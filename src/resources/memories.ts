@@ -2,39 +2,10 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
-import { type Uploadable } from '../core/uploads';
 import { RequestOptions } from '../internal/request-options';
-import { multipartFormRequestOptions } from '../internal/uploads';
 import { path } from '../internal/utils/path';
 
 export class Memories extends APIResource {
-  /**
-   * Add a memory with any content type (text, url, file, etc.) and metadata
-   *
-   * @example
-   * ```ts
-   * const memory = await client.memories.create({
-   *   content:
-   *     'This is a detailed article about machine learning concepts...',
-   * });
-   * ```
-   */
-  create(body: MemoryCreateParams, options?: RequestOptions): APIPromise<MemoryCreateResponse> {
-    return this._client.post('/v3/memories', { body, ...options });
-  }
-
-  /**
-   * Get a memory by ID
-   *
-   * @example
-   * ```ts
-   * const memory = await client.memories.retrieve('id');
-   * ```
-   */
-  retrieve(id: string, options?: RequestOptions): APIPromise<MemoryRetrieveResponse> {
-    return this._client.get(path`/v3/memories/${id}`, options);
-  }
-
   /**
    * Update a memory with any content type (text, url, file, etc.) and metadata
    *
@@ -78,33 +49,31 @@ export class Memories extends APIResource {
   }
 
   /**
-   * Upload a file to be processed
+   * Add a memory with any content type (text, url, file, etc.) and metadata
    *
    * @example
    * ```ts
-   * const response = await client.memories.uploadFile({
-   *   file: fs.createReadStream('path/to/file'),
+   * const response = await client.memories.add({
+   *   content:
+   *     'This is a detailed article about machine learning concepts...',
    * });
    * ```
    */
-  uploadFile(body: MemoryUploadFileParams, options?: RequestOptions): APIPromise<MemoryUploadFileResponse> {
-    return this._client.post(
-      '/v3/memories/file',
-      multipartFormRequestOptions({ body, ...options }, this._client),
-    );
+  add(body: MemoryAddParams, options?: RequestOptions): APIPromise<MemoryAddResponse> {
+    return this._client.post('/v3/memories', { body, ...options });
   }
-}
 
-export interface MemoryCreateResponse {
-  id: string;
-
-  status: string;
-}
-
-export interface MemoryRetrieveResponse {
-  id: string;
-
-  status: string;
+  /**
+   * Get a memory by ID
+   *
+   * @example
+   * ```ts
+   * const memory = await client.memories.get('id');
+   * ```
+   */
+  get(id: string, options?: RequestOptions): APIPromise<MemoryGetResponse> {
+    return this._client.get(path`/v3/memories/${id}`, options);
+  }
 }
 
 export interface MemoryUpdateResponse {
@@ -231,18 +200,16 @@ export interface MemoryDeleteResponse {
   success: boolean;
 }
 
-export interface MemoryUploadFileResponse {
+export interface MemoryAddResponse {
   id: string;
 
   status: string;
 }
 
-export interface MemoryCreateParams {
-  content: string;
+export interface MemoryGetResponse {
+  id: string;
 
-  containerTags?: Array<string>;
-
-  metadata?: Record<string, string | number | boolean>;
+  status: string;
 }
 
 export interface MemoryUpdateParams {
@@ -280,21 +247,23 @@ export interface MemoryListParams {
   sort?: 'createdAt' | 'updatedAt';
 }
 
-export interface MemoryUploadFileParams {
-  file: Uploadable;
+export interface MemoryAddParams {
+  content: string;
+
+  containerTags?: Array<string>;
+
+  metadata?: Record<string, string | number | boolean>;
 }
 
 export declare namespace Memories {
   export {
-    type MemoryCreateResponse as MemoryCreateResponse,
-    type MemoryRetrieveResponse as MemoryRetrieveResponse,
     type MemoryUpdateResponse as MemoryUpdateResponse,
     type MemoryListResponse as MemoryListResponse,
     type MemoryDeleteResponse as MemoryDeleteResponse,
-    type MemoryUploadFileResponse as MemoryUploadFileResponse,
-    type MemoryCreateParams as MemoryCreateParams,
+    type MemoryAddResponse as MemoryAddResponse,
+    type MemoryGetResponse as MemoryGetResponse,
     type MemoryUpdateParams as MemoryUpdateParams,
     type MemoryListParams as MemoryListParams,
-    type MemoryUploadFileParams as MemoryUploadFileParams,
+    type MemoryAddParams as MemoryAddParams,
   };
 }

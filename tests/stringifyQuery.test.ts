@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { SupermemoryNew } from 'supermemory-new';
+import { Supermemory } from 'supermemory';
 
-const { stringifyQuery } = SupermemoryNew.prototype as any;
+const { stringifyQuery } = Supermemory.prototype as any;
 
 describe(stringifyQuery, () => {
   for (const [input, expected] of [

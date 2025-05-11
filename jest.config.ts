@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^supermemory-new$': '<rootDir>/src/index.ts',
-    '^supermemory-new/(.*)$': '<rootDir>/src/$1',
+    '^supermemory$': '<rootDir>/src/index.ts',
+    '^supermemory/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',

@@ -9,8 +9,8 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "supermemory-new/*": ["src/*"],
-      "supermemory-new": ["src/index.ts"]
+      "supermemory/*": ["src/*"],
+      "supermemory": ["src/index.ts"]
     },
     "noEmit": true,
 

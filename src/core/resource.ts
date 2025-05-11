@@ -1,11 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { SupermemoryNew } from '../client';
+import type { Supermemory } from '../client';
 
 export class APIResource {
-  protected _client: SupermemoryNew;
+  protected _client: Supermemory;
 
-  constructor(client: SupermemoryNew) {
+  constructor(client: Supermemory) {
     this._client = client;
   }
 }

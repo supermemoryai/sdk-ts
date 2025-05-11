@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "supermemory-new/*": ["dist/src/*"],
-      "supermemory-new": ["dist/src/index.ts"]
+      "supermemory/*": ["dist/src/*"],
+      "supermemory": ["dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,

@@ -1,16 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import SupermemoryNew from 'supermemory-new';
+import Supermemory from 'supermemory';
 
-const client = new SupermemoryNew({
+const client = new Supermemory({
   apiKey: 'My API Key',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
 describe('resource search', () => {
   // skipped: tests are disabled for the time being
-  test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.search.retrieve({ q: 'machine learning concepts' });
+  test.skip('execute: only required params', async () => {
+    const responsePromise = client.search.execute({ q: 'machine learning concepts' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,8 +21,8 @@ describe('resource search', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('retrieve: required and optional params', async () => {
-    const response = await client.search.retrieve({
+  test.skip('execute: required and optional params', async () => {
+    const response = await client.search.execute({
       q: 'machine learning concepts',
       categoriesFilter: ['technology', 'science'],
       chunkThreshold: 0.5,

@@ -1,7 +1,7 @@
 import iconv from 'iconv-lite';
-import { stringify } from 'supermemory-new/internal/qs';
-import { encode } from 'supermemory-new/internal/qs/utils';
-import { StringifyOptions } from 'supermemory-new/internal/qs/types';
+import { stringify } from 'supermemory/internal/qs';
+import { encode } from 'supermemory/internal/qs/utils';
+import { StringifyOptions } from 'supermemory/internal/qs/types';
 import { empty_test_cases } from './empty-keys-cases';
 import assert from 'assert';
 

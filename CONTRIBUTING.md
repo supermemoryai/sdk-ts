@@ -55,12 +55,12 @@ $ cd supermemory-new-typescript
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link supermemory-new
+$ yarn link supermemory
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global supermemory-new
+$ pnpm link -—global supermemory
 ```
 
 ## Running tests

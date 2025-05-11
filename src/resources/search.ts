@@ -8,20 +8,20 @@ export class Search extends APIResource {
   /**
    * Search memories with filtering
    */
-  retrieve(query: SearchRetrieveParams, options?: RequestOptions): APIPromise<SearchRetrieveResponse> {
+  execute(query: SearchExecuteParams, options?: RequestOptions): APIPromise<SearchExecuteResponse> {
     return this._client.get('/v3/search', { query, ...options });
   }
 }
 
-export interface SearchRetrieveResponse {
-  results: Array<SearchRetrieveResponse.Result>;
+export interface SearchExecuteResponse {
+  results: Array<SearchExecuteResponse.Result>;
 
   timing: number;
 
   total: number;
 }
 
-export namespace SearchRetrieveResponse {
+export namespace SearchExecuteResponse {
   export interface Result {
     /**
      * Matching content chunks from the document
@@ -82,7 +82,7 @@ export namespace SearchRetrieveResponse {
   }
 }
 
-export interface SearchRetrieveParams {
+export interface SearchExecuteParams {
   /**
    * Search query string
    */
@@ -116,7 +116,7 @@ export interface SearchRetrieveParams {
   /**
    * Optional filters to apply to the search
    */
-  filters?: SearchRetrieveParams.UnionMember0 | Record<string, unknown>;
+  filters?: SearchExecuteParams.UnionMember0 | Record<string, unknown>;
 
   /**
    * If true, include document summary in the response. This is helpful if you want a
@@ -155,7 +155,7 @@ export interface SearchRetrieveParams {
   userId?: string;
 }
 
-export namespace SearchRetrieveParams {
+export namespace SearchExecuteParams {
   export interface UnionMember0 {
     AND?: Array<unknown>;
 
@@ -165,7 +165,7 @@ export namespace SearchRetrieveParams {
 
 export declare namespace Search {
   export {
-    type SearchRetrieveResponse as SearchRetrieveResponse,
-    type SearchRetrieveParams as SearchRetrieveParams,
+    type SearchExecuteResponse as SearchExecuteResponse,
+    type SearchExecuteParams as SearchExecuteParams,
   };
 }
