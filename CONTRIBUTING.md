@@ -42,15 +42,15 @@ If you’d like to use the repository from source, you can either install from g
 To install via git:
 
 ```sh
-$ npm install git+ssh://git@github.com:stainless-sdks/supermemory-new-typescript.git
+$ npm install git+ssh://git@github.com:supermemoryai/sdk-ts.git
 ```
 
 Alternatively, to link a local copy of the repo:
 
 ```sh
 # Clone
-$ git clone https://www.github.com/stainless-sdks/supermemory-new-typescript
-$ cd supermemory-new-typescript
+$ git clone https://www.github.com/supermemoryai/sdk-ts
+$ cd sdk-ts
 
 # With yarn
 $ yarn link
