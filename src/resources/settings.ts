@@ -6,13 +6,6 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Settings extends APIResource {
   /**
-   * Get settings for an organization
-   */
-  retrieve(options?: RequestOptions): APIPromise<SettingRetrieveResponse> {
-    return this._client.get('/v3/settings', options);
-  }
-
-  /**
    * Update settings for an organization
    */
   update(
@@ -21,10 +14,13 @@ export class Settings extends APIResource {
   ): APIPromise<SettingUpdateResponse> {
     return this._client.patch('/v3/settings', { body, ...options });
   }
-}
 
-export interface SettingRetrieveResponse {
-  settings: Record<string, unknown>;
+  /**
+   * Get settings for an organization
+   */
+  get(options?: RequestOptions): APIPromise<SettingGetResponse> {
+    return this._client.get('/v3/settings', options);
+  }
 }
 
 export interface SettingUpdateResponse {
@@ -47,6 +43,10 @@ export namespace SettingUpdateResponse {
   }
 }
 
+export interface SettingGetResponse {
+  settings: Record<string, unknown>;
+}
+
 export interface SettingUpdateParams {
   excludeItems?: Array<string>;
 
@@ -61,8 +61,8 @@ export interface SettingUpdateParams {
 
 export declare namespace Settings {
   export {
-    type SettingRetrieveResponse as SettingRetrieveResponse,
     type SettingUpdateResponse as SettingUpdateResponse,
+    type SettingGetResponse as SettingGetResponse,
     type SettingUpdateParams as SettingUpdateParams,
   };
 }

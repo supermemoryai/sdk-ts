@@ -1,10 +1,10 @@
-# Supermemory New TypeScript API Library
+# Supermemory TypeScript API Library
 
-[![NPM version](https://img.shields.io/npm/v/supermemory-new.svg)](https://npmjs.org/package/supermemory-new) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/supermemory-new)
+[![NPM version](https://img.shields.io/npm/v/supermemory.svg)](https://npmjs.org/package/supermemory) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/supermemory)
 
-This library provides convenient access to the Supermemory New REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Supermemory REST API from server-side TypeScript or JavaScript.
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs.supermemory.ai](https://docs.supermemory.ai). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -15,7 +15,7 @@ npm install git+ssh://git@github.com:stainless-sdks/supermemory-new-typescript.g
 ```
 
 > [!NOTE]
-> Once this package is [published to npm](https://app.stainless.com/docs/guides/publish), this will become: `npm install supermemory-new`
+> Once this package is [published to npm](https://app.stainless.com/docs/guides/publish), this will become: `npm install supermemory`
 
 ## Usage
 
@@ -23,16 +23,16 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import SupermemoryNew from 'supermemory-new';
+import Supermemory from 'supermemory';
 
-const client = new SupermemoryNew({
-  apiKey: process.env['SUPERMEMORY_NEW_API_KEY'], // This is the default and can be omitted
+const client = new Supermemory({
+  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted
 });
 
 async function main() {
-  const memory = await client.memories.create({ content: 'REPLACE_ME' });
+  const response = await client.search.execute({ q: 'documents related to python' });
 
-  console.log(memory.id);
+  console.log(response.results);
 }
 
 main();
@@ -44,50 +44,23 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import SupermemoryNew from 'supermemory-new';
+import Supermemory from 'supermemory';
 
-const client = new SupermemoryNew({
-  apiKey: process.env['SUPERMEMORY_NEW_API_KEY'], // This is the default and can be omitted
+const client = new Supermemory({
+  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted
 });
 
 async function main() {
-  const params: SupermemoryNew.MemoryCreateParams = { content: 'REPLACE_ME' };
-  const memory: SupermemoryNew.MemoryCreateResponse = await client.memories.create(params);
+  const params: Supermemory.MemoryAddParams = {
+    content: 'This is a detailed article about machine learning concepts...',
+  };
+  const response: Supermemory.MemoryAddResponse = await client.memories.add(params);
 }
 
 main();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
-
-## File uploads
-
-Request parameters that correspond to file uploads can be passed in many different forms:
-
-- `File` (or an object with the same structure)
-- a `fetch` `Response` (or an object with the same structure)
-- an `fs.ReadStream`
-- the return value of our `toFile` helper
-
-```ts
-import fs from 'fs';
-import SupermemoryNew, { toFile } from 'supermemory-new';
-
-const client = new SupermemoryNew();
-
-// If you have access to Node `fs` we recommend using `fs.createReadStream()`:
-await client.memories.uploadFile({ file: fs.createReadStream('/path/to/file') });
-
-// Or if you have the web `File` API you can pass a `File` instance:
-await client.memories.uploadFile({ file: new File(['my bytes'], 'file') });
-
-// You can also pass a `fetch` `Response`:
-await client.memories.uploadFile({ file: await fetch('https://somesite/file') });
-
-// Finally, if none of the above are convenient, you can use our `toFile` helper:
-await client.memories.uploadFile({ file: await toFile(Buffer.from('my bytes'), 'file') });
-await client.memories.uploadFile({ file: await toFile(new Uint8Array([0, 1, 2]), 'file') });
-```
 
 ## Handling errors
 
@@ -98,15 +71,17 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const memory = await client.memories.create({ content: 'REPLACE_ME' }).catch(async (err) => {
-    if (err instanceof SupermemoryNew.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
+  const response = await client.memories
+    .add({ content: 'This is a detailed article about machine learning concepts...' })
+    .catch(async (err) => {
+      if (err instanceof Supermemory.APIError) {
+        console.log(err.status); // 400
+        console.log(err.name); // BadRequestError
+        console.log(err.headers); // {server: 'nginx', ...}
+      } else {
+        throw err;
+      }
+    });
 }
 
 main();
@@ -136,12 +111,12 @@ You can use the `maxRetries` option to configure or disable this:
 <!-- prettier-ignore -->
 ```js
 // Configure the default for all requests:
-const client = new SupermemoryNew({
+const client = new Supermemory({
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await client.memories.create({ content: 'REPLACE_ME' }, {
+await client.memories.add({ content: 'This is a detailed article about machine learning concepts...' }, {
   maxRetries: 5,
 });
 ```
@@ -153,12 +128,12 @@ Requests time out after 1 minute by default. You can configure this with a `time
 <!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
-const client = new SupermemoryNew({
+const client = new Supermemory({
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
 // Override per-request:
-await client.memories.create({ content: 'REPLACE_ME' }, {
+await client.memories.add({ content: 'This is a detailed article about machine learning concepts...' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -179,17 +154,19 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 
 <!-- prettier-ignore -->
 ```ts
-const client = new SupermemoryNew();
+const client = new Supermemory();
 
-const response = await client.memories.create({ content: 'REPLACE_ME' }).asResponse();
+const response = await client.memories
+  .add({ content: 'This is a detailed article about machine learning concepts...' })
+  .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: memory, response: raw } = await client.memories
-  .create({ content: 'REPLACE_ME' })
+const { data: response, response: raw } = await client.memories
+  .add({ content: 'This is a detailed article about machine learning concepts...' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(memory.id);
+console.log(response.id);
 ```
 
 ### Logging
@@ -202,13 +179,13 @@ console.log(memory.id);
 
 The log level can be configured in two ways:
 
-1. Via the `SUPERMEMORY_NEW_LOG` environment variable
+1. Via the `SUPERMEMORY_LOG` environment variable
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import SupermemoryNew from 'supermemory-new';
+import Supermemory from 'supermemory';
 
-const client = new SupermemoryNew({
+const client = new Supermemory({
   logLevel: 'debug', // Show all log messages
 });
 ```
@@ -234,13 +211,13 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import SupermemoryNew from 'supermemory-new';
+import Supermemory from 'supermemory';
 import pino from 'pino';
 
 const logger = pino();
 
-const client = new SupermemoryNew({
-  logger: logger.child({ name: 'SupermemoryNew' }),
+const client = new Supermemory({
+  logger: logger.child({ name: 'Supermemory' }),
   logLevel: 'debug', // Send all messages to pino, allowing it to filter
 });
 ```
@@ -304,10 +281,10 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import SupermemoryNew from 'supermemory-new';
+import Supermemory from 'supermemory';
 import fetch from 'my-fetch';
 
-const client = new SupermemoryNew({ fetch });
+const client = new Supermemory({ fetch });
 ```
 
 ### Fetch options
@@ -315,9 +292,9 @@ const client = new SupermemoryNew({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import SupermemoryNew from 'supermemory-new';
+import Supermemory from 'supermemory';
 
-const client = new SupermemoryNew({
+const client = new Supermemory({
   fetchOptions: {
     // `RequestInit` options
   },
@@ -332,11 +309,11 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import SupermemoryNew from 'supermemory-new';
+import Supermemory from 'supermemory';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
-const client = new SupermemoryNew({
+const client = new Supermemory({
   fetchOptions: {
     dispatcher: proxyAgent,
   },
@@ -346,9 +323,9 @@ const client = new SupermemoryNew({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import SupermemoryNew from 'supermemory-new';
+import Supermemory from 'supermemory';
 
-const client = new SupermemoryNew({
+const client = new Supermemory({
   fetchOptions: {
     proxy: 'http://localhost:8888',
   },
@@ -358,10 +335,10 @@ const client = new SupermemoryNew({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import SupermemoryNew from 'npm:supermemory-new';
+import Supermemory from 'npm:supermemory';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
-const client = new SupermemoryNew({
+const client = new Supermemory({
   fetchOptions: {
     client: httpClient,
   },

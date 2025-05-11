@@ -23,26 +23,24 @@ import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
   ConnectionCreateResponse,
+  ConnectionGetResponse,
   ConnectionListResponse,
-  ConnectionRetrieveResponse,
   Connections,
 } from './resources/connections';
 import {
   Memories,
-  MemoryCreateParams,
-  MemoryCreateResponse,
+  MemoryAddParams,
+  MemoryAddResponse,
   MemoryDeleteResponse,
+  MemoryGetResponse,
   MemoryListParams,
   MemoryListResponse,
-  MemoryRetrieveResponse,
   MemoryUpdateParams,
   MemoryUpdateResponse,
-  MemoryUploadFileParams,
-  MemoryUploadFileResponse,
 } from './resources/memories';
-import { Search, SearchRetrieveParams, SearchRetrieveResponse } from './resources/search';
+import { Search, SearchExecuteParams, SearchExecuteResponse } from './resources/search';
 import {
-  SettingRetrieveResponse,
+  SettingGetResponse,
   SettingUpdateParams,
   SettingUpdateResponse,
   Settings,
@@ -53,14 +51,14 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Defaults to process.env['SUPERMEMORY_NEW_API_KEY'].
+   * Defaults to process.env['SUPERMEMORY_API_KEY'].
    */
   apiKey?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['SUPERMEMORY_NEW_BASE_URL'].
+   * Defaults to process.env['SUPERMEMORY_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -112,7 +110,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['SUPERMEMORY_NEW_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['SUPERMEMORY_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -125,9 +123,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Supermemory New API.
+ * API Client for interfacing with the Supermemory API.
  */
-export class SupermemoryNew {
+export class Supermemory {
   apiKey: string;
 
   baseURL: string;
@@ -143,10 +141,10 @@ export class SupermemoryNew {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Supermemory New API.
+   * API Client for interfacing with the Supermemory API.
    *
-   * @param {string | undefined} [opts.apiKey=process.env['SUPERMEMORY_NEW_API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['SUPERMEMORY_NEW_BASE_URL'] ?? https://api.supermemory.ai] - Override the default base URL for the API.
+   * @param {string | undefined} [opts.apiKey=process.env['SUPERMEMORY_API_KEY'] ?? undefined]
+   * @param {string} [opts.baseURL=process.env['SUPERMEMORY_BASE_URL'] ?? https://api.supermemory.ai] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -155,13 +153,13 @@ export class SupermemoryNew {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('SUPERMEMORY_NEW_BASE_URL'),
-    apiKey = readEnv('SUPERMEMORY_NEW_API_KEY'),
+    baseURL = readEnv('SUPERMEMORY_BASE_URL'),
+    apiKey = readEnv('SUPERMEMORY_API_KEY'),
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
-      throw new Errors.SupermemoryNewError(
-        "The SUPERMEMORY_NEW_API_KEY environment variable is missing or empty; either provide it, or instantiate the SupermemoryNew client with an apiKey option, like new SupermemoryNew({ apiKey: 'My API Key' }).",
+      throw new Errors.SupermemoryError(
+        "The SUPERMEMORY_API_KEY environment variable is missing or empty; either provide it, or instantiate the Supermemory client with an apiKey option, like new Supermemory({ apiKey: 'My API Key' }).",
       );
     }
 
@@ -172,14 +170,14 @@ export class SupermemoryNew {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? SupermemoryNew.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? Supermemory.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('SUPERMEMORY_NEW_LOG'), "process.env['SUPERMEMORY_NEW_LOG']", this) ??
+      parseLogLevel(readEnv('SUPERMEMORY_LOG'), "process.env['SUPERMEMORY_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -682,10 +680,10 @@ export class SupermemoryNew {
     }
   }
 
-  static SupermemoryNew = this;
+  static Supermemory = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static SupermemoryNewError = Errors.SupermemoryNewError;
+  static SupermemoryError = Errors.SupermemoryError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -706,44 +704,42 @@ export class SupermemoryNew {
   settings: API.Settings = new API.Settings(this);
   connections: API.Connections = new API.Connections(this);
 }
-SupermemoryNew.Memories = Memories;
-SupermemoryNew.Search = Search;
-SupermemoryNew.Settings = Settings;
-SupermemoryNew.Connections = Connections;
-export declare namespace SupermemoryNew {
+Supermemory.Memories = Memories;
+Supermemory.Search = Search;
+Supermemory.Settings = Settings;
+Supermemory.Connections = Connections;
+export declare namespace Supermemory {
   export type RequestOptions = Opts.RequestOptions;
 
   export {
     Memories as Memories,
-    type MemoryCreateResponse as MemoryCreateResponse,
-    type MemoryRetrieveResponse as MemoryRetrieveResponse,
     type MemoryUpdateResponse as MemoryUpdateResponse,
     type MemoryListResponse as MemoryListResponse,
     type MemoryDeleteResponse as MemoryDeleteResponse,
-    type MemoryUploadFileResponse as MemoryUploadFileResponse,
-    type MemoryCreateParams as MemoryCreateParams,
+    type MemoryAddResponse as MemoryAddResponse,
+    type MemoryGetResponse as MemoryGetResponse,
     type MemoryUpdateParams as MemoryUpdateParams,
     type MemoryListParams as MemoryListParams,
-    type MemoryUploadFileParams as MemoryUploadFileParams,
+    type MemoryAddParams as MemoryAddParams,
   };
 
   export {
     Search as Search,
-    type SearchRetrieveResponse as SearchRetrieveResponse,
-    type SearchRetrieveParams as SearchRetrieveParams,
+    type SearchExecuteResponse as SearchExecuteResponse,
+    type SearchExecuteParams as SearchExecuteParams,
   };
 
   export {
     Settings as Settings,
-    type SettingRetrieveResponse as SettingRetrieveResponse,
     type SettingUpdateResponse as SettingUpdateResponse,
+    type SettingGetResponse as SettingGetResponse,
     type SettingUpdateParams as SettingUpdateParams,
   };
 
   export {
     Connections as Connections,
     type ConnectionCreateResponse as ConnectionCreateResponse,
-    type ConnectionRetrieveResponse as ConnectionRetrieveResponse,
     type ConnectionListResponse as ConnectionListResponse,
+    type ConnectionGetResponse as ConnectionGetResponse,
   };
 }

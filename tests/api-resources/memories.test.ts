@@ -1,55 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import SupermemoryNew, { toFile } from 'supermemory-new';
+import Supermemory from 'supermemory';
 
-const client = new SupermemoryNew({
+const client = new Supermemory({
   apiKey: 'My API Key',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
 describe('resource memories', () => {
-  // skipped: tests are disabled for the time being
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.memories.create({
-      content: 'This is a detailed article about machine learning concepts...',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // skipped: tests are disabled for the time being
-  test.skip('create: required and optional params', async () => {
-    const response = await client.memories.create({
-      content: 'This is a detailed article about machine learning concepts...',
-      containerTags: ['string'],
-      metadata: {
-        source: 'web',
-        category: 'technology',
-        tag_1: 'ai',
-        tag_2: 'machine-learning',
-        readingTime: 5,
-        isPublic: true,
-      },
-    });
-  });
-
-  // skipped: tests are disabled for the time being
-  test.skip('retrieve', async () => {
-    const responsePromise = client.memories.retrieve('id');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
   // skipped: tests are disabled for the time being
   test.skip('update: only required params', async () => {
     const responsePromise = client.memories.update('id', {
@@ -107,7 +65,7 @@ describe('resource memories', () => {
         },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(SupermemoryNew.NotFoundError);
+    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // skipped: tests are disabled for the time being
@@ -123,9 +81,9 @@ describe('resource memories', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('uploadFile: only required params', async () => {
-    const responsePromise = client.memories.uploadFile({
-      file: await toFile(Buffer.from('# my file contents'), 'README.md'),
+  test.skip('add: only required params', async () => {
+    const responsePromise = client.memories.add({
+      content: 'This is a detailed article about machine learning concepts...',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -137,9 +95,30 @@ describe('resource memories', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('uploadFile: required and optional params', async () => {
-    const response = await client.memories.uploadFile({
-      file: await toFile(Buffer.from('# my file contents'), 'README.md'),
+  test.skip('add: required and optional params', async () => {
+    const response = await client.memories.add({
+      content: 'This is a detailed article about machine learning concepts...',
+      containerTags: ['string'],
+      metadata: {
+        source: 'web',
+        category: 'technology',
+        tag_1: 'ai',
+        tag_2: 'machine-learning',
+        readingTime: 5,
+        isPublic: true,
+      },
     });
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('get', async () => {
+    const responsePromise = client.memories.get('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'supermemory-new/internal/uploads';
-import { toFile } from 'supermemory-new/core/uploads';
+import { multipartFormRequestOptions, createForm } from 'supermemory/internal/uploads';
+import { toFile } from 'supermemory/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

@@ -17,17 +17,17 @@ export class Connections extends APIResource {
   }
 
   /**
-   * Get connection details
-   */
-  retrieve(connectionID: string, options?: RequestOptions): APIPromise<ConnectionRetrieveResponse> {
-    return this._client.get(path`/v3/connections/${connectionID}`, options);
-  }
-
-  /**
    * List all connections
    */
   list(options?: RequestOptions): APIPromise<ConnectionListResponse> {
     return this._client.get('/v3/connections', options);
+  }
+
+  /**
+   * Get connection details
+   */
+  get(connectionID: string, options?: RequestOptions): APIPromise<ConnectionGetResponse> {
+    return this._client.get(path`/v3/connections/${connectionID}`, options);
   }
 }
 
@@ -37,18 +37,6 @@ export interface ConnectionCreateResponse {
   authLink: string;
 
   expiresIn: string;
-}
-
-export interface ConnectionRetrieveResponse {
-  id: string;
-
-  createdAt: number;
-
-  provider: string;
-
-  expiresAt?: number;
-
-  metadata?: Record<string, unknown>;
 }
 
 export type ConnectionListResponse = Array<ConnectionListResponse.ConnectionListResponseItem>;
@@ -67,10 +55,22 @@ export namespace ConnectionListResponse {
   }
 }
 
+export interface ConnectionGetResponse {
+  id: string;
+
+  createdAt: number;
+
+  provider: string;
+
+  expiresAt?: number;
+
+  metadata?: Record<string, unknown>;
+}
+
 export declare namespace Connections {
   export {
     type ConnectionCreateResponse as ConnectionCreateResponse,
-    type ConnectionRetrieveResponse as ConnectionRetrieveResponse,
     type ConnectionListResponse as ConnectionListResponse,
+    type ConnectionGetResponse as ConnectionGetResponse,
   };
 }
