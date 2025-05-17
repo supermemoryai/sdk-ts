@@ -5,6 +5,8 @@ export {
   type ConnectionCreateResponse,
   type ConnectionListResponse,
   type ConnectionGetResponse,
+  type ConnectionCreateParams,
+  type ConnectionListParams,
 } from './connections';
 export {
   Memories,
