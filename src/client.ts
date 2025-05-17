@@ -22,8 +22,10 @@ import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
+  ConnectionCreateParams,
   ConnectionCreateResponse,
   ConnectionGetResponse,
+  ConnectionListParams,
   ConnectionListResponse,
   Connections,
 } from './resources/connections';
@@ -741,5 +743,7 @@ export declare namespace Supermemory {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
     type ConnectionGetResponse as ConnectionGetResponse,
+    type ConnectionCreateParams as ConnectionCreateParams,
+    type ConnectionListParams as ConnectionListParams,
   };
 }

@@ -48,6 +48,6 @@ Types:
 
 Methods:
 
-- <code title="post /v3/connections/{provider}">client.connections.<a href="./src/resources/connections.ts">create</a>(provider) -> ConnectionCreateResponse</code>
-- <code title="get /v3/connections">client.connections.<a href="./src/resources/connections.ts">list</a>() -> ConnectionListResponse</code>
+- <code title="post /v3/connections/{provider}">client.connections.<a href="./src/resources/connections.ts">create</a>(provider, { ...params }) -> ConnectionCreateResponse</code>
+- <code title="get /v3/connections">client.connections.<a href="./src/resources/connections.ts">list</a>({ ...params }) -> ConnectionListResponse</code>
 - <code title="get /v3/connections/{connectionId}">client.connections.<a href="./src/resources/connections.ts">get</a>(connectionID) -> ConnectionGetResponse</code>
