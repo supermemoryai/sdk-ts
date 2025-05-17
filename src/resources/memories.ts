@@ -2,7 +2,9 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { type Uploadable } from '../core/uploads';
 import { RequestOptions } from '../internal/request-options';
+import { multipartFormRequestOptions } from '../internal/uploads';
 import { path } from '../internal/utils/path';
 
 export class Memories extends APIResource {
@@ -73,6 +75,23 @@ export class Memories extends APIResource {
    */
   get(id: string, options?: RequestOptions): APIPromise<MemoryGetResponse> {
     return this._client.get(path`/v3/memories/${id}`, options);
+  }
+
+  /**
+   * Upload a file to be processed
+   *
+   * @example
+   * ```ts
+   * const response = await client.memories.uploadFile({
+   *   file: fs.createReadStream('path/to/file'),
+   * });
+   * ```
+   */
+  uploadFile(body: MemoryUploadFileParams, options?: RequestOptions): APIPromise<MemoryUploadFileResponse> {
+    return this._client.post(
+      '/v3/memories/file',
+      multipartFormRequestOptions({ body, ...options }, this._client),
+    );
   }
 }
 
@@ -212,6 +231,12 @@ export interface MemoryGetResponse {
   status: string;
 }
 
+export interface MemoryUploadFileResponse {
+  id: string;
+
+  status: string;
+}
+
 export interface MemoryUpdateParams {
   content: string;
 
@@ -255,6 +280,10 @@ export interface MemoryAddParams {
   metadata?: Record<string, string | number | boolean>;
 }
 
+export interface MemoryUploadFileParams {
+  file: Uploadable;
+}
+
 export declare namespace Memories {
   export {
     type MemoryUpdateResponse as MemoryUpdateResponse,
@@ -262,8 +291,10 @@ export declare namespace Memories {
     type MemoryDeleteResponse as MemoryDeleteResponse,
     type MemoryAddResponse as MemoryAddResponse,
     type MemoryGetResponse as MemoryGetResponse,
+    type MemoryUploadFileResponse as MemoryUploadFileResponse,
     type MemoryUpdateParams as MemoryUpdateParams,
     type MemoryListParams as MemoryListParams,
     type MemoryAddParams as MemoryAddParams,
+    type MemoryUploadFileParams as MemoryUploadFileParams,
   };
 }
