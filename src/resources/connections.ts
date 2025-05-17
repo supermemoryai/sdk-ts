@@ -11,16 +11,25 @@ export class Connections extends APIResource {
    */
   create(
     provider: 'notion' | 'google-drive' | 'onedrive',
+    params: ConnectionCreateParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ConnectionCreateResponse> {
-    return this._client.post(path`/v3/connections/${provider}`, options);
+    const { endUserId, redirectUrl, ...body } = params ?? {};
+    return this._client.post(path`/v3/connections/${provider}`, {
+      query: { endUserId, redirectUrl },
+      body,
+      ...options,
+    });
   }
 
   /**
    * List all connections
    */
-  list(options?: RequestOptions): APIPromise<ConnectionListResponse> {
-    return this._client.get('/v3/connections', options);
+  list(
+    query: ConnectionListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ConnectionListResponse> {
+    return this._client.get('/v3/connections', { query, ...options });
   }
 
   /**
@@ -37,6 +46,8 @@ export interface ConnectionCreateResponse {
   authLink: string;
 
   expiresIn: string;
+
+  redirectsTo?: string;
 }
 
 export type ConnectionListResponse = Array<ConnectionListResponse.ConnectionListResponseItem>;
@@ -67,10 +78,33 @@ export interface ConnectionGetResponse {
   metadata?: Record<string, unknown>;
 }
 
+export interface ConnectionCreateParams {
+  /**
+   * Query param:
+   */
+  endUserId?: string;
+
+  /**
+   * Query param:
+   */
+  redirectUrl?: string;
+
+  /**
+   * Body param:
+   */
+  metadata?: Record<string, string | number | boolean> | null;
+}
+
+export interface ConnectionListParams {
+  endUserId?: string;
+}
+
 export declare namespace Connections {
   export {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
     type ConnectionGetResponse as ConnectionGetResponse,
+    type ConnectionCreateParams as ConnectionCreateParams,
+    type ConnectionListParams as ConnectionListParams,
   };
 }

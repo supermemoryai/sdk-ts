@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.0.0-alpha.1 (2025-05-17)
+
+Full Changelog: [v3.0.0-alpha.0...v3.0.0-alpha.1](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.0...v3.0.0-alpha.1)
+
+### Features
+
+* **api:** api update ([01da5f8](https://github.com/supermemoryai/sdk-ts/commit/01da5f877264e7b0474dd7ca4fa5d0b99e4bfe8a))
+* **api:** update via SDK Studio ([af9edfe](https://github.com/supermemoryai/sdk-ts/commit/af9edfe44b9566819b503d0b4c6f325f56609a7d))
+
+
+### Chores
+
+* **package:** remove engines ([aa5d3ae](https://github.com/supermemoryai/sdk-ts/commit/aa5d3aeeecfda9866aa7fe4936eab52c6ce49e49))
+
 ## 3.0.0-alpha.0 (2025-05-11)
 
 Full Changelog: [v0.0.1-alpha.0...v3.0.0-alpha.0](https://github.com/supermemoryai/sdk-ts/compare/v0.0.1-alpha.0...v3.0.0-alpha.0)

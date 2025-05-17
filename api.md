@@ -7,6 +7,7 @@ Types:
 - <code><a href="./src/resources/memories.ts">MemoryDeleteResponse</a></code>
 - <code><a href="./src/resources/memories.ts">MemoryAddResponse</a></code>
 - <code><a href="./src/resources/memories.ts">MemoryGetResponse</a></code>
+- <code><a href="./src/resources/memories.ts">MemoryUploadFileResponse</a></code>
 
 Methods:
 
@@ -15,6 +16,7 @@ Methods:
 - <code title="delete /v3/memories/{id}">client.memories.<a href="./src/resources/memories.ts">delete</a>(id) -> MemoryDeleteResponse</code>
 - <code title="post /v3/memories">client.memories.<a href="./src/resources/memories.ts">add</a>({ ...params }) -> MemoryAddResponse</code>
 - <code title="get /v3/memories/{id}">client.memories.<a href="./src/resources/memories.ts">get</a>(id) -> MemoryGetResponse</code>
+- <code title="post /v3/memories/file">client.memories.<a href="./src/resources/memories.ts">uploadFile</a>({ ...params }) -> MemoryUploadFileResponse</code>
 
 # Search
 
@@ -48,6 +50,6 @@ Types:
 
 Methods:
 
-- <code title="post /v3/connections/{provider}">client.connections.<a href="./src/resources/connections.ts">create</a>(provider) -> ConnectionCreateResponse</code>
-- <code title="get /v3/connections">client.connections.<a href="./src/resources/connections.ts">list</a>() -> ConnectionListResponse</code>
+- <code title="post /v3/connections/{provider}">client.connections.<a href="./src/resources/connections.ts">create</a>(provider, { ...params }) -> ConnectionCreateResponse</code>
+- <code title="get /v3/connections">client.connections.<a href="./src/resources/connections.ts">list</a>({ ...params }) -> ConnectionListResponse</code>
 - <code title="get /v3/connections/{connectionId}">client.connections.<a href="./src/resources/connections.ts">get</a>(connectionID) -> ConnectionGetResponse</code>

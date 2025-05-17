@@ -22,8 +22,10 @@ import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
+  ConnectionCreateParams,
   ConnectionCreateResponse,
   ConnectionGetResponse,
+  ConnectionListParams,
   ConnectionListResponse,
   Connections,
 } from './resources/connections';
@@ -37,6 +39,8 @@ import {
   MemoryListResponse,
   MemoryUpdateParams,
   MemoryUpdateResponse,
+  MemoryUploadFileParams,
+  MemoryUploadFileResponse,
 } from './resources/memories';
 import { Search, SearchExecuteParams, SearchExecuteResponse } from './resources/search';
 import {
@@ -718,9 +722,11 @@ export declare namespace Supermemory {
     type MemoryDeleteResponse as MemoryDeleteResponse,
     type MemoryAddResponse as MemoryAddResponse,
     type MemoryGetResponse as MemoryGetResponse,
+    type MemoryUploadFileResponse as MemoryUploadFileResponse,
     type MemoryUpdateParams as MemoryUpdateParams,
     type MemoryListParams as MemoryListParams,
     type MemoryAddParams as MemoryAddParams,
+    type MemoryUploadFileParams as MemoryUploadFileParams,
   };
 
   export {
@@ -741,5 +747,7 @@ export declare namespace Supermemory {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
     type ConnectionGetResponse as ConnectionGetResponse,
+    type ConnectionCreateParams as ConnectionCreateParams,
+    type ConnectionListParams as ConnectionListParams,
   };
 }
