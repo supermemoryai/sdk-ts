@@ -51,12 +51,17 @@ export namespace SearchExecuteResponse {
     /**
      * Document title
      */
-    title: string;
+    title: string | null;
 
     /**
      * Document last update date
      */
     updatedAt: string;
+
+    /**
+     * Document summary
+     */
+    summary?: string | null;
   }
 
   export namespace Result {

@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { type Uploadable } from '../core/uploads';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { multipartFormRequestOptions } from '../internal/uploads';
 import { path } from '../internal/utils/path';
@@ -14,13 +15,18 @@ export class Memories extends APIResource {
    * @example
    * ```ts
    * const memory = await client.memories.update('id', {
+   *   body_id: 'acxV5LHMEsG2hMSNb4umbn',
    *   content:
    *     'This is a detailed article about machine learning concepts...',
    * });
    * ```
    */
-  update(id: string, body: MemoryUpdateParams, options?: RequestOptions): APIPromise<MemoryUpdateResponse> {
-    return this._client.patch(path`/v3/memories/${id}`, { body, ...options });
+  update(
+    pathID: string,
+    body: MemoryUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<MemoryUpdateResponse> {
+    return this._client.patch(path`/v3/memories/${pathID}`, { body, ...options });
   }
 
   /**
@@ -43,11 +49,14 @@ export class Memories extends APIResource {
    *
    * @example
    * ```ts
-   * const memory = await client.memories.delete('id');
+   * await client.memories.delete('id');
    * ```
    */
-  delete(id: string, options?: RequestOptions): APIPromise<MemoryDeleteResponse> {
-    return this._client.delete(path`/v3/memories/${id}`, options);
+  delete(id: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/v3/memories/${id}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -215,10 +224,6 @@ export namespace MemoryListResponse {
   }
 }
 
-export interface MemoryDeleteResponse {
-  success: boolean;
-}
-
 export interface MemoryAddResponse {
   id: string;
 
@@ -238,10 +243,42 @@ export interface MemoryUploadFileResponse {
 }
 
 export interface MemoryUpdateParams {
+  /**
+   * Unique identifier of the memory.
+   */
+  body_id: string;
+
+  /**
+   * The content to extract and process into a memory. This can be a URL to a
+   * website, a PDF, an image, or a video.
+   *
+   * Plaintext: Any plaintext format
+   *
+   * URL: A URL to a website, PDF, image, or video
+   *
+   * We automatically detect the content type from the url's response format.
+   */
   content: string;
 
+  /**
+   * Optional tags this memory should be containerized by. This can be an ID for your
+   * user, a project ID, or any other identifier you wish to use to group memories.
+   */
   containerTags?: Array<string>;
 
+  /**
+   * Optional custom ID of the memory. This could be an ID from your database that
+   * will uniquely identify this memory.
+   */
+  customId?: string;
+
+  /**
+   * Optional metadata for the memory. This is used to store additional information
+   * about the memory. You can use this to store any additional information you need
+   * about the memory. Metadata can be filtered through. Keys must be strings and are
+   * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
+   * objects.
+   */
   metadata?: Record<string, string | number | boolean>;
 }
 
@@ -273,10 +310,37 @@ export interface MemoryListParams {
 }
 
 export interface MemoryAddParams {
+  /**
+   * The content to extract and process into a memory. This can be a URL to a
+   * website, a PDF, an image, or a video.
+   *
+   * Plaintext: Any plaintext format
+   *
+   * URL: A URL to a website, PDF, image, or video
+   *
+   * We automatically detect the content type from the url's response format.
+   */
   content: string;
 
+  /**
+   * Optional tags this memory should be containerized by. This can be an ID for your
+   * user, a project ID, or any other identifier you wish to use to group memories.
+   */
   containerTags?: Array<string>;
 
+  /**
+   * Optional custom ID of the memory. This could be an ID from your database that
+   * will uniquely identify this memory.
+   */
+  customId?: string;
+
+  /**
+   * Optional metadata for the memory. This is used to store additional information
+   * about the memory. You can use this to store any additional information you need
+   * about the memory. Metadata can be filtered through. Keys must be strings and are
+   * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
+   * objects.
+   */
   metadata?: Record<string, string | number | boolean>;
 }
 
@@ -288,7 +352,6 @@ export declare namespace Memories {
   export {
     type MemoryUpdateResponse as MemoryUpdateResponse,
     type MemoryListResponse as MemoryListResponse,
-    type MemoryDeleteResponse as MemoryDeleteResponse,
     type MemoryAddResponse as MemoryAddResponse,
     type MemoryGetResponse as MemoryGetResponse,
     type MemoryUploadFileResponse as MemoryUploadFileResponse,
