@@ -24,13 +24,15 @@ export class Settings extends APIResource {
 }
 
 export interface SettingUpdateResponse {
-  message: string;
+  orgId: string;
 
-  settings: SettingUpdateResponse.Settings;
+  orgSlug: string;
+
+  updated: SettingUpdateResponse.Updated;
 }
 
 export namespace SettingUpdateResponse {
-  export interface Settings {
+  export interface Updated {
     excludeItems?: Array<string>;
 
     filterPrompt?: string;
@@ -44,7 +46,15 @@ export namespace SettingUpdateResponse {
 }
 
 export interface SettingGetResponse {
-  settings: Record<string, unknown>;
+  excludeItems?: Array<string>;
+
+  filterPrompt?: string;
+
+  filterTags?: Record<string, Array<string>>;
+
+  includeItems?: Array<string>;
+
+  shouldLLMFilter?: boolean;
 }
 
 export interface SettingUpdateParams {
