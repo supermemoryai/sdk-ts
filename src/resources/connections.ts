@@ -11,15 +11,10 @@ export class Connections extends APIResource {
    */
   create(
     provider: 'notion' | 'google-drive' | 'onedrive',
-    params: ConnectionCreateParams | null | undefined = {},
+    body: ConnectionCreateParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ConnectionCreateResponse> {
-    const { containerTags, redirectUrl, ...body } = params ?? {};
-    return this._client.post(path`/v3/connections/${provider}`, {
-      query: { containerTags, redirectUrl },
-      body,
-      ...options,
-    });
+    return this._client.post(path`/v3/connections/${provider}`, { body, ...options });
   }
 
   /**
@@ -79,20 +74,11 @@ export interface ConnectionGetResponse {
 }
 
 export interface ConnectionCreateParams {
-  /**
-   * Query param:
-   */
   containerTags?: Array<string>;
 
-  /**
-   * Query param:
-   */
-  redirectUrl?: string;
-
-  /**
-   * Body param:
-   */
   metadata?: Record<string, string | number | boolean> | null;
+
+  redirectUrl?: string;
 }
 
 export interface ConnectionListParams {
