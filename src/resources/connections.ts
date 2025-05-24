@@ -14,9 +14,9 @@ export class Connections extends APIResource {
     params: ConnectionCreateParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ConnectionCreateResponse> {
-    const { endUserId, redirectUrl, ...body } = params ?? {};
+    const { containerTags, redirectUrl, ...body } = params ?? {};
     return this._client.post(path`/v3/connections/${provider}`, {
-      query: { endUserId, redirectUrl },
+      query: { containerTags, redirectUrl },
       body,
       ...options,
     });
@@ -82,7 +82,7 @@ export interface ConnectionCreateParams {
   /**
    * Query param:
    */
-  endUserId?: string;
+  containerTags?: Array<string>;
 
   /**
    * Query param:

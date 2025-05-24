@@ -12,7 +12,6 @@ export {
   Memories,
   type MemoryUpdateResponse,
   type MemoryListResponse,
-  type MemoryDeleteResponse,
   type MemoryAddResponse,
   type MemoryGetResponse,
   type MemoryUploadFileResponse,
