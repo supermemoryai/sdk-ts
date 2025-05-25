@@ -6,7 +6,7 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Search extends APIResource {
   /**
-   * Search memories with advanced filtering (supports complex filters and arrays)
+   * Search memories with advanced filtering
    *
    * @example
    * ```ts
@@ -113,6 +113,12 @@ export interface SearchExecuteParams {
   chunkThreshold?: number;
 
   /**
+   * Optional tags this search should be containerized by. This can be an ID for your
+   * user, a project ID, or any other identifier you wish to use to filter memories.
+   */
+  containerTags?: Array<string>;
+
+  /**
    * Optional document ID to search within. You can use this to find chunks in a very
    * large document.
    */
@@ -159,12 +165,6 @@ export interface SearchExecuteParams {
    * the latency by about 400ms
    */
   rewriteQuery?: boolean;
-
-  /**
-   * End user ID this search is associated with. NOTE: This also acts as a filter for
-   * the search.
-   */
-  userId?: string;
 }
 
 export namespace SearchExecuteParams {
