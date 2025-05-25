@@ -20,7 +20,7 @@ export {
   type MemoryAddParams,
   type MemoryUploadFileParams,
 } from './memories';
-export { Search } from './search';
+export { Search, type SearchExecuteResponse, type SearchExecuteParams } from './search';
 export {
   Settings,
   type SettingUpdateResponse,
