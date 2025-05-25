@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0-alpha.6 (2025-05-25)
+
+Full Changelog: [v3.0.0-alpha.5...v3.0.0-alpha.6](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.5...v3.0.0-alpha.6)
+
+### Features
+
+* **api:** api update ([db77979](https://github.com/supermemoryai/sdk-ts/commit/db779799ded7bfa9f150737f1e497ee83a29851e))
+
 ## 3.0.0-alpha.5 (2025-05-25)
 
 Full Changelog: [v3.0.0-alpha.4...v3.0.0-alpha.5](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.4...v3.0.0-alpha.5)
