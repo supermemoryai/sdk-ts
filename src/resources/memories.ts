@@ -150,12 +150,6 @@ export namespace MemoryListResponse {
     createdAt: string;
 
     /**
-     * Optional custom ID of the memory. This could be an ID from your database that
-     * will uniquely identify this memory.
-     */
-    customId: string | null;
-
-    /**
      * Optional metadata for the memory. This is used to store additional information
      * about the memory. You can use this to store any additional information you need
      * about the memory. Metadata can be filtered through. Keys must be strings and are
@@ -163,10 +157,6 @@ export namespace MemoryListResponse {
      * objects.
      */
     metadata: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
-
-    ogImage: string | null;
-
-    source: string | null;
 
     /**
      * Status of the memory
@@ -184,11 +174,6 @@ export namespace MemoryListResponse {
     title: string | null;
 
     /**
-     * Type of the memory
-     */
-    type: 'text' | 'pdf' | 'tweet' | 'google_doc' | 'image' | 'video' | 'notion_doc' | 'webpage';
-
-    /**
      * Last update timestamp
      */
     updatedAt: string;
@@ -197,17 +182,6 @@ export namespace MemoryListResponse {
      * URL of the memory
      */
     url: string | null;
-
-    /**
-     * Optional tags this memory should be containerized by. This can be an ID for your
-     * user, a project ID, or any other identifier you wish to use to group memories.
-     */
-    containerTags?: Array<string>;
-
-    /**
-     * Raw content of the memory
-     */
-    raw?: null;
   }
 
   /**
@@ -231,9 +205,75 @@ export interface MemoryAddResponse {
 }
 
 export interface MemoryGetResponse {
-  id: string;
+  /**
+   * Memory object
+   */
+  doc: MemoryGetResponse.Doc;
 
   status: string;
+}
+
+export namespace MemoryGetResponse {
+  /**
+   * Memory object
+   */
+  export interface Doc {
+    /**
+     * Unique identifier of the memory.
+     */
+    id: string;
+
+    /**
+     * The content to extract and process into a memory. This can be a URL to a
+     * website, a PDF, an image, or a video.
+     *
+     * Plaintext: Any plaintext format
+     *
+     * URL: A URL to a website, PDF, image, or video
+     *
+     * We automatically detect the content type from the url's response format.
+     */
+    content: string | null;
+
+    /**
+     * Creation timestamp
+     */
+    createdAt: string;
+
+    /**
+     * Optional metadata for the memory. This is used to store additional information
+     * about the memory. You can use this to store any additional information you need
+     * about the memory. Metadata can be filtered through. Keys must be strings and are
+     * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
+     * objects.
+     */
+    metadata: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+
+    /**
+     * Status of the memory
+     */
+    status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed';
+
+    /**
+     * Summary of the memory content
+     */
+    summary: string | null;
+
+    /**
+     * Title of the memory
+     */
+    title: string | null;
+
+    /**
+     * Last update timestamp
+     */
+    updatedAt: string;
+
+    /**
+     * URL of the memory
+     */
+    url: string | null;
+  }
 }
 
 export interface MemoryUploadFileResponse {
