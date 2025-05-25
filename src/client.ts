@@ -40,7 +40,7 @@ import {
   MemoryUploadFileParams,
   MemoryUploadFileResponse,
 } from './resources/memories';
-import { Search } from './resources/search';
+import { Search, SearchExecuteParams, SearchExecuteResponse } from './resources/search';
 import {
   SettingGetResponse,
   SettingUpdateParams,
@@ -742,7 +742,11 @@ export declare namespace Supermemory {
     type MemoryUploadFileParams as MemoryUploadFileParams,
   };
 
-  export { Search as Search };
+  export {
+    Search as Search,
+    type SearchExecuteResponse as SearchExecuteResponse,
+    type SearchExecuteParams as SearchExecuteParams,
+  };
 
   export {
     Settings as Settings,
