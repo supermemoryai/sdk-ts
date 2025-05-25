@@ -19,14 +19,6 @@ Methods:
 
 # Search
 
-Types:
-
-- <code><a href="./src/resources/search.ts">SearchExecuteResponse</a></code>
-
-Methods:
-
-- <code title="get /v3/search">client.search.<a href="./src/resources/search.ts">execute</a>({ ...params }) -> SearchExecuteResponse</code>
-
 # Settings
 
 Types:

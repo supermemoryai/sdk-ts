@@ -27,9 +27,11 @@ const client = new Supermemory({
 });
 
 async function main() {
-  const response = await client.search.execute({ q: 'documents related to python' });
+  const response = await client.memories.add({
+    content: 'This is a detailed article about machine learning concepts...',
+  });
 
-  console.log(response.results);
+  console.log(response.id);
 }
 
 main();
