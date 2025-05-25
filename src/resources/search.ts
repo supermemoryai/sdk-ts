@@ -6,7 +6,7 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Search extends APIResource {
   /**
-   * Search memories with filtering
+   * Search memories with basic filtering (simple query parameters only)
    */
   execute(query: SearchExecuteParams, options?: RequestOptions): APIPromise<SearchExecuteResponse> {
     return this._client.get('/v3/search', { query, ...options });
@@ -94,11 +94,6 @@ export interface SearchExecuteParams {
   q: string;
 
   /**
-   * Optional category filters
-   */
-  categoriesFilter?: Array<'technology' | 'science' | 'business' | 'health'>;
-
-  /**
    * Threshold / sensitivity for chunk selection. 0 is least sensitive (returns most
    * chunks, more results), 1 is most sensitive (returns lesser chunks, accurate
    * results)
@@ -117,11 +112,6 @@ export interface SearchExecuteParams {
    * accurate results)
    */
   documentThreshold?: number;
-
-  /**
-   * Optional filters to apply to the search
-   */
-  filters?: SearchExecuteParams.UnionMember0 | Record<string, unknown>;
 
   /**
    * If true, include document summary in the response. This is helpful if you want a
@@ -158,14 +148,6 @@ export interface SearchExecuteParams {
    * the search.
    */
   userId?: string;
-}
-
-export namespace SearchExecuteParams {
-  export interface UnionMember0 {
-    AND?: Array<unknown>;
-
-    OR?: Array<unknown>;
-  }
 }
 
 export declare namespace Search {
