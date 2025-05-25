@@ -24,23 +24,9 @@ describe('resource search', () => {
   test.skip('execute: required and optional params', async () => {
     const response = await client.search.execute({
       q: 'machine learning concepts',
-      categoriesFilter: ['technology', 'science'],
       chunkThreshold: 0.5,
       docId: 'doc_xyz789',
       documentThreshold: 0.5,
-      filters: {
-        AND: [
-          { key: 'group', value: 'jira_users', negate: false },
-          {
-            filterType: 'numeric',
-            key: 'timestamp',
-            value: '1742745777',
-            negate: false,
-            numericOperator: '>',
-          },
-        ],
-        OR: [{}],
-      },
       includeSummary: false,
       limit: 10,
       onlyMatchingChunks: false,
