@@ -26,6 +26,7 @@ describe('resource search', () => {
       q: 'machine learning concepts',
       categoriesFilter: ['technology', 'science'],
       chunkThreshold: 0.5,
+      containerTags: ['user_123', 'project_123'],
       docId: 'doc_xyz789',
       documentThreshold: 0.5,
       filters: {
@@ -46,7 +47,6 @@ describe('resource search', () => {
       onlyMatchingChunks: false,
       rerank: false,
       rewriteQuery: false,
-      userId: 'user_123',
     });
   });
 });
