@@ -6,10 +6,17 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Search extends APIResource {
   /**
-   * Search memories with filtering
+   * Search memories with advanced filtering (supports complex filters and arrays)
+   *
+   * @example
+   * ```ts
+   * const response = await client.search.execute({
+   *   q: 'machine learning concepts',
+   * });
+   * ```
    */
-  execute(query: SearchExecuteParams, options?: RequestOptions): APIPromise<SearchExecuteResponse> {
-    return this._client.get('/v3/search', { query, ...options });
+  execute(body: SearchExecuteParams, options?: RequestOptions): APIPromise<SearchExecuteResponse> {
+    return this._client.post('/v3/search', { body, ...options });
   }
 }
 
