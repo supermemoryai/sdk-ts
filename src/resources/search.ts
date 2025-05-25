@@ -6,7 +6,7 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Search extends APIResource {
   /**
-   * Search memories with advanced filtering (supports complex filters and arrays)
+   * Search memories with advanced filtering
    *
    * @example
    * ```ts
