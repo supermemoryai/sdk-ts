@@ -8,6 +8,13 @@ import { path } from '../internal/utils/path';
 export class Connections extends APIResource {
   /**
    * Initialize connection and get authorization URL
+   *
+   * @example
+   * ```ts
+   * const connection = await client.connections.create(
+   *   'notion',
+   * );
+   * ```
    */
   create(
     provider: 'notion' | 'google-drive' | 'onedrive',
@@ -19,6 +26,11 @@ export class Connections extends APIResource {
 
   /**
    * List all connections
+   *
+   * @example
+   * ```ts
+   * const connections = await client.connections.list();
+   * ```
    */
   list(
     query: ConnectionListParams | null | undefined = {},
@@ -29,9 +41,34 @@ export class Connections extends APIResource {
 
   /**
    * Get connection details
+   *
+   * @example
+   * ```ts
+   * const connection = await client.connections.get(
+   *   'connectionId',
+   * );
+   * ```
    */
   get(connectionID: string, options?: RequestOptions): APIPromise<ConnectionGetResponse> {
     return this._client.get(path`/v3/connections/${connectionID}`, options);
+  }
+
+  /**
+   * List documents for a specific provider and container tags
+   *
+   * @example
+   * ```ts
+   * const response = await client.connections.listDocuments(
+   *   'notion',
+   * );
+   * ```
+   */
+  listDocuments(
+    provider: 'notion' | 'google-drive' | 'onedrive',
+    body: ConnectionListDocumentsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ConnectionListDocumentsResponse> {
+    return this._client.post(path`/v3/connections/${provider}/documents`, { body, ...options });
   }
 }
 
@@ -73,6 +110,35 @@ export interface ConnectionGetResponse {
   metadata?: Record<string, unknown>;
 }
 
+export type ConnectionListDocumentsResponse =
+  Array<ConnectionListDocumentsResponse.ConnectionListDocumentsResponseItem>;
+
+export namespace ConnectionListDocumentsResponse {
+  export interface ConnectionListDocumentsResponseItem {
+    id: string;
+
+    content: string | null;
+
+    createdAt: string;
+
+    metadata: Record<string, unknown> | null;
+
+    source: string | null;
+
+    status: string;
+
+    summary: string | null;
+
+    title: string | null;
+
+    type: string;
+
+    updatedAt: string;
+
+    url: string | null;
+  }
+}
+
 export interface ConnectionCreateParams {
   containerTags?: Array<string>;
 
@@ -85,12 +151,21 @@ export interface ConnectionListParams {
   endUserId?: string;
 }
 
+export interface ConnectionListDocumentsParams {
+  /**
+   * Optional comma-separated list of container tags to filter documents by
+   */
+  containerTags?: Array<string>;
+}
+
 export declare namespace Connections {
   export {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
     type ConnectionGetResponse as ConnectionGetResponse,
+    type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
+    type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
   };
 }
