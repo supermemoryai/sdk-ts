@@ -24,6 +24,8 @@ import {
   ConnectionCreateParams,
   ConnectionCreateResponse,
   ConnectionGetResponse,
+  ConnectionListDocumentsParams,
+  ConnectionListDocumentsResponse,
   ConnectionListParams,
   ConnectionListResponse,
   Connections,
@@ -760,7 +762,9 @@ export declare namespace Supermemory {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
     type ConnectionGetResponse as ConnectionGetResponse,
+    type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
+    type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
   };
 }
