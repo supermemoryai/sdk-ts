@@ -15,18 +15,13 @@ export class Memories extends APIResource {
    * @example
    * ```ts
    * const memory = await client.memories.update('id', {
-   *   body_id: 'acxV5LHMEsG2hMSNb4umbn',
    *   content:
    *     'This is a detailed article about machine learning concepts...',
    * });
    * ```
    */
-  update(
-    pathID: string,
-    body: MemoryUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<MemoryUpdateResponse> {
-    return this._client.patch(path`/v3/memories/${pathID}`, { body, ...options });
+  update(id: string, body: MemoryUpdateParams, options?: RequestOptions): APIPromise<MemoryUpdateResponse> {
+    return this._client.patch(path`/v3/memories/${id}`, { body, ...options });
   }
 
   /**
@@ -283,11 +278,6 @@ export interface MemoryUploadFileResponse {
 }
 
 export interface MemoryUpdateParams {
-  /**
-   * Unique identifier of the memory.
-   */
-  body_id: string;
-
   /**
    * The content to extract and process into a memory. This can be a URL to a
    * website, a PDF, an image, or a video.
