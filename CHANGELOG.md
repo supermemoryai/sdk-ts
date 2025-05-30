@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.0.0-alpha.9 (2025-05-30)
+
+Full Changelog: [v3.0.0-alpha.8...v3.0.0-alpha.9](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.8...v3.0.0-alpha.9)
+
+### Features
+
+* **api:** api update ([23e5400](https://github.com/supermemoryai/sdk-ts/commit/23e54005be0863fd1617eac329889825cccabfb3))
+* **api:** manual updates ([6b3a9a3](https://github.com/supermemoryai/sdk-ts/commit/6b3a9a3dab3a3a7ae14de4c9ee011466957f8914))
+
+
+### Bug Fixes
+
+* compat with more runtimes ([2fed96b](https://github.com/supermemoryai/sdk-ts/commit/2fed96b90cebb40d6f5a12ab1a85dcb7b82089d2))
+
+
+### Chores
+
+* improve publish-npm script --latest tag logic ([90c4e9c](https://github.com/supermemoryai/sdk-ts/commit/90c4e9c14ed795fb3d02f3c6ef457b518f45197b))
+
 ## 3.0.0-alpha.8 (2025-05-27)
 
 Full Changelog: [v3.0.0-alpha.7...v3.0.0-alpha.8](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.7...v3.0.0-alpha.8)
