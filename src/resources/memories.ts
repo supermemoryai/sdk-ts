@@ -15,18 +15,13 @@ export class Memories extends APIResource {
    * @example
    * ```ts
    * const memory = await client.memories.update('id', {
-   *   body_id: 'acxV5LHMEsG2hMSNb4umbn',
    *   content:
    *     'This is a detailed article about machine learning concepts...',
    * });
    * ```
    */
-  update(
-    pathID: string,
-    body: MemoryUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<MemoryUpdateResponse> {
-    return this._client.patch(path`/v3/memories/${pathID}`, { body, ...options });
+  update(id: string, body: MemoryUpdateParams, options?: RequestOptions): APIPromise<MemoryUpdateResponse> {
+    return this._client.patch(path`/v3/memories/${id}`, { body, ...options });
   }
 
   /**
@@ -133,21 +128,15 @@ export namespace MemoryListResponse {
     id: string;
 
     /**
-     * The content to extract and process into a memory. This can be a URL to a
-     * website, a PDF, an image, or a video.
-     *
-     * Plaintext: Any plaintext format
-     *
-     * URL: A URL to a website, PDF, image, or video
-     *
-     * We automatically detect the content type from the url's response format.
-     */
-    content: string | null;
-
-    /**
      * Creation timestamp
      */
     createdAt: string;
+
+    /**
+     * Optional custom ID of the memory. This could be an ID from your database that
+     * will uniquely identify this memory.
+     */
+    customId: string | null;
 
     /**
      * Optional metadata for the memory. This is used to store additional information
@@ -179,9 +168,10 @@ export namespace MemoryListResponse {
     updatedAt: string;
 
     /**
-     * URL of the memory
+     * Optional tags this memory should be containerized by. This can be an ID for your
+     * user, a project ID, or any other identifier you wish to use to group memories.
      */
-    url: string | null;
+    containerTags?: Array<string>;
   }
 
   /**
@@ -204,76 +194,94 @@ export interface MemoryAddResponse {
   status: string;
 }
 
+/**
+ * Memory object
+ */
 export interface MemoryGetResponse {
   /**
-   * Memory object
+   * Unique identifier of the memory.
    */
-  doc: MemoryGetResponse.Doc;
+  id: string;
 
-  status: string;
-}
-
-export namespace MemoryGetResponse {
   /**
-   * Memory object
+   * The content to extract and process into a memory. This can be a URL to a
+   * website, a PDF, an image, or a video.
+   *
+   * Plaintext: Any plaintext format
+   *
+   * URL: A URL to a website, PDF, image, or video
+   *
+   * We automatically detect the content type from the url's response format.
    */
-  export interface Doc {
-    /**
-     * Unique identifier of the memory.
-     */
-    id: string;
+  content: string | null;
 
-    /**
-     * The content to extract and process into a memory. This can be a URL to a
-     * website, a PDF, an image, or a video.
-     *
-     * Plaintext: Any plaintext format
-     *
-     * URL: A URL to a website, PDF, image, or video
-     *
-     * We automatically detect the content type from the url's response format.
-     */
-    content: string | null;
+  /**
+   * Creation timestamp
+   */
+  createdAt: string;
 
-    /**
-     * Creation timestamp
-     */
-    createdAt: string;
+  /**
+   * Optional custom ID of the memory. This could be an ID from your database that
+   * will uniquely identify this memory.
+   */
+  customId: string | null;
 
-    /**
-     * Optional metadata for the memory. This is used to store additional information
-     * about the memory. You can use this to store any additional information you need
-     * about the memory. Metadata can be filtered through. Keys must be strings and are
-     * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
-     * objects.
-     */
-    metadata: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+  /**
+   * Optional metadata for the memory. This is used to store additional information
+   * about the memory. You can use this to store any additional information you need
+   * about the memory. Metadata can be filtered through. Keys must be strings and are
+   * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
+   * objects.
+   */
+  metadata: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
 
-    /**
-     * Status of the memory
-     */
-    status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed';
+  ogImage: string | null;
 
-    /**
-     * Summary of the memory content
-     */
-    summary: string | null;
+  /**
+   * Source of the memory
+   */
+  source: string | null;
 
-    /**
-     * Title of the memory
-     */
-    title: string | null;
+  /**
+   * Status of the memory
+   */
+  status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed';
 
-    /**
-     * Last update timestamp
-     */
-    updatedAt: string;
+  /**
+   * Summary of the memory content
+   */
+  summary: string | null;
 
-    /**
-     * URL of the memory
-     */
-    url: string | null;
-  }
+  /**
+   * Title of the memory
+   */
+  title: string | null;
+
+  /**
+   * Type of the memory
+   */
+  type: 'text' | 'pdf' | 'tweet' | 'google_doc' | 'image' | 'video' | 'notion_doc' | 'webpage';
+
+  /**
+   * Last update timestamp
+   */
+  updatedAt: string;
+
+  /**
+   * URL of the memory
+   */
+  url: string | null;
+
+  /**
+   * Optional tags this memory should be containerized by. This can be an ID for your
+   * user, a project ID, or any other identifier you wish to use to group memories.
+   */
+  containerTags?: Array<string>;
+
+  /**
+   * Raw content of the memory
+   */
+  raw?: null;
 }
 
 export interface MemoryUploadFileResponse {
@@ -283,11 +291,6 @@ export interface MemoryUploadFileResponse {
 }
 
 export interface MemoryUpdateParams {
-  /**
-   * Unique identifier of the memory.
-   */
-  body_id: string;
-
   /**
    * The content to extract and process into a memory. This can be a URL to a
    * website, a PDF, an image, or a video.

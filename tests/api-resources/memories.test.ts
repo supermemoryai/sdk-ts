@@ -11,7 +11,6 @@ describe('resource memories', () => {
   // skipped: tests are disabled for the time being
   test.skip('update: only required params', async () => {
     const responsePromise = client.memories.update('id', {
-      body_id: 'acxV5LHMEsG2hMSNb4umbn',
       content: 'This is a detailed article about machine learning concepts...',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -26,7 +25,6 @@ describe('resource memories', () => {
   // skipped: tests are disabled for the time being
   test.skip('update: required and optional params', async () => {
     const response = await client.memories.update('id', {
-      body_id: 'acxV5LHMEsG2hMSNb4umbn',
       content: 'This is a detailed article about machine learning concepts...',
       containerTags: ['user_123', 'project_123'],
       customId: 'mem_abc123',

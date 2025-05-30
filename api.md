@@ -10,7 +10,7 @@ Types:
 
 Methods:
 
-- <code title="patch /v3/memories/{id}">client.memories.<a href="./src/resources/memories.ts">update</a>(pathID, { ...params }) -> MemoryUpdateResponse</code>
+- <code title="patch /v3/memories/{id}">client.memories.<a href="./src/resources/memories.ts">update</a>(id, { ...params }) -> MemoryUpdateResponse</code>
 - <code title="get /v3/memories">client.memories.<a href="./src/resources/memories.ts">list</a>({ ...params }) -> MemoryListResponse</code>
 - <code title="delete /v3/memories/{id}">client.memories.<a href="./src/resources/memories.ts">delete</a>(id) -> void</code>
 - <code title="post /v3/memories">client.memories.<a href="./src/resources/memories.ts">add</a>({ ...params }) -> MemoryAddResponse</code>
