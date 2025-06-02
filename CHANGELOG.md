@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.0-alpha.10 (2025-06-01)
+
+Full Changelog: [v3.0.0-alpha.9...v3.0.0-alpha.10](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.9...v3.0.0-alpha.10)
+
+### Chores
+
+* **deps:** bump eslint-plugin-prettier ([f943ca0](https://github.com/supermemoryai/sdk-ts/commit/f943ca084f67c9b4a09a70043c5b157db12967c3))
+* **internal:** update jest config ([58e54b1](https://github.com/supermemoryai/sdk-ts/commit/58e54b1e8a1041448995d4c597794342283b5db3))
+
 ## 3.0.0-alpha.9 (2025-05-30)
 
 Full Changelog: [v3.0.0-alpha.8...v3.0.0-alpha.9](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.8...v3.0.0-alpha.9)
