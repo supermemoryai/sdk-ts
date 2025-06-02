@@ -25,21 +25,6 @@ export class Connections extends APIResource {
   }
 
   /**
-   * List all connections
-   *
-   * @example
-   * ```ts
-   * const connections = await client.connections.list();
-   * ```
-   */
-  list(
-    query?: ConnectionListParams | null | undefined,
-    options?: RequestOptions,
-  ): APIPromise<ConnectionListResponse> {
-    return this._client.get('/v3/connections', options);
-  }
-
-  /**
    * Get connection details
    *
    * @example
@@ -80,22 +65,6 @@ export interface ConnectionCreateResponse {
   expiresIn: string;
 
   redirectsTo?: string;
-}
-
-export type ConnectionListResponse = Array<ConnectionListResponse.ConnectionListResponseItem>;
-
-export namespace ConnectionListResponse {
-  export interface ConnectionListResponseItem {
-    id: string;
-
-    createdAt: number;
-
-    provider: string;
-
-    expiresAt?: number;
-
-    metadata?: Record<string, unknown>;
-  }
 }
 
 export interface ConnectionGetResponse {
@@ -147,8 +116,6 @@ export interface ConnectionCreateParams {
   redirectUrl?: string;
 }
 
-export interface ConnectionListParams {}
-
 export interface ConnectionListDocumentsParams {
   /**
    * Optional comma-separated list of container tags to filter documents by
@@ -159,11 +126,9 @@ export interface ConnectionListDocumentsParams {
 export declare namespace Connections {
   export {
     type ConnectionCreateResponse as ConnectionCreateResponse,
-    type ConnectionListResponse as ConnectionListResponse,
     type ConnectionGetResponse as ConnectionGetResponse,
     type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
     type ConnectionCreateParams as ConnectionCreateParams,
-    type ConnectionListParams as ConnectionListParams,
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
   };
 }
