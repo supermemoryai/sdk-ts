@@ -3,9 +3,11 @@
 export {
   Connections,
   type ConnectionCreateResponse,
+  type ConnectionListResponse,
   type ConnectionGetResponse,
   type ConnectionListDocumentsResponse,
   type ConnectionCreateParams,
+  type ConnectionListParams,
   type ConnectionListDocumentsParams,
 } from './connections';
 export {

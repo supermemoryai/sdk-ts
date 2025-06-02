@@ -44,11 +44,13 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/connections.ts">ConnectionCreateResponse</a></code>
+- <code><a href="./src/resources/connections.ts">ConnectionListResponse</a></code>
 - <code><a href="./src/resources/connections.ts">ConnectionGetResponse</a></code>
 - <code><a href="./src/resources/connections.ts">ConnectionListDocumentsResponse</a></code>
 
 Methods:
 
 - <code title="post /v3/connections/{provider}">client.connections.<a href="./src/resources/connections.ts">create</a>(provider, { ...params }) -> ConnectionCreateResponse</code>
+- <code title="post /v3/connections/list">client.connections.<a href="./src/resources/connections.ts">list</a>({ ...params }) -> ConnectionListResponse</code>
 - <code title="get /v3/connections/{connectionId}">client.connections.<a href="./src/resources/connections.ts">get</a>(connectionID) -> ConnectionGetResponse</code>
 - <code title="post /v3/connections/{provider}/documents">client.connections.<a href="./src/resources/connections.ts">listDocuments</a>(provider, { ...params }) -> ConnectionListDocumentsResponse</code>
