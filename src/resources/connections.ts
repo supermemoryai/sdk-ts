@@ -33,10 +33,10 @@ export class Connections extends APIResource {
    * ```
    */
   list(
-    query: ConnectionListParams | null | undefined = {},
+    query?: ConnectionListParams | null | undefined,
     options?: RequestOptions,
   ): APIPromise<ConnectionListResponse> {
-    return this._client.get('/v3/connections', { query, ...options });
+    return this._client.get('/v3/connections', options);
   }
 
   /**
@@ -147,9 +147,7 @@ export interface ConnectionCreateParams {
   redirectUrl?: string;
 }
 
-export interface ConnectionListParams {
-  endUserId?: string;
-}
+export interface ConnectionListParams {}
 
 export interface ConnectionListDocumentsParams {
   /**
