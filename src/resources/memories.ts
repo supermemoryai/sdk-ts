@@ -203,6 +203,8 @@ export interface MemoryGetResponse {
    */
   id: string;
 
+  connectionId: string | null;
+
   /**
    * The content to extract and process into a memory. This can be a URL to a
    * website, a PDF, an image, or a video.
