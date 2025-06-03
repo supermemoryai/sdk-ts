@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.0.0-alpha.13 (2025-06-03)
+
+Full Changelog: [v3.0.0-alpha.12...v3.0.0-alpha.13](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.12...v3.0.0-alpha.13)
+
+### Features
+
+* **api:** add delete connection ([474f207](https://github.com/supermemoryai/sdk-ts/commit/474f2071bf3d36faf731c3737ba5298b63a532c4))
+* **api:** api update ([be72dd8](https://github.com/supermemoryai/sdk-ts/commit/be72dd8045135b989f7faef4569cda1a23fdfb79))
+* **api:** api update ([d1d50f5](https://github.com/supermemoryai/sdk-ts/commit/d1d50f53abca93c20a1dbbcd8b67750504315a97))
+
+
+### Chores
+
+* adjust eslint.config.mjs ignore pattern ([09c32f9](https://github.com/supermemoryai/sdk-ts/commit/09c32f973441cf06127cd673ec3f9b112ded9fc4))
+
 ## 3.0.0-alpha.12 (2025-06-02)
 
 Full Changelog: [v3.0.0-alpha.11...v3.0.0-alpha.12](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.11...v3.0.0-alpha.12)
