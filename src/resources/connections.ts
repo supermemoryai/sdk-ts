@@ -40,6 +40,24 @@ export class Connections extends APIResource {
   }
 
   /**
+   * Delete all connections for a specific provider and container tags
+   *
+   * @example
+   * ```ts
+   * const connection = await client.connections.delete(
+   *   'notion',
+   * );
+   * ```
+   */
+  delete(
+    provider: 'notion' | 'google-drive' | 'onedrive',
+    body: ConnectionDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ConnectionDeleteResponse> {
+    return this._client.delete(path`/v3/connections/${provider}`, { body, ...options });
+  }
+
+  /**
    * Get connection details
    *
    * @example
@@ -98,6 +116,22 @@ export namespace ConnectionListResponse {
   }
 }
 
+export interface ConnectionDeleteResponse {
+  deletedConnections: Array<ConnectionDeleteResponse.DeletedConnection>;
+
+  deletedCount: number;
+
+  success: boolean;
+}
+
+export namespace ConnectionDeleteResponse {
+  export interface DeletedConnection {
+    id: string;
+
+    provider: string;
+  }
+}
+
 export interface ConnectionGetResponse {
   id: string;
 
@@ -117,13 +151,7 @@ export namespace ConnectionListDocumentsResponse {
   export interface ConnectionListDocumentsResponseItem {
     id: string;
 
-    content: string | null;
-
     createdAt: string;
-
-    metadata: Record<string, unknown> | null;
-
-    source: string | null;
 
     status: string;
 
@@ -134,8 +162,6 @@ export namespace ConnectionListDocumentsResponse {
     type: string;
 
     updatedAt: string;
-
-    url: string | null;
   }
 }
 
@@ -154,6 +180,13 @@ export interface ConnectionListParams {
   containerTags?: Array<string>;
 }
 
+export interface ConnectionDeleteParams {
+  /**
+   * Optional comma-separated list of container tags to filter connections by
+   */
+  containerTags?: Array<string>;
+}
+
 export interface ConnectionListDocumentsParams {
   /**
    * Optional comma-separated list of container tags to filter documents by
@@ -165,10 +198,12 @@ export declare namespace Connections {
   export {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
+    type ConnectionDeleteResponse as ConnectionDeleteResponse,
     type ConnectionGetResponse as ConnectionGetResponse,
     type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
+    type ConnectionDeleteParams as ConnectionDeleteParams,
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
   };
 }

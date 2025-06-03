@@ -4,10 +4,12 @@ export {
   Connections,
   type ConnectionCreateResponse,
   type ConnectionListResponse,
+  type ConnectionDeleteResponse,
   type ConnectionGetResponse,
   type ConnectionListDocumentsResponse,
   type ConnectionCreateParams,
   type ConnectionListParams,
+  type ConnectionDeleteParams,
   type ConnectionListDocumentsParams,
 } from './connections';
 export {

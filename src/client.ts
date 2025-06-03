@@ -23,6 +23,8 @@ import { FinalRequestOptions, RequestOptions } from './internal/request-options'
 import {
   ConnectionCreateParams,
   ConnectionCreateResponse,
+  ConnectionDeleteParams,
+  ConnectionDeleteResponse,
   ConnectionGetResponse,
   ConnectionListDocumentsParams,
   ConnectionListDocumentsResponse,
@@ -761,10 +763,12 @@ export declare namespace Supermemory {
     Connections as Connections,
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
+    type ConnectionDeleteResponse as ConnectionDeleteResponse,
     type ConnectionGetResponse as ConnectionGetResponse,
     type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
+    type ConnectionDeleteParams as ConnectionDeleteParams,
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
   };
 }
