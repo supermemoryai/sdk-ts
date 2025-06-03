@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -69,6 +70,26 @@ export class Connections extends APIResource {
    */
   get(connectionID: string, options?: RequestOptions): APIPromise<ConnectionGetResponse> {
     return this._client.get(path`/v3/connections/${connectionID}`, options);
+  }
+
+  /**
+   * Import connections
+   *
+   * @example
+   * ```ts
+   * await client.connections.import('notion');
+   * ```
+   */
+  import(
+    provider: 'notion' | 'google-drive' | 'onedrive',
+    body: ConnectionImportParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    return this._client.post(path`/v3/connections/${provider}/import`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -187,6 +208,10 @@ export interface ConnectionDeleteParams {
   containerTags?: Array<string>;
 }
 
+export interface ConnectionImportParams {
+  containerTags?: Array<string>;
+}
+
 export interface ConnectionListDocumentsParams {
   /**
    * Optional comma-separated list of container tags to filter documents by
@@ -204,6 +229,7 @@ export declare namespace Connections {
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
     type ConnectionDeleteParams as ConnectionDeleteParams,
+    type ConnectionImportParams as ConnectionImportParams,
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
   };
 }

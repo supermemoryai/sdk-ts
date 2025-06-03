@@ -10,6 +10,7 @@ export {
   type ConnectionCreateParams,
   type ConnectionListParams,
   type ConnectionDeleteParams,
+  type ConnectionImportParams,
   type ConnectionListDocumentsParams,
 } from './connections';
 export {
