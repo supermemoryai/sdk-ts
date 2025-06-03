@@ -117,13 +117,7 @@ export namespace ConnectionListDocumentsResponse {
   export interface ConnectionListDocumentsResponseItem {
     id: string;
 
-    content: string | null;
-
     createdAt: string;
-
-    metadata: Record<string, unknown> | null;
-
-    source: string | null;
 
     status: string;
 
@@ -134,8 +128,6 @@ export namespace ConnectionListDocumentsResponse {
     type: string;
 
     updatedAt: string;
-
-    url: string | null;
   }
 }
 
