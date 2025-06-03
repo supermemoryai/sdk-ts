@@ -55,4 +55,5 @@ Methods:
 - <code title="post /v3/connections/list">client.connections.<a href="./src/resources/connections.ts">list</a>({ ...params }) -> ConnectionListResponse</code>
 - <code title="delete /v3/connections/{provider}">client.connections.<a href="./src/resources/connections.ts">delete</a>(provider, { ...params }) -> ConnectionDeleteResponse</code>
 - <code title="get /v3/connections/{connectionId}">client.connections.<a href="./src/resources/connections.ts">get</a>(connectionID) -> ConnectionGetResponse</code>
+- <code title="post /v3/connections/{provider}/import">client.connections.<a href="./src/resources/connections.ts">import</a>(provider, { ...params }) -> void</code>
 - <code title="post /v3/connections/{provider}/documents">client.connections.<a href="./src/resources/connections.ts">listDocuments</a>(provider, { ...params }) -> ConnectionListDocumentsResponse</code>

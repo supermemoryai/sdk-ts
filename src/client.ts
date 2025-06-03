@@ -26,6 +26,7 @@ import {
   ConnectionDeleteParams,
   ConnectionDeleteResponse,
   ConnectionGetResponse,
+  ConnectionImportParams,
   ConnectionListDocumentsParams,
   ConnectionListDocumentsResponse,
   ConnectionListParams,
@@ -769,6 +770,7 @@ export declare namespace Supermemory {
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
     type ConnectionDeleteParams as ConnectionDeleteParams,
+    type ConnectionImportParams as ConnectionImportParams,
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
   };
 }
