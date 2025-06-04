@@ -42,6 +42,7 @@ describe('resource search', () => {
         ],
         OR: [{}],
       },
+      includeFullDocs: false,
       includeSummary: false,
       limit: 10,
       onlyMatchingChunks: false,

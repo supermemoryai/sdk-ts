@@ -137,6 +137,12 @@ export interface SearchExecuteParams {
   filters?: SearchExecuteParams.UnionMember0 | Record<string, unknown>;
 
   /**
+   * If true, include full document in the response. This is helpful if you want a
+   * chatbot to know the full context of the document.
+   */
+  includeFullDocs?: boolean;
+
+  /**
    * If true, include document summary in the response. This is helpful if you want a
    * chatbot to know the full context of the document.
    */
