@@ -33,10 +33,10 @@ export class Memories extends APIResource {
    * ```
    */
   list(
-    query: MemoryListParams | null | undefined = {},
+    body: MemoryListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<MemoryListResponse> {
-    return this._client.get('/v3/memories', { query, ...options });
+    return this._client.post('/v3/memories/list', { body, ...options });
   }
 
   /**
@@ -203,8 +203,6 @@ export interface MemoryGetResponse {
    */
   id: string;
 
-  connectionId: string | null;
-
   /**
    * The content to extract and process into a memory. This can be a URL to a
    * website, a PDF, an image, or a video.
@@ -328,6 +326,12 @@ export interface MemoryUpdateParams {
 }
 
 export interface MemoryListParams {
+  /**
+   * Optional tags this memory should be containerized by. This can be an ID for your
+   * user, a project ID, or any other identifier you wish to use to group memories.
+   */
+  containerTags?: Array<string>;
+
   /**
    * Optional filters to apply to the search
    */

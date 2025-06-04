@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.0.0-alpha.15 (2025-06-04)
+
+Full Changelog: [v3.0.0-alpha.14...v3.0.0-alpha.15](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.14...v3.0.0-alpha.15)
+
+### Features
+
+* **api:** api update ([f22f3a3](https://github.com/supermemoryai/sdk-ts/commit/f22f3a3107c34df64dd664f1a6d16ff306da97cf))
+* **api:** manual updates ([b182524](https://github.com/supermemoryai/sdk-ts/commit/b1825249387bdf6083077de637a9a695788f3690))
+
+
+### Chores
+
+* **docs:** use top-level-await in example snippets ([6439032](https://github.com/supermemoryai/sdk-ts/commit/643903245ba0ade9b8cf49251d83ba7c223596d4))
+* **internal:** fix readablestream types in node 20 ([5afc052](https://github.com/supermemoryai/sdk-ts/commit/5afc05285db5c116e33e13c91be15d8fded5155b))
+
 ## 3.0.0-alpha.14 (2025-06-03)
 
 Full Changelog: [v3.0.0-alpha.13...v3.0.0-alpha.14](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.13...v3.0.0-alpha.14)

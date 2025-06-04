@@ -26,13 +26,9 @@ const client = new Supermemory({
   apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted
 });
 
-async function main() {
-  const response = await client.search.execute({ q: 'documents related to python' });
+const response = await client.search.execute({ q: 'documents related to python' });
 
-  console.log(response.results);
-}
-
-main();
+console.log(response.results);
 ```
 
 ### Request & Response types
@@ -47,14 +43,10 @@ const client = new Supermemory({
   apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted
 });
 
-async function main() {
-  const params: Supermemory.MemoryAddParams = {
-    content: 'This is a detailed article about machine learning concepts...',
-  };
-  const response: Supermemory.MemoryAddResponse = await client.memories.add(params);
-}
-
-main();
+const params: Supermemory.MemoryAddParams = {
+  content: 'This is a detailed article about machine learning concepts...',
+};
+const response: Supermemory.MemoryAddResponse = await client.memories.add(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -96,21 +88,17 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-async function main() {
-  const response = await client.memories
-    .add({ content: 'This is a detailed article about machine learning concepts...' })
-    .catch(async (err) => {
-      if (err instanceof Supermemory.APIError) {
-        console.log(err.status); // 400
-        console.log(err.name); // BadRequestError
-        console.log(err.headers); // {server: 'nginx', ...}
-      } else {
-        throw err;
-      }
-    });
-}
-
-main();
+const response = await client.memories
+  .add({ content: 'This is a detailed article about machine learning concepts...' })
+  .catch(async (err) => {
+    if (err instanceof Supermemory.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 ```
 
 Error codes are as follows:
