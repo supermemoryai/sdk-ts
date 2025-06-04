@@ -33,10 +33,10 @@ export class Memories extends APIResource {
    * ```
    */
   list(
-    query: MemoryListParams | null | undefined = {},
+    body: MemoryListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<MemoryListResponse> {
-    return this._client.get('/v3/memories', { query, ...options });
+    return this._client.post('/v3/memories/list', { body, ...options });
   }
 
   /**
