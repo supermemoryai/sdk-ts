@@ -60,9 +60,9 @@ describe('resource memories', () => {
           containerTags: ['user_123', 'project_123'],
           filters:
             '{"AND":[{"key":"group","value":"jira_users","negate":false},{"filterType":"numeric","key":"timestamp","value":"1742745777","negate":false,"numericOperator":">"}]}',
-          limit: '10',
+          limit: '321669910225',
           order: 'desc',
-          page: '1',
+          page: '321669910225',
           sort: 'createdAt',
         },
         { path: '/_stainless_unknown_path' },
