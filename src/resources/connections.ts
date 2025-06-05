@@ -41,7 +41,7 @@ export class Connections extends APIResource {
   }
 
   /**
-   * Delete all connections for a specific provider and container tags
+   * Delete connection for a specific provider and container tags
    *
    * @example
    * ```ts
@@ -59,7 +59,7 @@ export class Connections extends APIResource {
   }
 
   /**
-   * Get connection details
+   * Get connection details with id
    *
    * @example
    * ```ts
@@ -73,7 +73,7 @@ export class Connections extends APIResource {
   }
 
   /**
-   * Import connections
+   * Initiate a manual sync of connections
    *
    * @example
    * ```ts
@@ -93,7 +93,7 @@ export class Connections extends APIResource {
   }
 
   /**
-   * List documents for a specific provider and container tags
+   * List documents indexed for a provider and container tags
    *
    * @example
    * ```ts
