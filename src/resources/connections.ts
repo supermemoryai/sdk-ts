@@ -131,6 +131,8 @@ export namespace ConnectionListResponse {
 
     provider: string;
 
+    documentLimit?: number;
+
     expiresAt?: number;
 
     metadata?: Record<string, unknown>;
@@ -160,6 +162,8 @@ export interface ConnectionGetResponse {
 
   provider: string;
 
+  documentLimit?: number;
+
   expiresAt?: number;
 
   metadata?: Record<string, unknown>;
@@ -188,6 +192,12 @@ export namespace ConnectionListDocumentsResponse {
 
 export interface ConnectionCreateParams {
   containerTags?: Array<string>;
+
+  /**
+   * Maximum number of documents to sync from this connection (default: 100,
+   * max: 10000)
+   */
+  documentLimit?: number;
 
   metadata?: Record<string, string | number | boolean> | null;
 

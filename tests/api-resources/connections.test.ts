@@ -26,7 +26,12 @@ describe('resource connections', () => {
     await expect(
       client.connections.create(
         'notion',
-        { containerTags: ['string'], metadata: { foo: 'string' }, redirectUrl: 'redirectUrl' },
+        {
+          containerTags: ['string'],
+          documentLimit: 100,
+          metadata: { foo: 'string' },
+          redirectUrl: 'redirectUrl',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Supermemory.NotFoundError);
