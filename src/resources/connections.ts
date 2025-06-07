@@ -41,7 +41,7 @@ export class Connections extends APIResource {
   }
 
   /**
-   * Delete all connections for a specific provider and container tags
+   * Delete connection for a specific provider and container tags
    *
    * @example
    * ```ts
@@ -59,7 +59,7 @@ export class Connections extends APIResource {
   }
 
   /**
-   * Get connection details
+   * Get connection details with id
    *
    * @example
    * ```ts
@@ -73,7 +73,7 @@ export class Connections extends APIResource {
   }
 
   /**
-   * Import connections
+   * Initiate a manual sync of connections
    *
    * @example
    * ```ts
@@ -93,7 +93,7 @@ export class Connections extends APIResource {
   }
 
   /**
-   * List documents for a specific provider and container tags
+   * List documents indexed for a provider and container tags
    *
    * @example
    * ```ts
@@ -131,6 +131,8 @@ export namespace ConnectionListResponse {
 
     provider: string;
 
+    documentLimit?: number;
+
     expiresAt?: number;
 
     metadata?: Record<string, unknown>;
@@ -160,6 +162,8 @@ export interface ConnectionGetResponse {
 
   provider: string;
 
+  documentLimit?: number;
+
   expiresAt?: number;
 
   metadata?: Record<string, unknown>;
@@ -188,6 +192,12 @@ export namespace ConnectionListDocumentsResponse {
 
 export interface ConnectionCreateParams {
   containerTags?: Array<string>;
+
+  /**
+   * Maximum number of documents to sync from this connection (default: 100,
+   * max: 10000)
+   */
+  documentLimit?: number;
 
   metadata?: Record<string, string | number | boolean> | null;
 
