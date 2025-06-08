@@ -193,10 +193,6 @@ export namespace ConnectionListDocumentsResponse {
 export interface ConnectionCreateParams {
   containerTags?: Array<string>;
 
-  /**
-   * Maximum number of documents to sync from this connection (default: 100,
-   * max: 10000)
-   */
   documentLimit?: number;
 
   metadata?: Record<string, string | number | boolean> | null;
@@ -219,6 +215,9 @@ export interface ConnectionDeleteParams {
 }
 
 export interface ConnectionImportParams {
+  /**
+   * Optional comma-separated list of container tags to filter connections by
+   */
   containerTags?: Array<string>;
 }
 

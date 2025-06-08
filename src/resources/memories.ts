@@ -340,7 +340,7 @@ export interface MemoryListParams {
   /**
    * Number of items per page
    */
-  limit?: string;
+  limit?: string | number;
 
   /**
    * Sort order
@@ -350,7 +350,7 @@ export interface MemoryListParams {
   /**
    * Page number to fetch
    */
-  page?: string;
+  page?: string | number;
 
   /**
    * Field to sort by
