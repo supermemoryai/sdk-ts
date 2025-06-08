@@ -26,7 +26,12 @@ describe('resource connections', () => {
     await expect(
       client.connections.create(
         'notion',
-        { containerTags: ['string'], metadata: { foo: 'string' }, redirectUrl: 'redirectUrl' },
+        {
+          containerTags: ['string'],
+          documentLimit: 1,
+          metadata: { foo: 'string' },
+          redirectUrl: 'redirectUrl',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Supermemory.NotFoundError);
@@ -80,8 +85,8 @@ describe('resource connections', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('get', async () => {
-    const responsePromise = client.connections.get('connectionId');
+  test.skip('getByID', async () => {
+    const responsePromise = client.connections.getByID('connectionId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -89,6 +94,27 @@ describe('resource connections', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('getByTags: only required params', async () => {
+    const responsePromise = client.connections.getByTags('notion', {
+      containerTags: ['user_123', 'project_123'],
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('getByTags: required and optional params', async () => {
+    const response = await client.connections.getByTags('notion', {
+      containerTags: ['user_123', 'project_123'],
+    });
   });
 
   // skipped: tests are disabled for the time being
@@ -109,7 +135,7 @@ describe('resource connections', () => {
     await expect(
       client.connections.import(
         'notion',
-        { containerTags: ['string'] },
+        { containerTags: ['user_123', 'project_123'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Supermemory.NotFoundError);
