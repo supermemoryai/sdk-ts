@@ -28,7 +28,7 @@ describe('resource connections', () => {
         'notion',
         {
           containerTags: ['string'],
-          documentLimit: 100,
+          documentLimit: 1,
           metadata: { foo: 'string' },
           redirectUrl: 'redirectUrl',
         },
@@ -114,7 +114,7 @@ describe('resource connections', () => {
     await expect(
       client.connections.import(
         'notion',
-        { containerTags: ['string'] },
+        { containerTags: ['user_123', 'project_123'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Supermemory.NotFoundError);
