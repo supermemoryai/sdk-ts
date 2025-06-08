@@ -63,13 +63,32 @@ export class Connections extends APIResource {
    *
    * @example
    * ```ts
-   * const connection = await client.connections.get(
+   * const response = await client.connections.getByID(
    *   'connectionId',
    * );
    * ```
    */
-  get(connectionID: string, options?: RequestOptions): APIPromise<ConnectionGetResponse> {
+  getByID(connectionID: string, options?: RequestOptions): APIPromise<ConnectionGetByIDResponse> {
     return this._client.get(path`/v3/connections/${connectionID}`, options);
+  }
+
+  /**
+   * Get connection details with provider and container tags
+   *
+   * @example
+   * ```ts
+   * const response = await client.connections.getByTags(
+   *   'notion',
+   *   { containerTags: ['user_123', 'project_123'] },
+   * );
+   * ```
+   */
+  getByTags(
+    provider: 'notion' | 'google-drive' | 'onedrive',
+    body: ConnectionGetByTagsParams,
+    options?: RequestOptions,
+  ): APIPromise<ConnectionGetByTagsResponse> {
+    return this._client.post(path`/v3/connections/${provider}/connection`, { body, ...options });
   }
 
   /**
@@ -155,7 +174,21 @@ export namespace ConnectionDeleteResponse {
   }
 }
 
-export interface ConnectionGetResponse {
+export interface ConnectionGetByIDResponse {
+  id: string;
+
+  createdAt: number;
+
+  provider: string;
+
+  documentLimit?: number;
+
+  expiresAt?: number;
+
+  metadata?: Record<string, unknown>;
+}
+
+export interface ConnectionGetByTagsResponse {
   id: string;
 
   createdAt: number;
@@ -214,6 +247,13 @@ export interface ConnectionDeleteParams {
   containerTags?: Array<string>;
 }
 
+export interface ConnectionGetByTagsParams {
+  /**
+   * Comma-separated list of container tags to filter connection by
+   */
+  containerTags: Array<string>;
+}
+
 export interface ConnectionImportParams {
   /**
    * Optional comma-separated list of container tags to filter connections by
@@ -233,11 +273,13 @@ export declare namespace Connections {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
     type ConnectionDeleteResponse as ConnectionDeleteResponse,
-    type ConnectionGetResponse as ConnectionGetResponse,
+    type ConnectionGetByIDResponse as ConnectionGetByIDResponse,
+    type ConnectionGetByTagsResponse as ConnectionGetByTagsResponse,
     type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
     type ConnectionDeleteParams as ConnectionDeleteParams,
+    type ConnectionGetByTagsParams as ConnectionGetByTagsParams,
     type ConnectionImportParams as ConnectionImportParams,
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
   };
