@@ -21,11 +21,9 @@ export {
   type MemoryListResponse,
   type MemoryAddResponse,
   type MemoryGetResponse,
-  type MemoryUploadFileResponse,
   type MemoryUpdateParams,
   type MemoryListParams,
   type MemoryAddParams,
-  type MemoryUploadFileParams,
 } from './memories';
 export { Search, type SearchExecuteResponse, type SearchExecuteParams } from './search';
 export {
