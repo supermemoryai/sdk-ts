@@ -241,7 +241,17 @@ export interface MemoryGetResponse {
   /**
    * Type of the memory
    */
-  type: 'text' | 'pdf' | 'tweet' | 'google_doc' | 'image' | 'video' | 'notion_doc' | 'webpage';
+  type:
+    | 'text'
+    | 'pdf'
+    | 'tweet'
+    | 'google_doc'
+    | 'google_slide'
+    | 'google_sheet'
+    | 'image'
+    | 'video'
+    | 'notion_doc'
+    | 'webpage';
 
   /**
    * Last update timestamp
