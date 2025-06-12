@@ -109,12 +109,6 @@ export namespace MemoryListResponse {
     id: string;
 
     /**
-     * Optional ID of connection the memory was created from. This is useful for
-     * identifying the source of the memory.
-     */
-    connectionId: string | null;
-
-    /**
      * Creation timestamp
      */
     createdAt: string;
@@ -148,21 +142,6 @@ export namespace MemoryListResponse {
      * Title of the memory
      */
     title: string | null;
-
-    /**
-     * Type of the memory
-     */
-    type:
-      | 'text'
-      | 'pdf'
-      | 'tweet'
-      | 'google_doc'
-      | 'google_slide'
-      | 'google_sheet'
-      | 'image'
-      | 'video'
-      | 'notion_doc'
-      | 'webpage';
 
     /**
      * Last update timestamp
@@ -204,12 +183,6 @@ export interface MemoryGetResponse {
    * Unique identifier of the memory.
    */
   id: string;
-
-  /**
-   * Optional ID of connection the memory was created from. This is useful for
-   * identifying the source of the memory.
-   */
-  connectionId: string | null;
 
   /**
    * The content to extract and process into a memory. This can be a URL to a
