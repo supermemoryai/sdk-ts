@@ -152,6 +152,8 @@ export namespace ConnectionListResponse {
 
     documentLimit?: number;
 
+    email?: string;
+
     expiresAt?: number;
 
     metadata?: Record<string, unknown>;
@@ -183,6 +185,8 @@ export interface ConnectionGetByIDResponse {
 
   documentLimit?: number;
 
+  email?: string;
+
   expiresAt?: number;
 
   metadata?: Record<string, unknown>;
@@ -196,6 +200,8 @@ export interface ConnectionGetByTagsResponse {
   provider: string;
 
   documentLimit?: number;
+
+  email?: string;
 
   expiresAt?: number;
 
