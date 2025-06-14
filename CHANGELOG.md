@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.0.0-alpha.18 (2025-06-14)
+
+Full Changelog: [v3.0.0-alpha.17...v3.0.0-alpha.18](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.17...v3.0.0-alpha.18)
+
+### Features
+
+* **api:** api update ([9ef5fe1](https://github.com/supermemoryai/sdk-ts/commit/9ef5fe1468e7da9793ba2bc6ef003ae2c8857a25))
+* **api:** api update ([06dc425](https://github.com/supermemoryai/sdk-ts/commit/06dc425be966c335ecf5998ee5c2d3ef28cee8d0))
+* **api:** api update ([dc496a0](https://github.com/supermemoryai/sdk-ts/commit/dc496a0676c5d0e69c07952678437c62c02df3e6))
+* **api:** api update ([06edf86](https://github.com/supermemoryai/sdk-ts/commit/06edf86a8f38feefb79dd7aa80ee7bec3fc0fe02))
+* **api:** manual updates ([4a4cef3](https://github.com/supermemoryai/sdk-ts/commit/4a4cef33d6f755c3dee8b6822c5a25c1829d8f33))
+
+
+### Bug Fixes
+
+* publish script — handle NPM errors correctly ([5396449](https://github.com/supermemoryai/sdk-ts/commit/53964495de3a856935e20ccfcc24177e09d96f64))
+
+
+### Chores
+
+* **internal:** add pure annotations, make base APIResource abstract ([6737a66](https://github.com/supermemoryai/sdk-ts/commit/6737a66790ca26b35aae85a92dee4b723f6e908d))
+
 ## 3.0.0-alpha.17 (2025-06-09)
 
 Full Changelog: [v3.0.0-alpha.16...v3.0.0-alpha.17](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.16...v3.0.0-alpha.17)

@@ -2,7 +2,7 @@
 
 import type { Supermemory } from '../client';
 
-export class APIResource {
+export abstract class APIResource {
   protected _client: Supermemory;
 
   constructor(client: Supermemory) {
