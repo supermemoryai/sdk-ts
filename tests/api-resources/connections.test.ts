@@ -61,8 +61,8 @@ describe('resource connections', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('delete', async () => {
-    const responsePromise = client.connections.delete('notion');
+  test.skip('deleteByProvider', async () => {
+    const responsePromise = client.connections.deleteByProvider('notion');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -73,10 +73,10 @@ describe('resource connections', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('delete: request options and params are passed correctly', async () => {
+  test.skip('deleteByProvider: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.connections.delete(
+      client.connections.deleteByProvider(
         'notion',
         { containerTags: ['user_123', 'project_123'] },
         { path: '/_stainless_unknown_path' },
