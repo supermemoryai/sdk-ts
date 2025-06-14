@@ -45,16 +45,16 @@ export class Connections extends APIResource {
    *
    * @example
    * ```ts
-   * const connection = await client.connections.delete(
+   * const response = await client.connections.deleteByProvider(
    *   'notion',
    * );
    * ```
    */
-  delete(
+  deleteByProvider(
     provider: 'notion' | 'google-drive' | 'onedrive',
-    body: ConnectionDeleteParams | null | undefined = {},
+    body: ConnectionDeleteByProviderParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ConnectionDeleteResponse> {
+  ): APIPromise<ConnectionDeleteByProviderResponse> {
     return this._client.delete(path`/v3/connections/${provider}`, { body, ...options });
   }
 
@@ -160,15 +160,15 @@ export namespace ConnectionListResponse {
   }
 }
 
-export interface ConnectionDeleteResponse {
-  deletedConnections: Array<ConnectionDeleteResponse.DeletedConnection>;
+export interface ConnectionDeleteByProviderResponse {
+  deletedConnections: Array<ConnectionDeleteByProviderResponse.DeletedConnection>;
 
   deletedCount: number;
 
   success: boolean;
 }
 
-export namespace ConnectionDeleteResponse {
+export namespace ConnectionDeleteByProviderResponse {
   export interface DeletedConnection {
     id: string;
 
@@ -246,7 +246,7 @@ export interface ConnectionListParams {
   containerTags?: Array<string>;
 }
 
-export interface ConnectionDeleteParams {
+export interface ConnectionDeleteByProviderParams {
   /**
    * Optional comma-separated list of container tags to filter connections by
    */
@@ -278,13 +278,13 @@ export declare namespace Connections {
   export {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
-    type ConnectionDeleteResponse as ConnectionDeleteResponse,
+    type ConnectionDeleteByProviderResponse as ConnectionDeleteByProviderResponse,
     type ConnectionGetByIDResponse as ConnectionGetByIDResponse,
     type ConnectionGetByTagsResponse as ConnectionGetByTagsResponse,
     type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
-    type ConnectionDeleteParams as ConnectionDeleteParams,
+    type ConnectionDeleteByProviderParams as ConnectionDeleteByProviderParams,
     type ConnectionGetByTagsParams as ConnectionGetByTagsParams,
     type ConnectionImportParams as ConnectionImportParams,
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
