@@ -47,12 +47,13 @@ export class Connections extends APIResource {
    * ```ts
    * const response = await client.connections.deleteByProvider(
    *   'notion',
+   *   { containerTags: ['user_123', 'project_123'] },
    * );
    * ```
    */
   deleteByProvider(
     provider: 'notion' | 'google-drive' | 'onedrive',
-    body: ConnectionDeleteByProviderParams | null | undefined = {},
+    body: ConnectionDeleteByProviderParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionDeleteByProviderResponse> {
     return this._client.delete(path`/v3/connections/${provider}`, { body, ...options });
@@ -161,19 +162,9 @@ export namespace ConnectionListResponse {
 }
 
 export interface ConnectionDeleteByProviderResponse {
-  deletedConnections: Array<ConnectionDeleteByProviderResponse.DeletedConnection>;
+  id: string;
 
-  deletedCount: number;
-
-  success: boolean;
-}
-
-export namespace ConnectionDeleteByProviderResponse {
-  export interface DeletedConnection {
-    id: string;
-
-    provider: string;
-  }
+  provider: string;
 }
 
 export interface ConnectionGetByIDResponse {
@@ -250,7 +241,7 @@ export interface ConnectionDeleteByProviderParams {
   /**
    * Optional comma-separated list of container tags to filter connections by
    */
-  containerTags?: Array<string>;
+  containerTags: Array<string>;
 }
 
 export interface ConnectionGetByTagsParams {
