@@ -33,40 +33,94 @@ export interface SettingUpdateResponse {
 
 export namespace SettingUpdateResponse {
   export interface Updated {
-    excludeItems?: Array<string>;
+    excludeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
 
-    filterPrompt?: string;
+    filterPrompt?: string | null;
 
-    filterTags?: Record<string, Array<string>>;
+    filterTags?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
 
-    includeItems?: Array<string>;
+    googleDriveClientId?: string | null;
 
-    shouldLLMFilter?: boolean;
+    googleDriveClientSecret?: string | null;
+
+    googleDriveCustomKeyEnabled?: boolean | null;
+
+    includeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+
+    notionClientId?: string | null;
+
+    notionClientSecret?: string | null;
+
+    notionCustomKeyEnabled?: boolean | null;
+
+    onedriveClientId?: string | null;
+
+    onedriveClientSecret?: string | null;
+
+    onedriveCustomKeyEnabled?: boolean | null;
+
+    shouldLLMFilter?: boolean | null;
   }
 }
 
 export interface SettingGetResponse {
-  excludeItems?: Array<string>;
+  excludeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
 
-  filterPrompt?: string;
+  filterPrompt?: string | null;
 
-  filterTags?: Record<string, Array<string>>;
+  filterTags?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
 
-  includeItems?: Array<string>;
+  googleDriveClientId?: string | null;
 
-  shouldLLMFilter?: boolean;
+  googleDriveClientSecret?: string | null;
+
+  googleDriveCustomKeyEnabled?: boolean | null;
+
+  includeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+
+  notionClientId?: string | null;
+
+  notionClientSecret?: string | null;
+
+  notionCustomKeyEnabled?: boolean | null;
+
+  onedriveClientId?: string | null;
+
+  onedriveClientSecret?: string | null;
+
+  onedriveCustomKeyEnabled?: boolean | null;
+
+  shouldLLMFilter?: boolean | null;
 }
 
 export interface SettingUpdateParams {
-  excludeItems?: Array<string>;
+  excludeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
 
-  filterPrompt?: string;
+  filterPrompt?: string | null;
 
-  filterTags?: Record<string, Array<string>>;
+  filterTags?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
 
-  includeItems?: Array<string>;
+  googleDriveClientId?: string | null;
 
-  shouldLLMFilter?: boolean;
+  googleDriveClientSecret?: string | null;
+
+  googleDriveCustomKeyEnabled?: boolean | null;
+
+  includeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+
+  notionClientId?: string | null;
+
+  notionClientSecret?: string | null;
+
+  notionCustomKeyEnabled?: boolean | null;
+
+  onedriveClientId?: string | null;
+
+  onedriveClientSecret?: string | null;
+
+  onedriveCustomKeyEnabled?: boolean | null;
+
+  shouldLLMFilter?: boolean | null;
 }
 
 export declare namespace Settings {
