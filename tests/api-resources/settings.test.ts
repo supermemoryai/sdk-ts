@@ -26,10 +26,19 @@ describe('resource settings', () => {
     await expect(
       client.settings.update(
         {
-          excludeItems: ['x'],
-          filterPrompt: 'x',
-          filterTags: { foo: ['string'] },
-          includeItems: ['x'],
+          excludeItems: 'string',
+          filterPrompt: 'filterPrompt',
+          filterTags: 'string',
+          googleDriveClientId: 'googleDriveClientId',
+          googleDriveClientSecret: 'googleDriveClientSecret',
+          googleDriveCustomKeyEnabled: true,
+          includeItems: 'string',
+          notionClientId: 'notionClientId',
+          notionClientSecret: 'notionClientSecret',
+          notionCustomKeyEnabled: true,
+          onedriveClientId: 'onedriveClientId',
+          onedriveClientSecret: 'onedriveClientSecret',
+          onedriveCustomKeyEnabled: true,
           shouldLLMFilter: true,
         },
         { path: '/_stainless_unknown_path' },
