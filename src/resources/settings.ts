@@ -33,11 +33,11 @@ export interface SettingUpdateResponse {
 
 export namespace SettingUpdateResponse {
   export interface Updated {
-    excludeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+    excludeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
     filterPrompt?: string | null;
 
-    filterTags?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+    filterTags?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
     googleDriveClientId?: string | null;
 
@@ -45,7 +45,7 @@ export namespace SettingUpdateResponse {
 
     googleDriveCustomKeyEnabled?: boolean | null;
 
-    includeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+    includeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
     notionClientId?: string | null;
 
@@ -64,11 +64,11 @@ export namespace SettingUpdateResponse {
 }
 
 export interface SettingGetResponse {
-  excludeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+  excludeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   filterPrompt?: string | null;
 
-  filterTags?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+  filterTags?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   googleDriveClientId?: string | null;
 
@@ -76,7 +76,7 @@ export interface SettingGetResponse {
 
   googleDriveCustomKeyEnabled?: boolean | null;
 
-  includeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+  includeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   notionClientId?: string | null;
 
@@ -94,11 +94,11 @@ export interface SettingGetResponse {
 }
 
 export interface SettingUpdateParams {
-  excludeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+  excludeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   filterPrompt?: string | null;
 
-  filterTags?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+  filterTags?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   googleDriveClientId?: string | null;
 
@@ -106,7 +106,7 @@ export interface SettingUpdateParams {
 
   googleDriveCustomKeyEnabled?: boolean | null;
 
-  includeItems?: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+  includeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   notionClientId?: string | null;
 

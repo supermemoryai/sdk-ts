@@ -157,7 +157,7 @@ export namespace ConnectionListResponse {
 
     expiresAt?: number;
 
-    metadata?: Record<string, unknown>;
+    metadata?: { [key: string]: unknown };
   }
 }
 
@@ -180,7 +180,7 @@ export interface ConnectionGetByIDResponse {
 
   expiresAt?: number;
 
-  metadata?: Record<string, unknown>;
+  metadata?: { [key: string]: unknown };
 }
 
 export interface ConnectionGetByTagsResponse {
@@ -196,7 +196,7 @@ export interface ConnectionGetByTagsResponse {
 
   expiresAt?: number;
 
-  metadata?: Record<string, unknown>;
+  metadata?: { [key: string]: unknown };
 }
 
 export type ConnectionListDocumentsResponse =
@@ -225,7 +225,7 @@ export interface ConnectionCreateParams {
 
   documentLimit?: number;
 
-  metadata?: Record<string, string | number | boolean> | null;
+  metadata?: { [key: string]: string | number | boolean } | null;
 
   redirectUrl?: string;
 }
