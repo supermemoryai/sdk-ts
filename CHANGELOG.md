@@ -1,5 +1,34 @@
 # Changelog
 
+## 3.0.0-alpha.19 (2025-06-24)
+
+Full Changelog: [v3.0.0-alpha.18...v3.0.0-alpha.19](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.18...v3.0.0-alpha.19)
+
+### Features
+
+* **api:** api update ([7f31200](https://github.com/supermemoryai/sdk-ts/commit/7f312003f01cc5e7820d9d7169822b655366ebda))
+* **api:** api update ([fd23b75](https://github.com/supermemoryai/sdk-ts/commit/fd23b7509fc43f59b55ca98401b8293b940f748a))
+* **api:** api update ([ca755ef](https://github.com/supermemoryai/sdk-ts/commit/ca755efd0450f19b6780b11c5461bba7bac8b72f))
+* **client:** add support for endpoint-specific base URLs ([950b6e6](https://github.com/supermemoryai/sdk-ts/commit/950b6e66eb30a3908621bb64250d495b8187eab0))
+
+
+### Bug Fixes
+
+* **client:** explicitly copy fetch in withOptions ([ea7d42b](https://github.com/supermemoryai/sdk-ts/commit/ea7d42bf3e1cda451d587285a668b163674a34ef))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([b9d3281](https://github.com/supermemoryai/sdk-ts/commit/b9d32816e77fe57348a5c07fd1b93ab387717753))
+* **client:** refactor imports ([ae245a4](https://github.com/supermemoryai/sdk-ts/commit/ae245a4cc035602bc89c5d8d0c1a94827d93ad72))
+* **readme:** update badges ([74cd982](https://github.com/supermemoryai/sdk-ts/commit/74cd982784564d11817fb8aaff756128a64e964c))
+* **readme:** use better example snippet for undocumented params ([76142a1](https://github.com/supermemoryai/sdk-ts/commit/76142a1abf13c4460d8716060200dc53d5c1b9be))
+
+
+### Refactors
+
+* **types:** replace Record with mapped types ([687fd59](https://github.com/supermemoryai/sdk-ts/commit/687fd59d82a8ab6b0b287e5c86fb69518008e96a))
+
 ## 3.0.0-alpha.18 (2025-06-14)
 
 Full Changelog: [v3.0.0-alpha.17...v3.0.0-alpha.18](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.17...v3.0.0-alpha.18)
