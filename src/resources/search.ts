@@ -48,7 +48,7 @@ export namespace SearchExecuteResponse {
     /**
      * Document metadata
      */
-    metadata: Record<string, unknown> | null;
+    metadata: { [key: string]: unknown } | null;
 
     /**
      * Relevance score of the match
@@ -134,7 +134,7 @@ export interface SearchExecuteParams {
   /**
    * Optional filters to apply to the search
    */
-  filters?: SearchExecuteParams.UnionMember0 | Record<string, unknown>;
+  filters?: SearchExecuteParams.UnionMember0 | { [key: string]: unknown };
 
   /**
    * If true, include full document in the response. This is helpful if you want a

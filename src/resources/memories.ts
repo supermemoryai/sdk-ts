@@ -132,7 +132,7 @@ export namespace MemoryListResponse {
      * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
      * objects.
      */
-    metadata: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+    metadata: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
     /**
      * Status of the memory
@@ -162,7 +162,8 @@ export namespace MemoryListResponse {
       | 'image'
       | 'video'
       | 'notion_doc'
-      | 'webpage';
+      | 'webpage'
+      | 'onedrive';
 
     /**
      * Last update timestamp
@@ -241,7 +242,7 @@ export interface MemoryGetResponse {
    * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
    * objects.
    */
-  metadata: string | number | boolean | Record<string, unknown> | Array<unknown> | null;
+  metadata: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   ogImage: string | null;
 
@@ -278,7 +279,8 @@ export interface MemoryGetResponse {
     | 'image'
     | 'video'
     | 'notion_doc'
-    | 'webpage';
+    | 'webpage'
+    | 'onedrive';
 
   /**
    * Last update timestamp
@@ -334,7 +336,7 @@ export interface MemoryUpdateParams {
    * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
    * objects.
    */
-  metadata?: Record<string, string | number | boolean>;
+  metadata?: { [key: string]: string | number | boolean };
 }
 
 export interface MemoryListParams {
@@ -402,7 +404,7 @@ export interface MemoryAddParams {
    * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
    * objects.
    */
-  metadata?: Record<string, string | number | boolean>;
+  metadata?: { [key: string]: string | number | boolean };
 }
 
 export declare namespace Memories {
