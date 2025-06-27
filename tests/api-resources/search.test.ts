@@ -47,7 +47,7 @@ describe('resource search', () => {
       limit: 10,
       onlyMatchingChunks: false,
       rerank: false,
-      rewriteQuery: true,
+      rewriteQuery: false,
     });
   });
 });
