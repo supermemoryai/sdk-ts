@@ -37,8 +37,6 @@ export namespace SettingUpdateResponse {
 
     filterPrompt?: string | null;
 
-    filterTags?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
-
     googleDriveClientId?: string | null;
 
     googleDriveClientSecret?: string | null;
@@ -68,8 +66,6 @@ export interface SettingGetResponse {
 
   filterPrompt?: string | null;
 
-  filterTags?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
-
   googleDriveClientId?: string | null;
 
   googleDriveClientSecret?: string | null;
@@ -97,8 +93,6 @@ export interface SettingUpdateParams {
   excludeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   filterPrompt?: string | null;
-
-  filterTags?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   googleDriveClientId?: string | null;
 

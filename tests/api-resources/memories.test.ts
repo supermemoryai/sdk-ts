@@ -29,12 +29,12 @@ describe('resource memories', () => {
       containerTags: ['user_123', 'project_123'],
       customId: 'mem_abc123',
       metadata: {
-        source: 'web',
         category: 'technology',
+        isPublic: true,
+        readingTime: 5,
+        source: 'web',
         tag_1: 'ai',
         tag_2: 'machine-learning',
-        readingTime: 5,
-        isPublic: true,
       },
     });
   });
@@ -59,7 +59,7 @@ describe('resource memories', () => {
         {
           containerTags: ['user_123', 'project_123'],
           filters:
-            '{"AND":[{"key":"group","value":"jira_users","negate":false},{"filterType":"numeric","key":"timestamp","value":"1742745777","negate":false,"numericOperator":">"}]}',
+            '{"AND":[{"key":"group","negate":false,"value":"jira_users"},{"filterType":"numeric","key":"timestamp","negate":false,"numericOperator":">","value":"1742745777"}]}',
           limit: 10,
           order: 'desc',
           page: 1,
@@ -103,12 +103,12 @@ describe('resource memories', () => {
       containerTags: ['user_123', 'project_123'],
       customId: 'mem_abc123',
       metadata: {
-        source: 'web',
         category: 'technology',
+        isPublic: true,
+        readingTime: 5,
+        source: 'web',
         tag_1: 'ai',
         tag_2: 'machine-learning',
-        readingTime: 5,
-        isPublic: true,
       },
     });
   });

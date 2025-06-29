@@ -28,7 +28,6 @@ describe('resource settings', () => {
         {
           excludeItems: 'string',
           filterPrompt: 'filterPrompt',
-          filterTags: 'string',
           googleDriveClientId: 'googleDriveClientId',
           googleDriveClientSecret: 'googleDriveClientSecret',
           googleDriveCustomKeyEnabled: true,

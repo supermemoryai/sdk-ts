@@ -31,13 +31,13 @@ describe('resource search', () => {
       documentThreshold: 0.5,
       filters: {
         AND: [
-          { key: 'group', value: 'jira_users', negate: false },
+          { key: 'group', negate: false, value: 'jira_users' },
           {
             filterType: 'numeric',
             key: 'timestamp',
-            value: '1742745777',
             negate: false,
             numericOperator: '>',
+            value: '1742745777',
           },
         ],
         OR: [{}],
