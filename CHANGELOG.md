@@ -1,5 +1,29 @@
 # Changelog
 
+## 3.0.0-alpha.20 (2025-07-03)
+
+Full Changelog: [v3.0.0-alpha.19...v3.0.0-alpha.20](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.19...v3.0.0-alpha.20)
+
+### Features
+
+* **api:** api update ([32eafab](https://github.com/supermemoryai/sdk-ts/commit/32eafabdd29a946a380060bfc23460f0b4252f3f))
+* **api:** api update ([752f9cc](https://github.com/supermemoryai/sdk-ts/commit/752f9cc7631862270e8e92ff5eca955af7f1eba3))
+* **api:** api update ([b8d5994](https://github.com/supermemoryai/sdk-ts/commit/b8d5994196c1c9e8a9329925a701b731c7d0cfd7))
+* **api:** manual updates ([04c7fc5](https://github.com/supermemoryai/sdk-ts/commit/04c7fc524f8c0cc105315465703a6b7e44ab5e1d))
+
+
+### Bug Fixes
+
+* **ci:** release-doctor — report correct token name ([7aa5dd7](https://github.com/supermemoryai/sdk-ts/commit/7aa5dd745b83ac35a651cb69d98e245daff78ca9))
+* **client:** get fetchOptions type more reliably ([6898034](https://github.com/supermemoryai/sdk-ts/commit/6898034055d576bfca64a37a2bc09c11ac9aec66))
+
+
+### Chores
+
+* add docs to RequestOptions type ([f0862dd](https://github.com/supermemoryai/sdk-ts/commit/f0862dd4e074b416388a0b092ac6ee31917cc8c6))
+* **ci:** only run for pushes and fork pull requests ([be5b494](https://github.com/supermemoryai/sdk-ts/commit/be5b494e86287267ab778bd783bf3565ee29bf92))
+* **client:** improve path param validation ([88ce022](https://github.com/supermemoryai/sdk-ts/commit/88ce022028073f694072215b30f37b088ccb5214))
+
 ## 3.0.0-alpha.19 (2025-06-24)
 
 Full Changelog: [v3.0.0-alpha.18...v3.0.0-alpha.19](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.18...v3.0.0-alpha.19)

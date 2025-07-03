@@ -19,6 +19,7 @@ import { APIPromise } from './core/api-promise';
 import {
   ConnectionCreateParams,
   ConnectionCreateResponse,
+  ConnectionDeleteByIDResponse,
   ConnectionDeleteByProviderParams,
   ConnectionDeleteByProviderResponse,
   ConnectionGetByIDResponse,
@@ -80,6 +81,8 @@ export interface ClientOptions {
    *
    * Note that request timeouts are retried by default, so in a worst-case scenario you may wait
    * much longer than this timeout before the promise succeeds or fails.
+   *
+   * @unit milliseconds
    */
   timeout?: number | undefined;
   /**
@@ -780,6 +783,7 @@ export declare namespace Supermemory {
     Connections as Connections,
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
+    type ConnectionDeleteByIDResponse as ConnectionDeleteByIDResponse,
     type ConnectionDeleteByProviderResponse as ConnectionDeleteByProviderResponse,
     type ConnectionGetByIDResponse as ConnectionGetByIDResponse,
     type ConnectionGetByTagsResponse as ConnectionGetByTagsResponse,

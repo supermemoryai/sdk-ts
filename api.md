@@ -43,6 +43,7 @@ Types:
 
 - <code><a href="./src/resources/connections.ts">ConnectionCreateResponse</a></code>
 - <code><a href="./src/resources/connections.ts">ConnectionListResponse</a></code>
+- <code><a href="./src/resources/connections.ts">ConnectionDeleteByIDResponse</a></code>
 - <code><a href="./src/resources/connections.ts">ConnectionDeleteByProviderResponse</a></code>
 - <code><a href="./src/resources/connections.ts">ConnectionGetByIDResponse</a></code>
 - <code><a href="./src/resources/connections.ts">ConnectionGetByTagsResponse</a></code>
@@ -52,6 +53,7 @@ Methods:
 
 - <code title="post /v3/connections/{provider}">client.connections.<a href="./src/resources/connections.ts">create</a>(provider, { ...params }) -> ConnectionCreateResponse</code>
 - <code title="post /v3/connections/list">client.connections.<a href="./src/resources/connections.ts">list</a>({ ...params }) -> ConnectionListResponse</code>
+- <code title="delete /v3/connections/{connectionId}">client.connections.<a href="./src/resources/connections.ts">deleteByID</a>(connectionID) -> ConnectionDeleteByIDResponse</code>
 - <code title="delete /v3/connections/{provider}">client.connections.<a href="./src/resources/connections.ts">deleteByProvider</a>(provider, { ...params }) -> ConnectionDeleteByProviderResponse</code>
 - <code title="get /v3/connections/{connectionId}">client.connections.<a href="./src/resources/connections.ts">getByID</a>(connectionID) -> ConnectionGetByIDResponse</code>
 - <code title="post /v3/connections/{provider}/connection">client.connections.<a href="./src/resources/connections.ts">getByTags</a>(provider, { ...params }) -> ConnectionGetByTagsResponse</code>

@@ -41,6 +41,20 @@ export class Connections extends APIResource {
   }
 
   /**
+   * Delete a specific connection by ID
+   *
+   * @example
+   * ```ts
+   * const response = await client.connections.deleteByID(
+   *   'connectionId',
+   * );
+   * ```
+   */
+  deleteByID(connectionID: string, options?: RequestOptions): APIPromise<ConnectionDeleteByIDResponse> {
+    return this._client.delete(path`/v3/connections/${connectionID}`, options);
+  }
+
+  /**
    * Delete connection for a specific provider and container tags
    *
    * @example
@@ -161,6 +175,12 @@ export namespace ConnectionListResponse {
   }
 }
 
+export interface ConnectionDeleteByIDResponse {
+  id: string;
+
+  provider: string;
+}
+
 export interface ConnectionDeleteByProviderResponse {
   id: string;
 
@@ -269,6 +289,7 @@ export declare namespace Connections {
   export {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
+    type ConnectionDeleteByIDResponse as ConnectionDeleteByIDResponse,
     type ConnectionDeleteByProviderResponse as ConnectionDeleteByProviderResponse,
     type ConnectionGetByIDResponse as ConnectionGetByIDResponse,
     type ConnectionGetByTagsResponse as ConnectionGetByTagsResponse,
