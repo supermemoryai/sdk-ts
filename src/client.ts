@@ -19,6 +19,7 @@ import { APIPromise } from './core/api-promise';
 import {
   ConnectionCreateParams,
   ConnectionCreateResponse,
+  ConnectionDeleteByIDResponse,
   ConnectionDeleteByProviderParams,
   ConnectionDeleteByProviderResponse,
   ConnectionGetByIDResponse,
@@ -782,6 +783,7 @@ export declare namespace Supermemory {
     Connections as Connections,
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
+    type ConnectionDeleteByIDResponse as ConnectionDeleteByIDResponse,
     type ConnectionDeleteByProviderResponse as ConnectionDeleteByProviderResponse,
     type ConnectionGetByIDResponse as ConnectionGetByIDResponse,
     type ConnectionGetByTagsResponse as ConnectionGetByTagsResponse,
