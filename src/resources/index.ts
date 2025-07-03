@@ -4,6 +4,7 @@ export {
   Connections,
   type ConnectionCreateResponse,
   type ConnectionListResponse,
+  type ConnectionDeleteByIDResponse,
   type ConnectionDeleteByProviderResponse,
   type ConnectionGetByIDResponse,
   type ConnectionGetByTagsResponse,
