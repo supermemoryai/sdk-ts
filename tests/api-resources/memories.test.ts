@@ -9,10 +9,8 @@ const client = new Supermemory({
 
 describe('resource memories', () => {
   // skipped: tests are disabled for the time being
-  test.skip('update: only required params', async () => {
-    const responsePromise = client.memories.update('id', {
-      content: 'This is a detailed article about machine learning concepts...',
-    });
+  test.skip('update', async () => {
+    const responsePromise = client.memories.update('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,20 +21,27 @@ describe('resource memories', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('update: required and optional params', async () => {
-    const response = await client.memories.update('id', {
-      content: 'This is a detailed article about machine learning concepts...',
-      containerTags: ['user_123', 'project_123'],
-      customId: 'mem_abc123',
-      metadata: {
-        category: 'technology',
-        isPublic: true,
-        readingTime: 5,
-        source: 'web',
-        tag_1: 'ai',
-        tag_2: 'machine-learning',
-      },
-    });
+  test.skip('update: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.memories.update(
+        'id',
+        {
+          containerTags: ['user_123', 'project_123'],
+          content: 'This is a detailed article about machine learning concepts...',
+          customId: 'mem_abc123',
+          metadata: {
+            category: 'technology',
+            isPublic: true,
+            readingTime: 5,
+            source: 'web',
+            tag_1: 'ai',
+            tag_2: 'machine-learning',
+          },
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // skipped: tests are disabled for the time being
@@ -83,10 +88,8 @@ describe('resource memories', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('add: only required params', async () => {
-    const responsePromise = client.memories.add({
-      content: 'This is a detailed article about machine learning concepts...',
-    });
+  test.skip('add', async () => {
+    const responsePromise = client.memories.add();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -97,20 +100,26 @@ describe('resource memories', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('add: required and optional params', async () => {
-    const response = await client.memories.add({
-      content: 'This is a detailed article about machine learning concepts...',
-      containerTags: ['user_123', 'project_123'],
-      customId: 'mem_abc123',
-      metadata: {
-        category: 'technology',
-        isPublic: true,
-        readingTime: 5,
-        source: 'web',
-        tag_1: 'ai',
-        tag_2: 'machine-learning',
-      },
-    });
+  test.skip('add: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.memories.add(
+        {
+          containerTags: ['user_123', 'project_123'],
+          content: 'This is a detailed article about machine learning concepts...',
+          customId: 'mem_abc123',
+          metadata: {
+            category: 'technology',
+            isPublic: true,
+            readingTime: 5,
+            source: 'web',
+            tag_1: 'ai',
+            tag_2: 'machine-learning',
+          },
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // skipped: tests are disabled for the time being
