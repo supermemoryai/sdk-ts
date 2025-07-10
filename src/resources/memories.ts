@@ -262,6 +262,12 @@ export interface MemoryGetResponse {
    */
   summary: string | null;
 
+  summaryEmbeddingModel: string | null;
+
+  summaryEmbeddingModelNew: string | null;
+
+  summaryEmbeddingNew: Array<number> | null;
+
   /**
    * Title of the memory
    */
@@ -289,11 +295,6 @@ export interface MemoryGetResponse {
   updatedAt: string;
 
   /**
-   * URL of the memory
-   */
-  url: string | null;
-
-  /**
    * Optional tags this memory should be containerized by. This can be an ID for your
    * user, a project ID, or any other identifier you wish to use to group memories.
    */
@@ -303,6 +304,11 @@ export interface MemoryGetResponse {
    * Raw content of the memory
    */
   raw?: null;
+
+  /**
+   * URL of the memory
+   */
+  url?: string | null;
 }
 
 export interface MemoryUpdateParams {
