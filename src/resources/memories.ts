@@ -12,13 +12,14 @@ export class Memories extends APIResource {
    *
    * @example
    * ```ts
-   * const memory = await client.memories.update('id', {
-   *   content:
-   *     'This is a detailed article about machine learning concepts...',
-   * });
+   * const memory = await client.memories.update('id');
    * ```
    */
-  update(id: string, body: MemoryUpdateParams, options?: RequestOptions): APIPromise<MemoryUpdateResponse> {
+  update(
+    id: string,
+    body: MemoryUpdateParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<MemoryUpdateResponse> {
     return this._client.patch(path`/v3/memories/${id}`, { body, ...options });
   }
 
@@ -57,13 +58,13 @@ export class Memories extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.memories.add({
-   *   content:
-   *     'This is a detailed article about machine learning concepts...',
-   * });
+   * const response = await client.memories.add();
    * ```
    */
-  add(body: MemoryAddParams, options?: RequestOptions): APIPromise<MemoryAddResponse> {
+  add(
+    body: MemoryAddParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<MemoryAddResponse> {
     return this._client.post('/v3/memories', { body, ...options });
   }
 
@@ -261,6 +262,12 @@ export interface MemoryGetResponse {
    */
   summary: string | null;
 
+  summaryEmbeddingModel: string | null;
+
+  summaryEmbeddingModelNew: string | null;
+
+  summaryEmbeddingNew: Array<number> | null;
+
   /**
    * Title of the memory
    */
@@ -288,11 +295,6 @@ export interface MemoryGetResponse {
   updatedAt: string;
 
   /**
-   * URL of the memory
-   */
-  url: string | null;
-
-  /**
    * Optional tags this memory should be containerized by. This can be an ID for your
    * user, a project ID, or any other identifier you wish to use to group memories.
    */
@@ -302,9 +304,20 @@ export interface MemoryGetResponse {
    * Raw content of the memory
    */
   raw?: null;
+
+  /**
+   * URL of the memory
+   */
+  url?: string | null;
 }
 
 export interface MemoryUpdateParams {
+  /**
+   * Optional tags this memory should be containerized by. This can be an ID for your
+   * user, a project ID, or any other identifier you wish to use to group memories.
+   */
+  containerTags?: Array<string>;
+
   /**
    * The content to extract and process into a memory. This can be a URL to a
    * website, a PDF, an image, or a video.
@@ -315,13 +328,7 @@ export interface MemoryUpdateParams {
    *
    * We automatically detect the content type from the url's response format.
    */
-  content: string;
-
-  /**
-   * Optional tags this memory should be containerized by. This can be an ID for your
-   * user, a project ID, or any other identifier you wish to use to group memories.
-   */
-  containerTags?: Array<string>;
+  content?: string;
 
   /**
    * Optional custom ID of the memory. This could be an ID from your database that
@@ -374,6 +381,12 @@ export interface MemoryListParams {
 
 export interface MemoryAddParams {
   /**
+   * Optional tags this memory should be containerized by. This can be an ID for your
+   * user, a project ID, or any other identifier you wish to use to group memories.
+   */
+  containerTags?: Array<string>;
+
+  /**
    * The content to extract and process into a memory. This can be a URL to a
    * website, a PDF, an image, or a video.
    *
@@ -383,13 +396,7 @@ export interface MemoryAddParams {
    *
    * We automatically detect the content type from the url's response format.
    */
-  content: string;
-
-  /**
-   * Optional tags this memory should be containerized by. This can be an ID for your
-   * user, a project ID, or any other identifier you wish to use to group memories.
-   */
-  containerTags?: Array<string>;
+  content?: string;
 
   /**
    * Optional custom ID of the memory. This could be an ID from your database that
