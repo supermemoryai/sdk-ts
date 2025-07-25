@@ -161,7 +161,7 @@ export namespace ConnectionListResponse {
   export interface ConnectionListResponseItem {
     id: string;
 
-    createdAt: number;
+    createdAt: string;
 
     provider: string;
 
@@ -169,7 +169,7 @@ export namespace ConnectionListResponse {
 
     email?: string;
 
-    expiresAt?: number;
+    expiresAt?: string;
 
     metadata?: { [key: string]: unknown };
   }
@@ -190,7 +190,7 @@ export interface ConnectionDeleteByProviderResponse {
 export interface ConnectionGetByIDResponse {
   id: string;
 
-  createdAt: number;
+  createdAt: string;
 
   provider: string;
 
@@ -198,7 +198,7 @@ export interface ConnectionGetByIDResponse {
 
   email?: string;
 
-  expiresAt?: number;
+  expiresAt?: string;
 
   metadata?: { [key: string]: unknown };
 }
@@ -206,7 +206,7 @@ export interface ConnectionGetByIDResponse {
 export interface ConnectionGetByTagsResponse {
   id: string;
 
-  createdAt: number;
+  createdAt: string;
 
   provider: string;
 
@@ -214,7 +214,7 @@ export interface ConnectionGetByTagsResponse {
 
   email?: string;
 
-  expiresAt?: number;
+  expiresAt?: string;
 
   metadata?: { [key: string]: unknown };
 }
