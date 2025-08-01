@@ -61,6 +61,11 @@ export namespace SearchExecuteResponse {
     title: string | null;
 
     /**
+     * Document type
+     */
+    type: string | null;
+
+    /**
      * Document last update date
      */
     updatedAt: string;
