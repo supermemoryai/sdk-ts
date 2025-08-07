@@ -106,7 +106,7 @@ export interface SearchExecuteParams {
   q: string;
 
   /**
-   * @deprecated Optional category filters
+   * Optional category filters
    */
   categoriesFilter?: Array<'technology' | 'science' | 'business' | 'health'>;
 
