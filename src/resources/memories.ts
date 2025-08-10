@@ -39,7 +39,7 @@ export class Memories extends APIResource {
   }
 
   /**
-   * Delete a memory
+   * Delete a memory by ID
    *
    * @example
    * ```ts
