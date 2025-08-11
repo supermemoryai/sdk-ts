@@ -1,5 +1,29 @@
 # Changelog
 
+## 3.0.0-alpha.22 (2025-08-10)
+
+Full Changelog: [v3.0.0-alpha.21...v3.0.0-alpha.22](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.21...v3.0.0-alpha.22)
+
+### Features
+
+* **api:** api update ([823e151](https://github.com/supermemoryai/sdk-ts/commit/823e151450a7a204644af24079cd80bbe4df6ebe))
+* **api:** api update ([f30aec0](https://github.com/supermemoryai/sdk-ts/commit/f30aec086372d4472906c75745d1d9d830957be7))
+* **api:** api update ([3e5d79c](https://github.com/supermemoryai/sdk-ts/commit/3e5d79c99af0310e5e7f5b923c170f7d290448b8))
+* **api:** api update ([edee8f4](https://github.com/supermemoryai/sdk-ts/commit/edee8f4681b4894068471fc482e92a59ca62bb69))
+* **api:** api update ([cad11a5](https://github.com/supermemoryai/sdk-ts/commit/cad11a54d2cd89eeb26130461f17969e514d49b8))
+* **api:** api update ([99d1cc1](https://github.com/supermemoryai/sdk-ts/commit/99d1cc1d4420b17067b4d3e3dd78119a919e69b6))
+* **api:** api update ([e303ebb](https://github.com/supermemoryai/sdk-ts/commit/e303ebbc6dd29720a8a5cfc586483ac6fe014534))
+* **api:** api update ([e243d83](https://github.com/supermemoryai/sdk-ts/commit/e243d83a3b78d4c905a6035529c46f668ed66d8a))
+
+
+### Chores
+
+* **internal:** move publish config ([580c9d0](https://github.com/supermemoryai/sdk-ts/commit/580c9d015a3383666dd8ead4533656fa07b8793d))
+* **internal:** remove redundant imports config ([fbc02b9](https://github.com/supermemoryai/sdk-ts/commit/fbc02b9a666e33cf99acad1f133eef00010cb18b))
+* **internal:** update comment in script ([ecfefab](https://github.com/supermemoryai/sdk-ts/commit/ecfefabdd84e3549097045040c44433f46e800a7))
+* **ts:** reorder package.json imports ([0f96de1](https://github.com/supermemoryai/sdk-ts/commit/0f96de171447c17d9810feb946868c04c94414c6))
+* update @stainless-api/prism-cli to v5.15.0 ([0c7953d](https://github.com/supermemoryai/sdk-ts/commit/0c7953d18d1cba8097580978acd921d3efcab713))
+
 ## 3.0.0-alpha.21 (2025-07-15)
 
 Full Changelog: [v3.0.0-alpha.20...v3.0.0-alpha.21](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.20...v3.0.0-alpha.21)

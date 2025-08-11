@@ -61,6 +61,11 @@ export namespace SearchExecuteResponse {
     title: string | null;
 
     /**
+     * Document type
+     */
+    type: string | null;
+
+    /**
      * Document last update date
      */
     updatedAt: string;
@@ -101,7 +106,7 @@ export interface SearchExecuteParams {
   q: string;
 
   /**
-   * Optional category filters
+   * @deprecated Optional category filters
    */
   categoriesFilter?: Array<'technology' | 'science' | 'business' | 'health'>;
 
