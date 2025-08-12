@@ -8,7 +8,7 @@ const client = new Supermemory({
 });
 
 describe('resource connections', () => {
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('create', async () => {
     const responsePromise = client.connections.create('notion');
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -37,7 +37,7 @@ describe('resource connections', () => {
     ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.connections.list();
     const rawResponse = await responsePromise.asResponse();
@@ -49,7 +49,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -60,7 +60,7 @@ describe('resource connections', () => {
     ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('deleteByID', async () => {
     const responsePromise = client.connections.deleteByID('connectionId');
     const rawResponse = await responsePromise.asResponse();
@@ -72,7 +72,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('deleteByProvider: only required params', async () => {
     const responsePromise = client.connections.deleteByProvider('notion', {
       containerTags: ['user_123', 'project_123'],
@@ -86,14 +86,14 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('deleteByProvider: required and optional params', async () => {
     const response = await client.connections.deleteByProvider('notion', {
       containerTags: ['user_123', 'project_123'],
     });
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('getByID', async () => {
     const responsePromise = client.connections.getByID('connectionId');
     const rawResponse = await responsePromise.asResponse();
@@ -105,7 +105,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('getByTags: only required params', async () => {
     const responsePromise = client.connections.getByTags('notion', {
       containerTags: ['user_123', 'project_123'],
@@ -119,14 +119,14 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('getByTags: required and optional params', async () => {
     const response = await client.connections.getByTags('notion', {
       containerTags: ['user_123', 'project_123'],
     });
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('import', async () => {
     const responsePromise = client.connections.import('notion');
     const rawResponse = await responsePromise.asResponse();
@@ -138,7 +138,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('import: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -150,7 +150,7 @@ describe('resource connections', () => {
     ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('listDocuments', async () => {
     const responsePromise = client.connections.listDocuments('notion');
     const rawResponse = await responsePromise.asResponse();
@@ -162,7 +162,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('listDocuments: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
