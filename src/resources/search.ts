@@ -71,6 +71,11 @@ export namespace SearchExecuteResponse {
     updatedAt: string;
 
     /**
+     * Full document content (only included when includeFullDocs=true)
+     */
+    content?: string | null;
+
+    /**
      * Document summary
      */
     summary?: string | null;
