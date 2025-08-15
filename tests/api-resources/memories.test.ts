@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Supermemory from 'supermemory';
+import Supermemory, { toFile } from 'supermemory';
 
 const client = new Supermemory({
   apiKey: 'My API Key',
@@ -132,5 +132,27 @@ describe('resource memories', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('uploadFile: only required params', async () => {
+    const responsePromise = client.memories.uploadFile({
+      file: await toFile(Buffer.from('# my file contents'), 'README.md'),
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('uploadFile: required and optional params', async () => {
+    const response = await client.memories.uploadFile({
+      file: await toFile(Buffer.from('# my file contents'), 'README.md'),
+      containerTags: 'containerTags',
+    });
   });
 });
