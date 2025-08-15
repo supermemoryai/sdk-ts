@@ -26,7 +26,7 @@ const client = new Supermemory({
   apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted
 });
 
-const response = await client.search.execute({ q: 'documents related to python' });
+const response = await client.search.documents({ q: 'documents related to python' });
 
 console.log(response.results);
 ```
@@ -251,7 +251,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.search.execute({
+client.search.documents({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

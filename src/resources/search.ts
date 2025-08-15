@@ -10,25 +10,39 @@ export class Search extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.search.execute({
+   * const response = await client.search.documents({
    *   q: 'machine learning concepts',
    * });
    * ```
    */
-  execute(body: SearchExecuteParams, options?: RequestOptions): APIPromise<SearchExecuteResponse> {
+  documents(body: SearchDocumentsParams, options?: RequestOptions): APIPromise<SearchDocumentsResponse> {
     return this._client.post('/v3/search', { body, ...options });
+  }
+
+  /**
+   * Search memory entries - Low latency for conversational
+   *
+   * @example
+   * ```ts
+   * const response = await client.search.memories({
+   *   q: 'machine learning concepts',
+   * });
+   * ```
+   */
+  memories(body: SearchMemoriesParams, options?: RequestOptions): APIPromise<SearchMemoriesResponse> {
+    return this._client.post('/v4/search', { body, ...options });
   }
 }
 
-export interface SearchExecuteResponse {
-  results: Array<SearchExecuteResponse.Result>;
+export interface SearchDocumentsResponse {
+  results: Array<SearchDocumentsResponse.Result>;
 
   timing: number;
 
   total: number;
 }
 
-export namespace SearchExecuteResponse {
+export namespace SearchDocumentsResponse {
   export interface Result {
     /**
      * Matching content chunks from the document
@@ -104,7 +118,169 @@ export namespace SearchExecuteResponse {
   }
 }
 
-export interface SearchExecuteParams {
+export interface SearchMemoriesResponse {
+  /**
+   * Array of matching memory entries with similarity scores
+   */
+  results: Array<SearchMemoriesResponse.Result>;
+
+  /**
+   * Search execution time in milliseconds
+   */
+  timing: number;
+
+  /**
+   * Total number of results returned
+   */
+  total: number;
+}
+
+export namespace SearchMemoriesResponse {
+  export interface Result {
+    /**
+     * Memory entry ID
+     */
+    id: string;
+
+    /**
+     * The memory content
+     */
+    memory: string;
+
+    /**
+     * Memory metadata
+     */
+    metadata: { [key: string]: unknown } | null;
+
+    /**
+     * Similarity score between the query and memory entry
+     */
+    similarity: number;
+
+    /**
+     * Memory last update date
+     */
+    updatedAt: string;
+
+    /**
+     * Object containing arrays of parent and child contextual memories
+     */
+    context?: Result.Context;
+
+    /**
+     * Associated documents for this memory entry
+     */
+    documents?: Array<Result.Document>;
+
+    /**
+     * Version number of this memory entry
+     */
+    version?: number | null;
+  }
+
+  export namespace Result {
+    /**
+     * Object containing arrays of parent and child contextual memories
+     */
+    export interface Context {
+      children?: Array<Context.Child>;
+
+      parents?: Array<Context.Parent>;
+    }
+
+    export namespace Context {
+      export interface Child {
+        /**
+         * The contextual memory content
+         */
+        memory: string;
+
+        /**
+         * Relation type between this memory and its parent/child
+         */
+        relation: 'updates' | 'extends' | 'derives';
+
+        /**
+         * Contextual memory last update date
+         */
+        updatedAt: string;
+
+        /**
+         * Contextual memory metadata
+         */
+        metadata?: { [key: string]: unknown } | null;
+
+        /**
+         * Relative version distance from the primary memory (+1 for direct child, +2 for
+         * grand-child, etc.)
+         */
+        version?: number | null;
+      }
+
+      export interface Parent {
+        /**
+         * The contextual memory content
+         */
+        memory: string;
+
+        /**
+         * Relation type between this memory and its parent/child
+         */
+        relation: 'updates' | 'extends' | 'derives';
+
+        /**
+         * Contextual memory last update date
+         */
+        updatedAt: string;
+
+        /**
+         * Contextual memory metadata
+         */
+        metadata?: { [key: string]: unknown } | null;
+
+        /**
+         * Relative version distance from the primary memory (-1 for direct parent, -2 for
+         * grand-parent, etc.)
+         */
+        version?: number | null;
+      }
+    }
+
+    export interface Document {
+      /**
+       * Document ID
+       */
+      id: string;
+
+      /**
+       * Document creation date
+       */
+      createdAt: string;
+
+      /**
+       * Document metadata
+       */
+      metadata: { [key: string]: unknown } | null;
+
+      /**
+       * Document title
+       */
+      title: string;
+
+      /**
+       * Document type
+       */
+      type: string;
+
+      /**
+       * Document last update date
+       */
+      updatedAt: string;
+    }
+  }
+}
+
+export interface SearchDocumentsParams {
   /**
    * Search query string
    */
@@ -144,7 +320,7 @@ export interface SearchExecuteParams {
   /**
    * Optional filters to apply to the search
    */
-  filters?: SearchExecuteParams.UnionMember0 | { [key: string]: unknown };
+  filters?: SearchDocumentsParams.UnionMember0 | { [key: string]: unknown };
 
   /**
    * If true, include full document in the response. This is helpful if you want a
@@ -183,7 +359,7 @@ export interface SearchExecuteParams {
   rewriteQuery?: boolean;
 }
 
-export namespace SearchExecuteParams {
+export namespace SearchDocumentsParams {
   export interface UnionMember0 {
     AND?: Array<unknown>;
 
@@ -191,9 +367,71 @@ export namespace SearchExecuteParams {
   }
 }
 
+export interface SearchMemoriesParams {
+  /**
+   * Search query string
+   */
+  q: string;
+
+  /**
+   * Optional tag this search should be containerized by. This can be an ID for your
+   * user, a project ID, or any other identifier you wish to use to filter memories.
+   */
+  containerTag?: string;
+
+  /**
+   * Optional filters to apply to the search
+   */
+  filters?: SearchMemoriesParams.UnionMember0 | { [key: string]: unknown };
+
+  include?: SearchMemoriesParams.Include;
+
+  /**
+   * Maximum number of results to return
+   */
+  limit?: number;
+
+  /**
+   * If true, rerank the results based on the query. This is helpful if you want to
+   * ensure the most relevant results are returned.
+   */
+  rerank?: boolean;
+
+  /**
+   * If true, rewrites the query to make it easier to find documents. This increases
+   * the latency by about 400ms
+   */
+  rewriteQuery?: boolean;
+
+  /**
+   * Threshold / sensitivity for memories selection. 0 is least sensitive (returns
+   * most memories, more results), 1 is most sensitive (returns lesser memories,
+   * accurate results)
+   */
+  threshold?: number;
+}
+
+export namespace SearchMemoriesParams {
+  export interface UnionMember0 {
+    AND?: Array<unknown>;
+
+    OR?: Array<unknown>;
+  }
+
+  export interface Include {
+    documents?: boolean;
+
+    relatedMemories?: boolean;
+
+    summaries?: boolean;
+  }
+}
+
 export declare namespace Search {
   export {
-    type SearchExecuteResponse as SearchExecuteResponse,
-    type SearchExecuteParams as SearchExecuteParams,
+    type SearchDocumentsResponse as SearchDocumentsResponse,
+    type SearchMemoriesResponse as SearchMemoriesResponse,
+    type SearchDocumentsParams as SearchDocumentsParams,
+    type SearchMemoriesParams as SearchMemoriesParams,
   };
 }
