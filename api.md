@@ -22,11 +22,13 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/search.ts">SearchDocumentsResponse</a></code>
+- <code><a href="./src/resources/search.ts">SearchExecuteResponse</a></code>
 - <code><a href="./src/resources/search.ts">SearchMemoriesResponse</a></code>
 
 Methods:
 
 - <code title="post /v3/search">client.search.<a href="./src/resources/search.ts">documents</a>({ ...params }) -> SearchDocumentsResponse</code>
+- <code title="post /v3/search">client.search.<a href="./src/resources/search.ts">execute</a>({ ...params }) -> SearchExecuteResponse</code>
 - <code title="post /v4/search">client.search.<a href="./src/resources/search.ts">memories</a>({ ...params }) -> SearchMemoriesResponse</code>
 
 # Settings

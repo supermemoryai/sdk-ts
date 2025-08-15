@@ -31,8 +31,10 @@ export {
 export {
   Search,
   type SearchDocumentsResponse,
+  type SearchExecuteResponse,
   type SearchMemoriesResponse,
   type SearchDocumentsParams,
+  type SearchExecuteParams,
   type SearchMemoriesParams,
 } from './search';
 export {
