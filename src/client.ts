@@ -761,10 +761,12 @@ export class Supermemory {
   settings: API.Settings = new API.Settings(this);
   connections: API.Connections = new API.Connections(this);
 }
+
 Supermemory.Memories = Memories;
 Supermemory.Search = Search;
 Supermemory.Settings = Settings;
 Supermemory.Connections = Connections;
+
 export declare namespace Supermemory {
   export type RequestOptions = Opts.RequestOptions;
 
