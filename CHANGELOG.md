@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.0.0-alpha.23 (2025-08-16)
+
+Full Changelog: [v3.0.0-alpha.22...v3.0.0-alpha.23](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.22...v3.0.0-alpha.23)
+
+### Features
+
+* **api:** api update ([6fcacef](https://github.com/supermemoryai/sdk-ts/commit/6fcacefd52bf47f7c0010e82d3b624ea25ad7e5a))
+* **api:** manual updates ([e9ca883](https://github.com/supermemoryai/sdk-ts/commit/e9ca8834d39f14433f9c94fed20d5fef74c62929))
+* **api:** manual updates ([c5915df](https://github.com/supermemoryai/sdk-ts/commit/c5915df7f91e604e6a5efe5b80706f696b3b4c7d))
+* **api:** manual updates ([aa8a5e2](https://github.com/supermemoryai/sdk-ts/commit/aa8a5e236d59470e935416bf63b7e7184e11a2d5))
+
+
+### Chores
+
+* **deps:** update dependency @types/node to v20.17.58 ([9c611b7](https://github.com/supermemoryai/sdk-ts/commit/9c611b7ce6d65dd08a105dd0983795b87a84bd94))
+* **internal:** codegen related update ([17e1e76](https://github.com/supermemoryai/sdk-ts/commit/17e1e761d3ee39a5a3ebd202de76f50e0c8f3f7d))
+* **internal:** formatting change ([9e14ef7](https://github.com/supermemoryai/sdk-ts/commit/9e14ef7d357398e9e64376d219ccb43e4f24e635))
+
 ## 3.0.0-alpha.22 (2025-08-10)
 
 Full Changelog: [v3.0.0-alpha.21...v3.0.0-alpha.22](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.21...v3.0.0-alpha.22)
