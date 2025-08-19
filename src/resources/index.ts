@@ -22,11 +22,21 @@ export {
   type MemoryListResponse,
   type MemoryAddResponse,
   type MemoryGetResponse,
+  type MemoryUploadFileResponse,
   type MemoryUpdateParams,
   type MemoryListParams,
   type MemoryAddParams,
+  type MemoryUploadFileParams,
 } from './memories';
-export { Search, type SearchExecuteResponse, type SearchExecuteParams } from './search';
+export {
+  Search,
+  type SearchDocumentsResponse,
+  type SearchExecuteResponse,
+  type SearchMemoriesResponse,
+  type SearchDocumentsParams,
+  type SearchExecuteParams,
+  type SearchMemoriesParams,
+} from './search';
 export {
   Settings,
   type SettingUpdateResponse,

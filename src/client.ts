@@ -41,8 +41,18 @@ import {
   MemoryListResponse,
   MemoryUpdateParams,
   MemoryUpdateResponse,
+  MemoryUploadFileParams,
+  MemoryUploadFileResponse,
 } from './resources/memories';
-import { Search, SearchExecuteParams, SearchExecuteResponse } from './resources/search';
+import {
+  Search,
+  SearchDocumentsParams,
+  SearchDocumentsResponse,
+  SearchExecuteParams,
+  SearchExecuteResponse,
+  SearchMemoriesParams,
+  SearchMemoriesResponse,
+} from './resources/search';
 import {
   SettingGetResponse,
   SettingUpdateParams,
@@ -751,10 +761,12 @@ export class Supermemory {
   settings: API.Settings = new API.Settings(this);
   connections: API.Connections = new API.Connections(this);
 }
+
 Supermemory.Memories = Memories;
 Supermemory.Search = Search;
 Supermemory.Settings = Settings;
 Supermemory.Connections = Connections;
+
 export declare namespace Supermemory {
   export type RequestOptions = Opts.RequestOptions;
 
@@ -764,15 +776,21 @@ export declare namespace Supermemory {
     type MemoryListResponse as MemoryListResponse,
     type MemoryAddResponse as MemoryAddResponse,
     type MemoryGetResponse as MemoryGetResponse,
+    type MemoryUploadFileResponse as MemoryUploadFileResponse,
     type MemoryUpdateParams as MemoryUpdateParams,
     type MemoryListParams as MemoryListParams,
     type MemoryAddParams as MemoryAddParams,
+    type MemoryUploadFileParams as MemoryUploadFileParams,
   };
 
   export {
     Search as Search,
+    type SearchDocumentsResponse as SearchDocumentsResponse,
     type SearchExecuteResponse as SearchExecuteResponse,
+    type SearchMemoriesResponse as SearchMemoriesResponse,
+    type SearchDocumentsParams as SearchDocumentsParams,
     type SearchExecuteParams as SearchExecuteParams,
+    type SearchMemoriesParams as SearchMemoriesParams,
   };
 
   export {
