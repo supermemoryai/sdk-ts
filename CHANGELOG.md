@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0-alpha.25 (2025-08-24)
+
+Full Changelog: [v3.0.0-alpha.24...v3.0.0-alpha.25](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.24...v3.0.0-alpha.25)
+
+### Features
+
+* **api:** api update ([76bebff](https://github.com/supermemoryai/sdk-ts/commit/76bebff2a0e9049a5e0dc5e6e5ff368695696a0d))
+
 ## 3.0.0-alpha.24 (2025-08-24)
 
 Full Changelog: [v3.0.0-alpha.23...v3.0.0-alpha.24](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.23...v3.0.0-alpha.24)
