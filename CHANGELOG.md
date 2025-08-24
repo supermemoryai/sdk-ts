@@ -1,5 +1,22 @@
 # Changelog
 
+## 3.0.0-alpha.24 (2025-08-24)
+
+Full Changelog: [v3.0.0-alpha.23...v3.0.0-alpha.24](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.23...v3.0.0-alpha.24)
+
+### Features
+
+* **api:** api update ([d15cac5](https://github.com/supermemoryai/sdk-ts/commit/d15cac59b4a9b9c0b39ffea84cf8126a16894445))
+* **api:** api update ([c1967bf](https://github.com/supermemoryai/sdk-ts/commit/c1967bf3a96ddbf100a1ddb829b226a120b95350))
+* **mcp:** add code execution tool ([7f46f73](https://github.com/supermemoryai/sdk-ts/commit/7f46f73f34099dddcd536493bf79fd077a7f8bc6))
+
+
+### Chores
+
+* add package to package.json ([46dddb3](https://github.com/supermemoryai/sdk-ts/commit/46dddb3272e67125c3ec2258ee095769f8b2c846))
+* **client:** qualify global Blob ([652941a](https://github.com/supermemoryai/sdk-ts/commit/652941aeb0483c7ee73071c2285c70a4e143d8fc))
+* update CI script ([d80ffc7](https://github.com/supermemoryai/sdk-ts/commit/d80ffc75a36ca9e2241db6171956a87b0a3cf251))
+
 ## 3.0.0-alpha.23 (2025-08-16)
 
 Full Changelog: [v3.0.0-alpha.22...v3.0.0-alpha.23](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.22...v3.0.0-alpha.23)
