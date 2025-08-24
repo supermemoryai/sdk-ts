@@ -27,6 +27,7 @@ describe('resource memories', () => {
       client.memories.update(
         'id',
         {
+          containerTag: 'user_123',
           containerTags: ['user_123', 'project_123'],
           content: 'This is a detailed article about machine learning concepts...',
           customId: 'mem_abc123',
@@ -105,6 +106,7 @@ describe('resource memories', () => {
     await expect(
       client.memories.add(
         {
+          containerTag: 'user_123',
           containerTags: ['user_123', 'project_123'],
           content: 'This is a detailed article about machine learning concepts...',
           customId: 'mem_abc123',
