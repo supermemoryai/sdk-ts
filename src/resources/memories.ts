@@ -338,8 +338,15 @@ export interface MemoryUploadFileResponse {
 
 export interface MemoryUpdateParams {
   /**
-   * Optional tags this memory should be containerized by. This can be an ID for your
+   * Optional tag this memory should be containerized by. This can be an ID for your
    * user, a project ID, or any other identifier you wish to use to group memories.
+   */
+  containerTag?: string;
+
+  /**
+   * (DEPRECATED: Use containerTag instead) Optional tags this memory should be
+   * containerized by. This can be an ID for your user, a project ID, or any other
+   * identifier you wish to use to group memories.
    */
   containerTags?: Array<string>;
 
@@ -406,8 +413,15 @@ export interface MemoryListParams {
 
 export interface MemoryAddParams {
   /**
-   * Optional tags this memory should be containerized by. This can be an ID for your
+   * Optional tag this memory should be containerized by. This can be an ID for your
    * user, a project ID, or any other identifier you wish to use to group memories.
+   */
+  containerTag?: string;
+
+  /**
+   * (DEPRECATED: Use containerTag instead) Optional tags this memory should be
+   * containerized by. This can be an ID for your user, a project ID, or any other
+   * identifier you wish to use to group memories.
    */
   containerTags?: Array<string>;
 
