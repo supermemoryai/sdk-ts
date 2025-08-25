@@ -53,7 +53,6 @@ Types:
 - <code><a href="./src/resources/connections.ts">ConnectionDeleteByProviderResponse</a></code>
 - <code><a href="./src/resources/connections.ts">ConnectionGetByIDResponse</a></code>
 - <code><a href="./src/resources/connections.ts">ConnectionGetByTagsResponse</a></code>
-- <code><a href="./src/resources/connections.ts">ConnectionImportResponse</a></code>
 - <code><a href="./src/resources/connections.ts">ConnectionListDocumentsResponse</a></code>
 
 Methods:
@@ -64,5 +63,5 @@ Methods:
 - <code title="delete /v3/connections/{provider}">client.connections.<a href="./src/resources/connections.ts">deleteByProvider</a>(provider, { ...params }) -> ConnectionDeleteByProviderResponse</code>
 - <code title="get /v3/connections/{connectionId}">client.connections.<a href="./src/resources/connections.ts">getByID</a>(connectionID) -> ConnectionGetByIDResponse</code>
 - <code title="post /v3/connections/{provider}/connection">client.connections.<a href="./src/resources/connections.ts">getByTags</a>(provider, { ...params }) -> ConnectionGetByTagsResponse</code>
-- <code title="post /v3/connections/{provider}/import">client.connections.<a href="./src/resources/connections.ts">import</a>(provider, { ...params }) -> string</code>
+- <code title="post /v3/connections/{provider}/import">client.connections.<a href="./src/resources/connections.ts">import</a>(provider, { ...params }) -> void</code>
 - <code title="post /v3/connections/{provider}/documents">client.connections.<a href="./src/resources/connections.ts">listDocuments</a>(provider, { ...params }) -> ConnectionListDocumentsResponse</code>
