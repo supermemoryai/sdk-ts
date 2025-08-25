@@ -111,18 +111,18 @@ export class Connections extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.connections.import('notion');
+   * await client.connections.import('notion');
    * ```
    */
   import(
     provider: 'notion' | 'google-drive' | 'onedrive',
     body: ConnectionImportParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<string> {
+  ): APIPromise<void> {
     return this._client.post(path`/v3/connections/${provider}/import`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: 'text/plain' }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 
@@ -219,8 +219,6 @@ export interface ConnectionGetByTagsResponse {
   metadata?: { [key: string]: unknown };
 }
 
-export type ConnectionImportResponse = string;
-
 export type ConnectionListDocumentsResponse =
   Array<ConnectionListDocumentsResponse.ConnectionListDocumentsResponseItem>;
 
@@ -295,7 +293,6 @@ export declare namespace Connections {
     type ConnectionDeleteByProviderResponse as ConnectionDeleteByProviderResponse,
     type ConnectionGetByIDResponse as ConnectionGetByIDResponse,
     type ConnectionGetByTagsResponse as ConnectionGetByTagsResponse,
-    type ConnectionImportResponse as ConnectionImportResponse,
     type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
