@@ -8,6 +8,7 @@ export {
   type ConnectionDeleteByProviderResponse,
   type ConnectionGetByIDResponse,
   type ConnectionGetByTagsResponse,
+  type ConnectionImportResponse,
   type ConnectionListDocumentsResponse,
   type ConnectionCreateParams,
   type ConnectionListParams,
