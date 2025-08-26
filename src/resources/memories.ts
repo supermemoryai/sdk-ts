@@ -195,6 +195,11 @@ export namespace MemoryListResponse {
      * user, a project ID, or any other identifier you wish to use to group memories.
      */
     containerTags?: Array<string>;
+
+    /**
+     * Content of the memory (only included when includeContent=true)
+     */
+    content?: string;
   }
 
   /**
@@ -389,6 +394,12 @@ export interface MemoryListParams {
    * Optional filters to apply to the search
    */
   filters?: string;
+
+  /**
+   * Whether to include the content field in the response. Warning: This can make
+   * responses significantly larger.
+   */
+  includeContent?: boolean;
 
   /**
    * Number of items per page
