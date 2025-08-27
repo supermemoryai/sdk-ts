@@ -66,6 +66,7 @@ describe('resource memories', () => {
           containerTags: ['user_123', 'project_123'],
           filters:
             '{"AND":[{"key":"group","negate":false,"value":"jira_users"},{"filterType":"numeric","key":"timestamp","negate":false,"numericOperator":">","value":"1742745777"}]}',
+          includeContent: false,
           limit: 10,
           order: 'desc',
           page: 1,
