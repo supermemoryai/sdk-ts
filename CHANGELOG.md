@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0-alpha.27 (2025-08-29)
+
+Full Changelog: [v3.0.0-alpha.26...v3.0.0-alpha.27](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.26...v3.0.0-alpha.27)
+
+### Chores
+
+* **internal:** update global Error reference ([5c8e529](https://github.com/supermemoryai/sdk-ts/commit/5c8e529624c921433b81cbcc975acacb5cd9aa2c))
+
 ## 3.0.0-alpha.26 (2025-08-26)
 
 Full Changelog: [v3.0.0-alpha.25...v3.0.0-alpha.26](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.25...v3.0.0-alpha.26)
