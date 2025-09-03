@@ -380,7 +380,7 @@ export interface MemoryUpdateParams {
    * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
    * objects.
    */
-  metadata?: { [key: string]: string | number | boolean };
+  metadata?: { [key: string]: string | number | boolean | Array<string> };
 }
 
 export interface MemoryListParams {
@@ -461,7 +461,7 @@ export interface MemoryAddParams {
    * case sensitive. Values can be strings, numbers, or booleans. You cannot nest
    * objects.
    */
-  metadata?: { [key: string]: string | number | boolean };
+  metadata?: { [key: string]: string | number | boolean | Array<string> };
 }
 
 export interface MemoryUploadFileParams {
