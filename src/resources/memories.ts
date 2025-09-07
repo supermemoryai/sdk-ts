@@ -60,13 +60,13 @@ export class Memories extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.memories.add();
+   * const response = await client.memories.add({
+   *   content:
+   *     'This is a detailed article about machine learning concepts...',
+   * });
    * ```
    */
-  add(
-    body: MemoryAddParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<MemoryAddResponse> {
+  add(body: MemoryAddParams, options?: RequestOptions): APIPromise<MemoryAddResponse> {
     return this._client.post('/v3/memories', { body, ...options });
   }
 
@@ -424,6 +424,18 @@ export interface MemoryListParams {
 
 export interface MemoryAddParams {
   /**
+   * The content to extract and process into a memory. This can be a URL to a
+   * website, a PDF, an image, or a video.
+   *
+   * Plaintext: Any plaintext format
+   *
+   * URL: A URL to a website, PDF, image, or video
+   *
+   * We automatically detect the content type from the url's response format.
+   */
+  content: string;
+
+  /**
    * Optional tag this memory should be containerized by. This can be an ID for your
    * user, a project ID, or any other identifier you wish to use to group memories.
    */
@@ -435,18 +447,6 @@ export interface MemoryAddParams {
    * any other identifier you wish to use to group memories.
    */
   containerTags?: Array<string>;
-
-  /**
-   * The content to extract and process into a memory. This can be a URL to a
-   * website, a PDF, an image, or a video.
-   *
-   * Plaintext: Any plaintext format
-   *
-   * URL: A URL to a website, PDF, image, or video
-   *
-   * We automatically detect the content type from the url's response format.
-   */
-  content?: string;
 
   /**
    * Optional custom ID of the memory. This could be an ID from your database that
