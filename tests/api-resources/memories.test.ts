@@ -90,8 +90,10 @@ describe('resource memories', () => {
   });
 
   // Prism tests are disabled
-  test.skip('add', async () => {
-    const responsePromise = client.memories.add();
+  test.skip('add: only required params', async () => {
+    const responsePromise = client.memories.add({
+      content: 'This is a detailed article about machine learning concepts...',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -102,27 +104,21 @@ describe('resource memories', () => {
   });
 
   // Prism tests are disabled
-  test.skip('add: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.memories.add(
-        {
-          containerTag: 'user_123',
-          containerTags: ['user_123', 'project_123'],
-          content: 'This is a detailed article about machine learning concepts...',
-          customId: 'mem_abc123',
-          metadata: {
-            category: 'technology',
-            isPublic: true,
-            readingTime: 5,
-            source: 'web',
-            tag_1: 'ai',
-            tag_2: 'machine-learning',
-          },
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Supermemory.NotFoundError);
+  test.skip('add: required and optional params', async () => {
+    const response = await client.memories.add({
+      content: 'This is a detailed article about machine learning concepts...',
+      containerTag: 'user_123',
+      containerTags: ['user_123', 'project_123'],
+      customId: 'mem_abc123',
+      metadata: {
+        category: 'technology',
+        isPublic: true,
+        readingTime: 5,
+        source: 'web',
+        tag_1: 'ai',
+        tag_2: 'machine-learning',
+      },
+    });
   });
 
   // Prism tests are disabled
