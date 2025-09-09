@@ -356,24 +356,29 @@ export namespace SearchMemoriesResponse {
       createdAt: string;
 
       /**
-       * Document metadata
-       */
-      metadata: { [key: string]: unknown } | null;
-
-      /**
-       * Document title
-       */
-      title: string;
-
-      /**
-       * Document type
-       */
-      type: string;
-
-      /**
        * Document last update date
        */
       updatedAt: string;
+
+      /**
+       * Document metadata (only included when documents=true)
+       */
+      metadata?: { [key: string]: unknown } | null;
+
+      /**
+       * Document summary (only included when summaries=true)
+       */
+      summary?: string | null;
+
+      /**
+       * Document title (only included when documents=true)
+       */
+      title?: string;
+
+      /**
+       * Document type (only included when documents=true)
+       */
+      type?: string;
     }
   }
 }
