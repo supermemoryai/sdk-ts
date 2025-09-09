@@ -31,6 +31,7 @@ describe('resource memories', () => {
           containerTags: ['user_123', 'project_123'],
           content: 'This is a detailed article about machine learning concepts...',
           customId: 'mem_abc123',
+          fileType: 'pdf',
           metadata: {
             category: 'technology',
             isPublic: true,
@@ -39,6 +40,7 @@ describe('resource memories', () => {
             tag_1: 'ai',
             tag_2: 'machine-learning',
           },
+          mimeType: 'image/png',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -110,6 +112,7 @@ describe('resource memories', () => {
       containerTag: 'user_123',
       containerTags: ['user_123', 'project_123'],
       customId: 'mem_abc123',
+      fileType: 'pdf',
       metadata: {
         category: 'technology',
         isPublic: true,
@@ -118,6 +121,7 @@ describe('resource memories', () => {
         tag_1: 'ai',
         tag_2: 'machine-learning',
       },
+      mimeType: 'image/png',
     });
   });
 
@@ -151,7 +155,9 @@ describe('resource memories', () => {
   test.skip('uploadFile: required and optional params', async () => {
     const response = await client.memories.uploadFile({
       file: await toFile(Buffer.from('# my file contents'), 'README.md'),
-      containerTags: 'containerTags',
+      containerTags: '["user_123", "project_123"]',
+      fileType: 'image',
+      mimeType: 'image/png',
     });
   });
 });

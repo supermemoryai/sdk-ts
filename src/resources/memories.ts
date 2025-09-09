@@ -374,6 +374,13 @@ export interface MemoryUpdateParams {
   customId?: string;
 
   /**
+   * Optional file type override to force specific processing behavior. Valid values:
+   * text, pdf, tweet, google_doc, google_slide, google_sheet, image, video,
+   * notion_doc, webpage, onedrive
+   */
+  fileType?: string;
+
+  /**
    * Optional metadata for the memory. This is used to store additional information
    * about the memory. You can use this to store any additional information you need
    * about the memory. Metadata can be filtered through. Keys must be strings and are
@@ -381,6 +388,12 @@ export interface MemoryUpdateParams {
    * objects.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
+
+  /**
+   * Required when fileType is 'image' or 'video'. Specifies the exact MIME type to
+   * use (e.g., 'image/png', 'image/jpeg', 'video/mp4', 'video/webm')
+   */
+  mimeType?: string;
 }
 
 export interface MemoryListParams {
@@ -455,6 +468,13 @@ export interface MemoryAddParams {
   customId?: string;
 
   /**
+   * Optional file type override to force specific processing behavior. Valid values:
+   * text, pdf, tweet, google_doc, google_slide, google_sheet, image, video,
+   * notion_doc, webpage, onedrive
+   */
+  fileType?: string;
+
+  /**
    * Optional metadata for the memory. This is used to store additional information
    * about the memory. You can use this to store any additional information you need
    * about the memory. Metadata can be filtered through. Keys must be strings and are
@@ -462,12 +482,38 @@ export interface MemoryAddParams {
    * objects.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
+
+  /**
+   * Required when fileType is 'image' or 'video'. Specifies the exact MIME type to
+   * use (e.g., 'image/png', 'image/jpeg', 'video/mp4', 'video/webm')
+   */
+  mimeType?: string;
 }
 
 export interface MemoryUploadFileParams {
+  /**
+   * File to upload and process
+   */
   file: Uploadable;
 
+  /**
+   * Optional JSON string of container tags array. This can be an ID for your user, a
+   * project ID, or any other identifier you wish to use to group memories.
+   */
   containerTags?: string;
+
+  /**
+   * Optional file type override to force specific processing behavior. Valid values:
+   * text, pdf, tweet, google_doc, google_slide, google_sheet, image, video,
+   * notion_doc, webpage, onedrive
+   */
+  fileType?: string;
+
+  /**
+   * Required when fileType is 'image' or 'video'. Specifies the exact MIME type to
+   * use (e.g., 'image/png', 'image/jpeg', 'video/mp4', 'video/webm')
+   */
+  mimeType?: string;
 }
 
 export declare namespace Memories {
