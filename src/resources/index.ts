@@ -17,18 +17,7 @@ export {
   type ConnectionImportParams,
   type ConnectionListDocumentsParams,
 } from './connections';
-export {
-  Memories,
-  type MemoryUpdateResponse,
-  type MemoryListResponse,
-  type MemoryAddResponse,
-  type MemoryGetResponse,
-  type MemoryUploadFileResponse,
-  type MemoryUpdateParams,
-  type MemoryListParams,
-  type MemoryAddParams,
-  type MemoryUploadFileParams,
-} from './memories';
+export { Memories } from './memories';
 export {
   Search,
   type SearchDocumentsResponse,
