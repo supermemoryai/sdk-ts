@@ -1,5 +1,28 @@
 # Changelog
 
+## 3.0.0-alpha.27 (2025-09-15)
+
+Full Changelog: [v3.0.0-alpha.26...v3.0.0-alpha.27](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.26...v3.0.0-alpha.27)
+
+### Features
+
+* **api:** api update ([4fd4c3f](https://github.com/supermemoryai/sdk-ts/commit/4fd4c3fda1bb0b9abc88c35e7d6ed3423242da9f))
+* **api:** api update ([931f06e](https://github.com/supermemoryai/sdk-ts/commit/931f06ec191b9265a5b616ad464f13196b5323e8))
+* **api:** api update ([1867027](https://github.com/supermemoryai/sdk-ts/commit/1867027fbf09579e83274f56662a9f52bfde7980))
+* **api:** api update ([ba68418](https://github.com/supermemoryai/sdk-ts/commit/ba684187bac42ee1c631fda0018759923f1ceb64))
+* **api:** api update ([e1af8d2](https://github.com/supermemoryai/sdk-ts/commit/e1af8d2c434a9aef933486a21a9a290b17ce44cd))
+
+
+### Bug Fixes
+
+* coerce nullable values to undefined ([d3d7567](https://github.com/supermemoryai/sdk-ts/commit/d3d75676732fa48be0847fbbcc542489bc8cff1a))
+
+
+### Chores
+
+* ci build action ([e1f58f5](https://github.com/supermemoryai/sdk-ts/commit/e1f58f5b24257a252c8e6fc13d9befc25ea42538))
+* **internal:** update global Error reference ([5c8e529](https://github.com/supermemoryai/sdk-ts/commit/5c8e529624c921433b81cbcc975acacb5cd9aa2c))
+
 ## 3.0.0-alpha.26 (2025-08-26)
 
 Full Changelog: [v3.0.0-alpha.25...v3.0.0-alpha.26](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.25...v3.0.0-alpha.26)
