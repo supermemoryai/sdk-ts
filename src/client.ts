@@ -33,18 +33,7 @@ import {
   ConnectionListResponse,
   Connections,
 } from './resources/connections';
-import {
-  Memories,
-  MemoryAddParams,
-  MemoryAddResponse,
-  MemoryGetResponse,
-  MemoryListParams,
-  MemoryListResponse,
-  MemoryUpdateParams,
-  MemoryUpdateResponse,
-  MemoryUploadFileParams,
-  MemoryUploadFileResponse,
-} from './resources/memories';
+import { Memories } from './resources/memories';
 import {
   Search,
   SearchDocumentsParams,
@@ -411,7 +400,7 @@ export class Supermemory {
     const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
     const headersTime = Date.now();
 
-    if (response instanceof Error) {
+    if (response instanceof globalThis.Error) {
       const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
       if (options.signal?.aborted) {
         throw new Errors.APIUserAbortError();
@@ -771,18 +760,7 @@ Supermemory.Connections = Connections;
 export declare namespace Supermemory {
   export type RequestOptions = Opts.RequestOptions;
 
-  export {
-    Memories as Memories,
-    type MemoryUpdateResponse as MemoryUpdateResponse,
-    type MemoryListResponse as MemoryListResponse,
-    type MemoryAddResponse as MemoryAddResponse,
-    type MemoryGetResponse as MemoryGetResponse,
-    type MemoryUploadFileResponse as MemoryUploadFileResponse,
-    type MemoryUpdateParams as MemoryUpdateParams,
-    type MemoryListParams as MemoryListParams,
-    type MemoryAddParams as MemoryAddParams,
-    type MemoryUploadFileParams as MemoryUploadFileParams,
-  };
+  export { Memories as Memories };
 
   export {
     Search as Search,

@@ -356,24 +356,29 @@ export namespace SearchMemoriesResponse {
       createdAt: string;
 
       /**
-       * Document metadata
-       */
-      metadata: { [key: string]: unknown } | null;
-
-      /**
-       * Document title
-       */
-      title: string;
-
-      /**
-       * Document type
-       */
-      type: string;
-
-      /**
        * Document last update date
        */
       updatedAt: string;
+
+      /**
+       * Document metadata (only included when documents=true)
+       */
+      metadata?: { [key: string]: unknown } | null;
+
+      /**
+       * Document summary (only included when summaries=true)
+       */
+      summary?: string | null;
+
+      /**
+       * Document title (only included when documents=true)
+       */
+      title?: string;
+
+      /**
+       * Document type (only included when documents=true)
+       */
+      type?: string;
     }
   }
 }
@@ -398,7 +403,7 @@ export interface SearchDocumentsParams {
 
   /**
    * Optional tags this search should be containerized by. This can be an ID for your
-   * user, a project ID, or any other identifier you wish to use to filter memories.
+   * user, a project ID, or any other identifier you wish to use to filter documents.
    */
   containerTags?: Array<string>;
 
@@ -485,7 +490,7 @@ export interface SearchExecuteParams {
 
   /**
    * Optional tags this search should be containerized by. This can be an ID for your
-   * user, a project ID, or any other identifier you wish to use to filter memories.
+   * user, a project ID, or any other identifier you wish to use to filter documents.
    */
   containerTags?: Array<string>;
 
