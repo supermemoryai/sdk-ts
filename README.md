@@ -43,11 +43,39 @@ const client = new Supermemory({
   apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted
 });
 
-const params: Supermemory.SearchDocumentsParams = { q: 'machine learning concepts' };
-const response: Supermemory.SearchDocumentsResponse = await client.search.documents(params);
+const memory: Supermemory.MemoryUpdateResponse = await client.memories.update('id');
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
+
+## File uploads
+
+Request parameters that correspond to file uploads can be passed in many different forms:
+
+- `File` (or an object with the same structure)
+- a `fetch` `Response` (or an object with the same structure)
+- an `fs.ReadStream`
+- the return value of our `toFile` helper
+
+```ts
+import fs from 'fs';
+import Supermemory, { toFile } from 'supermemory';
+
+const client = new Supermemory();
+
+// If you have access to Node `fs` we recommend using `fs.createReadStream()`:
+await client.memories.uploadFile({ file: fs.createReadStream('/path/to/file') });
+
+// Or if you have the web `File` API you can pass a `File` instance:
+await client.memories.uploadFile({ file: new File(['my bytes'], 'file') });
+
+// You can also pass a `fetch` `Response`:
+await client.memories.uploadFile({ file: await fetch('https://somesite/file') });
+
+// Finally, if none of the above are convenient, you can use our `toFile` helper:
+await client.memories.uploadFile({ file: await toFile(Buffer.from('my bytes'), 'file') });
+await client.memories.uploadFile({ file: await toFile(new Uint8Array([0, 1, 2]), 'file') });
+```
 
 ## Handling errors
 
@@ -57,7 +85,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.search.documents({ q: 'machine learning concepts' }).catch(async (err) => {
+const memory = await client.memories.update('id').catch(async (err) => {
   if (err instanceof Supermemory.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -97,7 +125,7 @@ const client = new Supermemory({
 });
 
 // Or, configure per-request:
-await client.search.documents({ q: 'machine learning concepts' }, {
+await client.memories.update('id', {
   maxRetries: 5,
 });
 ```
@@ -114,7 +142,7 @@ const client = new Supermemory({
 });
 
 // Override per-request:
-await client.search.documents({ q: 'machine learning concepts' }, {
+await client.memories.update('id', {
   timeout: 5 * 1000,
 });
 ```
@@ -137,15 +165,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Supermemory();
 
-const response = await client.search.documents({ q: 'machine learning concepts' }).asResponse();
+const response = await client.memories.update('id').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.search
-  .documents({ q: 'machine learning concepts' })
-  .withResponse();
+const { data: memory, response: raw } = await client.memories.update('id').withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.results);
+console.log(memory.id);
 ```
 
 ### Logging
