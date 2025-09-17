@@ -124,7 +124,7 @@ describe('resource search', () => {
         ],
         OR: [{}],
       },
-      include: { documents: true, relatedMemories: true, summaries: true },
+      include: { documents: true, forgottenMemories: false, relatedMemories: true, summaries: true },
       limit: 10,
       rerank: false,
       rewriteQuery: false,

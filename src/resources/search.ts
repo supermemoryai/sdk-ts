@@ -611,6 +611,13 @@ export namespace SearchMemoriesParams {
   export interface Include {
     documents?: boolean;
 
+    /**
+     * If true, include forgotten memories in search results. Forgotten memories are
+     * memories that have been explicitly forgotten or have passed their expiration
+     * date.
+     */
+    forgottenMemories?: boolean;
+
     relatedMemories?: boolean;
 
     summaries?: boolean;
