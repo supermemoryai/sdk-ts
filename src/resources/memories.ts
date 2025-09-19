@@ -408,9 +408,9 @@ export interface MemoryListParams {
   containerTags?: Array<string>;
 
   /**
-   * Optional filters to apply to the search
+   * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: string;
+  filters?: MemoryListParams.Or | MemoryListParams.And;
 
   /**
    * Whether to include the content field in the response. Warning: This can make
@@ -437,6 +437,60 @@ export interface MemoryListParams {
    * Field to sort by
    */
   sort?: 'createdAt' | 'updatedAt';
+}
+
+export namespace MemoryListParams {
+  export interface Or {
+    OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+  }
+
+  export namespace Or {
+    export interface UnionMember0 {
+      key: string;
+
+      value: string;
+
+      filterType?: 'metadata' | 'numeric' | 'array_contains';
+
+      negate?: boolean | 'true' | 'false';
+
+      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+    }
+
+    export interface Or {
+      OR: Array<unknown>;
+    }
+
+    export interface And {
+      AND: Array<unknown>;
+    }
+  }
+
+  export interface And {
+    AND: Array<And.UnionMember0 | And.Or | And.And>;
+  }
+
+  export namespace And {
+    export interface UnionMember0 {
+      key: string;
+
+      value: string;
+
+      filterType?: 'metadata' | 'numeric' | 'array_contains';
+
+      negate?: boolean | 'true' | 'false';
+
+      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+    }
+
+    export interface Or {
+      OR: Array<unknown>;
+    }
+
+    export interface And {
+      AND: Array<unknown>;
+    }
+  }
 }
 
 export interface MemoryAddParams {

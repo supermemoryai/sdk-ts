@@ -66,8 +66,24 @@ describe('resource memories', () => {
       client.memories.list(
         {
           containerTags: ['user_123', 'project_123'],
-          filters:
-            '{"AND":[{"key":"group","negate":false,"value":"jira_users"},{"filterType":"numeric","key":"timestamp","negate":false,"numericOperator":">","value":"1742745777"}]}',
+          filters: {
+            AND: [
+              {
+                key: 'group',
+                value: 'jira_users',
+                filterType: 'metadata',
+                negate: false,
+                numericOperator: '>',
+              },
+              {
+                key: 'timestamp',
+                value: '1742745777',
+                filterType: 'numeric',
+                negate: false,
+                numericOperator: '>',
+              },
+            ],
+          },
           includeContent: false,
           limit: 10,
           order: 'desc',
