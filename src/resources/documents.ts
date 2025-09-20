@@ -8,20 +8,20 @@ import { RequestOptions } from '../internal/request-options';
 import { multipartFormRequestOptions } from '../internal/uploads';
 import { path } from '../internal/utils/path';
 
-export class Memories extends APIResource {
+export class Documents extends APIResource {
   /**
    * Update a document with any content type (text, url, file, etc.) and metadata
    *
    * @example
    * ```ts
-   * const memory = await client.memories.update('id');
+   * const document = await client.documents.update('id');
    * ```
    */
   update(
     id: string,
-    body: MemoryUpdateParams | null | undefined = {},
+    body: DocumentUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<MemoryUpdateResponse> {
+  ): APIPromise<DocumentUpdateResponse> {
     return this._client.patch(path`/v3/documents/${id}`, { body, ...options });
   }
 
@@ -30,13 +30,13 @@ export class Memories extends APIResource {
    *
    * @example
    * ```ts
-   * const memories = await client.memories.list();
+   * const documents = await client.documents.list();
    * ```
    */
   list(
-    body: MemoryListParams | null | undefined = {},
+    body: DocumentListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<MemoryListResponse> {
+  ): APIPromise<DocumentListResponse> {
     return this._client.post('/v3/documents/list', { body, ...options });
   }
 
@@ -45,7 +45,7 @@ export class Memories extends APIResource {
    *
    * @example
    * ```ts
-   * await client.memories.delete('id');
+   * await client.documents.delete('id');
    * ```
    */
   delete(id: string, options?: RequestOptions): APIPromise<void> {
@@ -60,13 +60,13 @@ export class Memories extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.memories.add({
+   * const response = await client.documents.add({
    *   content:
    *     'This is a detailed article about machine learning concepts...',
    * });
    * ```
    */
-  add(body: MemoryAddParams, options?: RequestOptions): APIPromise<MemoryAddResponse> {
+  add(body: DocumentAddParams, options?: RequestOptions): APIPromise<DocumentAddResponse> {
     return this._client.post('/v3/documents', { body, ...options });
   }
 
@@ -75,10 +75,10 @@ export class Memories extends APIResource {
    *
    * @example
    * ```ts
-   * const memory = await client.memories.get('id');
+   * const document = await client.documents.get('id');
    * ```
    */
-  get(id: string, options?: RequestOptions): APIPromise<MemoryGetResponse> {
+  get(id: string, options?: RequestOptions): APIPromise<DocumentGetResponse> {
     return this._client.get(path`/v3/documents/${id}`, options);
   }
 
@@ -87,12 +87,15 @@ export class Memories extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.memories.uploadFile({
+   * const response = await client.documents.uploadFile({
    *   file: fs.createReadStream('path/to/file'),
    * });
    * ```
    */
-  uploadFile(body: MemoryUploadFileParams, options?: RequestOptions): APIPromise<MemoryUploadFileResponse> {
+  uploadFile(
+    body: DocumentUploadFileParams,
+    options?: RequestOptions,
+  ): APIPromise<DocumentUploadFileResponse> {
     return this._client.post(
       '/v3/documents/file',
       multipartFormRequestOptions({ body, ...options }, this._client),
@@ -100,7 +103,7 @@ export class Memories extends APIResource {
   }
 }
 
-export interface MemoryUpdateResponse {
+export interface DocumentUpdateResponse {
   id: string;
 
   status: string;
@@ -109,16 +112,16 @@ export interface MemoryUpdateResponse {
 /**
  * List of documents
  */
-export interface MemoryListResponse {
-  memories: Array<MemoryListResponse.Memory>;
+export interface DocumentListResponse {
+  memories: Array<DocumentListResponse.Memory>;
 
   /**
    * Pagination metadata
    */
-  pagination: MemoryListResponse.Pagination;
+  pagination: DocumentListResponse.Pagination;
 }
 
-export namespace MemoryListResponse {
+export namespace DocumentListResponse {
   /**
    * Document object
    */
@@ -217,7 +220,7 @@ export namespace MemoryListResponse {
   }
 }
 
-export interface MemoryAddResponse {
+export interface DocumentAddResponse {
   id: string;
 
   status: string;
@@ -226,7 +229,7 @@ export interface MemoryAddResponse {
 /**
  * Document object
  */
-export interface MemoryGetResponse {
+export interface DocumentGetResponse {
   /**
    * Unique identifier of the document.
    */
@@ -337,13 +340,13 @@ export interface MemoryGetResponse {
   url?: string | null;
 }
 
-export interface MemoryUploadFileResponse {
+export interface DocumentUploadFileResponse {
   id: string;
 
   status: string;
 }
 
-export interface MemoryUpdateParams {
+export interface DocumentUpdateParams {
   /**
    * Optional tag this document should be containerized by. This can be an ID for
    * your user, a project ID, or any other identifier you wish to use to group
@@ -399,7 +402,7 @@ export interface MemoryUpdateParams {
   mimeType?: string;
 }
 
-export interface MemoryListParams {
+export interface DocumentListParams {
   /**
    * Optional tags this document should be containerized by. This can be an ID for
    * your user, a project ID, or any other identifier you wish to use to group
@@ -410,7 +413,7 @@ export interface MemoryListParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: MemoryListParams.Or | MemoryListParams.And;
+  filters?: DocumentListParams.Or | DocumentListParams.And;
 
   /**
    * Whether to include the content field in the response. Warning: This can make
@@ -439,7 +442,7 @@ export interface MemoryListParams {
   sort?: 'createdAt' | 'updatedAt';
 }
 
-export namespace MemoryListParams {
+export namespace DocumentListParams {
   export interface Or {
     OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
   }
@@ -493,7 +496,7 @@ export namespace MemoryListParams {
   }
 }
 
-export interface MemoryAddParams {
+export interface DocumentAddParams {
   /**
    * The content to extract and process into a document. This can be a URL to a
    * website, a PDF, an image, or a video.
@@ -549,7 +552,7 @@ export interface MemoryAddParams {
   mimeType?: string;
 }
 
-export interface MemoryUploadFileParams {
+export interface DocumentUploadFileParams {
   /**
    * File to upload and process
    */
@@ -575,16 +578,16 @@ export interface MemoryUploadFileParams {
   mimeType?: string;
 }
 
-export declare namespace Memories {
+export declare namespace Documents {
   export {
-    type MemoryUpdateResponse as MemoryUpdateResponse,
-    type MemoryListResponse as MemoryListResponse,
-    type MemoryAddResponse as MemoryAddResponse,
-    type MemoryGetResponse as MemoryGetResponse,
-    type MemoryUploadFileResponse as MemoryUploadFileResponse,
-    type MemoryUpdateParams as MemoryUpdateParams,
-    type MemoryListParams as MemoryListParams,
-    type MemoryAddParams as MemoryAddParams,
-    type MemoryUploadFileParams as MemoryUploadFileParams,
+    type DocumentUpdateResponse as DocumentUpdateResponse,
+    type DocumentListResponse as DocumentListResponse,
+    type DocumentAddResponse as DocumentAddResponse,
+    type DocumentGetResponse as DocumentGetResponse,
+    type DocumentUploadFileResponse as DocumentUploadFileResponse,
+    type DocumentUpdateParams as DocumentUpdateParams,
+    type DocumentListParams as DocumentListParams,
+    type DocumentAddParams as DocumentAddParams,
+    type DocumentUploadFileParams as DocumentUploadFileParams,
   };
 }

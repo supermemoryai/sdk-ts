@@ -31,16 +31,15 @@ describe('resource search', () => {
       documentThreshold: 0.5,
       filters: {
         AND: [
-          { key: 'group', negate: false, value: 'jira_users' },
+          { key: 'group', value: 'jira_users', filterType: 'metadata', negate: false, numericOperator: '>' },
           {
-            filterType: 'numeric',
             key: 'timestamp',
+            value: '1742745777',
+            filterType: 'numeric',
             negate: false,
             numericOperator: '>',
-            value: '1742745777',
           },
         ],
-        OR: [{}],
       },
       includeFullDocs: false,
       includeSummary: false,
@@ -74,16 +73,15 @@ describe('resource search', () => {
       documentThreshold: 0.5,
       filters: {
         AND: [
-          { key: 'group', negate: false, value: 'jira_users' },
+          { key: 'group', value: 'jira_users', filterType: 'metadata', negate: false, numericOperator: '>' },
           {
-            filterType: 'numeric',
             key: 'timestamp',
+            value: '1742745777',
+            filterType: 'numeric',
             negate: false,
             numericOperator: '>',
-            value: '1742745777',
           },
         ],
-        OR: [{}],
       },
       includeFullDocs: false,
       includeSummary: false,
@@ -113,18 +111,17 @@ describe('resource search', () => {
       containerTag: 'user_123',
       filters: {
         AND: [
-          { key: 'group', negate: false, value: 'jira_users' },
+          { key: 'group', value: 'jira_users', filterType: 'metadata', negate: false, numericOperator: '>' },
           {
-            filterType: 'numeric',
             key: 'timestamp',
+            value: '1742745777',
+            filterType: 'numeric',
             negate: false,
             numericOperator: '>',
-            value: '1742745777',
           },
         ],
-        OR: [{}],
       },
-      include: { documents: true, relatedMemories: true, summaries: true },
+      include: { documents: true, forgottenMemories: false, relatedMemories: true, summaries: true },
       limit: 10,
       rerank: false,
       rewriteQuery: false,

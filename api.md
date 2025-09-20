@@ -1,5 +1,41 @@
 # Memories
 
+Types:
+
+- <code><a href="./src/resources/memories.ts">MemoryUpdateResponse</a></code>
+- <code><a href="./src/resources/memories.ts">MemoryListResponse</a></code>
+- <code><a href="./src/resources/memories.ts">MemoryAddResponse</a></code>
+- <code><a href="./src/resources/memories.ts">MemoryGetResponse</a></code>
+- <code><a href="./src/resources/memories.ts">MemoryUploadFileResponse</a></code>
+
+Methods:
+
+- <code title="patch /v3/documents/{id}">client.memories.<a href="./src/resources/memories.ts">update</a>(id, { ...params }) -> MemoryUpdateResponse</code>
+- <code title="post /v3/documents/list">client.memories.<a href="./src/resources/memories.ts">list</a>({ ...params }) -> MemoryListResponse</code>
+- <code title="delete /v3/documents/{id}">client.memories.<a href="./src/resources/memories.ts">delete</a>(id) -> void</code>
+- <code title="post /v3/documents">client.memories.<a href="./src/resources/memories.ts">add</a>({ ...params }) -> MemoryAddResponse</code>
+- <code title="get /v3/documents/{id}">client.memories.<a href="./src/resources/memories.ts">get</a>(id) -> MemoryGetResponse</code>
+- <code title="post /v3/documents/file">client.memories.<a href="./src/resources/memories.ts">uploadFile</a>({ ...params }) -> MemoryUploadFileResponse</code>
+
+# Documents
+
+Types:
+
+- <code><a href="./src/resources/documents.ts">DocumentUpdateResponse</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentListResponse</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentAddResponse</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentGetResponse</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentUploadFileResponse</a></code>
+
+Methods:
+
+- <code title="patch /v3/documents/{id}">client.documents.<a href="./src/resources/documents.ts">update</a>(id, { ...params }) -> DocumentUpdateResponse</code>
+- <code title="post /v3/documents/list">client.documents.<a href="./src/resources/documents.ts">list</a>({ ...params }) -> DocumentListResponse</code>
+- <code title="delete /v3/documents/{id}">client.documents.<a href="./src/resources/documents.ts">delete</a>(id) -> void</code>
+- <code title="post /v3/documents">client.documents.<a href="./src/resources/documents.ts">add</a>({ ...params }) -> DocumentAddResponse</code>
+- <code title="get /v3/documents/{id}">client.documents.<a href="./src/resources/documents.ts">get</a>(id) -> DocumentGetResponse</code>
+- <code title="post /v3/documents/file">client.documents.<a href="./src/resources/documents.ts">uploadFile</a>({ ...params }) -> DocumentUploadFileResponse</code>
+
 # Search
 
 Types:

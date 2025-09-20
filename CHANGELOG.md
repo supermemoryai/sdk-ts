@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.1.0 (2025-09-20)
+
+Full Changelog: [v3.0.0-alpha.27...v3.1.0](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.27...v3.1.0)
+
+### Features
+
+* **api:** api update ([290de9a](https://github.com/supermemoryai/sdk-ts/commit/290de9a3602efcf37588ffd2ad21f70201d4bd4c))
+* **api:** api update ([6d81959](https://github.com/supermemoryai/sdk-ts/commit/6d8195908aad3dfe3825cb48be754c3fab439248))
+* **api:** manual updates ([08bfcf3](https://github.com/supermemoryai/sdk-ts/commit/08bfcf3eb3b38256b464eee8455a3ea06a016842))
+* **api:** manual updates ([e3de154](https://github.com/supermemoryai/sdk-ts/commit/e3de154f75866468f20ebc89b32d03c16eb1a83f))
+
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([7484585](https://github.com/supermemoryai/sdk-ts/commit/7484585d8e2972c4ac75c2c593e12eb07f727fb3))
+
 ## 3.0.0-alpha.27 (2025-09-15)
 
 Full Changelog: [v3.0.0-alpha.26...v3.0.0-alpha.27](https://github.com/supermemoryai/sdk-ts/compare/v3.0.0-alpha.26...v3.0.0-alpha.27)

@@ -33,7 +33,30 @@ import {
   ConnectionListResponse,
   Connections,
 } from './resources/connections';
-import { Memories } from './resources/memories';
+import {
+  DocumentAddParams,
+  DocumentAddResponse,
+  DocumentGetResponse,
+  DocumentListParams,
+  DocumentListResponse,
+  DocumentUpdateParams,
+  DocumentUpdateResponse,
+  DocumentUploadFileParams,
+  DocumentUploadFileResponse,
+  Documents,
+} from './resources/documents';
+import {
+  Memories,
+  MemoryAddParams,
+  MemoryAddResponse,
+  MemoryGetResponse,
+  MemoryListParams,
+  MemoryListResponse,
+  MemoryUpdateParams,
+  MemoryUpdateResponse,
+  MemoryUploadFileParams,
+  MemoryUploadFileResponse,
+} from './resources/memories';
 import {
   Search,
   SearchDocumentsParams,
@@ -747,12 +770,14 @@ export class Supermemory {
   static toFile = Uploads.toFile;
 
   memories: API.Memories = new API.Memories(this);
+  documents: API.Documents = new API.Documents(this);
   search: API.Search = new API.Search(this);
   settings: API.Settings = new API.Settings(this);
   connections: API.Connections = new API.Connections(this);
 }
 
 Supermemory.Memories = Memories;
+Supermemory.Documents = Documents;
 Supermemory.Search = Search;
 Supermemory.Settings = Settings;
 Supermemory.Connections = Connections;
@@ -760,7 +785,31 @@ Supermemory.Connections = Connections;
 export declare namespace Supermemory {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Memories as Memories };
+  export {
+    Memories as Memories,
+    type MemoryUpdateResponse as MemoryUpdateResponse,
+    type MemoryListResponse as MemoryListResponse,
+    type MemoryAddResponse as MemoryAddResponse,
+    type MemoryGetResponse as MemoryGetResponse,
+    type MemoryUploadFileResponse as MemoryUploadFileResponse,
+    type MemoryUpdateParams as MemoryUpdateParams,
+    type MemoryListParams as MemoryListParams,
+    type MemoryAddParams as MemoryAddParams,
+    type MemoryUploadFileParams as MemoryUploadFileParams,
+  };
+
+  export {
+    Documents as Documents,
+    type DocumentUpdateResponse as DocumentUpdateResponse,
+    type DocumentListResponse as DocumentListResponse,
+    type DocumentAddResponse as DocumentAddResponse,
+    type DocumentGetResponse as DocumentGetResponse,
+    type DocumentUploadFileResponse as DocumentUploadFileResponse,
+    type DocumentUpdateParams as DocumentUpdateParams,
+    type DocumentListParams as DocumentListParams,
+    type DocumentAddParams as DocumentAddParams,
+    type DocumentUploadFileParams as DocumentUploadFileParams,
+  };
 
   export {
     Search as Search,

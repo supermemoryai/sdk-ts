@@ -421,9 +421,9 @@ export interface SearchDocumentsParams {
   documentThreshold?: number;
 
   /**
-   * Optional filters to apply to the search
+   * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: SearchDocumentsParams.UnionMember0 | { [key: string]: unknown };
+  filters?: SearchDocumentsParams.Or | SearchDocumentsParams.And;
 
   /**
    * If true, include full document in the response. This is helpful if you want a
@@ -463,10 +463,56 @@ export interface SearchDocumentsParams {
 }
 
 export namespace SearchDocumentsParams {
-  export interface UnionMember0 {
-    AND?: Array<unknown>;
+  export interface Or {
+    OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+  }
 
-    OR?: Array<unknown>;
+  export namespace Or {
+    export interface UnionMember0 {
+      key: string;
+
+      value: string;
+
+      filterType?: 'metadata' | 'numeric' | 'array_contains';
+
+      negate?: boolean | 'true' | 'false';
+
+      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+    }
+
+    export interface Or {
+      OR: Array<unknown>;
+    }
+
+    export interface And {
+      AND: Array<unknown>;
+    }
+  }
+
+  export interface And {
+    AND: Array<And.UnionMember0 | And.Or | And.And>;
+  }
+
+  export namespace And {
+    export interface UnionMember0 {
+      key: string;
+
+      value: string;
+
+      filterType?: 'metadata' | 'numeric' | 'array_contains';
+
+      negate?: boolean | 'true' | 'false';
+
+      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+    }
+
+    export interface Or {
+      OR: Array<unknown>;
+    }
+
+    export interface And {
+      AND: Array<unknown>;
+    }
   }
 }
 
@@ -508,9 +554,9 @@ export interface SearchExecuteParams {
   documentThreshold?: number;
 
   /**
-   * Optional filters to apply to the search
+   * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: SearchExecuteParams.UnionMember0 | { [key: string]: unknown };
+  filters?: SearchExecuteParams.Or | SearchExecuteParams.And;
 
   /**
    * If true, include full document in the response. This is helpful if you want a
@@ -550,10 +596,56 @@ export interface SearchExecuteParams {
 }
 
 export namespace SearchExecuteParams {
-  export interface UnionMember0 {
-    AND?: Array<unknown>;
+  export interface Or {
+    OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+  }
 
-    OR?: Array<unknown>;
+  export namespace Or {
+    export interface UnionMember0 {
+      key: string;
+
+      value: string;
+
+      filterType?: 'metadata' | 'numeric' | 'array_contains';
+
+      negate?: boolean | 'true' | 'false';
+
+      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+    }
+
+    export interface Or {
+      OR: Array<unknown>;
+    }
+
+    export interface And {
+      AND: Array<unknown>;
+    }
+  }
+
+  export interface And {
+    AND: Array<And.UnionMember0 | And.Or | And.And>;
+  }
+
+  export namespace And {
+    export interface UnionMember0 {
+      key: string;
+
+      value: string;
+
+      filterType?: 'metadata' | 'numeric' | 'array_contains';
+
+      negate?: boolean | 'true' | 'false';
+
+      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+    }
+
+    export interface Or {
+      OR: Array<unknown>;
+    }
+
+    export interface And {
+      AND: Array<unknown>;
+    }
   }
 }
 
@@ -570,9 +662,9 @@ export interface SearchMemoriesParams {
   containerTag?: string;
 
   /**
-   * Optional filters to apply to the search
+   * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: SearchMemoriesParams.UnionMember0 | { [key: string]: unknown };
+  filters?: SearchMemoriesParams.Or | SearchMemoriesParams.And;
 
   include?: SearchMemoriesParams.Include;
 
@@ -602,14 +694,67 @@ export interface SearchMemoriesParams {
 }
 
 export namespace SearchMemoriesParams {
-  export interface UnionMember0 {
-    AND?: Array<unknown>;
+  export interface Or {
+    OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+  }
 
-    OR?: Array<unknown>;
+  export namespace Or {
+    export interface UnionMember0 {
+      key: string;
+
+      value: string;
+
+      filterType?: 'metadata' | 'numeric' | 'array_contains';
+
+      negate?: boolean | 'true' | 'false';
+
+      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+    }
+
+    export interface Or {
+      OR: Array<unknown>;
+    }
+
+    export interface And {
+      AND: Array<unknown>;
+    }
+  }
+
+  export interface And {
+    AND: Array<And.UnionMember0 | And.Or | And.And>;
+  }
+
+  export namespace And {
+    export interface UnionMember0 {
+      key: string;
+
+      value: string;
+
+      filterType?: 'metadata' | 'numeric' | 'array_contains';
+
+      negate?: boolean | 'true' | 'false';
+
+      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+    }
+
+    export interface Or {
+      OR: Array<unknown>;
+    }
+
+    export interface And {
+      AND: Array<unknown>;
+    }
   }
 
   export interface Include {
     documents?: boolean;
+
+    /**
+     * If true, include forgotten memories in search results. Forgotten memories are
+     * memories that have been explicitly forgotten or have passed their expiration
+     * date.
+     */
+    forgottenMemories?: boolean;
 
     relatedMemories?: boolean;
 
