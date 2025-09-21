@@ -503,8 +503,9 @@ export interface MemoryUploadFileParams {
   file: Uploadable;
 
   /**
-   * Optional JSON string of container tags array. This can be an ID for your user, a
-   * project ID, or any other identifier you wish to use to group documents.
+   * Optional container tags. Can be either a JSON string of an array (e.g.,
+   * '["user_123", "project_123"]') or a single string (e.g., 'user_123'). Single
+   * strings will be automatically converted to an array.
    */
   containerTags?: string;
 
