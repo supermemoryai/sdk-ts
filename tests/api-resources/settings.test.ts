@@ -26,6 +26,7 @@ describe('resource settings', () => {
     await expect(
       client.settings.update(
         {
+          chunkSize: -2147483648,
           excludeItems: 'string',
           filterPrompt: 'filterPrompt',
           googleDriveClientId: 'googleDriveClientId',

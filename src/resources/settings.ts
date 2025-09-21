@@ -33,6 +33,8 @@ export interface SettingUpdateResponse {
 
 export namespace SettingUpdateResponse {
   export interface Updated {
+    chunkSize?: number | null;
+
     excludeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
     filterPrompt?: string | null;
@@ -62,6 +64,8 @@ export namespace SettingUpdateResponse {
 }
 
 export interface SettingGetResponse {
+  chunkSize?: number | null;
+
   excludeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   filterPrompt?: string | null;
@@ -90,6 +94,8 @@ export interface SettingGetResponse {
 }
 
 export interface SettingUpdateParams {
+  chunkSize?: number | null;
+
   excludeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   filterPrompt?: string | null;
