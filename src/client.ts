@@ -845,4 +845,7 @@ export declare namespace Supermemory {
     type ConnectionImportParams as ConnectionImportParams,
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
   };
+
+  export type And = API.And;
+  export type Or = API.Or;
 }

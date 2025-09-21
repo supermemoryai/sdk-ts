@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
@@ -423,7 +424,7 @@ export interface SearchDocumentsParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: SearchDocumentsParams.Or | SearchDocumentsParams.And;
+  filters?: Shared.Or | Shared.And;
 
   /**
    * If true, include full document in the response. This is helpful if you want a
@@ -460,60 +461,6 @@ export interface SearchDocumentsParams {
    * the latency by about 400ms
    */
   rewriteQuery?: boolean;
-}
-
-export namespace SearchDocumentsParams {
-  export interface Or {
-    OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
-  }
-
-  export namespace Or {
-    export interface UnionMember0 {
-      key: string;
-
-      value: string;
-
-      filterType?: 'metadata' | 'numeric' | 'array_contains';
-
-      negate?: boolean | 'true' | 'false';
-
-      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
-    }
-
-    export interface Or {
-      OR: Array<unknown>;
-    }
-
-    export interface And {
-      AND: Array<unknown>;
-    }
-  }
-
-  export interface And {
-    AND: Array<And.UnionMember0 | And.Or | And.And>;
-  }
-
-  export namespace And {
-    export interface UnionMember0 {
-      key: string;
-
-      value: string;
-
-      filterType?: 'metadata' | 'numeric' | 'array_contains';
-
-      negate?: boolean | 'true' | 'false';
-
-      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
-    }
-
-    export interface Or {
-      OR: Array<unknown>;
-    }
-
-    export interface And {
-      AND: Array<unknown>;
-    }
-  }
 }
 
 export interface SearchExecuteParams {
@@ -556,7 +503,7 @@ export interface SearchExecuteParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: SearchExecuteParams.Or | SearchExecuteParams.And;
+  filters?: Shared.Or | Shared.And;
 
   /**
    * If true, include full document in the response. This is helpful if you want a
@@ -595,60 +542,6 @@ export interface SearchExecuteParams {
   rewriteQuery?: boolean;
 }
 
-export namespace SearchExecuteParams {
-  export interface Or {
-    OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
-  }
-
-  export namespace Or {
-    export interface UnionMember0 {
-      key: string;
-
-      value: string;
-
-      filterType?: 'metadata' | 'numeric' | 'array_contains';
-
-      negate?: boolean | 'true' | 'false';
-
-      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
-    }
-
-    export interface Or {
-      OR: Array<unknown>;
-    }
-
-    export interface And {
-      AND: Array<unknown>;
-    }
-  }
-
-  export interface And {
-    AND: Array<And.UnionMember0 | And.Or | And.And>;
-  }
-
-  export namespace And {
-    export interface UnionMember0 {
-      key: string;
-
-      value: string;
-
-      filterType?: 'metadata' | 'numeric' | 'array_contains';
-
-      negate?: boolean | 'true' | 'false';
-
-      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
-    }
-
-    export interface Or {
-      OR: Array<unknown>;
-    }
-
-    export interface And {
-      AND: Array<unknown>;
-    }
-  }
-}
-
 export interface SearchMemoriesParams {
   /**
    * Search query string
@@ -664,7 +557,7 @@ export interface SearchMemoriesParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: SearchMemoriesParams.Or | SearchMemoriesParams.And;
+  filters?: Shared.Or | Shared.And;
 
   include?: SearchMemoriesParams.Include;
 
@@ -694,58 +587,6 @@ export interface SearchMemoriesParams {
 }
 
 export namespace SearchMemoriesParams {
-  export interface Or {
-    OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
-  }
-
-  export namespace Or {
-    export interface UnionMember0 {
-      key: string;
-
-      value: string;
-
-      filterType?: 'metadata' | 'numeric' | 'array_contains';
-
-      negate?: boolean | 'true' | 'false';
-
-      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
-    }
-
-    export interface Or {
-      OR: Array<unknown>;
-    }
-
-    export interface And {
-      AND: Array<unknown>;
-    }
-  }
-
-  export interface And {
-    AND: Array<And.UnionMember0 | And.Or | And.And>;
-  }
-
-  export namespace And {
-    export interface UnionMember0 {
-      key: string;
-
-      value: string;
-
-      filterType?: 'metadata' | 'numeric' | 'array_contains';
-
-      negate?: boolean | 'true' | 'false';
-
-      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
-    }
-
-    export interface Or {
-      OR: Array<unknown>;
-    }
-
-    export interface And {
-      AND: Array<unknown>;
-    }
-  }
-
   export interface Include {
     documents?: boolean;
 
