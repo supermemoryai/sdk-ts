@@ -572,6 +572,13 @@ export interface DocumentUploadFileParams {
   fileType?: string;
 
   /**
+   * Optional metadata for the document as a JSON string. This is used to store
+   * additional information about the document. Keys must be strings and values can
+   * be strings, numbers, or booleans.
+   */
+  metadata?: string;
+
+  /**
    * Required when fileType is 'image' or 'video'. Specifies the exact MIME type to
    * use (e.g., 'image/png', 'image/jpeg', 'video/mp4', 'video/webm')
    */

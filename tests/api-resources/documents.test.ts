@@ -173,6 +173,7 @@ describe('resource documents', () => {
       file: await toFile(Buffer.from('# my file contents'), 'README.md'),
       containerTags: '["user_123", "project_123"]',
       fileType: 'image',
+      metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',
       mimeType: 'image/png',
     });
   });
