@@ -7,10 +7,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": "./",
     "paths": {
-      "supermemory/*": ["src/*"],
-      "supermemory": ["src/index.ts"]
+      "supermemory/*": ["./src/*"],
+      "supermemory": ["./src/index.ts"]
     },
     "noEmit": true,
 
