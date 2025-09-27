@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.5.0 (2025-09-27)
+
+Full Changelog: [v3.4.0...v3.5.0](https://github.com/supermemoryai/sdk-ts/compare/v3.4.0...v3.5.0)
+
+### Features
+
+* **api:** api update ([0563e28](https://github.com/supermemoryai/sdk-ts/commit/0563e2820838618e36994d027266138ff663a1e5))
+
+
+### Performance Improvements
+
+* faster formatting ([5b0a9dd](https://github.com/supermemoryai/sdk-ts/commit/5b0a9ddb5c7b946d6b8e0449e6a4d1208ece96be))
+
+
+### Chores
+
+* **internal:** codegen related update ([e0994c6](https://github.com/supermemoryai/sdk-ts/commit/e0994c69fde02a24a601e17bd055acdf5241c9a6))
+* **internal:** fix incremental formatting in some cases ([9ff7b43](https://github.com/supermemoryai/sdk-ts/commit/9ff7b43309a2dc22c0ba75ac3ef7af0bc1b319dc))
+* **internal:** ignore .eslintcache ([1ea5fb5](https://github.com/supermemoryai/sdk-ts/commit/1ea5fb5ce8344cb39cd38d482042f29556616a56))
+* **internal:** remove deprecated `compilerOptions.baseUrl` from tsconfig.json ([93eb1e5](https://github.com/supermemoryai/sdk-ts/commit/93eb1e5b7add0e367ec09d9197e3021f2278630f))
+
 ## 3.4.0 (2025-09-21)
 
 Full Changelog: [v3.3.0...v3.4.0](https://github.com/supermemoryai/sdk-ts/compare/v3.3.0...v3.4.0)
