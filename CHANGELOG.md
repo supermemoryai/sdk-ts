@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.6.0 (2025-10-04)
+
+Full Changelog: [v3.5.0...v3.6.0](https://github.com/supermemoryai/sdk-ts/compare/v3.5.0...v3.6.0)
+
+### Features
+
+* **api:** api update ([7c85660](https://github.com/supermemoryai/sdk-ts/commit/7c8566063a558301b83ebca7bfd830a1ce4e8d6b))
+
+
+### Chores
+
+* **internal:** remove .eslintcache ([1175a1c](https://github.com/supermemoryai/sdk-ts/commit/1175a1c393fb00d556eca9a80546e724c3b83ed5))
+* **jsdoc:** fix [@link](https://github.com/link) annotations to refer only to parts of the package‘s public interface ([16397d2](https://github.com/supermemoryai/sdk-ts/commit/16397d28274d76703c54c5d7a5abeefbc94e5363))
+
 ## 3.5.0 (2025-09-27)
 
 Full Changelog: [v3.4.0...v3.5.0](https://github.com/supermemoryai/sdk-ts/compare/v3.4.0...v3.5.0)

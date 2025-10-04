@@ -31,13 +31,13 @@ describe('resource search', () => {
       documentThreshold: 0.5,
       filters: {
         AND: [
-          { key: 'group', value: 'jira_users', filterType: 'metadata', negate: false, numericOperator: '>' },
+          { filterType: 'metadata', key: 'group', negate: false, value: 'jira_users' },
           {
-            key: 'timestamp',
-            value: '1742745777',
             filterType: 'numeric',
+            key: 'timestamp',
             negate: false,
             numericOperator: '>',
+            value: '1742745777',
           },
         ],
       },
@@ -73,13 +73,13 @@ describe('resource search', () => {
       documentThreshold: 0.5,
       filters: {
         AND: [
-          { key: 'group', value: 'jira_users', filterType: 'metadata', negate: false, numericOperator: '>' },
+          { filterType: 'metadata', key: 'group', negate: false, value: 'jira_users' },
           {
-            key: 'timestamp',
-            value: '1742745777',
             filterType: 'numeric',
+            key: 'timestamp',
             negate: false,
             numericOperator: '>',
+            value: '1742745777',
           },
         ],
       },
@@ -111,13 +111,13 @@ describe('resource search', () => {
       containerTag: 'user_123',
       filters: {
         AND: [
-          { key: 'group', value: 'jira_users', filterType: 'metadata', negate: false, numericOperator: '>' },
+          { filterType: 'metadata', key: 'group', negate: false, value: 'jira_users' },
           {
-            key: 'timestamp',
-            value: '1742745777',
             filterType: 'numeric',
+            key: 'timestamp',
             negate: false,
             numericOperator: '>',
+            value: '1742745777',
           },
         ],
       },
