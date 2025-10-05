@@ -31,6 +31,7 @@ describe('resource documents', () => {
           containerTags: ['user_123', 'project_123'],
           content: 'This is a detailed article about machine learning concepts...',
           customId: 'mem_abc123',
+          fileType: 'pdf',
           metadata: {
             category: 'technology',
             isPublic: true,
@@ -39,6 +40,7 @@ describe('resource documents', () => {
             tag_1: 'ai',
             tag_2: 'machine-learning',
           },
+          mimeType: 'image/png',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -66,13 +68,19 @@ describe('resource documents', () => {
           containerTags: ['user_123', 'project_123'],
           filters: {
             AND: [
-              { filterType: 'metadata', key: 'group', negate: false, value: 'jira_users' },
               {
-                filterType: 'numeric',
-                key: 'timestamp',
+                key: 'group',
+                value: 'jira_users',
+                filterType: 'metadata',
                 negate: false,
                 numericOperator: '>',
+              },
+              {
+                key: 'timestamp',
                 value: '1742745777',
+                filterType: 'numeric',
+                negate: false,
+                numericOperator: '>',
               },
             ],
           },
@@ -120,6 +128,7 @@ describe('resource documents', () => {
       containerTag: 'user_123',
       containerTags: ['user_123', 'project_123'],
       customId: 'mem_abc123',
+      fileType: 'pdf',
       metadata: {
         category: 'technology',
         isPublic: true,
@@ -128,6 +137,7 @@ describe('resource documents', () => {
         tag_1: 'ai',
         tag_2: 'machine-learning',
       },
+      mimeType: 'image/png',
     });
   });
 
@@ -164,7 +174,7 @@ describe('resource documents', () => {
       containerTags: '["user_123", "project_123"]',
       fileType: 'image',
       metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',
-      mimeType: 'mimeType',
+      mimeType: 'image/png',
     });
   });
 });
