@@ -385,8 +385,6 @@ export interface DocumentUpdateParams {
    * nest objects.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
-
-  [k: string]: unknown;
 }
 
 export interface DocumentListParams {
@@ -470,8 +468,6 @@ export interface DocumentAddParams {
    * nest objects.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
-
-  [k: string]: unknown;
 }
 
 export interface DocumentUploadFileParams {
