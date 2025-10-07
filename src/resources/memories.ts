@@ -382,8 +382,6 @@ export interface MemoryUpdateParams {
    * nest objects.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
-
-  [k: string]: unknown;
 }
 
 export interface MemoryListParams {
@@ -467,8 +465,6 @@ export interface MemoryAddParams {
    * nest objects.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
-
-  [k: string]: unknown;
 }
 
 export interface MemoryUploadFileParams {
