@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.6.0 (2025-10-07)
+
+Full Changelog: [v3.5.0...v3.6.0](https://github.com/supermemoryai/sdk-ts/compare/v3.5.0...v3.6.0)
+
+### Features
+
+* **api:** api update ([81bfd53](https://github.com/supermemoryai/sdk-ts/commit/81bfd5352b4cb8e09098c010fbadcf2f31cb162d))
+* **api:** api update ([f43ec83](https://github.com/supermemoryai/sdk-ts/commit/f43ec8376f494f8713874e7126932bc9c999082b))
+* **api:** api update ([80bfa4e](https://github.com/supermemoryai/sdk-ts/commit/80bfa4e9b5f8a95ba74d4a043dc6295c8a6054ef))
+* **api:** api update ([7c85660](https://github.com/supermemoryai/sdk-ts/commit/7c8566063a558301b83ebca7bfd830a1ce4e8d6b))
+
+
+### Chores
+
+* **internal:** remove .eslintcache ([1175a1c](https://github.com/supermemoryai/sdk-ts/commit/1175a1c393fb00d556eca9a80546e724c3b83ed5))
+* **internal:** use npm pack for build uploads ([c14b460](https://github.com/supermemoryai/sdk-ts/commit/c14b460ba6983c51141b4ca446a907d21e7f67d4))
+* **jsdoc:** fix [@link](https://github.com/link) annotations to refer only to parts of the package‘s public interface ([16397d2](https://github.com/supermemoryai/sdk-ts/commit/16397d28274d76703c54c5d7a5abeefbc94e5363))
+
 ## 3.5.0 (2025-09-27)
 
 Full Changelog: [v3.4.0...v3.5.0](https://github.com/supermemoryai/sdk-ts/compare/v3.4.0...v3.5.0)

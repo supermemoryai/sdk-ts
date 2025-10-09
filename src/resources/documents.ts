@@ -123,9 +123,6 @@ export interface DocumentListResponse {
 }
 
 export namespace DocumentListResponse {
-  /**
-   * Document object
-   */
   export interface Memory {
     /**
      * Unique identifier of the document.
@@ -213,11 +210,11 @@ export namespace DocumentListResponse {
   export interface Pagination {
     currentPage: number;
 
-    limit: number;
-
     totalItems: number;
 
     totalPages: number;
+
+    limit?: number;
   }
 }
 
@@ -277,6 +274,11 @@ export interface DocumentGetResponse {
   ogImage: string | null;
 
   /**
+   * Raw content of the document
+   */
+  raw: unknown;
+
+  /**
    * Source of the document
    */
   source: string | null;
@@ -331,11 +333,6 @@ export interface DocumentGetResponse {
   containerTags?: Array<string>;
 
   /**
-   * Raw content of the document
-   */
-  raw?: null;
-
-  /**
    * URL of the document
    */
   url?: string | null;
@@ -381,13 +378,6 @@ export interface DocumentUpdateParams {
   customId?: string;
 
   /**
-   * Optional file type override to force specific processing behavior. Valid values:
-   * text, pdf, tweet, google_doc, google_slide, google_sheet, image, video,
-   * notion_doc, webpage, onedrive
-   */
-  fileType?: string;
-
-  /**
    * Optional metadata for the document. This is used to store additional information
    * about the document. You can use this to store any additional information you
    * need about the document. Metadata can be filtered through. Keys must be strings
@@ -395,12 +385,6 @@ export interface DocumentUpdateParams {
    * nest objects.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
-
-  /**
-   * Required when fileType is 'image' or 'video'. Specifies the exact MIME type to
-   * use (e.g., 'image/png', 'image/jpeg', 'video/mp4', 'video/webm')
-   */
-  mimeType?: string;
 }
 
 export interface DocumentListParams {
@@ -477,13 +461,6 @@ export interface DocumentAddParams {
   customId?: string;
 
   /**
-   * Optional file type override to force specific processing behavior. Valid values:
-   * text, pdf, tweet, google_doc, google_slide, google_sheet, image, video,
-   * notion_doc, webpage, onedrive
-   */
-  fileType?: string;
-
-  /**
    * Optional metadata for the document. This is used to store additional information
    * about the document. You can use this to store any additional information you
    * need about the document. Metadata can be filtered through. Keys must be strings
@@ -491,12 +468,6 @@ export interface DocumentAddParams {
    * nest objects.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
-
-  /**
-   * Required when fileType is 'image' or 'video'. Specifies the exact MIME type to
-   * use (e.g., 'image/png', 'image/jpeg', 'video/mp4', 'video/webm')
-   */
-  mimeType?: string;
 }
 
 export interface DocumentUploadFileParams {
