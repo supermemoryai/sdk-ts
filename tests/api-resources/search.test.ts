@@ -24,27 +24,16 @@ describe('resource search', () => {
   test.skip('documents: required and optional params', async () => {
     const response = await client.search.documents({
       q: 'machine learning concepts',
-      categoriesFilter: ['technology', 'science'],
+      categoriesFilter: ['string'],
       chunkThreshold: 0.5,
-      containerTags: ['user_123', 'project_123'],
-      docId: 'doc_xyz789',
-      documentThreshold: 0.5,
-      filters: {
-        AND: [
-          { filterType: 'metadata', key: 'group', negate: false, value: 'jira_users' },
-          {
-            filterType: 'numeric',
-            key: 'timestamp',
-            negate: false,
-            numericOperator: '>',
-            value: '1742745777',
-          },
-        ],
-      },
+      containerTags: ['user_123'],
+      docId: 'docId',
+      documentThreshold: 0,
+      filters: { OR: [{}] },
       includeFullDocs: false,
-      includeSummary: false,
+      includeSummary: true,
       limit: 10,
-      onlyMatchingChunks: false,
+      onlyMatchingChunks: true,
       rerank: false,
       rewriteQuery: false,
     });
@@ -66,27 +55,16 @@ describe('resource search', () => {
   test.skip('execute: required and optional params', async () => {
     const response = await client.search.execute({
       q: 'machine learning concepts',
-      categoriesFilter: ['technology', 'science'],
+      categoriesFilter: ['string'],
       chunkThreshold: 0.5,
-      containerTags: ['user_123', 'project_123'],
-      docId: 'doc_xyz789',
-      documentThreshold: 0.5,
-      filters: {
-        AND: [
-          { filterType: 'metadata', key: 'group', negate: false, value: 'jira_users' },
-          {
-            filterType: 'numeric',
-            key: 'timestamp',
-            negate: false,
-            numericOperator: '>',
-            value: '1742745777',
-          },
-        ],
-      },
+      containerTags: ['user_123'],
+      docId: 'docId',
+      documentThreshold: 0,
+      filters: { OR: [{}] },
       includeFullDocs: false,
-      includeSummary: false,
+      includeSummary: true,
       limit: 10,
-      onlyMatchingChunks: false,
+      onlyMatchingChunks: true,
       rerank: false,
       rewriteQuery: false,
     });
@@ -109,18 +87,7 @@ describe('resource search', () => {
     const response = await client.search.memories({
       q: 'machine learning concepts',
       containerTag: 'user_123',
-      filters: {
-        AND: [
-          { filterType: 'metadata', key: 'group', negate: false, value: 'jira_users' },
-          {
-            filterType: 'numeric',
-            key: 'timestamp',
-            negate: false,
-            numericOperator: '>',
-            value: '1742745777',
-          },
-        ],
-      },
+      filters: { OR: [{}] },
       include: { documents: true, forgottenMemories: false, relatedMemories: true, summaries: true },
       limit: 10,
       rerank: false,
