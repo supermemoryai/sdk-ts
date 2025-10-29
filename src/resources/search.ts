@@ -391,9 +391,9 @@ export interface SearchDocumentsParams {
   q: string;
 
   /**
-   * @deprecated Optional category filters
+   * @deprecated DEPRECATED: Optional category filters
    */
-  categoriesFilter?: Array<'technology' | 'science' | 'business' | 'health'>;
+  categoriesFilter?: Array<string>;
 
   /**
    * Threshold / sensitivity for chunk selection. 0 is least sensitive (returns most
@@ -415,9 +415,8 @@ export interface SearchDocumentsParams {
   docId?: string;
 
   /**
-   * Threshold / sensitivity for document selection. 0 is least sensitive (returns
-   * most documents, more results), 1 is most sensitive (returns lesser documents,
-   * accurate results)
+   * @deprecated DEPRECATED: This field is no longer used in v3 search. The search
+   * now uses chunkThreshold only. This parameter will be ignored.
    */
   documentThreshold?: number;
 
@@ -470,9 +469,9 @@ export interface SearchExecuteParams {
   q: string;
 
   /**
-   * @deprecated Optional category filters
+   * @deprecated DEPRECATED: Optional category filters
    */
-  categoriesFilter?: Array<'technology' | 'science' | 'business' | 'health'>;
+  categoriesFilter?: Array<string>;
 
   /**
    * Threshold / sensitivity for chunk selection. 0 is least sensitive (returns most
@@ -494,9 +493,8 @@ export interface SearchExecuteParams {
   docId?: string;
 
   /**
-   * Threshold / sensitivity for document selection. 0 is least sensitive (returns
-   * most documents, more results), 1 is most sensitive (returns lesser documents,
-   * accurate results)
+   * @deprecated DEPRECATED: This field is no longer used in v3 search. The search
+   * now uses chunkThreshold only. This parameter will be ignored.
    */
   documentThreshold?: number;
 
