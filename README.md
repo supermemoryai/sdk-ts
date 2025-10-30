@@ -43,9 +43,7 @@ const client = new Supermemory({
   apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted
 });
 
-const params: Supermemory.MemoryAddParams = {
-  content: 'This is a detailed article about machine learning concepts...',
-};
+const params: Supermemory.MemoryAddParams = { content: 'content' };
 const response: Supermemory.MemoryAddResponse = await client.memories.add(params);
 ```
 
@@ -88,17 +86,15 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.memories
-  .add({ content: 'This is a detailed article about machine learning concepts...' })
-  .catch(async (err) => {
-    if (err instanceof Supermemory.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
+const response = await client.memories.add({ content: 'content' }).catch(async (err) => {
+  if (err instanceof Supermemory.APIError) {
+    console.log(err.status); // 400
+    console.log(err.name); // BadRequestError
+    console.log(err.headers); // {server: 'nginx', ...}
+  } else {
+    throw err;
+  }
+});
 ```
 
 Error codes are as follows:
@@ -130,7 +126,7 @@ const client = new Supermemory({
 });
 
 // Or, configure per-request:
-await client.memories.add({ content: 'This is a detailed article about machine learning concepts...' }, {
+await client.memories.add({ content: 'content' }, {
   maxRetries: 5,
 });
 ```
@@ -147,7 +143,7 @@ const client = new Supermemory({
 });
 
 // Override per-request:
-await client.memories.add({ content: 'This is a detailed article about machine learning concepts...' }, {
+await client.memories.add({ content: 'content' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -170,15 +166,11 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Supermemory();
 
-const response = await client.memories
-  .add({ content: 'This is a detailed article about machine learning concepts...' })
-  .asResponse();
+const response = await client.memories.add({ content: 'content' }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.memories
-  .add({ content: 'This is a detailed article about machine learning concepts...' })
-  .withResponse();
+const { data: response, response: raw } = await client.memories.add({ content: 'content' }).withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(response.id);
 ```

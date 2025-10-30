@@ -101,9 +101,7 @@ describe('resource memories', () => {
 
   // Prism tests are disabled
   test.skip('add: only required params', async () => {
-    const responsePromise = client.memories.add({
-      content: 'This is a detailed article about machine learning concepts...',
-    });
+    const responsePromise = client.memories.add({ content: 'content' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -116,18 +114,11 @@ describe('resource memories', () => {
   // Prism tests are disabled
   test.skip('add: required and optional params', async () => {
     const response = await client.memories.add({
-      content: 'This is a detailed article about machine learning concepts...',
-      containerTag: 'user_123',
-      containerTags: ['user_123', 'project_123'],
-      customId: 'mem_abc123',
-      metadata: {
-        category: 'technology',
-        isPublic: true,
-        readingTime: 5,
-        source: 'web',
-        tag_1: 'ai',
-        tag_2: 'machine-learning',
-      },
+      content: 'content',
+      containerTag: 'containerTag',
+      containerTags: ['string'],
+      customId: 'customId',
+      metadata: { foo: 'string' },
     });
   });
 

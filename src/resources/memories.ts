@@ -62,8 +62,7 @@ export class Memories extends APIResource {
    * @example
    * ```ts
    * const response = await client.memories.add({
-   *   content:
-   *     'This is a detailed article about machine learning concepts...',
+   *   content: 'content',
    * });
    * ```
    */
@@ -102,8 +101,14 @@ export class Memories extends APIResource {
 }
 
 export interface MemoryUpdateResponse {
+  /**
+   * Unique identifier of the document
+   */
   id: string;
 
+  /**
+   * Status of the document
+   */
   status: string;
 }
 
@@ -216,8 +221,14 @@ export namespace MemoryListResponse {
 }
 
 export interface MemoryAddResponse {
+  /**
+   * Unique identifier of the document
+   */
   id: string;
 
+  /**
+   * Status of the document
+   */
   status: string;
 }
 
@@ -336,8 +347,14 @@ export interface MemoryGetResponse {
 }
 
 export interface MemoryUploadFileResponse {
+  /**
+   * Unique identifier of the document
+   */
   id: string;
 
+  /**
+   * Status of the document
+   */
   status: string;
 }
 
@@ -428,41 +445,28 @@ export interface MemoryAddParams {
   /**
    * The content to extract and process into a document. This can be a URL to a
    * website, a PDF, an image, or a video.
-   *
-   * Plaintext: Any plaintext format
-   *
-   * URL: A URL to a website, PDF, image, or video
-   *
-   * We automatically detect the content type from the url's response format.
    */
   content: string;
 
   /**
-   * Optional tag this document should be containerized by. This can be an ID for
-   * your user, a project ID, or any other identifier you wish to use to group
-   * documents.
+   * Optional tag this document should be containerized by. Max 100 characters,
+   * alphanumeric with hyphens and underscores only.
    */
   containerTag?: string;
 
   /**
-   * @deprecated (DEPRECATED: Use containerTag instead) Optional tags this document
-   * should be containerized by. This can be an ID for your user, a project ID, or
-   * any other identifier you wish to use to group documents.
+   * @deprecated
    */
   containerTags?: Array<string>;
 
   /**
-   * Optional custom ID of the document. This could be an ID from your database that
-   * will uniquely identify this document.
+   * Optional custom ID of the document. Max 100 characters, alphanumeric with
+   * hyphens and underscores only.
    */
   customId?: string;
 
   /**
-   * Optional metadata for the document. This is used to store additional information
-   * about the document. You can use this to store any additional information you
-   * need about the document. Metadata can be filtered through. Keys must be strings
-   * and are case sensitive. Values can be strings, numbers, or booleans. You cannot
-   * nest objects.
+   * Optional metadata for the document.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
 }
