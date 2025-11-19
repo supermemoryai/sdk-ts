@@ -18,7 +18,7 @@ export class Connections extends APIResource {
    * ```
    */
   create(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'web-crawler',
+    provider: 'notion' | 'google-drive' | 'onedrive',
     body: ConnectionCreateParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ConnectionCreateResponse> {
@@ -66,7 +66,7 @@ export class Connections extends APIResource {
    * ```
    */
   deleteByProvider(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'web-crawler',
+    provider: 'notion' | 'google-drive' | 'onedrive',
     body: ConnectionDeleteByProviderParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionDeleteByProviderResponse> {
@@ -99,7 +99,7 @@ export class Connections extends APIResource {
    * ```
    */
   getByTags(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'web-crawler',
+    provider: 'notion' | 'google-drive' | 'onedrive',
     body: ConnectionGetByTagsParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionGetByTagsResponse> {
@@ -115,7 +115,7 @@ export class Connections extends APIResource {
    * ```
    */
   import(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'web-crawler',
+    provider: 'notion' | 'google-drive' | 'onedrive',
     body: ConnectionImportParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<string> {
@@ -137,7 +137,7 @@ export class Connections extends APIResource {
    * ```
    */
   listDocuments(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'web-crawler',
+    provider: 'notion' | 'google-drive' | 'onedrive',
     body: ConnectionListDocumentsParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ConnectionListDocumentsResponse> {
