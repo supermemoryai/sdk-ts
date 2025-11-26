@@ -848,5 +848,4 @@ export declare namespace Supermemory {
 
   export type And = API.And;
   export type Or = API.Or;
-  export type ProfileResponse = API.ProfileResponse;
 }
