@@ -1,5 +1,17 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+export interface AddResponse {
+  /**
+   * Unique identifier of the document
+   */
+  id: string;
+
+  /**
+   * Status of the document
+   */
+  status: string;
+}
+
 export interface ProfileResponse {
   profile: ProfileResponse.Profile;
 
@@ -43,6 +55,36 @@ export namespace ProfileResponse {
   }
 }
 
+export interface AddParams {
+  /**
+   * The content to extract and process into a document. This can be a URL to a
+   * website, a PDF, an image, or a video.
+   */
+  content: string;
+
+  /**
+   * Optional tag this document should be containerized by. Max 100 characters,
+   * alphanumeric with hyphens and underscores only.
+   */
+  containerTag?: string;
+
+  /**
+   * @deprecated
+   */
+  containerTags?: Array<string>;
+
+  /**
+   * Optional custom ID of the document. Max 100 characters, alphanumeric with
+   * hyphens and underscores only.
+   */
+  customId?: string;
+
+  /**
+   * Optional metadata for the document.
+   */
+  metadata?: { [key: string]: string | number | boolean | Array<string> };
+}
+
 export interface ProfileParams {
   /**
    * Tag to filter the profile by. This can be an ID for your user, a project ID, or
@@ -57,5 +99,10 @@ export interface ProfileParams {
 }
 
 export declare namespace TopLevel {
-  export { type ProfileResponse as ProfileResponse, type ProfileParams as ProfileParams };
+  export {
+    type AddResponse as AddResponse,
+    type ProfileResponse as ProfileResponse,
+    type AddParams as AddParams,
+    type ProfileParams as ProfileParams,
+  };
 }
