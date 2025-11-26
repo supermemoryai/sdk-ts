@@ -42,7 +42,6 @@ export {
   type MemoryAddParams,
   type MemoryUploadFileParams,
 } from './memories';
-export { Profile, type ProfilePropertyResponse, type ProfilePropertyParams } from './profile';
 export {
   Search,
   type SearchDocumentsResponse,
