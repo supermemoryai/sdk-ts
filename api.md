@@ -4,6 +4,11 @@ Types:
 
 - <code><a href="./src/resources/shared.ts">And</a></code>
 - <code><a href="./src/resources/shared.ts">Or</a></code>
+- <code><a href="./src/resources/shared.ts">ProfileResponse</a></code>
+
+Methods:
+
+- <code title="post /v4/profile">client.shared.<a href="./src/resources/shared.ts">profile</a>({ ...params }) -> ProfileResponse</code>
 
 # Memories
 
