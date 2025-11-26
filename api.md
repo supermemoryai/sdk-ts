@@ -1,5 +1,13 @@
 # Supermemory
 
+Types:
+
+- <code><a href="./src/resources/top-level.ts">ProfileResponse</a></code>
+
+Methods:
+
+- <code title="post /v4/profile">client.<a href="./src/index.ts">profile</a>({ ...params }) -> ProfileResponse</code>
+
 # Memories
 
 Types:

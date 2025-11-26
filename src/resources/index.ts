@@ -56,3 +56,4 @@ export {
   type SettingGetResponse,
   type SettingUpdateParams,
 } from './settings';
+export { type ProfileResponse, type ProfileParams } from './top-level';
