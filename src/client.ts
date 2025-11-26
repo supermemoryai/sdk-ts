@@ -15,6 +15,8 @@ import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
+import * as TopLevelAPI from './resources/top-level';
+import { ProfileParams, ProfileResponse } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import {
   ConnectionCreateParams,
@@ -251,6 +253,16 @@ export class Supermemory {
    */
   #baseURLOverridden(): boolean {
     return this.baseURL !== 'https://api.supermemory.ai';
+  }
+
+  /**
+   * Get user profile with optional search results
+   */
+  profile(
+    body: TopLevelAPI.ProfileParams,
+    options?: RequestOptions,
+  ): APIPromise<TopLevelAPI.ProfileResponse> {
+    return this.post('/v4/profile', { body, ...options });
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -784,6 +796,8 @@ Supermemory.Connections = Connections;
 
 export declare namespace Supermemory {
   export type RequestOptions = Opts.RequestOptions;
+
+  export { type ProfileResponse as ProfileResponse, type ProfileParams as ProfileParams };
 
   export {
     Memories as Memories,
