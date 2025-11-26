@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.9.0 (2025-11-26)
+
+Full Changelog: [v3.8.0...v3.9.0](https://github.com/supermemoryai/sdk-ts/compare/v3.8.0...v3.9.0)
+
+### Features
+
+* **api:** manual updates ([940b068](https://github.com/supermemoryai/sdk-ts/commit/940b06806de3d609bb0801cce104b22f7033299d))
+* **api:** manual updates ([ff15d92](https://github.com/supermemoryai/sdk-ts/commit/ff15d92b91ec2e7b6a199a2fd8d5370555e9b3b7))
+* **api:** manual updates ([d02b088](https://github.com/supermemoryai/sdk-ts/commit/d02b08837dc74c91a630e61ee70409bab098782c))
+* **api:** manual updates ([a31ae09](https://github.com/supermemoryai/sdk-ts/commit/a31ae09c27f09ed0b24536686c56d4b0386f38c1))
+* **api:** manual updates ([5ff6ed1](https://github.com/supermemoryai/sdk-ts/commit/5ff6ed14d0a676cbe13a9b90555635bb6f973a8e))
+* **api:** manual updates ([d4edc7f](https://github.com/supermemoryai/sdk-ts/commit/d4edc7f04328a5fcd7ffcc63ecc1df1f6075ceb1))
+* **api:** manual updates ([91034cb](https://github.com/supermemoryai/sdk-ts/commit/91034cb9935031ad5db877c67571e1f22cb4ed68))
+* **api:** manual updates ([c40f02f](https://github.com/supermemoryai/sdk-ts/commit/c40f02f508f51de9c9b364d4d04e2641012df541))
+* **api:** manual updates ([bea6e27](https://github.com/supermemoryai/sdk-ts/commit/bea6e278b1d55a26ff7bc0686648df215e339de5))
+
 ## 3.8.0 (2025-11-25)
 
 Full Changelog: [v3.7.0...v3.8.0](https://github.com/supermemoryai/sdk-ts/compare/v3.7.0...v3.8.0)
