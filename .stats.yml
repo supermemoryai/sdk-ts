@@ -1,4 +1,4 @@
-configured_endpoints: 18
+configured_endpoints: 19
 openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/supermemory--inc%2Fsupermemory-new-ebd5e757d0e76cb83013e01a1e0bb3dba62beb83b2a2ffa28d148ea032e96fd0.yml
 openapi_spec_hash: f930474a6ad230545154244045cc602e
-config_hash: 4cd6c09cac62e96e5ab8a77a3fb1b2a4
+config_hash: 5761a0b4f8c53c72efab21d41c00012b

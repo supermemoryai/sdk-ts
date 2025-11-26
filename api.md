@@ -45,6 +45,14 @@ Methods:
 
 # Profile
 
+Types:
+
+- <code><a href="./src/resources/profile.ts">ProfilePropertyResponse</a></code>
+
+Methods:
+
+- <code title="post /v4/profile">client.profile.<a href="./src/resources/profile.ts">property</a>({ ...params }) -> ProfilePropertyResponse</code>
+
 # Search
 
 Types:

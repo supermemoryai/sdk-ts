@@ -57,7 +57,7 @@ import {
   MemoryUploadFileParams,
   MemoryUploadFileResponse,
 } from './resources/memories';
-import { Profile } from './resources/profile';
+import { Profile, ProfilePropertyParams, ProfilePropertyResponse } from './resources/profile';
 import {
   Search,
   SearchDocumentsParams,
@@ -814,7 +814,11 @@ export declare namespace Supermemory {
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };
 
-  export { Profile as Profile };
+  export {
+    Profile as Profile,
+    type ProfilePropertyResponse as ProfilePropertyResponse,
+    type ProfilePropertyParams as ProfilePropertyParams,
+  };
 
   export {
     Search as Search,
