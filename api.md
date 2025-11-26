@@ -1,12 +1,5 @@
 # Supermemory
 
-# Shared
-
-Types:
-
-- <code><a href="./src/resources/shared.ts">And</a></code>
-- <code><a href="./src/resources/shared.ts">Or</a></code>
-
 # Memories
 
 Types:
