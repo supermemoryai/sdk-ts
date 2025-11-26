@@ -57,6 +57,7 @@ import {
   MemoryUploadFileParams,
   MemoryUploadFileResponse,
 } from './resources/memories';
+import { Profile } from './resources/profile';
 import {
   Search,
   SearchDocumentsParams,
@@ -771,6 +772,7 @@ export class Supermemory {
 
   memories: API.Memories = new API.Memories(this);
   documents: API.Documents = new API.Documents(this);
+  profile: API.Profile = new API.Profile(this);
   search: API.Search = new API.Search(this);
   settings: API.Settings = new API.Settings(this);
   connections: API.Connections = new API.Connections(this);
@@ -778,6 +780,7 @@ export class Supermemory {
 
 Supermemory.Memories = Memories;
 Supermemory.Documents = Documents;
+Supermemory.Profile = Profile;
 Supermemory.Search = Search;
 Supermemory.Settings = Settings;
 Supermemory.Connections = Connections;
@@ -810,6 +813,8 @@ export declare namespace Supermemory {
     type DocumentAddParams as DocumentAddParams,
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };
+
+  export { Profile as Profile };
 
   export {
     Search as Search,
