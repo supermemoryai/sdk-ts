@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { type Uploadable } from '../core/uploads';
 import { buildHeaders } from '../internal/headers';
@@ -415,7 +414,7 @@ export interface DocumentListParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: Shared.Or | Shared.And;
+  filters?: DocumentListParams.Or | DocumentListParams.And;
 
   /**
    * Whether to include the content field in the response. Warning: This can make
@@ -442,6 +441,22 @@ export interface DocumentListParams {
    * Field to sort by
    */
   sort?: 'createdAt' | 'updatedAt';
+}
+
+export namespace DocumentListParams {
+  /**
+   * OR
+   */
+  export interface Or {
+    OR: Array<unknown>;
+  }
+
+  /**
+   * AND
+   */
+  export interface And {
+    AND: Array<unknown>;
+  }
 }
 
 export interface DocumentAddParams {

@@ -1,6 +1,5 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export * from './shared';
 export {
   Connections,
   type ConnectionCreateResponse,
@@ -57,3 +56,4 @@ export {
   type SettingGetResponse,
   type SettingUpdateParams,
 } from './settings';
+export { type AddResponse, type ProfileResponse, type AddParams, type ProfileParams } from './top-level';
