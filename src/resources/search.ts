@@ -261,6 +261,11 @@ export namespace SearchMemoriesResponse {
     updatedAt: string;
 
     /**
+     * Relevant chunks from associated documents (only included when chunks=true)
+     */
+    chunks?: Array<Result.Chunk>;
+
+    /**
      * Object containing arrays of parent and child contextual memories
      */
     context?: Result.Context;
@@ -277,6 +282,28 @@ export namespace SearchMemoriesResponse {
   }
 
   export namespace Result {
+    export interface Chunk {
+      /**
+       * Content of the chunk
+       */
+      content: string;
+
+      /**
+       * ID of the document this chunk belongs to
+       */
+      documentId: string;
+
+      /**
+       * Position of chunk in the document (0-indexed)
+       */
+      position: number;
+
+      /**
+       * Similarity score between the query and chunk
+       */
+      score: number;
+    }
+
     /**
      * Object containing arrays of parent and child contextual memories
      */
@@ -631,6 +658,12 @@ export namespace SearchMemoriesParams {
   }
 
   export interface Include {
+    /**
+     * If true, fetch and return chunks from documents associated with the found
+     * memories. Performs vector search on chunks within those documents.
+     */
+    chunks?: boolean;
+
     documents?: boolean;
 
     /**
