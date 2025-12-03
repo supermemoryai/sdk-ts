@@ -188,7 +188,8 @@ export namespace DocumentListResponse {
       | 'video'
       | 'notion_doc'
       | 'webpage'
-      | 'onedrive';
+      | 'onedrive'
+      | 'github_markdown';
 
     /**
      * Last update timestamp
@@ -328,7 +329,8 @@ export interface DocumentGetResponse {
     | 'video'
     | 'notion_doc'
     | 'webpage'
-    | 'onedrive';
+    | 'onedrive'
+    | 'github_markdown';
 
   /**
    * Last update timestamp
