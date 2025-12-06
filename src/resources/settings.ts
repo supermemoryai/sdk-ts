@@ -39,6 +39,12 @@ export namespace SettingUpdateResponse {
 
     filterPrompt?: string | null;
 
+    githubClientId?: string | null;
+
+    githubClientSecret?: string | null;
+
+    githubCustomKeyEnabled?: boolean | null;
+
     googleDriveClientId?: string | null;
 
     googleDriveClientSecret?: string | null;
@@ -70,6 +76,12 @@ export interface SettingGetResponse {
 
   filterPrompt?: string | null;
 
+  githubClientId?: string | null;
+
+  githubClientSecret?: string | null;
+
+  githubCustomKeyEnabled?: boolean | null;
+
   googleDriveClientId?: string | null;
 
   googleDriveClientSecret?: string | null;
@@ -99,6 +111,12 @@ export interface SettingUpdateParams {
   excludeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
   filterPrompt?: string | null;
+
+  githubClientId?: string | null;
+
+  githubClientSecret?: string | null;
+
+  githubCustomKeyEnabled?: boolean | null;
 
   googleDriveClientId?: string | null;
 

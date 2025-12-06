@@ -185,7 +185,8 @@ export namespace MemoryListResponse {
       | 'video'
       | 'notion_doc'
       | 'webpage'
-      | 'onedrive';
+      | 'onedrive'
+      | 'github_markdown';
 
     /**
      * Last update timestamp
@@ -325,7 +326,8 @@ export interface MemoryGetResponse {
     | 'video'
     | 'notion_doc'
     | 'webpage'
-    | 'onedrive';
+    | 'onedrive'
+    | 'github_markdown';
 
   /**
    * Last update timestamp
