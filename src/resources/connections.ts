@@ -41,6 +41,25 @@ export class Connections extends APIResource {
   }
 
   /**
+   * Configure resources for a connection (supported providers: GitHub for now)
+   *
+   * @example
+   * ```ts
+   * const response = await client.connections.configure(
+   *   'connectionId',
+   *   { resources: [{ foo: 'bar' }] },
+   * );
+   * ```
+   */
+  configure(
+    connectionID: string,
+    body: ConnectionConfigureParams,
+    options?: RequestOptions,
+  ): APIPromise<ConnectionConfigureResponse> {
+    return this._client.post(path`/v3/connections/${connectionID}/configure`, { body, ...options });
+  }
+
+  /**
    * Delete a specific connection by ID
    *
    * @example
@@ -92,17 +111,17 @@ export class Connections extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.connections.getByTags(
+   * const response = await client.connections.getByTag(
    *   'notion',
    *   { containerTags: ['user_123', 'project_123'] },
    * );
    * ```
    */
-  getByTags(
+  getByTag(
     provider: 'notion' | 'google-drive' | 'onedrive' | 'github' | 'web-crawler',
-    body: ConnectionGetByTagsParams,
+    body: ConnectionGetByTagParams,
     options?: RequestOptions,
-  ): APIPromise<ConnectionGetByTagsResponse> {
+  ): APIPromise<ConnectionGetByTagResponse> {
     return this._client.post(path`/v3/connections/${provider}/connection`, { body, ...options });
   }
 
@@ -143,6 +162,24 @@ export class Connections extends APIResource {
   ): APIPromise<ConnectionListDocumentsResponse> {
     return this._client.post(path`/v3/connections/${provider}/documents`, { body, ...options });
   }
+
+  /**
+   * Fetch resources for a connection (supported providers: GitHub for now)
+   *
+   * @example
+   * ```ts
+   * const response = await client.connections.resources(
+   *   'connectionId',
+   * );
+   * ```
+   */
+  resources(
+    connectionID: string,
+    query: ConnectionResourcesParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ConnectionResourcesResponse> {
+    return this._client.get(path`/v3/connections/${connectionID}/resources`, { query, ...options });
+  }
 }
 
 export interface ConnectionCreateResponse {
@@ -175,6 +212,14 @@ export namespace ConnectionListResponse {
   }
 }
 
+export interface ConnectionConfigureResponse {
+  message: string;
+
+  success: boolean;
+
+  webhooksRegistered?: number;
+}
+
 export interface ConnectionDeleteByIDResponse {
   id: string;
 
@@ -203,7 +248,7 @@ export interface ConnectionGetByIDResponse {
   metadata?: { [key: string]: unknown };
 }
 
-export interface ConnectionGetByTagsResponse {
+export interface ConnectionGetByTagResponse {
   id: string;
 
   createdAt: string;
@@ -242,6 +287,12 @@ export namespace ConnectionListDocumentsResponse {
   }
 }
 
+export interface ConnectionResourcesResponse {
+  resources: Array<{ [key: string]: unknown }>;
+
+  total_count?: number;
+}
+
 export interface ConnectionCreateParams {
   containerTags?: Array<string>;
 
@@ -259,6 +310,10 @@ export interface ConnectionListParams {
   containerTags?: Array<string>;
 }
 
+export interface ConnectionConfigureParams {
+  resources: Array<{ [key: string]: unknown }>;
+}
+
 export interface ConnectionDeleteByProviderParams {
   /**
    * Optional comma-separated list of container tags to filter connections by
@@ -266,7 +321,7 @@ export interface ConnectionDeleteByProviderParams {
   containerTags: Array<string>;
 }
 
-export interface ConnectionGetByTagsParams {
+export interface ConnectionGetByTagParams {
   /**
    * Comma-separated list of container tags to filter connection by
    */
@@ -287,21 +342,31 @@ export interface ConnectionListDocumentsParams {
   containerTags?: Array<string>;
 }
 
+export interface ConnectionResourcesParams {
+  page?: number;
+
+  per_page?: number;
+}
+
 export declare namespace Connections {
   export {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
+    type ConnectionConfigureResponse as ConnectionConfigureResponse,
     type ConnectionDeleteByIDResponse as ConnectionDeleteByIDResponse,
     type ConnectionDeleteByProviderResponse as ConnectionDeleteByProviderResponse,
     type ConnectionGetByIDResponse as ConnectionGetByIDResponse,
-    type ConnectionGetByTagsResponse as ConnectionGetByTagsResponse,
+    type ConnectionGetByTagResponse as ConnectionGetByTagResponse,
     type ConnectionImportResponse as ConnectionImportResponse,
     type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
+    type ConnectionResourcesResponse as ConnectionResourcesResponse,
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
+    type ConnectionConfigureParams as ConnectionConfigureParams,
     type ConnectionDeleteByProviderParams as ConnectionDeleteByProviderParams,
-    type ConnectionGetByTagsParams as ConnectionGetByTagsParams,
+    type ConnectionGetByTagParams as ConnectionGetByTagParams,
     type ConnectionImportParams as ConnectionImportParams,
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
+    type ConnectionResourcesParams as ConnectionResourcesParams,
   };
 }

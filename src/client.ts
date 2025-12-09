@@ -16,28 +16,41 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
-import { AddParams, AddResponse, ProfileParams, ProfileResponse } from './resources/top-level';
+import {
+  AddParams,
+  AddResponse,
+  ProfileParams,
+  ProfileResponse,
+  SearchParams,
+  SearchResponse,
+} from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import {
+  ConnectionConfigureParams,
+  ConnectionConfigureResponse,
   ConnectionCreateParams,
   ConnectionCreateResponse,
   ConnectionDeleteByIDResponse,
   ConnectionDeleteByProviderParams,
   ConnectionDeleteByProviderResponse,
   ConnectionGetByIDResponse,
-  ConnectionGetByTagsParams,
-  ConnectionGetByTagsResponse,
+  ConnectionGetByTagParams,
+  ConnectionGetByTagResponse,
   ConnectionImportParams,
   ConnectionImportResponse,
   ConnectionListDocumentsParams,
   ConnectionListDocumentsResponse,
   ConnectionListParams,
   ConnectionListResponse,
+  ConnectionResourcesParams,
+  ConnectionResourcesResponse,
   Connections,
 } from './resources/connections';
 import {
   DocumentAddParams,
   DocumentAddResponse,
+  DocumentDeleteBulkParams,
+  DocumentDeleteBulkResponse,
   DocumentGetResponse,
   DocumentListParams,
   DocumentListResponse,
@@ -51,9 +64,13 @@ import {
   Memories,
   MemoryAddParams,
   MemoryAddResponse,
+  MemoryForgetParams,
+  MemoryForgetResponse,
   MemoryGetResponse,
   MemoryListParams,
   MemoryListResponse,
+  MemoryUpdateMemoryParams,
+  MemoryUpdateMemoryResponse,
   MemoryUpdateParams,
   MemoryUpdateResponse,
   MemoryUploadFileParams,
@@ -257,6 +274,11 @@ export class Supermemory {
 
   /**
    * Add a document with any content type (text, url, file, etc.) and metadata
+   *
+   * @example
+   * ```ts
+   * const response = await client.add({ content: 'content' });
+   * ```
    */
   add(body: TopLevelAPI.AddParams, options?: RequestOptions): APIPromise<TopLevelAPI.AddResponse> {
     return this.post('/v3/documents', { body, ...options });
@@ -264,12 +286,33 @@ export class Supermemory {
 
   /**
    * Get user profile with optional search results
+   *
+   * @example
+   * ```ts
+   * const response = await client.profile({
+   *   containerTag: 'containerTag',
+   * });
+   * ```
    */
   profile(
     body: TopLevelAPI.ProfileParams,
     options?: RequestOptions,
   ): APIPromise<TopLevelAPI.ProfileResponse> {
     return this.post('/v4/profile', { body, ...options });
+  }
+
+  /**
+   * Search memory entries - Low latency for conversational
+   *
+   * @example
+   * ```ts
+   * const response = await client.search({
+   *   q: 'machine learning concepts',
+   * });
+   * ```
+   */
+  search(body: TopLevelAPI.SearchParams, options?: RequestOptions): APIPromise<TopLevelAPI.SearchResponse> {
+    return this.post('/v4/search', { body, ...options });
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -807,8 +850,10 @@ export declare namespace Supermemory {
   export {
     type AddResponse as AddResponse,
     type ProfileResponse as ProfileResponse,
+    type SearchResponse as SearchResponse,
     type AddParams as AddParams,
     type ProfileParams as ProfileParams,
+    type SearchParams as SearchParams,
   };
 
   export {
@@ -816,11 +861,15 @@ export declare namespace Supermemory {
     type MemoryUpdateResponse as MemoryUpdateResponse,
     type MemoryListResponse as MemoryListResponse,
     type MemoryAddResponse as MemoryAddResponse,
+    type MemoryForgetResponse as MemoryForgetResponse,
     type MemoryGetResponse as MemoryGetResponse,
+    type MemoryUpdateMemoryResponse as MemoryUpdateMemoryResponse,
     type MemoryUploadFileResponse as MemoryUploadFileResponse,
     type MemoryUpdateParams as MemoryUpdateParams,
     type MemoryListParams as MemoryListParams,
     type MemoryAddParams as MemoryAddParams,
+    type MemoryForgetParams as MemoryForgetParams,
+    type MemoryUpdateMemoryParams as MemoryUpdateMemoryParams,
     type MemoryUploadFileParams as MemoryUploadFileParams,
   };
 
@@ -829,11 +878,13 @@ export declare namespace Supermemory {
     type DocumentUpdateResponse as DocumentUpdateResponse,
     type DocumentListResponse as DocumentListResponse,
     type DocumentAddResponse as DocumentAddResponse,
+    type DocumentDeleteBulkResponse as DocumentDeleteBulkResponse,
     type DocumentGetResponse as DocumentGetResponse,
     type DocumentUploadFileResponse as DocumentUploadFileResponse,
     type DocumentUpdateParams as DocumentUpdateParams,
     type DocumentListParams as DocumentListParams,
     type DocumentAddParams as DocumentAddParams,
+    type DocumentDeleteBulkParams as DocumentDeleteBulkParams,
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };
 
@@ -858,17 +909,21 @@ export declare namespace Supermemory {
     Connections as Connections,
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionListResponse as ConnectionListResponse,
+    type ConnectionConfigureResponse as ConnectionConfigureResponse,
     type ConnectionDeleteByIDResponse as ConnectionDeleteByIDResponse,
     type ConnectionDeleteByProviderResponse as ConnectionDeleteByProviderResponse,
     type ConnectionGetByIDResponse as ConnectionGetByIDResponse,
-    type ConnectionGetByTagsResponse as ConnectionGetByTagsResponse,
+    type ConnectionGetByTagResponse as ConnectionGetByTagResponse,
     type ConnectionImportResponse as ConnectionImportResponse,
     type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
+    type ConnectionResourcesResponse as ConnectionResourcesResponse,
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
+    type ConnectionConfigureParams as ConnectionConfigureParams,
     type ConnectionDeleteByProviderParams as ConnectionDeleteByProviderParams,
-    type ConnectionGetByTagsParams as ConnectionGetByTagsParams,
+    type ConnectionGetByTagParams as ConnectionGetByTagParams,
     type ConnectionImportParams as ConnectionImportParams,
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
+    type ConnectionResourcesParams as ConnectionResourcesParams,
   };
 }

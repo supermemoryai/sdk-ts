@@ -123,6 +123,32 @@ describe('resource documents', () => {
   });
 
   // Prism tests are disabled
+  test.skip('deleteBulk', async () => {
+    const responsePromise = client.documents.deleteBulk();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('deleteBulk: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.documents.deleteBulk(
+        {
+          containerTags: ['user_123', 'project_123'],
+          ids: ['acxV5LHMEsG2hMSNb4umbn', 'bxcV5LHMEsG2hMSNb4umbn'],
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Supermemory.NotFoundError);
+  });
+
+  // Prism tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.documents.get('id');
     const rawResponse = await responsePromise.asResponse();
