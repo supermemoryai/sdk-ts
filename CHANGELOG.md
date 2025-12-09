@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.11.0 (2025-12-09)
+
+Full Changelog: [v3.10.0...v3.11.0](https://github.com/supermemoryai/sdk-ts/compare/v3.10.0...v3.11.0)
+
+### Features
+
+* **api:** api update ([8b15b2e](https://github.com/supermemoryai/sdk-ts/commit/8b15b2e80480cb6c9ef674c38a87cad16917e0e7))
+
+
+### Bug Fixes
+
+* **mcp:** correct code tool API endpoint ([679b47d](https://github.com/supermemoryai/sdk-ts/commit/679b47dcc3a535a546e4175cc6b79969773107b2))
+* **mcp:** return correct lines on typescript errors ([f299338](https://github.com/supermemoryai/sdk-ts/commit/f2993387c7301d20659fc87b49cc1df729df02cd))
+
+
+### Chores
+
+* **client:** fix logger property type ([17e3bd9](https://github.com/supermemoryai/sdk-ts/commit/17e3bd9e3348dcfd5db3c45e8704dafa560201f2))
+* **internal:** codegen related update ([b739d2e](https://github.com/supermemoryai/sdk-ts/commit/b739d2e147344f28b39a9155da5f1e76343eb8a7))
+* **internal:** codegen related update ([37449e3](https://github.com/supermemoryai/sdk-ts/commit/37449e3d4165770e88f804628c495a947c45c1ab))
+* **internal:** upgrade eslint ([82765af](https://github.com/supermemoryai/sdk-ts/commit/82765afd1dc701528d2686d78bba12f82a586109))
+
 ## 3.10.0 (2025-11-27)
 
 Full Changelog: [v3.9.0...v3.10.0](https://github.com/supermemoryai/sdk-ts/compare/v3.9.0...v3.10.0)
