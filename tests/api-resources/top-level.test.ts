@@ -47,36 +47,4 @@ describe('top level methods', () => {
   test.skip('profile: required and optional params', async () => {
     const response = await client.profile({ containerTag: 'containerTag', q: 'q' });
   });
-
-  // Prism tests are disabled
-  test.skip('search: only required params', async () => {
-    const responsePromise = client.search({ q: 'machine learning concepts' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('search: required and optional params', async () => {
-    const response = await client.search({
-      q: 'machine learning concepts',
-      containerTag: 'user_123',
-      filters: { OR: [{}] },
-      include: {
-        chunks: false,
-        documents: true,
-        forgottenMemories: false,
-        relatedMemories: true,
-        summaries: true,
-      },
-      limit: 10,
-      rerank: false,
-      rewriteQuery: false,
-      threshold: 0.5,
-    });
-  });
 });

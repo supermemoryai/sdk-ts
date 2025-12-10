@@ -4,13 +4,18 @@ Types:
 
 - <code><a href="./src/resources/top-level.ts">AddResponse</a></code>
 - <code><a href="./src/resources/top-level.ts">ProfileResponse</a></code>
-- <code><a href="./src/resources/top-level.ts">SearchResponse</a></code>
 
 Methods:
 
 - <code title="post /v3/documents">client.<a href="./src/index.ts">add</a>({ ...params }) -> AddResponse</code>
 - <code title="post /v4/profile">client.<a href="./src/index.ts">profile</a>({ ...params }) -> ProfileResponse</code>
-- <code title="post /v4/search">client.<a href="./src/index.ts">search</a>({ ...params }) -> SearchResponse</code>
+
+# Shared
+
+Types:
+
+- <code><a href="./src/resources/shared.ts">And</a></code>
+- <code><a href="./src/resources/shared.ts">Or</a></code>
 
 # Memories
 
