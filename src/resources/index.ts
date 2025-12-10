@@ -1,6 +1,5 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export * from './shared';
 export {
   Connections,
   type ConnectionCreateResponse,
@@ -24,7 +23,6 @@ export {
 } from './connections';
 export {
   Documents,
-  type Query,
   type DocumentUpdateResponse,
   type DocumentListResponse,
   type DocumentAddResponse,

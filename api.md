@@ -10,13 +10,6 @@ Methods:
 - <code title="post /v3/documents">client.<a href="./src/index.ts">add</a>({ ...params }) -> AddResponse</code>
 - <code title="post /v4/profile">client.<a href="./src/index.ts">profile</a>({ ...params }) -> ProfileResponse</code>
 
-# Shared
-
-Types:
-
-- <code><a href="./src/resources/shared.ts">And</a></code>
-- <code><a href="./src/resources/shared.ts">Or</a></code>
-
 # Memories
 
 Types:
@@ -44,7 +37,6 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/documents.ts">Query</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentUpdateResponse</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentListResponse</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentAddResponse</a></code>
