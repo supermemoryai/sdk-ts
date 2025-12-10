@@ -67,11 +67,4 @@ export {
   type SettingGetResponse,
   type SettingUpdateParams,
 } from './settings';
-export {
-  type AddResponse,
-  type ProfileResponse,
-  type SearchResponse,
-  type AddParams,
-  type ProfileParams,
-  type SearchParams,
-} from './top-level';
+export { type AddResponse, type ProfileResponse, type AddParams, type ProfileParams } from './top-level';
