@@ -55,7 +55,6 @@ import {
   DocumentUploadFileParams,
   DocumentUploadFileResponse,
   Documents,
-  Query,
 } from './resources/documents';
 import {
   Memories,
@@ -844,7 +843,6 @@ export declare namespace Supermemory {
 
   export {
     Documents as Documents,
-    type Query as Query,
     type DocumentUpdateResponse as DocumentUpdateResponse,
     type DocumentListResponse as DocumentListResponse,
     type DocumentAddResponse as DocumentAddResponse,
@@ -899,7 +897,4 @@ export declare namespace Supermemory {
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
     type ConnectionResourcesParams as ConnectionResourcesParams,
   };
-
-  export type And = API.And;
-  export type Or = API.Or;
 }
