@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as Shared from './shared';
+import * as DocumentsAPI from './documents';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
@@ -450,7 +450,7 @@ export interface SearchDocumentsParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: Shared.Or | Shared.And;
+  filters?: DocumentsAPI.Query;
 
   /**
    * If true, include full document in the response. This is helpful if you want a
@@ -528,7 +528,7 @@ export interface SearchExecuteParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: Shared.Or | Shared.And;
+  filters?: DocumentsAPI.Query;
 
   /**
    * If true, include full document in the response. This is helpful if you want a
@@ -582,7 +582,7 @@ export interface SearchMemoriesParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: Shared.Or | Shared.And;
+  filters?: DocumentsAPI.Query;
 
   include?: SearchMemoriesParams.Include;
 

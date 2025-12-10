@@ -71,6 +71,29 @@ export class Documents extends APIResource {
   }
 
   /**
+   * Add multiple documents in a single request. Each document can have any content
+   * type (text, url, file, etc.) and metadata
+   *
+   * @example
+   * ```ts
+   * const response = await client.documents.batchCreate({
+   *   documents: [
+   *     {
+   *       content:
+   *         'This is a detailed article about machine learning concepts...',
+   *     },
+   *   ],
+   * });
+   * ```
+   */
+  batchCreate(
+    body: DocumentBatchCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<DocumentBatchCreateResponse> {
+    return this._client.post('/v3/documents/batch', { body, ...options });
+  }
+
+  /**
    * Bulk delete documents by IDs or container tags
    *
    * @example
@@ -98,6 +121,18 @@ export class Documents extends APIResource {
   }
 
   /**
+   * Get documents that are currently being processed
+   *
+   * @example
+   * ```ts
+   * const response = await client.documents.listProcessing();
+   * ```
+   */
+  listProcessing(options?: RequestOptions): APIPromise<DocumentListProcessingResponse> {
+    return this._client.get('/v3/documents/processing', options);
+  }
+
+  /**
    * Upload a file to be processed
    *
    * @example
@@ -117,6 +152,11 @@ export class Documents extends APIResource {
     );
   }
 }
+
+/**
+ * Optional filters to apply to the search. Can be a JSON string or Query object.
+ */
+export type Query = Shared.Or | Shared.And;
 
 export interface DocumentUpdateResponse {
   /**
@@ -249,6 +289,22 @@ export interface DocumentAddResponse {
    * Status of the document
    */
   status: string;
+}
+
+export type DocumentBatchCreateResponse = Array<DocumentBatchCreateResponse.DocumentBatchCreateResponseItem>;
+
+export namespace DocumentBatchCreateResponse {
+  export interface DocumentBatchCreateResponseItem {
+    /**
+     * Unique identifier of the document
+     */
+    id: string;
+
+    /**
+     * Status of the document
+     */
+    status: string;
+  }
 }
 
 /**
@@ -401,6 +457,86 @@ export interface DocumentGetResponse {
   url?: string | null;
 }
 
+/**
+ * List of documents currently being processed
+ */
+export interface DocumentListProcessingResponse {
+  documents: Array<DocumentListProcessingResponse.Document>;
+
+  /**
+   * Total number of processing documents
+   */
+  totalCount: number;
+}
+
+export namespace DocumentListProcessingResponse {
+  export interface Document {
+    /**
+     * Unique identifier of the document.
+     */
+    id: string;
+
+    /**
+     * Creation timestamp
+     */
+    createdAt: string;
+
+    /**
+     * Optional custom ID of the document. This could be an ID from your database that
+     * will uniquely identify this document.
+     */
+    customId: string | null;
+
+    /**
+     * Optional metadata for the document. This is used to store additional information
+     * about the document. You can use this to store any additional information you
+     * need about the document. Metadata can be filtered through. Keys must be strings
+     * and are case sensitive. Values can be strings, numbers, or booleans. You cannot
+     * nest objects.
+     */
+    metadata: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
+
+    /**
+     * Status of the document
+     */
+    status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed';
+
+    /**
+     * Title of the document
+     */
+    title: string | null;
+
+    /**
+     * Type of the document
+     */
+    type:
+      | 'text'
+      | 'pdf'
+      | 'tweet'
+      | 'google_doc'
+      | 'google_slide'
+      | 'google_sheet'
+      | 'image'
+      | 'video'
+      | 'notion_doc'
+      | 'webpage'
+      | 'onedrive'
+      | 'github_markdown';
+
+    /**
+     * Last update timestamp
+     */
+    updatedAt: string;
+
+    /**
+     * Optional tags this document should be containerized by. This can be an ID for
+     * your user, a project ID, or any other identifier you wish to use to group
+     * documents.
+     */
+    containerTags?: Array<string>;
+  }
+}
+
 export interface DocumentUploadFileResponse {
   /**
    * Unique identifier of the document
@@ -467,7 +603,7 @@ export interface DocumentListParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: Shared.Or | Shared.And;
+  filters?: Query;
 
   /**
    * Whether to include the content field in the response. Warning: This can make
@@ -526,6 +662,80 @@ export interface DocumentAddParams {
   metadata?: { [key: string]: string | number | boolean | Array<string> };
 }
 
+export interface DocumentBatchCreateParams {
+  documents: Array<DocumentBatchCreateParams.UnionMember0> | Array<string>;
+
+  /**
+   * Optional tag this document should be containerized by. This can be an ID for
+   * your user, a project ID, or any other identifier you wish to use to group
+   * documents.
+   */
+  containerTag?: string;
+
+  /**
+   * @deprecated (DEPRECATED: Use containerTag instead) Optional tags this document
+   * should be containerized by. This can be an ID for your user, a project ID, or
+   * any other identifier you wish to use to group documents.
+   */
+  containerTags?: Array<string>;
+
+  content?: null;
+
+  /**
+   * Optional metadata for the document. This is used to store additional information
+   * about the document. You can use this to store any additional information you
+   * need about the document. Metadata can be filtered through. Keys must be strings
+   * and are case sensitive. Values can be strings, numbers, or booleans. You cannot
+   * nest objects.
+   */
+  metadata?: { [key: string]: string | number | boolean | Array<string> };
+}
+
+export namespace DocumentBatchCreateParams {
+  export interface UnionMember0 {
+    /**
+     * The content to extract and process into a document. This can be a URL to a
+     * website, a PDF, an image, or a video.
+     *
+     * Plaintext: Any plaintext format
+     *
+     * URL: A URL to a website, PDF, image, or video
+     *
+     * We automatically detect the content type from the url's response format.
+     */
+    content: string;
+
+    /**
+     * Optional tag this document should be containerized by. This can be an ID for
+     * your user, a project ID, or any other identifier you wish to use to group
+     * documents.
+     */
+    containerTag?: string;
+
+    /**
+     * @deprecated (DEPRECATED: Use containerTag instead) Optional tags this document
+     * should be containerized by. This can be an ID for your user, a project ID, or
+     * any other identifier you wish to use to group documents.
+     */
+    containerTags?: Array<string>;
+
+    /**
+     * Optional custom ID of the document. This could be an ID from your database that
+     * will uniquely identify this document.
+     */
+    customId?: string;
+
+    /**
+     * Optional metadata for the document. This is used to store additional information
+     * about the document. You can use this to store any additional information you
+     * need about the document. Metadata can be filtered through. Keys must be strings
+     * and are case sensitive. Values can be strings, numbers, or booleans. You cannot
+     * nest objects.
+     */
+    metadata?: { [key: string]: string | number | boolean | Array<string> };
+  }
+}
+
 export interface DocumentDeleteBulkParams {
   /**
    * Array of container tags - all documents in these containers will be deleted
@@ -574,15 +784,19 @@ export interface DocumentUploadFileParams {
 
 export declare namespace Documents {
   export {
+    type Query as Query,
     type DocumentUpdateResponse as DocumentUpdateResponse,
     type DocumentListResponse as DocumentListResponse,
     type DocumentAddResponse as DocumentAddResponse,
+    type DocumentBatchCreateResponse as DocumentBatchCreateResponse,
     type DocumentDeleteBulkResponse as DocumentDeleteBulkResponse,
     type DocumentGetResponse as DocumentGetResponse,
+    type DocumentListProcessingResponse as DocumentListProcessingResponse,
     type DocumentUploadFileResponse as DocumentUploadFileResponse,
     type DocumentUpdateParams as DocumentUpdateParams,
     type DocumentListParams as DocumentListParams,
     type DocumentAddParams as DocumentAddParams,
+    type DocumentBatchCreateParams as DocumentBatchCreateParams,
     type DocumentDeleteBulkParams as DocumentDeleteBulkParams,
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };
