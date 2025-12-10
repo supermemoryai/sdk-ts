@@ -42,8 +42,8 @@ import {
 import {
   DocumentAddParams,
   DocumentAddResponse,
-  DocumentBatchCreateParams,
-  DocumentBatchCreateResponse,
+  DocumentBatchAddParams,
+  DocumentBatchAddResponse,
   DocumentDeleteBulkParams,
   DocumentDeleteBulkResponse,
   DocumentGetResponse,
@@ -848,7 +848,7 @@ export declare namespace Supermemory {
     type DocumentUpdateResponse as DocumentUpdateResponse,
     type DocumentListResponse as DocumentListResponse,
     type DocumentAddResponse as DocumentAddResponse,
-    type DocumentBatchCreateResponse as DocumentBatchCreateResponse,
+    type DocumentBatchAddResponse as DocumentBatchAddResponse,
     type DocumentDeleteBulkResponse as DocumentDeleteBulkResponse,
     type DocumentGetResponse as DocumentGetResponse,
     type DocumentListProcessingResponse as DocumentListProcessingResponse,
@@ -856,7 +856,7 @@ export declare namespace Supermemory {
     type DocumentUpdateParams as DocumentUpdateParams,
     type DocumentListParams as DocumentListParams,
     type DocumentAddParams as DocumentAddParams,
-    type DocumentBatchCreateParams as DocumentBatchCreateParams,
+    type DocumentBatchAddParams as DocumentBatchAddParams,
     type DocumentDeleteBulkParams as DocumentDeleteBulkParams,
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };

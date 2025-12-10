@@ -28,7 +28,7 @@ export {
   type DocumentUpdateResponse,
   type DocumentListResponse,
   type DocumentAddResponse,
-  type DocumentBatchCreateResponse,
+  type DocumentBatchAddResponse,
   type DocumentDeleteBulkResponse,
   type DocumentGetResponse,
   type DocumentListProcessingResponse,
@@ -36,7 +36,7 @@ export {
   type DocumentUpdateParams,
   type DocumentListParams,
   type DocumentAddParams,
-  type DocumentBatchCreateParams,
+  type DocumentBatchAddParams,
   type DocumentDeleteBulkParams,
   type DocumentUploadFileParams,
 } from './documents';
