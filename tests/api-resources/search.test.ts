@@ -29,18 +29,7 @@ describe('resource search', () => {
       containerTags: ['user_123'],
       docId: 'docId',
       documentThreshold: 0,
-      filters: {
-        OR: [
-          {
-            key: 'key',
-            value: 'value',
-            filterType: 'metadata',
-            ignoreCase: true,
-            negate: true,
-            numericOperator: '>',
-          },
-        ],
-      },
+      filters: { OR: [{}] },
       includeFullDocs: false,
       includeSummary: true,
       limit: 10,
@@ -71,18 +60,7 @@ describe('resource search', () => {
       containerTags: ['user_123'],
       docId: 'docId',
       documentThreshold: 0,
-      filters: {
-        OR: [
-          {
-            key: 'key',
-            value: 'value',
-            filterType: 'metadata',
-            ignoreCase: true,
-            negate: true,
-            numericOperator: '>',
-          },
-        ],
-      },
+      filters: { OR: [{}] },
       includeFullDocs: false,
       includeSummary: true,
       limit: 10,
@@ -109,18 +87,7 @@ describe('resource search', () => {
     const response = await client.search.memories({
       q: 'machine learning concepts',
       containerTag: 'user_123',
-      filters: {
-        OR: [
-          {
-            key: 'key',
-            value: 'value',
-            filterType: 'metadata',
-            ignoreCase: true,
-            negate: true,
-            numericOperator: '>',
-          },
-        ],
-      },
+      filters: { OR: [{}] },
       include: {
         chunks: false,
         documents: true,
