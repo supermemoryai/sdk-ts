@@ -1,5 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import * as Shared from './shared';
+
 export interface AddResponse {
   /**
    * Unique identifier of the document
@@ -307,7 +309,7 @@ export interface SearchParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: SearchParams.Or | SearchParams.And;
+  filters?: Shared.Or | Shared.And;
 
   include?: SearchParams.Include;
 
@@ -337,20 +339,6 @@ export interface SearchParams {
 }
 
 export namespace SearchParams {
-  /**
-   * OR
-   */
-  export interface Or {
-    OR: Array<unknown>;
-  }
-
-  /**
-   * AND
-   */
-  export interface And {
-    AND: Array<unknown>;
-  }
-
   export interface Include {
     /**
      * If true, fetch and return chunks from documents associated with the found
