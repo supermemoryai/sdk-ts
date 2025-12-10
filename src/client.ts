@@ -42,16 +42,20 @@ import {
 import {
   DocumentAddParams,
   DocumentAddResponse,
+  DocumentBatchCreateParams,
+  DocumentBatchCreateResponse,
   DocumentDeleteBulkParams,
   DocumentDeleteBulkResponse,
   DocumentGetResponse,
   DocumentListParams,
+  DocumentListProcessingResponse,
   DocumentListResponse,
   DocumentUpdateParams,
   DocumentUpdateResponse,
   DocumentUploadFileParams,
   DocumentUploadFileResponse,
   Documents,
+  Query,
 } from './resources/documents';
 import {
   Memories,
@@ -840,15 +844,19 @@ export declare namespace Supermemory {
 
   export {
     Documents as Documents,
+    type Query as Query,
     type DocumentUpdateResponse as DocumentUpdateResponse,
     type DocumentListResponse as DocumentListResponse,
     type DocumentAddResponse as DocumentAddResponse,
+    type DocumentBatchCreateResponse as DocumentBatchCreateResponse,
     type DocumentDeleteBulkResponse as DocumentDeleteBulkResponse,
     type DocumentGetResponse as DocumentGetResponse,
+    type DocumentListProcessingResponse as DocumentListProcessingResponse,
     type DocumentUploadFileResponse as DocumentUploadFileResponse,
     type DocumentUpdateParams as DocumentUpdateParams,
     type DocumentListParams as DocumentListParams,
     type DocumentAddParams as DocumentAddParams,
+    type DocumentBatchCreateParams as DocumentBatchCreateParams,
     type DocumentDeleteBulkParams as DocumentDeleteBulkParams,
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };

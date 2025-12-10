@@ -24,15 +24,19 @@ export {
 } from './connections';
 export {
   Documents,
+  type Query,
   type DocumentUpdateResponse,
   type DocumentListResponse,
   type DocumentAddResponse,
+  type DocumentBatchCreateResponse,
   type DocumentDeleteBulkResponse,
   type DocumentGetResponse,
+  type DocumentListProcessingResponse,
   type DocumentUploadFileResponse,
   type DocumentUpdateParams,
   type DocumentListParams,
   type DocumentAddParams,
+  type DocumentBatchCreateParams,
   type DocumentDeleteBulkParams,
   type DocumentUploadFileParams,
 } from './documents';
