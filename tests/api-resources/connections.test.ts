@@ -61,6 +61,23 @@ describe('resource connections', () => {
   });
 
   // Prism tests are disabled
+  test.skip('configure: only required params', async () => {
+    const responsePromise = client.connections.configure('connectionId', { resources: [{ foo: 'bar' }] });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('configure: required and optional params', async () => {
+    const response = await client.connections.configure('connectionId', { resources: [{ foo: 'bar' }] });
+  });
+
+  // Prism tests are disabled
   test.skip('deleteByID', async () => {
     const responsePromise = client.connections.deleteByID('connectionId');
     const rawResponse = await responsePromise.asResponse();
@@ -106,8 +123,8 @@ describe('resource connections', () => {
   });
 
   // Prism tests are disabled
-  test.skip('getByTags: only required params', async () => {
-    const responsePromise = client.connections.getByTags('notion', {
+  test.skip('getByTag: only required params', async () => {
+    const responsePromise = client.connections.getByTag('notion', {
       containerTags: ['user_123', 'project_123'],
     });
     const rawResponse = await responsePromise.asResponse();
@@ -120,8 +137,8 @@ describe('resource connections', () => {
   });
 
   // Prism tests are disabled
-  test.skip('getByTags: required and optional params', async () => {
-    const response = await client.connections.getByTags('notion', {
+  test.skip('getByTag: required and optional params', async () => {
+    const response = await client.connections.getByTag('notion', {
       containerTags: ['user_123', 'project_123'],
     });
   });
@@ -169,6 +186,30 @@ describe('resource connections', () => {
       client.connections.listDocuments(
         'notion',
         { containerTags: ['user_123', 'project_123'] },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Supermemory.NotFoundError);
+  });
+
+  // Prism tests are disabled
+  test.skip('resources', async () => {
+    const responsePromise = client.connections.resources('connectionId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('resources: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.connections.resources(
+        'connectionId',
+        { page: 0, per_page: 0 },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Supermemory.NotFoundError);

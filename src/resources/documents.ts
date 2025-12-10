@@ -70,6 +70,21 @@ export class Documents extends APIResource {
   }
 
   /**
+   * Bulk delete documents by IDs or container tags
+   *
+   * @example
+   * ```ts
+   * const response = await client.documents.deleteBulk();
+   * ```
+   */
+  deleteBulk(
+    body: DocumentDeleteBulkParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<DocumentDeleteBulkResponse> {
+    return this._client.delete('/v3/documents/bulk', { body, ...options });
+  }
+
+  /**
    * Get a document by ID
    *
    * @example
@@ -233,6 +248,41 @@ export interface DocumentAddResponse {
    * Status of the document
    */
   status: string;
+}
+
+/**
+ * Response for bulk document deletion
+ */
+export interface DocumentDeleteBulkResponse {
+  /**
+   * Number of documents successfully deleted
+   */
+  deletedCount: number;
+
+  /**
+   * Whether the bulk deletion was successful
+   */
+  success: boolean;
+
+  /**
+   * Container tags that were processed (only applicable when deleting by container
+   * tags)
+   */
+  containerTags?: Array<string>;
+
+  /**
+   * Array of errors for documents that couldn't be deleted (only applicable when
+   * deleting by IDs)
+   */
+  errors?: Array<DocumentDeleteBulkResponse.Error>;
+}
+
+export namespace DocumentDeleteBulkResponse {
+  export interface Error {
+    id: string;
+
+    error: string;
+  }
 }
 
 /**
@@ -491,6 +541,18 @@ export interface DocumentAddParams {
   metadata?: { [key: string]: string | number | boolean | Array<string> };
 }
 
+export interface DocumentDeleteBulkParams {
+  /**
+   * Array of container tags - all documents in these containers will be deleted
+   */
+  containerTags?: Array<string>;
+
+  /**
+   * Array of document IDs to delete (max 100 at once)
+   */
+  ids?: Array<string>;
+}
+
 export interface DocumentUploadFileParams {
   /**
    * File to upload and process
@@ -530,11 +592,13 @@ export declare namespace Documents {
     type DocumentUpdateResponse as DocumentUpdateResponse,
     type DocumentListResponse as DocumentListResponse,
     type DocumentAddResponse as DocumentAddResponse,
+    type DocumentDeleteBulkResponse as DocumentDeleteBulkResponse,
     type DocumentGetResponse as DocumentGetResponse,
     type DocumentUploadFileResponse as DocumentUploadFileResponse,
     type DocumentUpdateParams as DocumentUpdateParams,
     type DocumentListParams as DocumentListParams,
     type DocumentAddParams as DocumentAddParams,
+    type DocumentDeleteBulkParams as DocumentDeleteBulkParams,
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };
 }
