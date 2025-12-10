@@ -42,10 +42,13 @@ import {
 import {
   DocumentAddParams,
   DocumentAddResponse,
+  DocumentBatchAddParams,
+  DocumentBatchAddResponse,
   DocumentDeleteBulkParams,
   DocumentDeleteBulkResponse,
   DocumentGetResponse,
   DocumentListParams,
+  DocumentListProcessingResponse,
   DocumentListResponse,
   DocumentUpdateParams,
   DocumentUpdateResponse,
@@ -843,12 +846,15 @@ export declare namespace Supermemory {
     type DocumentUpdateResponse as DocumentUpdateResponse,
     type DocumentListResponse as DocumentListResponse,
     type DocumentAddResponse as DocumentAddResponse,
+    type DocumentBatchAddResponse as DocumentBatchAddResponse,
     type DocumentDeleteBulkResponse as DocumentDeleteBulkResponse,
     type DocumentGetResponse as DocumentGetResponse,
+    type DocumentListProcessingResponse as DocumentListProcessingResponse,
     type DocumentUploadFileResponse as DocumentUploadFileResponse,
     type DocumentUpdateParams as DocumentUpdateParams,
     type DocumentListParams as DocumentListParams,
     type DocumentAddParams as DocumentAddParams,
+    type DocumentBatchAddParams as DocumentBatchAddParams,
     type DocumentDeleteBulkParams as DocumentDeleteBulkParams,
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };
@@ -891,7 +897,4 @@ export declare namespace Supermemory {
     type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
     type ConnectionResourcesParams as ConnectionResourcesParams,
   };
-
-  export type And = API.And;
-  export type Or = API.Or;
 }

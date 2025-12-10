@@ -66,13 +66,21 @@ describe('resource documents', () => {
           containerTags: ['user_123', 'project_123'],
           filters: {
             AND: [
-              { filterType: 'metadata', key: 'group', negate: false, value: 'jira_users' },
               {
-                filterType: 'numeric',
-                key: 'timestamp',
+                key: 'group',
+                value: 'jira_users',
+                filterType: 'metadata',
+                ignoreCase: true,
                 negate: false,
                 numericOperator: '>',
+              },
+              {
+                key: 'timestamp',
                 value: '1742745777',
+                filterType: 'numeric',
+                ignoreCase: true,
+                negate: false,
+                numericOperator: '>',
               },
             ],
           },
@@ -123,6 +131,53 @@ describe('resource documents', () => {
   });
 
   // Prism tests are disabled
+  test.skip('batchAdd: only required params', async () => {
+    const responsePromise = client.documents.batchAdd({
+      documents: [{ content: 'This is a detailed article about machine learning concepts...' }],
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('batchAdd: required and optional params', async () => {
+    const response = await client.documents.batchAdd({
+      documents: [
+        {
+          content: 'This is a detailed article about machine learning concepts...',
+          containerTag: 'user_123',
+          containerTags: ['user_123', 'project_123'],
+          customId: 'mem_abc123',
+          metadata: {
+            category: 'technology',
+            isPublic: true,
+            readingTime: 5,
+            source: 'web',
+            tag_1: 'ai',
+            tag_2: 'machine-learning',
+          },
+        },
+      ],
+      containerTag: 'user_123',
+      containerTags: ['user_123', 'project_123'],
+      content: null,
+      metadata: {
+        category: 'technology',
+        isPublic: true,
+        readingTime: 5,
+        source: 'web',
+        tag_1: 'ai',
+        tag_2: 'machine-learning',
+      },
+    });
+  });
+
+  // Prism tests are disabled
   test.skip('deleteBulk', async () => {
     const responsePromise = client.documents.deleteBulk();
     const rawResponse = await responsePromise.asResponse();
@@ -151,6 +206,18 @@ describe('resource documents', () => {
   // Prism tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.documents.get('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('listProcessing', async () => {
+    const responsePromise = client.documents.listProcessing();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

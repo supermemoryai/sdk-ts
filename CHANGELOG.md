@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.14.0 (2025-12-10)
+
+Full Changelog: [v3.13.0...v3.14.0](https://github.com/supermemoryai/sdk-ts/compare/v3.13.0...v3.14.0)
+
+### Features
+
+* **api:** api update ([fabea15](https://github.com/supermemoryai/sdk-ts/commit/fabea15835df16a52a8b8467f5057dd821e4fa1a))
+* **api:** api update ([6fe2255](https://github.com/supermemoryai/sdk-ts/commit/6fe2255a233da702dd5c4541310c83b53bf0912f))
+* **api:** manual updates ([74bf6a6](https://github.com/supermemoryai/sdk-ts/commit/74bf6a6fead3cda70c3a880e893018c0f2c5f3b4))
+* **api:** manual updates ([fe02134](https://github.com/supermemoryai/sdk-ts/commit/fe0213486e3e411a5fdda356f36362f1fc2eb359))
+* **api:** manual updates ([b81eda3](https://github.com/supermemoryai/sdk-ts/commit/b81eda3a90fc573a92cf7c9f3d976d8d4e510533))
+* **api:** manual updates ([7f51e4e](https://github.com/supermemoryai/sdk-ts/commit/7f51e4e840e5e4d48be6ea4c69a976d1dd1e7731))
+
 ## 3.13.0 (2025-12-10)
 
 Full Changelog: [v3.12.0...v3.13.0](https://github.com/supermemoryai/sdk-ts/compare/v3.12.0...v3.13.0)
