@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { type Uploadable } from '../core/uploads';
 import { buildHeaders } from '../internal/headers';
@@ -595,7 +594,7 @@ export interface DocumentListParams {
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
-  filters?: Shared.Or | Shared.And;
+  filters?: DocumentListParams.Or | DocumentListParams.And;
 
   /**
    * Whether to include the content field in the response. Warning: This can make
@@ -622,6 +621,3410 @@ export interface DocumentListParams {
    * Field to sort by
    */
   sort?: 'createdAt' | 'updatedAt';
+}
+
+export namespace DocumentListParams {
+  export interface Or {
+    /**
+     * Array of OR filter expressions
+     */
+    OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+  }
+
+  export namespace Or {
+    /**
+     * A single filter condition based on metadata, numeric values, array contents, or
+     * string matching
+     */
+    export interface UnionMember0 {
+      key: string;
+
+      value: string;
+
+      filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+      ignoreCase?: boolean | 'true' | 'false';
+
+      negate?: boolean | 'true' | 'false';
+
+      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+    }
+
+    export interface Or {
+      /**
+       * OR: Array of conditions or nested expressions
+       */
+      OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+    }
+
+    export namespace Or {
+      /**
+       * A single filter condition based on metadata, numeric values, array contents, or
+       * string matching
+       */
+      export interface UnionMember0 {
+        key: string;
+
+        value: string;
+
+        filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+        ignoreCase?: boolean | 'true' | 'false';
+
+        negate?: boolean | 'true' | 'false';
+
+        numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+      }
+
+      export interface Or {
+        /**
+         * OR: Array of conditions or nested expressions
+         */
+        OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+      }
+
+      export namespace Or {
+        /**
+         * A single filter condition based on metadata, numeric values, array contents, or
+         * string matching
+         */
+        export interface UnionMember0 {
+          key: string;
+
+          value: string;
+
+          filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+          ignoreCase?: boolean | 'true' | 'false';
+
+          negate?: boolean | 'true' | 'false';
+
+          numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+        }
+
+        export interface Or {
+          /**
+           * OR: Array of conditions or nested expressions
+           */
+          OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+        }
+
+        export namespace Or {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+
+        export interface And {
+          /**
+           * AND: Array of conditions or nested expressions
+           */
+          AND: Array<And.UnionMember0 | And.Or | And.And>;
+        }
+
+        export namespace And {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+      }
+
+      export interface And {
+        /**
+         * AND: Array of conditions or nested expressions
+         */
+        AND: Array<And.UnionMember0 | And.Or | And.And>;
+      }
+
+      export namespace And {
+        /**
+         * A single filter condition based on metadata, numeric values, array contents, or
+         * string matching
+         */
+        export interface UnionMember0 {
+          key: string;
+
+          value: string;
+
+          filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+          ignoreCase?: boolean | 'true' | 'false';
+
+          negate?: boolean | 'true' | 'false';
+
+          numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+        }
+
+        export interface Or {
+          /**
+           * OR: Array of conditions or nested expressions
+           */
+          OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+        }
+
+        export namespace Or {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+
+        export interface And {
+          /**
+           * AND: Array of conditions or nested expressions
+           */
+          AND: Array<And.UnionMember0 | And.Or | And.And>;
+        }
+
+        export namespace And {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+      }
+    }
+
+    export interface And {
+      /**
+       * AND: Array of conditions or nested expressions
+       */
+      AND: Array<And.UnionMember0 | And.Or | And.And>;
+    }
+
+    export namespace And {
+      /**
+       * A single filter condition based on metadata, numeric values, array contents, or
+       * string matching
+       */
+      export interface UnionMember0 {
+        key: string;
+
+        value: string;
+
+        filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+        ignoreCase?: boolean | 'true' | 'false';
+
+        negate?: boolean | 'true' | 'false';
+
+        numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+      }
+
+      export interface Or {
+        /**
+         * OR: Array of conditions or nested expressions
+         */
+        OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+      }
+
+      export namespace Or {
+        /**
+         * A single filter condition based on metadata, numeric values, array contents, or
+         * string matching
+         */
+        export interface UnionMember0 {
+          key: string;
+
+          value: string;
+
+          filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+          ignoreCase?: boolean | 'true' | 'false';
+
+          negate?: boolean | 'true' | 'false';
+
+          numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+        }
+
+        export interface Or {
+          /**
+           * OR: Array of conditions or nested expressions
+           */
+          OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+        }
+
+        export namespace Or {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+
+        export interface And {
+          /**
+           * AND: Array of conditions or nested expressions
+           */
+          AND: Array<And.UnionMember0 | And.Or | And.And>;
+        }
+
+        export namespace And {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+      }
+
+      export interface And {
+        /**
+         * AND: Array of conditions or nested expressions
+         */
+        AND: Array<And.UnionMember0 | And.Or | And.And>;
+      }
+
+      export namespace And {
+        /**
+         * A single filter condition based on metadata, numeric values, array contents, or
+         * string matching
+         */
+        export interface UnionMember0 {
+          key: string;
+
+          value: string;
+
+          filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+          ignoreCase?: boolean | 'true' | 'false';
+
+          negate?: boolean | 'true' | 'false';
+
+          numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+        }
+
+        export interface Or {
+          /**
+           * OR: Array of conditions or nested expressions
+           */
+          OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+        }
+
+        export namespace Or {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+
+        export interface And {
+          /**
+           * AND: Array of conditions or nested expressions
+           */
+          AND: Array<And.UnionMember0 | And.Or | And.And>;
+        }
+
+        export namespace And {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  export interface And {
+    /**
+     * Array of AND filter expressions
+     */
+    AND: Array<And.UnionMember0 | And.Or | And.And>;
+  }
+
+  export namespace And {
+    /**
+     * A single filter condition based on metadata, numeric values, array contents, or
+     * string matching
+     */
+    export interface UnionMember0 {
+      key: string;
+
+      value: string;
+
+      filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+      ignoreCase?: boolean | 'true' | 'false';
+
+      negate?: boolean | 'true' | 'false';
+
+      numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+    }
+
+    export interface Or {
+      /**
+       * OR: Array of conditions or nested expressions
+       */
+      OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+    }
+
+    export namespace Or {
+      /**
+       * A single filter condition based on metadata, numeric values, array contents, or
+       * string matching
+       */
+      export interface UnionMember0 {
+        key: string;
+
+        value: string;
+
+        filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+        ignoreCase?: boolean | 'true' | 'false';
+
+        negate?: boolean | 'true' | 'false';
+
+        numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+      }
+
+      export interface Or {
+        /**
+         * OR: Array of conditions or nested expressions
+         */
+        OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+      }
+
+      export namespace Or {
+        /**
+         * A single filter condition based on metadata, numeric values, array contents, or
+         * string matching
+         */
+        export interface UnionMember0 {
+          key: string;
+
+          value: string;
+
+          filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+          ignoreCase?: boolean | 'true' | 'false';
+
+          negate?: boolean | 'true' | 'false';
+
+          numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+        }
+
+        export interface Or {
+          /**
+           * OR: Array of conditions or nested expressions
+           */
+          OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+        }
+
+        export namespace Or {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+
+        export interface And {
+          /**
+           * AND: Array of conditions or nested expressions
+           */
+          AND: Array<And.UnionMember0 | And.Or | And.And>;
+        }
+
+        export namespace And {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+      }
+
+      export interface And {
+        /**
+         * AND: Array of conditions or nested expressions
+         */
+        AND: Array<And.UnionMember0 | And.Or | And.And>;
+      }
+
+      export namespace And {
+        /**
+         * A single filter condition based on metadata, numeric values, array contents, or
+         * string matching
+         */
+        export interface UnionMember0 {
+          key: string;
+
+          value: string;
+
+          filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+          ignoreCase?: boolean | 'true' | 'false';
+
+          negate?: boolean | 'true' | 'false';
+
+          numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+        }
+
+        export interface Or {
+          /**
+           * OR: Array of conditions or nested expressions
+           */
+          OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+        }
+
+        export namespace Or {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+
+        export interface And {
+          /**
+           * AND: Array of conditions or nested expressions
+           */
+          AND: Array<And.UnionMember0 | And.Or | And.And>;
+        }
+
+        export namespace And {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+      }
+    }
+
+    export interface And {
+      /**
+       * AND: Array of conditions or nested expressions
+       */
+      AND: Array<And.UnionMember0 | And.Or | And.And>;
+    }
+
+    export namespace And {
+      /**
+       * A single filter condition based on metadata, numeric values, array contents, or
+       * string matching
+       */
+      export interface UnionMember0 {
+        key: string;
+
+        value: string;
+
+        filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+        ignoreCase?: boolean | 'true' | 'false';
+
+        negate?: boolean | 'true' | 'false';
+
+        numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+      }
+
+      export interface Or {
+        /**
+         * OR: Array of conditions or nested expressions
+         */
+        OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+      }
+
+      export namespace Or {
+        /**
+         * A single filter condition based on metadata, numeric values, array contents, or
+         * string matching
+         */
+        export interface UnionMember0 {
+          key: string;
+
+          value: string;
+
+          filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+          ignoreCase?: boolean | 'true' | 'false';
+
+          negate?: boolean | 'true' | 'false';
+
+          numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+        }
+
+        export interface Or {
+          /**
+           * OR: Array of conditions or nested expressions
+           */
+          OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+        }
+
+        export namespace Or {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+
+        export interface And {
+          /**
+           * AND: Array of conditions or nested expressions
+           */
+          AND: Array<And.UnionMember0 | And.Or | And.And>;
+        }
+
+        export namespace And {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+      }
+
+      export interface And {
+        /**
+         * AND: Array of conditions or nested expressions
+         */
+        AND: Array<And.UnionMember0 | And.Or | And.And>;
+      }
+
+      export namespace And {
+        /**
+         * A single filter condition based on metadata, numeric values, array contents, or
+         * string matching
+         */
+        export interface UnionMember0 {
+          key: string;
+
+          value: string;
+
+          filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+          ignoreCase?: boolean | 'true' | 'false';
+
+          negate?: boolean | 'true' | 'false';
+
+          numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+        }
+
+        export interface Or {
+          /**
+           * OR: Array of conditions or nested expressions
+           */
+          OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+        }
+
+        export namespace Or {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+
+        export interface And {
+          /**
+           * AND: Array of conditions or nested expressions
+           */
+          AND: Array<And.UnionMember0 | And.Or | And.And>;
+        }
+
+        export namespace And {
+          /**
+           * A single filter condition based on metadata, numeric values, array contents, or
+           * string matching
+           */
+          export interface UnionMember0 {
+            key: string;
+
+            value: string;
+
+            filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+            ignoreCase?: boolean | 'true' | 'false';
+
+            negate?: boolean | 'true' | 'false';
+
+            numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+          }
+
+          export interface Or {
+            /**
+             * OR: Array of conditions or nested expressions
+             */
+            OR: Array<Or.UnionMember0 | Or.Or | Or.And>;
+          }
+
+          export namespace Or {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+
+          export interface And {
+            /**
+             * AND: Array of conditions or nested expressions
+             */
+            AND: Array<And.UnionMember0 | And.Or | And.And>;
+          }
+
+          export namespace And {
+            /**
+             * A single filter condition based on metadata, numeric values, array contents, or
+             * string matching
+             */
+            export interface UnionMember0 {
+              key: string;
+
+              value: string;
+
+              filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+              ignoreCase?: boolean | 'true' | 'false';
+
+              negate?: boolean | 'true' | 'false';
+
+              numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+            }
+
+            export interface Or {
+              /**
+               * OR: Array of conditions
+               */
+              OR: Array<Or.Or>;
+            }
+
+            export namespace Or {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface Or {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+
+            export interface And {
+              /**
+               * AND: Array of conditions
+               */
+              AND: Array<And.And>;
+            }
+
+            export namespace And {
+              /**
+               * A single filter condition based on metadata, numeric values, array contents, or
+               * string matching
+               */
+              export interface And {
+                key: string;
+
+                value: string;
+
+                filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains';
+
+                ignoreCase?: boolean | 'true' | 'false';
+
+                negate?: boolean | 'true' | 'false';
+
+                numericOperator?: '>' | '<' | '>=' | '<=' | '=';
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 export interface DocumentAddParams {

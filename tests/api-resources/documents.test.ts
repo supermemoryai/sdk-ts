@@ -66,13 +66,21 @@ describe('resource documents', () => {
           containerTags: ['user_123', 'project_123'],
           filters: {
             AND: [
-              { filterType: 'metadata', key: 'group', negate: false, value: 'jira_users' },
               {
-                filterType: 'numeric',
-                key: 'timestamp',
+                key: 'group',
+                value: 'jira_users',
+                filterType: 'metadata',
+                ignoreCase: true,
                 negate: false,
                 numericOperator: '>',
+              },
+              {
+                key: 'timestamp',
                 value: '1742745777',
+                filterType: 'numeric',
+                ignoreCase: true,
+                negate: false,
+                numericOperator: '>',
               },
             ],
           },
