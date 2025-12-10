@@ -12,6 +12,13 @@ Methods:
 - <code title="post /v4/profile">client.<a href="./src/index.ts">profile</a>({ ...params }) -> ProfileResponse</code>
 - <code title="post /v4/search">client.<a href="./src/index.ts">search</a>({ ...params }) -> SearchResponse</code>
 
+# Shared
+
+Types:
+
+- <code><a href="./src/resources/shared.ts">And</a></code>
+- <code><a href="./src/resources/shared.ts">Or</a></code>
+
 # Memories
 
 Types:
