@@ -76,7 +76,7 @@ export class Documents extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.documents.batchCreate({
+   * const response = await client.documents.batchAdd({
    *   documents: [
    *     {
    *       content:
@@ -86,10 +86,7 @@ export class Documents extends APIResource {
    * });
    * ```
    */
-  batchCreate(
-    body: DocumentBatchCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<DocumentBatchCreateResponse> {
+  batchAdd(body: DocumentBatchAddParams, options?: RequestOptions): APIPromise<DocumentBatchAddResponse> {
     return this._client.post('/v3/documents/batch', { body, ...options });
   }
 
@@ -291,10 +288,10 @@ export interface DocumentAddResponse {
   status: string;
 }
 
-export type DocumentBatchCreateResponse = Array<DocumentBatchCreateResponse.DocumentBatchCreateResponseItem>;
+export type DocumentBatchAddResponse = Array<DocumentBatchAddResponse.DocumentBatchAddResponseItem>;
 
-export namespace DocumentBatchCreateResponse {
-  export interface DocumentBatchCreateResponseItem {
+export namespace DocumentBatchAddResponse {
+  export interface DocumentBatchAddResponseItem {
     /**
      * Unique identifier of the document
      */
@@ -662,8 +659,8 @@ export interface DocumentAddParams {
   metadata?: { [key: string]: string | number | boolean | Array<string> };
 }
 
-export interface DocumentBatchCreateParams {
-  documents: Array<DocumentBatchCreateParams.UnionMember0> | Array<string>;
+export interface DocumentBatchAddParams {
+  documents: Array<DocumentBatchAddParams.UnionMember0> | Array<string>;
 
   /**
    * Optional tag this document should be containerized by. This can be an ID for
@@ -691,7 +688,7 @@ export interface DocumentBatchCreateParams {
   metadata?: { [key: string]: string | number | boolean | Array<string> };
 }
 
-export namespace DocumentBatchCreateParams {
+export namespace DocumentBatchAddParams {
   export interface UnionMember0 {
     /**
      * The content to extract and process into a document. This can be a URL to a
@@ -788,7 +785,7 @@ export declare namespace Documents {
     type DocumentUpdateResponse as DocumentUpdateResponse,
     type DocumentListResponse as DocumentListResponse,
     type DocumentAddResponse as DocumentAddResponse,
-    type DocumentBatchCreateResponse as DocumentBatchCreateResponse,
+    type DocumentBatchAddResponse as DocumentBatchAddResponse,
     type DocumentDeleteBulkResponse as DocumentDeleteBulkResponse,
     type DocumentGetResponse as DocumentGetResponse,
     type DocumentListProcessingResponse as DocumentListProcessingResponse,
@@ -796,7 +793,7 @@ export declare namespace Documents {
     type DocumentUpdateParams as DocumentUpdateParams,
     type DocumentListParams as DocumentListParams,
     type DocumentAddParams as DocumentAddParams,
-    type DocumentBatchCreateParams as DocumentBatchCreateParams,
+    type DocumentBatchAddParams as DocumentBatchAddParams,
     type DocumentDeleteBulkParams as DocumentDeleteBulkParams,
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };

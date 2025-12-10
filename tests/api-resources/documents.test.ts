@@ -123,8 +123,8 @@ describe('resource documents', () => {
   });
 
   // Prism tests are disabled
-  test.skip('batchCreate: only required params', async () => {
-    const responsePromise = client.documents.batchCreate({
+  test.skip('batchAdd: only required params', async () => {
+    const responsePromise = client.documents.batchAdd({
       documents: [{ content: 'This is a detailed article about machine learning concepts...' }],
     });
     const rawResponse = await responsePromise.asResponse();
@@ -137,8 +137,8 @@ describe('resource documents', () => {
   });
 
   // Prism tests are disabled
-  test.skip('batchCreate: required and optional params', async () => {
-    const response = await client.documents.batchCreate({
+  test.skip('batchAdd: required and optional params', async () => {
+    const response = await client.documents.batchAdd({
       documents: [
         {
           content: 'This is a detailed article about machine learning concepts...',
