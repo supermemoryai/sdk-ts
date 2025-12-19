@@ -212,6 +212,7 @@ describe('resource memories', () => {
       fileType: 'image',
       metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',
       mimeType: 'mimeType',
+      useAdvancedProcessing: 'true',
     });
   });
 });

@@ -4175,6 +4175,12 @@ export interface DocumentUploadFileParams {
    * use (e.g., 'image/png', 'image/jpeg', 'video/mp4', 'video/webm')
    */
   mimeType?: string;
+
+  /**
+   * Use advanced processing with Reducto for better PDF extraction and chunking.
+   * This costs 3x tokens but provides superior quality for complex documents.
+   */
+  useAdvancedProcessing?: string;
 }
 
 export declare namespace Documents {

@@ -218,7 +218,10 @@ export namespace SearchExecuteResponse {
 
 export interface SearchMemoriesResponse {
   /**
-   * Array of matching memory entries with similarity scores
+   * Array of matching memory entries and chunks with similarity scores. Contains
+   * memory results when searchMode='memories', or both memory and chunk results when
+   * searchMode='hybrid'. Memory results have 'memory' field, chunk results have
+   * 'chunk' field.
    */
   results: Array<SearchMemoriesResponse.Result>;
 
@@ -236,14 +239,9 @@ export interface SearchMemoriesResponse {
 export namespace SearchMemoriesResponse {
   export interface Result {
     /**
-     * Memory entry ID
+     * Memory entry ID or chunk ID
      */
     id: string;
-
-    /**
-     * The memory content
-     */
-    memory: string;
 
     /**
      * Memory metadata
@@ -261,6 +259,11 @@ export namespace SearchMemoriesResponse {
     updatedAt: string;
 
     /**
+     * The chunk content (only present for chunk results from hybrid search)
+     */
+    chunk?: string;
+
+    /**
      * Relevant chunks from associated documents (only included when chunks=true)
      */
     chunks?: Array<Result.Chunk>;
@@ -274,6 +277,11 @@ export namespace SearchMemoriesResponse {
      * Associated documents for this memory entry
      */
     documents?: Array<Result.Document>;
+
+    /**
+     * The memory content (only present for memory results)
+     */
+    memory?: string;
 
     /**
      * Version number of this memory entry
@@ -7409,6 +7417,13 @@ export interface SearchMemoriesParams {
    * the latency by about 400ms
    */
   rewriteQuery?: boolean;
+
+  /**
+   * Search mode. 'memories' searches only memory entries (default). 'hybrid'
+   * searches memories first, then falls back to document chunks if no memories are
+   * found.
+   */
+  searchMode?: 'memories' | 'hybrid';
 
   /**
    * Threshold / sensitivity for memories selection. 0 is least sensitive (returns

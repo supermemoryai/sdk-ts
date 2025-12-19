@@ -131,6 +131,7 @@ describe('resource search', () => {
       limit: 10,
       rerank: false,
       rewriteQuery: false,
+      searchMode: 'memories',
       threshold: 0.5,
     });
   });
