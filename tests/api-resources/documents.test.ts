@@ -249,6 +249,7 @@ describe('resource documents', () => {
       fileType: 'image',
       metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',
       mimeType: 'mimeType',
+      useAdvancedProcessing: 'true',
     });
   });
 });
