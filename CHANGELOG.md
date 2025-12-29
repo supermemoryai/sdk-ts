@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.1.0 (2025-12-29)
+
+Full Changelog: [v4.0.0...v4.1.0](https://github.com/supermemoryai/sdk-ts/compare/v4.0.0...v4.1.0)
+
+### Features
+
+* **api:** api update ([983ca0b](https://github.com/supermemoryai/sdk-ts/commit/983ca0b89e73272d3f9c25bf2272494b62742de7))
+
 ## 4.0.0 (2025-12-19)
 
 Full Changelog: [v3.14.0...v4.0.0](https://github.com/supermemoryai/sdk-ts/compare/v3.14.0...v4.0.0)
