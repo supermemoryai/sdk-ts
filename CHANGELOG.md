@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.2.1 (2026-01-06)
+
+Full Changelog: [v4.2.0...v4.2.1](https://github.com/supermemoryai/sdk-ts/compare/v4.2.0...v4.2.1)
+
+### Bug Fixes
+
+* **mcp:** correct code tool api output types ([328783f](https://github.com/supermemoryai/sdk-ts/commit/328783f4d00616393c654d7c840feb5a9caa5349))
+
+
+### Documentation
+
+* prominently feature MCP server setup in root SDK readmes ([e8ec001](https://github.com/supermemoryai/sdk-ts/commit/e8ec00148502cf41b209a83cd4db7d69ee61d128))
+
 ## 4.2.0 (2026-01-05)
 
 Full Changelog: [v4.1.0...v4.2.0](https://github.com/supermemoryai/sdk-ts/compare/v4.1.0...v4.2.0)
