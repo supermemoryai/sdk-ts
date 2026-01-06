@@ -21,7 +21,7 @@ export const newMcpServer = () =>
   new McpServer(
     {
       name: 'supermemory_api',
-      version: '4.2.0',
+      version: '4.2.1',
     },
     { capabilities: { tools: {}, logging: {} } },
   );

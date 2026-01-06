@@ -1,6 +1,6 @@
 {
   "name": "supermemory",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "The official TypeScript library for the Supermemory API",
   "author": "Supermemory <dhravya@supermemory.com>",
   "types": "dist/index.d.ts",
