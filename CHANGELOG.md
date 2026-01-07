@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.2.2 (2026-01-07)
+
+Full Changelog: [v4.2.1...v4.2.2](https://github.com/supermemoryai/sdk-ts/compare/v4.2.1...v4.2.2)
+
+### Bug Fixes
+
+* **mcp:** fix options parsing ([b42d492](https://github.com/supermemoryai/sdk-ts/commit/b42d492d4061fa640d7720811954a2cfcaa1183e))
+
+
+### Chores
+
+* break long lines in snippets into multiline ([55593b3](https://github.com/supermemoryai/sdk-ts/commit/55593b38961a3892294a4c091c7bb77fd095ac89))
+
 ## 4.2.1 (2026-01-06)
 
 Full Changelog: [v4.2.0...v4.2.1](https://github.com/supermemoryai/sdk-ts/compare/v4.2.0...v4.2.1)
