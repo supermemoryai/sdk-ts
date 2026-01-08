@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.2.3 (2026-01-08)
+
+Full Changelog: [v4.2.2...v4.2.3](https://github.com/supermemoryai/sdk-ts/compare/v4.2.2...v4.2.3)
+
+### Bug Fixes
+
+* **mcp:** fix env parsing ([31952f5](https://github.com/supermemoryai/sdk-ts/commit/31952f541aa02a1e698ef4a4613520a36488246c))
+
 ## 4.2.2 (2026-01-07)
 
 Full Changelog: [v4.2.1...v4.2.2](https://github.com/supermemoryai/sdk-ts/compare/v4.2.1...v4.2.2)
