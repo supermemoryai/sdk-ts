@@ -93,6 +93,12 @@ export interface ProfileParams {
   containerTag: string;
 
   /**
+   * Threshold for search results. Only results with a score above this threshold
+   * will be included.
+   */
+  threshold: number;
+
+  /**
    * Optional search query to include search results in the response
    */
   q?: string;
