@@ -18,7 +18,7 @@ export class Connections extends APIResource {
    * ```
    */
   create(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'github' | 'web-crawler' | 's3',
+    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
     body: ConnectionCreateParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ConnectionCreateResponse> {
@@ -85,7 +85,7 @@ export class Connections extends APIResource {
    * ```
    */
   deleteByProvider(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'github' | 'web-crawler' | 's3',
+    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
     body: ConnectionDeleteByProviderParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionDeleteByProviderResponse> {
@@ -118,7 +118,7 @@ export class Connections extends APIResource {
    * ```
    */
   getByTag(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'github' | 'web-crawler' | 's3',
+    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
     body: ConnectionGetByTagParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionGetByTagResponse> {
@@ -134,7 +134,7 @@ export class Connections extends APIResource {
    * ```
    */
   import(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'github' | 'web-crawler' | 's3',
+    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
     body: ConnectionImportParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<string> {
@@ -156,7 +156,7 @@ export class Connections extends APIResource {
    * ```
    */
   listDocuments(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'github' | 'web-crawler' | 's3',
+    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
     body: ConnectionListDocumentsParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ConnectionListDocumentsResponse> {
