@@ -33,7 +33,7 @@ describe('top level methods', () => {
 
   // Prism tests are disabled
   test.skip('profile: only required params', async () => {
-    const responsePromise = client.profile({ containerTag: 'containerTag' });
+    const responsePromise = client.profile({ containerTag: 'containerTag', threshold: 0 });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -45,6 +45,10 @@ describe('top level methods', () => {
 
   // Prism tests are disabled
   test.skip('profile: required and optional params', async () => {
-    const response = await client.profile({ containerTag: 'containerTag', q: 'q' });
+    const response = await client.profile({
+      containerTag: 'containerTag',
+      threshold: 0,
+      q: 'q',
+    });
   });
 });
