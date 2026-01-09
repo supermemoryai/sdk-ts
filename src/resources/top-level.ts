@@ -96,6 +96,12 @@ export interface ProfileParams {
    * Optional search query to include search results in the response
    */
   q?: string;
+
+  /**
+   * Threshold for search results. Only results with a score above this threshold
+   * will be included.
+   */
+  threshold?: number;
 }
 
 export declare namespace TopLevel {
