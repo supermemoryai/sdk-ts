@@ -202,6 +202,8 @@ export namespace ConnectionListResponse {
 
     provider: string;
 
+    containerTags?: Array<string>;
+
     documentLimit?: number;
 
     email?: string;
@@ -239,6 +241,8 @@ export interface ConnectionGetByIDResponse {
 
   provider: string;
 
+  containerTags?: Array<string>;
+
   documentLimit?: number;
 
   email?: string;
@@ -254,6 +258,8 @@ export interface ConnectionGetByTagResponse {
   createdAt: string;
 
   provider: string;
+
+  containerTags?: Array<string>;
 
   documentLimit?: number;
 
