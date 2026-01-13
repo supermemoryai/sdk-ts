@@ -1,5 +1,22 @@
 # Changelog
 
+## 4.5.0 (2026-01-13)
+
+Full Changelog: [v4.4.0...v4.5.0](https://github.com/supermemoryai/sdk-ts/compare/v4.4.0...v4.5.0)
+
+### Features
+
+* **api:** api update ([a6a6b1d](https://github.com/supermemoryai/sdk-ts/commit/a6a6b1d3a594ef7cbdf5179995ea4efddde6203b))
+
+
+### Chores
+
+* **internal:** codegen related update ([7c4f9fc](https://github.com/supermemoryai/sdk-ts/commit/7c4f9fce0f8a577e196047b92d76928246ea6a76))
+* **internal:** codegen related update ([7608a0d](https://github.com/supermemoryai/sdk-ts/commit/7608a0deed44c7b19451a2cff4d356a6be030bfb))
+* **internal:** codegen related update ([9a21ecf](https://github.com/supermemoryai/sdk-ts/commit/9a21ecf17922345cbb7882d20f5a5aec98d76054))
+* **internal:** codegen related update ([fc20b52](https://github.com/supermemoryai/sdk-ts/commit/fc20b5203a580abaf2f8cd8be915d65317bf9df4))
+* **internal:** configure MCP Server hosting ([2c80d1b](https://github.com/supermemoryai/sdk-ts/commit/2c80d1baee22fe219a7a0476eb481b73f0a8f1e4))
+
 ## 4.4.0 (2026-01-09)
 
 Full Changelog: [v4.3.0...v4.4.0](https://github.com/supermemoryai/sdk-ts/compare/v4.3.0...v4.4.0)
