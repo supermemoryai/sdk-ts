@@ -350,7 +350,11 @@ export interface MemoryGetResponse {
    */
   summary: string | null;
 
+  summaryEmbeddingHv: Array<number> | null;
+
   summaryEmbeddingModel: string | null;
+
+  summaryEmbeddingModelHv: string | null;
 
   summaryEmbeddingModelNew: string | null;
 
