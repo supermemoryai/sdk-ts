@@ -402,16 +402,6 @@ export interface DocumentGetResponse {
    */
   summary: string | null;
 
-  summaryEmbeddingHv: Array<number> | null;
-
-  summaryEmbeddingModel: string | null;
-
-  summaryEmbeddingModelHv: string | null;
-
-  summaryEmbeddingModelNew: string | null;
-
-  summaryEmbeddingNew: Array<number> | null;
-
   /**
    * Title of the document
    */
