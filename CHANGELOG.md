@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.7.0 (2026-01-20)
+
+Full Changelog: [v4.6.0...v4.7.0](https://github.com/supermemoryai/sdk-ts/compare/v4.6.0...v4.7.0)
+
+### Features
+
+* **api:** api update ([89f0158](https://github.com/supermemoryai/sdk-ts/commit/89f01589ccb9c856796ad1326204ab66042cc287))
+* **api:** api update ([4300e3f](https://github.com/supermemoryai/sdk-ts/commit/4300e3f07df8c10b544284ddc64b8f5a2e4042b1))
+
+
+### Chores
+
+* **internal:** update `actions/checkout` version ([05d0b84](https://github.com/supermemoryai/sdk-ts/commit/05d0b84e2ab2386e15d6e0777d64148dc8800b7d))
+* **internal:** upgrade babel, qs, js-yaml ([7f8ba56](https://github.com/supermemoryai/sdk-ts/commit/7f8ba56b29453a91d0ca9b01c9713fdf7b895f70))
+* **mcp:** add intent param to execute tool ([3893f67](https://github.com/supermemoryai/sdk-ts/commit/3893f671d06249296e87e6f393533731219ac5c8))
+* **mcp:** pass intent param to execute handler ([d494071](https://github.com/supermemoryai/sdk-ts/commit/d4940710acaf7ed763eb37085179ec7b3842f806))
+* **mcp:** upgrade dependencies ([bea7474](https://github.com/supermemoryai/sdk-ts/commit/bea7474bc438382c861d7cd68ecc506a78512868))
+
 ## 4.6.0 (2026-01-14)
 
 Full Changelog: [v4.5.0...v4.6.0](https://github.com/supermemoryai/sdk-ts/compare/v4.5.0...v4.6.0)
