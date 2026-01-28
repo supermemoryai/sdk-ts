@@ -2,7 +2,7 @@
 
 import { McpTool, Metadata, ToolCallResult, asErrorResult, asTextContentResult } from './types';
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { readEnv, readEnvOrError } from './server';
+import { readEnv, requireValue } from './server';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
 import { Supermemory } from 'supermemory';
 
@@ -71,7 +71,10 @@ export function codeTool(): McpTool {
         ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
         'Content-Type': 'application/json',
         client_envs: JSON.stringify({
-          SUPERMEMORY_API_KEY: readEnvOrError('SUPERMEMORY_API_KEY') ?? client.apiKey ?? undefined,
+          SUPERMEMORY_API_KEY: requireValue(
+            readEnv('SUPERMEMORY_API_KEY') ?? client.apiKey,
+            'set SUPERMEMORY_API_KEY environment variable or provide apiKey client option',
+          ),
           SUPERMEMORY_BASE_URL: readEnv('SUPERMEMORY_BASE_URL') ?? client.baseURL ?? undefined,
         }),
       },
