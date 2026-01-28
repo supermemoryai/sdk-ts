@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.7.1 (2026-01-28)
+
+Full Changelog: [v4.7.0...v4.7.1](https://github.com/supermemoryai/sdk-ts/compare/v4.7.0...v4.7.1)
+
+### Bug Fixes
+
+* **mcp:** allow falling back for required env variables ([0ebb99e](https://github.com/supermemoryai/sdk-ts/commit/0ebb99e76e47aa1167c7b212b2760952cd40dabb))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([43e0edb](https://github.com/supermemoryai/sdk-ts/commit/43e0edbad55853b6da58453af046d5e8bc28728a))
+* **internal:** codegen related update ([26d72d7](https://github.com/supermemoryai/sdk-ts/commit/26d72d7175ee0a85262cbed7d66086886775a13e))
+* **internal:** update lock file ([e7f670f](https://github.com/supermemoryai/sdk-ts/commit/e7f670fc44d6149fa9d725cf9adfe0d9e88b8be0))
+
 ## 4.7.0 (2026-01-20)
 
 Full Changelog: [v4.6.0...v4.7.0](https://github.com/supermemoryai/sdk-ts/compare/v4.6.0...v4.7.0)
