@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.7.2 (2026-01-29)
+
+Full Changelog: [v4.7.1...v4.7.2](https://github.com/supermemoryai/sdk-ts/compare/v4.7.1...v4.7.2)
+
+### Bug Fixes
+
+* **docs:** fix mcp installation instructions for remote servers ([b255909](https://github.com/supermemoryai/sdk-ts/commit/b255909973db43112fd4d70b03fa97999babf257))
+
+
+### Chores
+
+* **mcp:** up tsconfig lib version to es2022 ([6024829](https://github.com/supermemoryai/sdk-ts/commit/6024829469e1d106bf675e0a964d64985ecc4fe4))
+
 ## 4.7.1 (2026-01-28)
 
 Full Changelog: [v4.7.0...v4.7.1](https://github.com/supermemoryai/sdk-ts/compare/v4.7.0...v4.7.1)
