@@ -80,6 +80,12 @@ export interface AddParams {
   customId?: string;
 
   /**
+   * Optional entity context for this container tag. Max 1500 characters. Used during
+   * document processing to guide memory extraction.
+   */
+  entityContext?: string;
+
+  /**
    * Optional metadata for the document.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };

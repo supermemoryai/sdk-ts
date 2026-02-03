@@ -27,6 +27,7 @@ describe('top level methods', () => {
       containerTag: 'containerTag',
       containerTags: ['string'],
       customId: 'customId',
+      entityContext: 'entityContext',
       metadata: { foo: 'string' },
     });
   });
