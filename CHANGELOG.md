@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.7.3 (2026-02-03)
+
+Full Changelog: [v4.7.2...v4.7.3](https://github.com/supermemoryai/sdk-ts/compare/v4.7.2...v4.7.3)
+
+### Bug Fixes
+
+* **client:** avoid memory leak with abort signals ([8101444](https://github.com/supermemoryai/sdk-ts/commit/8101444e17a7a57efd87ac16695f21450a5f4a63))
+
+
+### Chores
+
+* **client:** do not parse responses with empty content-length ([947bb74](https://github.com/supermemoryai/sdk-ts/commit/947bb74e4a67395b0ba00c8c6078e1dede646714))
+* **internal:** support oauth authorization code flow for MCP servers ([50baa3b](https://github.com/supermemoryai/sdk-ts/commit/50baa3b528d002f6a66b292076741890edbbd5fa))
+
 ## 4.7.2 (2026-01-29)
 
 Full Changelog: [v4.7.1...v4.7.2](https://github.com/supermemoryai/sdk-ts/compare/v4.7.1...v4.7.2)
