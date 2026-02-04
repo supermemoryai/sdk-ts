@@ -58,19 +58,10 @@ import {
 } from './resources/documents';
 import {
   Memories,
-  MemoryAddParams,
-  MemoryAddResponse,
   MemoryForgetParams,
   MemoryForgetResponse,
-  MemoryGetResponse,
-  MemoryListParams,
-  MemoryListResponse,
   MemoryUpdateMemoryParams,
   MemoryUpdateMemoryResponse,
-  MemoryUpdateParams,
-  MemoryUpdateResponse,
-  MemoryUploadFileParams,
-  MemoryUploadFileResponse,
 } from './resources/memories';
 import {
   Search,
@@ -827,19 +818,10 @@ export declare namespace Supermemory {
 
   export {
     Memories as Memories,
-    type MemoryUpdateResponse as MemoryUpdateResponse,
-    type MemoryListResponse as MemoryListResponse,
-    type MemoryAddResponse as MemoryAddResponse,
     type MemoryForgetResponse as MemoryForgetResponse,
-    type MemoryGetResponse as MemoryGetResponse,
     type MemoryUpdateMemoryResponse as MemoryUpdateMemoryResponse,
-    type MemoryUploadFileResponse as MemoryUploadFileResponse,
-    type MemoryUpdateParams as MemoryUpdateParams,
-    type MemoryListParams as MemoryListParams,
-    type MemoryAddParams as MemoryAddParams,
     type MemoryForgetParams as MemoryForgetParams,
     type MemoryUpdateMemoryParams as MemoryUpdateMemoryParams,
-    type MemoryUploadFileParams as MemoryUploadFileParams,
   };
 
   export {
