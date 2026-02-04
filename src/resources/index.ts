@@ -40,19 +40,10 @@ export {
 } from './documents';
 export {
   Memories,
-  type MemoryUpdateResponse,
-  type MemoryListResponse,
-  type MemoryAddResponse,
   type MemoryForgetResponse,
-  type MemoryGetResponse,
   type MemoryUpdateMemoryResponse,
-  type MemoryUploadFileResponse,
-  type MemoryUpdateParams,
-  type MemoryListParams,
-  type MemoryAddParams,
   type MemoryForgetParams,
   type MemoryUpdateMemoryParams,
-  type MemoryUploadFileParams,
 } from './memories';
 export {
   Search,
