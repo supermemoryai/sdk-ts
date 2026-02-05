@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.9.0 (2026-02-05)
+
+Full Changelog: [v4.8.0...v4.9.0](https://github.com/supermemoryai/sdk-ts/compare/v4.8.0...v4.9.0)
+
+### Features
+
+* **api:** manual updates ([7e95e85](https://github.com/supermemoryai/sdk-ts/commit/7e95e854a98cc37ef408013ad3320246dffa557f))
+* **mcp:** add initial server instructions ([25f77f5](https://github.com/supermemoryai/sdk-ts/commit/25f77f5f76914ee6d35bfa9593850fabdb26e83c))
+
+
+### Chores
+
+* **client:** restructure abort controller binding ([801654c](https://github.com/supermemoryai/sdk-ts/commit/801654cf7725cdcb832ac6f1a480ebdf3c8a497c))
+* **internal:** refactor flag parsing for MCP servers and add debug flag ([2acc011](https://github.com/supermemoryai/sdk-ts/commit/2acc0115d5c8aa942aae6d31330159b19c508f47))
+
 ## 4.8.0 (2026-02-03)
 
 Full Changelog: [v4.7.3...v4.8.0](https://github.com/supermemoryai/sdk-ts/compare/v4.7.3...v4.8.0)
