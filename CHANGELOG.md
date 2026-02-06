@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.9.1 (2026-02-06)
+
+Full Changelog: [v4.9.0...v4.9.1](https://github.com/supermemoryai/sdk-ts/compare/v4.9.0...v4.9.1)
+
+### Bug Fixes
+
+* **client:** avoid removing abort listener too early ([d3af18e](https://github.com/supermemoryai/sdk-ts/commit/d3af18e05bbcc085d7fef21dace557bf07011c7b))
+
 ## 4.9.0 (2026-02-05)
 
 Full Changelog: [v4.8.0...v4.9.0](https://github.com/supermemoryai/sdk-ts/compare/v4.8.0...v4.9.0)
