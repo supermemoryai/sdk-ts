@@ -57,7 +57,7 @@ export const newMcpServer = async () =>
   new McpServer(
     {
       name: 'supermemory_api',
-      version: '4.9.1',
+      version: '4.9.2',
     },
     {
       instructions: await getInstructions(),

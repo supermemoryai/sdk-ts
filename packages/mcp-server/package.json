@@ -1,6 +1,6 @@
 {
   "name": "supermemory-mcp",
-  "version": "4.9.1",
+  "version": "4.9.2",
   "description": "The official MCP Server for the Supermemory API",
   "author": "Supermemory <dhravya@supermemory.com>",
   "types": "dist/index.d.ts",
