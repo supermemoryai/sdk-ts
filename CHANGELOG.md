@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.9.2 (2026-02-07)
+
+Full Changelog: [v4.9.1...v4.9.2](https://github.com/supermemoryai/sdk-ts/compare/v4.9.1...v4.9.2)
+
+### Chores
+
+* **internal:** add health check to MCP server when running in HTTP mode ([57ae83b](https://github.com/supermemoryai/sdk-ts/commit/57ae83bcab580f996479abc267fe97bc9633c60a))
+
 ## 4.9.1 (2026-02-06)
 
 Full Changelog: [v4.9.0...v4.9.1](https://github.com/supermemoryai/sdk-ts/compare/v4.9.0...v4.9.1)
