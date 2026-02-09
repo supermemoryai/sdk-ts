@@ -202,6 +202,9 @@ export namespace ConnectionListResponse {
 
     provider: string;
 
+    /**
+     * @deprecated
+     */
     containerTags?: Array<string>;
 
     documentLimit?: number;
@@ -241,6 +244,9 @@ export interface ConnectionGetByIDResponse {
 
   provider: string;
 
+  /**
+   * @deprecated
+   */
   containerTags?: Array<string>;
 
   documentLimit?: number;
@@ -259,6 +265,9 @@ export interface ConnectionGetByTagResponse {
 
   provider: string;
 
+  /**
+   * @deprecated
+   */
   containerTags?: Array<string>;
 
   documentLimit?: number;

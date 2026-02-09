@@ -244,9 +244,9 @@ export namespace DocumentListResponse {
     updatedAt: string;
 
     /**
-     * Optional tags this document should be containerized by. This can be an ID for
-     * your user, a project ID, or any other identifier you wish to use to group
-     * documents.
+     * @deprecated Optional tags this document should be containerized by. This can be
+     * an ID for your user, a project ID, or any other identifier you wish to use to
+     * group documents.
      */
     containerTags?: Array<string>;
 
@@ -313,8 +313,8 @@ export interface DocumentDeleteBulkResponse {
   success: boolean;
 
   /**
-   * Container tags that were processed (only applicable when deleting by container
-   * tags)
+   * @deprecated Container tags that were processed (only applicable when deleting by
+   * container tags)
    */
   containerTags?: Array<string>;
 
@@ -432,9 +432,9 @@ export interface DocumentGetResponse {
   updatedAt: string;
 
   /**
-   * Optional tags this document should be containerized by. This can be an ID for
-   * your user, a project ID, or any other identifier you wish to use to group
-   * documents.
+   * @deprecated Optional tags this document should be containerized by. This can be
+   * an ID for your user, a project ID, or any other identifier you wish to use to
+   * group documents.
    */
   containerTags?: Array<string>;
 
@@ -516,9 +516,9 @@ export namespace DocumentListProcessingResponse {
     updatedAt: string;
 
     /**
-     * Optional tags this document should be containerized by. This can be an ID for
-     * your user, a project ID, or any other identifier you wish to use to group
-     * documents.
+     * @deprecated Optional tags this document should be containerized by. This can be
+     * an ID for your user, a project ID, or any other identifier you wish to use to
+     * group documents.
      */
     containerTags?: Array<string>;
   }
@@ -581,9 +581,9 @@ export interface DocumentUpdateParams {
 
 export interface DocumentListParams {
   /**
-   * Optional tags this document should be containerized by. This can be an ID for
-   * your user, a project ID, or any other identifier you wish to use to group
-   * documents.
+   * @deprecated Optional tags this document should be containerized by. This can be
+   * an ID for your user, a project ID, or any other identifier you wish to use to
+   * group documents.
    */
   containerTags?: Array<string>;
 
@@ -4135,7 +4135,8 @@ export namespace DocumentBatchAddParams {
 
 export interface DocumentDeleteBulkParams {
   /**
-   * Array of container tags - all documents in these containers will be deleted
+   * @deprecated Array of container tags - all documents in these containers will be
+   * deleted
    */
   containerTags?: Array<string>;
 
@@ -4152,9 +4153,9 @@ export interface DocumentUploadFileParams {
   file: Uploadable;
 
   /**
-   * Optional container tags. Can be either a JSON string of an array (e.g.,
-   * '["user_123", "project_123"]') or a single string (e.g., 'user_123'). Single
-   * strings will be automatically converted to an array.
+   * @deprecated Optional container tags. Can be either a JSON string of an array
+   * (e.g., '["user_123", "project_123"]') or a single string (e.g., 'user_123').
+   * Single strings will be automatically converted to an array.
    */
   containerTags?: string;
 
