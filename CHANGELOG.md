@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.11.1 (2026-02-10)
+
+Full Changelog: [v4.11.0...v4.11.1](https://github.com/supermemoryai/sdk-ts/compare/v4.11.0...v4.11.1)
+
+### Chores
+
+* **internal:** allow basic filtering of methods allowed for MCP code mode ([602094d](https://github.com/supermemoryai/sdk-ts/commit/602094d9fb17fe7dbf081279371f2cac00524464))
+* **internal:** always generate MCP server dockerfiles and upgrade associated dependencies ([b6b4ef0](https://github.com/supermemoryai/sdk-ts/commit/b6b4ef0eff3ca5b2c675488e33d048d7470a72b2))
+
 ## 4.11.0 (2026-02-09)
 
 Full Changelog: [v4.10.0...v4.11.0](https://github.com/supermemoryai/sdk-ts/compare/v4.10.0...v4.11.0)
