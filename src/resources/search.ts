@@ -219,9 +219,9 @@ export namespace SearchExecuteResponse {
 export interface SearchMemoriesResponse {
   /**
    * Array of matching memory entries and chunks with similarity scores. Contains
-   * memory results when searchMode='memories', or both memory and chunk results when
-   * searchMode='hybrid'. Memory results have 'memory' field, chunk results have
-   * 'chunk' field.
+   * memory results when searchMode='memories', both memory and chunk results when
+   * searchMode='hybrid', or only chunk results when searchMode='documents'. Memory
+   * results have 'memory' field, chunk results have 'chunk' field.
    */
   results: Array<SearchMemoriesResponse.Result>;
 
@@ -7422,10 +7422,10 @@ export interface SearchMemoriesParams {
 
   /**
    * Search mode. 'memories' searches only memory entries (default). 'hybrid'
-   * searches memories first, then falls back to document chunks if no memories are
-   * found.
+   * searches both memories and document chunks. 'documents' searches only document
+   * chunks.
    */
-  searchMode?: 'memories' | 'hybrid';
+  searchMode?: 'memories' | 'hybrid' | 'documents';
 
   /**
    * Threshold / sensitivity for memories selection. 0 is least sensitive (returns
