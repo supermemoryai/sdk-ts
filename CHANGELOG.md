@@ -1,5 +1,22 @@
 # Changelog
 
+## 4.12.0 (2026-02-18)
+
+Full Changelog: [v4.11.1...v4.12.0](https://github.com/supermemoryai/sdk-ts/compare/v4.11.1...v4.12.0)
+
+### Features
+
+* **api:** api update ([e9d22b1](https://github.com/supermemoryai/sdk-ts/commit/e9d22b19b3f7eaca0313a03e27a3dca721cba319))
+
+
+### Chores
+
+* **internal/client:** fix form-urlencoded requests ([28e9418](https://github.com/supermemoryai/sdk-ts/commit/28e9418ebe6b87399d6ff869c98a9fb0eb708095))
+* **internal:** allow setting x-stainless-api-key header on mcp server requests ([9ca6413](https://github.com/supermemoryai/sdk-ts/commit/9ca641384c4f8c8da3220cf0973d19305105a262))
+* **internal:** avoid type checking errors with ts-reset ([c702b36](https://github.com/supermemoryai/sdk-ts/commit/c702b36141ed73117ce24d4d0527a033f2cda2a8))
+* **internal:** improve layout of generated MCP server files ([7210253](https://github.com/supermemoryai/sdk-ts/commit/7210253af774936bb6feb92c5103b7e847f073f1))
+* **mcp:** forward STAINLESS_API_KEY to docs search endpoint ([61b2b64](https://github.com/supermemoryai/sdk-ts/commit/61b2b64d5c5d932766e23b63654ca23f246e7925))
+
 ## 4.11.1 (2026-02-10)
 
 Full Changelog: [v4.11.0...v4.11.1](https://github.com/supermemoryai/sdk-ts/compare/v4.11.0...v4.11.1)
