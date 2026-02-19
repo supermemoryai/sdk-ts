@@ -221,7 +221,9 @@ export interface SearchMemoriesResponse {
    * Array of matching memory entries and chunks with similarity scores. Contains
    * memory results when searchMode='memories', both memory and chunk results when
    * searchMode='hybrid', or only chunk results when searchMode='documents'. Memory
-   * results have 'memory' field, chunk results have 'chunk' field.
+   * results have 'memory' field, chunk results have 'chunk' field. BACKWARD
+   * COMPATIBILITY: When using deprecated include.chunks=true, only memory results
+   * are returned with chunks embedded in them (old format).
    */
   results: Array<SearchMemoriesResponse.Result>;
 
@@ -10840,8 +10842,8 @@ export namespace SearchMemoriesParams {
 
   export interface Include {
     /**
-     * If true, fetch and return chunks from documents associated with the found
-     * memories. Performs vector search on chunks within those documents.
+     * @deprecated DEPRECATED: Use searchMode='hybrid' instead. If true, automatically
+     * switches to hybrid mode. This field is kept for backward compatibility only.
      */
     chunks?: boolean;
 
