@@ -8,7 +8,7 @@ const client = new Supermemory({
 });
 
 describe('resource memories', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('forget: only required params', async () => {
     const responsePromise = client.memories.forget({ containerTag: 'user_123' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource memories', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('forget: required and optional params', async () => {
     const response = await client.memories.forget({
       containerTag: 'user_123',
@@ -30,7 +30,7 @@ describe('resource memories', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('updateMemory: only required params', async () => {
     const responsePromise = client.memories.updateMemory({
       containerTag: 'user_123',
@@ -45,7 +45,7 @@ describe('resource memories', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('updateMemory: required and optional params', async () => {
     const response = await client.memories.updateMemory({
       containerTag: 'user_123',
