@@ -8,7 +8,7 @@ const client = new Supermemory({
 });
 
 describe('top level methods', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('add: only required params', async () => {
     const responsePromise = client.add({ content: 'content' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('top level methods', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('add: required and optional params', async () => {
     const response = await client.add({
       content: 'content',
@@ -32,7 +32,7 @@ describe('top level methods', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('profile: only required params', async () => {
     const responsePromise = client.profile({ containerTag: 'containerTag' });
     const rawResponse = await responsePromise.asResponse();
@@ -44,7 +44,7 @@ describe('top level methods', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('profile: required and optional params', async () => {
     const response = await client.profile({
       containerTag: 'containerTag',

@@ -8,7 +8,7 @@ const client = new Supermemory({
 });
 
 describe('resource search', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('documents: only required params', async () => {
     const responsePromise = client.search.documents({ q: 'machine learning concepts' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource search', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('documents: required and optional params', async () => {
     const response = await client.search.documents({
       q: 'machine learning concepts',
@@ -50,7 +50,7 @@ describe('resource search', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('execute: only required params', async () => {
     const responsePromise = client.search.execute({ q: 'machine learning concepts' });
     const rawResponse = await responsePromise.asResponse();
@@ -62,7 +62,7 @@ describe('resource search', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('execute: required and optional params', async () => {
     const response = await client.search.execute({
       q: 'machine learning concepts',
@@ -92,7 +92,7 @@ describe('resource search', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('memories: only required params', async () => {
     const responsePromise = client.search.memories({ q: 'machine learning concepts' });
     const rawResponse = await responsePromise.asResponse();
@@ -104,7 +104,7 @@ describe('resource search', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('memories: required and optional params', async () => {
     const response = await client.search.memories({
       q: 'machine learning concepts',
