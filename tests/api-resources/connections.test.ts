@@ -8,7 +8,7 @@ const client = new Supermemory({
 });
 
 describe('resource connections', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create', async () => {
     const responsePromise = client.connections.create('notion');
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -37,7 +37,7 @@ describe('resource connections', () => {
     ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.connections.list();
     const rawResponse = await responsePromise.asResponse();
@@ -49,7 +49,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -60,7 +60,7 @@ describe('resource connections', () => {
     ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('configure: only required params', async () => {
     const responsePromise = client.connections.configure('connectionId', { resources: [{ foo: 'bar' }] });
     const rawResponse = await responsePromise.asResponse();
@@ -72,12 +72,12 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('configure: required and optional params', async () => {
     const response = await client.connections.configure('connectionId', { resources: [{ foo: 'bar' }] });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('deleteByID', async () => {
     const responsePromise = client.connections.deleteByID('connectionId');
     const rawResponse = await responsePromise.asResponse();
@@ -89,7 +89,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('deleteByProvider: only required params', async () => {
     const responsePromise = client.connections.deleteByProvider('notion', {
       containerTags: ['user_123', 'project_123'],
@@ -103,14 +103,14 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('deleteByProvider: required and optional params', async () => {
     const response = await client.connections.deleteByProvider('notion', {
       containerTags: ['user_123', 'project_123'],
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getByID', async () => {
     const responsePromise = client.connections.getByID('connectionId');
     const rawResponse = await responsePromise.asResponse();
@@ -122,7 +122,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getByTag: only required params', async () => {
     const responsePromise = client.connections.getByTag('notion', {
       containerTags: ['user_123', 'project_123'],
@@ -136,14 +136,14 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getByTag: required and optional params', async () => {
     const response = await client.connections.getByTag('notion', {
       containerTags: ['user_123', 'project_123'],
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('import', async () => {
     const responsePromise = client.connections.import('notion');
     const rawResponse = await responsePromise.asResponse();
@@ -155,7 +155,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('import: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -167,7 +167,7 @@ describe('resource connections', () => {
     ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('listDocuments', async () => {
     const responsePromise = client.connections.listDocuments('notion');
     const rawResponse = await responsePromise.asResponse();
@@ -179,7 +179,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('listDocuments: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -191,7 +191,7 @@ describe('resource connections', () => {
     ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('resources', async () => {
     const responsePromise = client.connections.resources('connectionId');
     const rawResponse = await responsePromise.asResponse();
@@ -203,7 +203,7 @@ describe('resource connections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('resources: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
