@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.13.0 (2026-02-20)
+
+Full Changelog: [v4.12.0...v4.13.0](https://github.com/supermemoryai/sdk-ts/compare/v4.12.0...v4.13.0)
+
+### Features
+
+* **api:** api update ([c2bd0a4](https://github.com/supermemoryai/sdk-ts/commit/c2bd0a47042f73f33fe17faaf1900fced7f52e68))
+
+
+### Bug Fixes
+
+* **mcp:** initialize SDK lazily to avoid failing the connection on init errors ([429e1d7](https://github.com/supermemoryai/sdk-ts/commit/429e1d77d941ea2fa593fb0281c58e77df301387))
+
+
+### Chores
+
+* **internal:** cache fetch instruction calls in MCP server ([96bdbba](https://github.com/supermemoryai/sdk-ts/commit/96bdbba9d1c268d7a359eff759626ca0350df271))
+* **internal:** remove mock server code ([2278d8f](https://github.com/supermemoryai/sdk-ts/commit/2278d8f7467418cd1c3eb9a033e915af2226bc2e))
+* **mcp:** correctly update version in sync with sdk ([ce85b9d](https://github.com/supermemoryai/sdk-ts/commit/ce85b9d52c8bfdb67377e593d1b585ed42c121d5))
+* update mock server docs ([c7cb202](https://github.com/supermemoryai/sdk-ts/commit/c7cb2024498b6874b188e411ecf71b554082684c))
+
 ## 4.12.0 (2026-02-18)
 
 Full Changelog: [v4.11.1...v4.12.0](https://github.com/supermemoryai/sdk-ts/compare/v4.11.1...v4.12.0)
