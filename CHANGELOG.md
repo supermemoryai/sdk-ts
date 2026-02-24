@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.14.0 (2026-02-24)
+
+Full Changelog: [v4.13.0...v4.14.0](https://github.com/supermemoryai/sdk-ts/compare/v4.13.0...v4.14.0)
+
+### Features
+
+* **api:** api update ([361f385](https://github.com/supermemoryai/sdk-ts/commit/361f38572e0f8659f895a665e144bd3fa7a4f46a))
+
+
+### Bug Fixes
+
+* **docs/contributing:** correct pnpm link command ([e0c46ad](https://github.com/supermemoryai/sdk-ts/commit/e0c46add9a36d704020ef3fffd08c385e8c4c170))
+
+
+### Chores
+
+* **internal:** upgrade @modelcontextprotocol/sdk and hono ([57a4564](https://github.com/supermemoryai/sdk-ts/commit/57a4564c65ce3b0284818b34ed8c3df3d16ddffa))
+
 ## 4.13.0 (2026-02-20)
 
 Full Changelog: [v4.12.0...v4.13.0](https://github.com/supermemoryai/sdk-ts/compare/v4.12.0...v4.13.0)
