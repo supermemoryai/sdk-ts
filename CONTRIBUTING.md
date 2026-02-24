@@ -60,7 +60,7 @@ $ yarn link supermemory
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global supermemory
+$ pnpm link --global supermemory
 ```
 
 ## Running tests
