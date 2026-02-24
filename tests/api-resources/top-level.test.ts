@@ -48,6 +48,18 @@ describe('top level methods', () => {
   test.skip('profile: required and optional params', async () => {
     const response = await client.profile({
       containerTag: 'containerTag',
+      filters: {
+        OR: [
+          {
+            key: 'key',
+            value: 'value',
+            filterType: 'metadata',
+            ignoreCase: true,
+            negate: true,
+            numericOperator: '>',
+          },
+        ],
+      },
       q: 'q',
       threshold: 0,
     });
