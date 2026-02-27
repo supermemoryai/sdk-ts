@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.15.0 (2026-02-27)
+
+Full Changelog: [v4.14.0...v4.15.0](https://github.com/supermemoryai/sdk-ts/compare/v4.14.0...v4.15.0)
+
+### Features
+
+* **mcp:** add an option to disable code tool ([4cdbe34](https://github.com/supermemoryai/sdk-ts/commit/4cdbe341d1dcfcc35f4c38d8a14e99590e48ff82))
+
+
+### Bug Fixes
+
+* **mcp:** update prompt ([fd8d956](https://github.com/supermemoryai/sdk-ts/commit/fd8d95644beb2cdbfec34c0d2ef8959377f4b269))
+
+
+### Chores
+
+* **internal:** fix MCP Dockerfiles so they can be built without buildkit ([fb7d1f6](https://github.com/supermemoryai/sdk-ts/commit/fb7d1f6106de40ff1d85cbe1b0a502b1e0fbacab))
+* **internal:** fix MCP Dockerfiles so they can be built without buildkit ([1dd35ca](https://github.com/supermemoryai/sdk-ts/commit/1dd35ca9fc12fa1521f9dac23fc658bee9f4424a))
+* **internal:** make MCP code execution location configurable via a flag ([11d9837](https://github.com/supermemoryai/sdk-ts/commit/11d983754ecdcd3e480cf7929c83a15325ff06ad))
+* **internal:** move stringifyQuery implementation to internal function ([824e718](https://github.com/supermemoryai/sdk-ts/commit/824e71821992f1fe4ed5f79056b985991276b6d4))
+
 ## 4.14.0 (2026-02-24)
 
 Full Changelog: [v4.13.0...v4.14.0](https://github.com/supermemoryai/sdk-ts/compare/v4.13.0...v4.14.0)
