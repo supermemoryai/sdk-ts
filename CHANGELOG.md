@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.15.1 (2026-03-07)
+
+Full Changelog: [v4.15.0...v4.15.1](https://github.com/supermemoryai/sdk-ts/compare/v4.15.0...v4.15.1)
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([742aaa8](https://github.com/supermemoryai/sdk-ts/commit/742aaa87603779df76d4c0696f9aec58720e192e))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([dcfbb1b](https://github.com/supermemoryai/sdk-ts/commit/dcfbb1b53dcd9043e99849d708a9b444e322b68a))
+* **internal:** codegen related update ([dc4ccb6](https://github.com/supermemoryai/sdk-ts/commit/dc4ccb67640307e50b94e7d78f46dc778e3813cc))
+* **internal:** codegen related update ([a8c2ca2](https://github.com/supermemoryai/sdk-ts/commit/a8c2ca2e4dca8d5017cc97954914c8085d14e637))
+* **internal:** use x-stainless-mcp-client-envs header for MCP remote code tool calls ([f82a316](https://github.com/supermemoryai/sdk-ts/commit/f82a3162a12ded5f19b987fccd656196b2280821))
+* **mcp-server:** return access instructions for 404 without API key ([d6e609b](https://github.com/supermemoryai/sdk-ts/commit/d6e609b9d624eb7eb5e30bc8725853cd40d94657))
+* update placeholder string ([0d2731c](https://github.com/supermemoryai/sdk-ts/commit/0d2731cd304f1d04a58da65a9a7dc64241a24ccb))
+
 ## 4.15.0 (2026-02-27)
 
 Full Changelog: [v4.14.0...v4.15.0](https://github.com/supermemoryai/sdk-ts/compare/v4.14.0...v4.15.0)
