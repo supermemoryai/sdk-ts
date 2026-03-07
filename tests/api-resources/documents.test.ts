@@ -231,7 +231,7 @@ describe('resource documents', () => {
   // Mock server tests are disabled
   test.skip('uploadFile: only required params', async () => {
     const responsePromise = client.documents.uploadFile({
-      file: await toFile(Buffer.from('# my file contents'), 'README.md'),
+      file: await toFile(Buffer.from('Example data'), 'README.md'),
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -245,7 +245,7 @@ describe('resource documents', () => {
   // Mock server tests are disabled
   test.skip('uploadFile: required and optional params', async () => {
     const response = await client.documents.uploadFile({
-      file: await toFile(Buffer.from('# my file contents'), 'README.md'),
+      file: await toFile(Buffer.from('Example data'), 'README.md'),
       containerTags: '["user_123", "project_123"]',
       fileType: 'image',
       metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',
