@@ -64,7 +64,7 @@ export interface AddParams {
 
   /**
    * Optional tag this document should be containerized by. Max 100 characters,
-   * alphanumeric with hyphens and underscores only.
+   * alphanumeric with hyphens, underscores, and dots only.
    */
   containerTag?: string;
 
@@ -75,7 +75,7 @@ export interface AddParams {
 
   /**
    * Optional custom ID of the document. Max 100 characters, alphanumeric with
-   * hyphens and underscores only.
+   * hyphens, underscores, and dots only.
    */
   customId?: string;
 
