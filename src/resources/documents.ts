@@ -4032,7 +4032,7 @@ export interface DocumentAddParams {
 
   /**
    * Optional tag this document should be containerized by. Max 100 characters,
-   * alphanumeric with hyphens and underscores only.
+   * alphanumeric with hyphens, underscores, and dots only.
    */
   containerTag?: string;
 
@@ -4043,7 +4043,7 @@ export interface DocumentAddParams {
 
   /**
    * Optional custom ID of the document. Max 100 characters, alphanumeric with
-   * hyphens and underscores only.
+   * hyphens, underscores, and dots only.
    */
   customId?: string;
 
