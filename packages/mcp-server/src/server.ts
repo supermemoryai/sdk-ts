@@ -20,7 +20,7 @@ export const newMcpServer = async (stainlessApiKey: string | undefined) =>
   new McpServer(
     {
       name: 'supermemory_api',
-      version: '4.15.1',
+      version: '4.16.0',
     },
     {
       instructions: await getInstructions(stainlessApiKey),

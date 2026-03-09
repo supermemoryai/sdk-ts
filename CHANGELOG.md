@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.16.0 (2026-03-09)
+
+Full Changelog: [v4.15.1...v4.16.0](https://github.com/supermemoryai/sdk-ts/compare/v4.15.1...v4.16.0)
+
+### Features
+
+* **api:** api update ([f518aa0](https://github.com/supermemoryai/sdk-ts/commit/f518aa0e5129797ec5a167a1d6296dd26270e2d6))
+
+
+### Chores
+
+* **mcp-server:** improve instructions ([7ea144b](https://github.com/supermemoryai/sdk-ts/commit/7ea144bf723ef598f8a1ae0763752725d410b97a))
+
 ## 4.15.1 (2026-03-07)
 
 Full Changelog: [v4.15.0...v4.15.1](https://github.com/supermemoryai/sdk-ts/compare/v4.15.0...v4.15.1)
