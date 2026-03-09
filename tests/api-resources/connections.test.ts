@@ -27,7 +27,8 @@ describe('resource connections', () => {
       client.connections.create(
         'notion',
         {
-          containerTags: ['string'],
+          containerTag: 'containerTag',
+          containerTags: ['_1K--W2kIFj1'],
           documentLimit: 1,
           metadata: { foo: 'string' },
           redirectUrl: 'redirectUrl',

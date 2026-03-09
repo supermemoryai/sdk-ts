@@ -309,6 +309,8 @@ export interface ConnectionResourcesResponse {
 }
 
 export interface ConnectionCreateParams {
+  containerTag?: string;
+
   containerTags?: Array<string>;
 
   documentLimit?: number;
