@@ -91,6 +91,18 @@ describe('resource connections', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('deleteByID: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.connections.deleteByID(
+        'connectionId',
+        { deleteDocuments: 'deleteDocuments' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Supermemory.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('deleteByProvider: only required params', async () => {
     const responsePromise = client.connections.deleteByProvider('notion', {
       containerTags: ['user_123', 'project_123'],
