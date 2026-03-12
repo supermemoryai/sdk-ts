@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.17.0 (2026-03-12)
+
+Full Changelog: [v4.16.0...v4.17.0](https://github.com/supermemoryai/sdk-ts/compare/v4.16.0...v4.17.0)
+
+### Features
+
+* **api:** api update ([3220815](https://github.com/supermemoryai/sdk-ts/commit/32208158caa7361e6263ce8e9344201246156d23))
+* **api:** api update ([7038385](https://github.com/supermemoryai/sdk-ts/commit/7038385d4c737fb19888e7760a1dabae82c2690c))
+
+
+### Chores
+
+* **internal:** bump @modelcontextprotocol/sdk, @hono/node-server, and minimatch ([82934cc](https://github.com/supermemoryai/sdk-ts/commit/82934ccbe74e2e8052c76371a326796dc5416a07))
+* **internal:** update dependencies to address dependabot vulnerabilities ([f7a1e73](https://github.com/supermemoryai/sdk-ts/commit/f7a1e73f89e5d319f62763d397ee23b61f5bc9d6))
+
 ## 4.16.0 (2026-03-09)
 
 Full Changelog: [v4.15.1...v4.16.0](https://github.com/supermemoryai/sdk-ts/compare/v4.15.1...v4.16.0)
