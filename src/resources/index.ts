@@ -15,6 +15,7 @@ export {
   type ConnectionCreateParams,
   type ConnectionListParams,
   type ConnectionConfigureParams,
+  type ConnectionDeleteByIDParams,
   type ConnectionDeleteByProviderParams,
   type ConnectionGetByTagParams,
   type ConnectionImportParams,
