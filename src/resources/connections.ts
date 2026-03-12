@@ -69,8 +69,16 @@ export class Connections extends APIResource {
    * );
    * ```
    */
-  deleteByID(connectionID: string, options?: RequestOptions): APIPromise<ConnectionDeleteByIDResponse> {
-    return this._client.delete(path`/v3/connections/${connectionID}`, options);
+  deleteByID(
+    connectionID: string,
+    params: ConnectionDeleteByIDParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ConnectionDeleteByIDResponse> {
+    const { deleteDocuments } = params ?? {};
+    return this._client.delete(path`/v3/connections/${connectionID}`, {
+      query: { deleteDocuments },
+      ...options,
+    });
   }
 
   /**
@@ -331,6 +339,13 @@ export interface ConnectionConfigureParams {
   resources: Array<{ [key: string]: unknown }>;
 }
 
+export interface ConnectionDeleteByIDParams {
+  /**
+   * Whether to also delete documents imported by this connection. Defaults to true.
+   */
+  deleteDocuments?: string;
+}
+
 export interface ConnectionDeleteByProviderParams {
   /**
    * Optional comma-separated list of container tags to filter connections by
@@ -380,6 +395,7 @@ export declare namespace Connections {
     type ConnectionCreateParams as ConnectionCreateParams,
     type ConnectionListParams as ConnectionListParams,
     type ConnectionConfigureParams as ConnectionConfigureParams,
+    type ConnectionDeleteByIDParams as ConnectionDeleteByIDParams,
     type ConnectionDeleteByProviderParams as ConnectionDeleteByProviderParams,
     type ConnectionGetByTagParams as ConnectionGetByTagParams,
     type ConnectionImportParams as ConnectionImportParams,
