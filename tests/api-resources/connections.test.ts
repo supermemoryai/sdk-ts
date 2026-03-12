@@ -28,7 +28,7 @@ describe('resource connections', () => {
         'notion',
         {
           containerTag: 'containerTag',
-          containerTags: ['_1K--W2kIFj1'],
+          containerTags: ['_:_k--W2K_1V'],
           documentLimit: 1,
           metadata: { foo: 'string' },
           redirectUrl: 'redirectUrl',
