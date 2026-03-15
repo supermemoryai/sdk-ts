@@ -60439,6 +60439,73 @@ var configCommand = defineCommand({
   }
 });
 
+// src/lib/prompt.ts
+var import_node_readline2 = require("node:readline");
+async function confirm(message) {
+  const rl = import_node_readline2.createInterface({
+    input: process.stdin,
+    output: process.stderr
+  });
+  const answer = await new Promise((resolve4) => {
+    rl.question(message, resolve4);
+  });
+  rl.close();
+  return answer.toLowerCase() === "y";
+}
+function createPromptSession() {
+  const rl = import_node_readline2.createInterface({
+    input: process.stdin,
+    output: process.stderr
+  });
+  rl.on("close", () => {
+    process.exit(0);
+  });
+  function question(prompt2) {
+    return new Promise((resolve4) => {
+      rl.question(prompt2, resolve4);
+    });
+  }
+  return {
+    async ask(label, opts) {
+      const defaultDisplay = opts?.default ? ` [${opts.default}]` : "";
+      const hint = opts?.hint ? ` ${opts.hint}` : "";
+      const answer = await question(`  ${label}${defaultDisplay}${hint}: `);
+      const trimmed = answer.trim();
+      return trimmed || opts?.default || "";
+    },
+    async select(label, options, defaultIndex = 0) {
+      const defaultDisplay = ` [${defaultIndex + 1}]`;
+      const defaultOpt = options[defaultIndex];
+      process.stderr.write(`  ${label}${defaultDisplay}:
+`);
+      for (let i2 = 0;i2 < options.length; i2++) {
+        const opt = options[i2];
+        if (!opt)
+          continue;
+        const hint = opt.hint ? ` — ${opt.hint}` : "";
+        process.stderr.write(`    ${i2 + 1}. ${opt.label}${hint}
+`);
+      }
+      const answer = await question("  > ");
+      const trimmed = answer.trim();
+      if (!trimmed) {
+        return defaultOpt?.value ?? "";
+      }
+      const num = Number.parseInt(trimmed, 10);
+      if (Number.isNaN(num) || num < 1 || num > options.length) {
+        process.stderr.write(`  Invalid selection. Using default: ${defaultOpt?.label}
+`);
+        return defaultOpt?.value ?? "";
+      }
+      return options[num - 1]?.value ?? "";
+    },
+    close() {
+      rl.removeAllListeners("close");
+      rl.close();
+    }
+  };
+}
+
 // src/commands/connectors.ts
 var VALID_PROVIDERS = [
   "google-drive",
@@ -60587,16 +60654,8 @@ var connectorsDisconnectCommand = defineCliCommand({
   },
   async handler({ args, flags }) {
     if (!args.yes) {
-      const readline = await import("node:readline");
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stderr
-      });
-      const answer = await new Promise((resolve4) => {
-        rl.question(`${source_default.yellow("⚠")} Disconnect connection ${source_default.bold(args.id)}? This cannot be undone. [y/N] `, resolve4);
-      });
-      rl.close();
-      if (answer.toLowerCase() !== "y") {
+      const confirmed = await confirm(`${source_default.yellow("⚠")} Disconnect connection ${source_default.bold(args.id)}? This cannot be undone. [y/N] `);
+      if (!confirmed) {
         exitWithError("cancelled", "Disconnect cancelled.", flags, EXIT.SUCCESS);
       }
     }
@@ -60808,16 +60867,8 @@ var docsDeleteCommand = defineCliCommand({
   },
   async handler({ args, flags, span }) {
     if (!args.yes) {
-      const readline = await import("node:readline");
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stderr
-      });
-      const answer = await new Promise((resolve4) => {
-        rl.question(`${source_default.yellow("?")} Delete document ${source_default.bold(args.id)}? (y/N) `, resolve4);
-      });
-      rl.close();
-      if (answer.toLowerCase() !== "y") {
+      const confirmed = await confirm(`${source_default.yellow("?")} Delete document ${source_default.bold(args.id)}? (y/N) `);
+      if (!confirmed) {
         exitWithError("cancelled", "Delete cancelled", flags);
       }
     }
@@ -60978,64 +61029,6 @@ var forgetCommand = defineCliCommand({
 
 // src/commands/init.ts
 var import_node_path5 = require("node:path");
-
-// src/lib/prompt.ts
-var import_node_readline2 = require("node:readline");
-function createPromptSession() {
-  const rl = import_node_readline2.createInterface({
-    input: process.stdin,
-    output: process.stderr
-  });
-  rl.on("close", () => {
-    process.exit(0);
-  });
-  function question(prompt2) {
-    return new Promise((resolve4) => {
-      rl.question(prompt2, resolve4);
-    });
-  }
-  return {
-    async ask(label, opts) {
-      const defaultDisplay = opts?.default ? ` [${opts.default}]` : "";
-      const hint = opts?.hint ? ` ${opts.hint}` : "";
-      const answer = await question(`  ${label}${defaultDisplay}${hint}: `);
-      const trimmed = answer.trim();
-      return trimmed || opts?.default || "";
-    },
-    async select(label, options, defaultIndex = 0) {
-      const defaultDisplay = ` [${defaultIndex + 1}]`;
-      const defaultOpt = options[defaultIndex];
-      process.stderr.write(`  ${label}${defaultDisplay}:
-`);
-      for (let i2 = 0;i2 < options.length; i2++) {
-        const opt = options[i2];
-        if (!opt)
-          continue;
-        const hint = opt.hint ? ` — ${opt.hint}` : "";
-        process.stderr.write(`    ${i2 + 1}. ${opt.label}${hint}
-`);
-      }
-      const answer = await question("  > ");
-      const trimmed = answer.trim();
-      if (!trimmed) {
-        return defaultOpt?.value ?? "";
-      }
-      const num = Number.parseInt(trimmed, 10);
-      if (Number.isNaN(num) || num < 1 || num > options.length) {
-        process.stderr.write(`  Invalid selection. Using default: ${defaultOpt?.label}
-`);
-        return defaultOpt?.value ?? "";
-      }
-      return options[num - 1]?.value ?? "";
-    },
-    close() {
-      rl.removeAllListeners("close");
-      rl.close();
-    }
-  };
-}
-
-// src/commands/init.ts
 var initCommand = defineCliCommand({
   meta: {
     name: "init",
@@ -61462,16 +61455,8 @@ var keysRevokeCommand = defineCliCommand({
   },
   async handler({ args, flags }) {
     if (!args.yes) {
-      const readline = await import("node:readline");
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stderr
-      });
-      const answer = await new Promise((resolve4) => {
-        rl.question(`${source_default.yellow("⚠")} Revoke API key ${source_default.bold(args.id)}? This cannot be undone. [y/N] `, resolve4);
-      });
-      rl.close();
-      if (answer.toLowerCase() !== "y") {
+      const confirmed = await confirm(`${source_default.yellow("⚠")} Revoke API key ${source_default.bold(args.id)}? This cannot be undone. [y/N] `);
+      if (!confirmed) {
         exitWithError("cancelled", "Revocation cancelled.", flags, EXIT.SUCCESS);
       }
     }
@@ -61846,16 +61831,8 @@ var pluginsRevokeCommand = defineCliCommand({
       exitWithError("not_found", `No connected plugin found for "${pluginName}"`, flags);
     }
     if (!args.yes) {
-      const readline = await import("node:readline");
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stderr
-      });
-      const answer = await new Promise((resolve4) => {
-        rl.question(`${source_default.yellow("⚠")} Revoke API key for plugin ${source_default.bold(pluginName)}? [y/N] `, resolve4);
-      });
-      rl.close();
-      if (answer.toLowerCase() !== "y") {
+      const confirmed = await confirm(`${source_default.yellow("⚠")} Revoke API key for plugin ${source_default.bold(pluginName)}? [y/N] `);
+      if (!confirmed) {
         exitWithError("cancelled", "Revocation cancelled.", flags, EXIT.SUCCESS);
       }
     }
@@ -61951,9 +61928,8 @@ var profileCommand = defineCliCommand({
   },
   args: {
     tag: {
-      type: "positional",
-      description: 'Container tag (e.g., "default" resolves to "sm_project_default")',
-      required: false
+      type: "string",
+      description: 'Container tag (e.g., "default" resolves to "sm_project_default")'
     },
     query: {
       type: "string",
@@ -62286,7 +62262,7 @@ ${hints2.map((h2) => `  ${h2}`).join(`
         String(t2.memoryCount ?? 0),
         t2.lastActivityAt ? new Date(t2.lastActivityAt).toLocaleDateString() : source_default.dim("never")
       ]));
-      const firstTag = tags[0].containerTag;
+      const firstTag = tags[0]?.containerTag;
       const hints = [
         `${source_default.dim("View docs:")} supermemory docs list --tag ${firstTag}`,
         `${source_default.dim("Tag details:")} supermemory tags info ${firstTag}`
@@ -62375,16 +62351,8 @@ var tagsDeleteCommand = defineCliCommand({
   },
   async handler({ args, flags }) {
     if (!args.yes) {
-      const readline = await import("node:readline");
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stderr
-      });
-      const answer = await new Promise((resolve4) => {
-        rl.question(`${source_default.yellow("⚠")} Delete container tag ${source_default.bold(args.tag)}? This cannot be undone. [y/N] `, resolve4);
-      });
-      rl.close();
-      if (answer.toLowerCase() !== "y") {
+      const confirmed = await confirm(`${source_default.yellow("⚠")} Delete container tag ${source_default.bold(args.tag)}? This cannot be undone. [y/N] `);
+      if (!confirmed) {
         exitWithError("cancelled", "Deletion cancelled.", flags, EXIT.SUCCESS);
       }
     }
@@ -62464,11 +62432,11 @@ var tagsMergeCommand = defineCliCommand({
     const { data } = await apiRequest("/v3/container-tags/merge", {
       method: "POST",
       body: {
-        sources: [args.source],
-        target: args.into
+        containerTags: [args.source, args.into],
+        targetContainerTag: args.into
       }
     });
-    output(data, () => `${source_default.green("✓")} Merged ${source_default.bold(args.source)} into ${source_default.bold(args.into)}${data.merged != null ? ` (${data.merged} items)` : ""}`, flags);
+    output(data, () => `${source_default.green("✓")} Merged ${source_default.bold(args.source)} into ${source_default.bold(args.into)}${data.mergedCount != null ? ` (${data.mergedCount} items)` : ""}`, flags);
   }
 });
 var tagsCommand = defineCommand({
@@ -62565,16 +62533,8 @@ var teamRemoveCommand = defineCliCommand({
   async handler({ args, flags }) {
     const memberId = args["member-id"];
     if (!args.yes) {
-      const readline = await import("node:readline");
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stderr
-      });
-      const answer = await new Promise((resolve4) => {
-        rl.question(`${source_default.yellow("?")} Remove team member ${source_default.bold(memberId)}? (y/N) `, resolve4);
-      });
-      rl.close();
-      if (answer.toLowerCase() !== "y") {
+      const confirmed = await confirm(`${source_default.yellow("?")} Remove team member ${source_default.bold(memberId)}? (y/N) `);
+      if (!confirmed) {
         exitWithError("cancelled", "Remove cancelled", flags);
       }
     }
