@@ -8,6 +8,9 @@
   "type": "commonjs",
   "repository": "github:supermemoryai/sdk-ts",
   "license": "Apache-2.0",
+  "bin": {
+    "supermemory": "dist/bin/cli"
+  },
   "packageManager": "yarn@1.22.22",
   "files": [
     "**/*"
