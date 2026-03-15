@@ -10,7 +10,7 @@ const client = new Supermemory({
 describe('resource settings', () => {
   // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.settings.update();
+    const responsePromise = client.settings.update({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,35 +18,6 @@ describe('resource settings', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.settings.update(
-        {
-          chunkSize: -2147483648,
-          excludeItems: 'string',
-          filterPrompt: 'filterPrompt',
-          githubClientId: 'githubClientId',
-          githubClientSecret: 'githubClientSecret',
-          githubCustomKeyEnabled: true,
-          googleDriveClientId: 'googleDriveClientId',
-          googleDriveClientSecret: 'googleDriveClientSecret',
-          googleDriveCustomKeyEnabled: true,
-          includeItems: 'string',
-          notionClientId: 'notionClientId',
-          notionClientSecret: 'notionClientSecret',
-          notionCustomKeyEnabled: true,
-          onedriveClientId: 'onedriveClientId',
-          onedriveClientSecret: 'onedriveClientSecret',
-          onedriveCustomKeyEnabled: true,
-          shouldLLMFilter: true,
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // Mock server tests are disabled

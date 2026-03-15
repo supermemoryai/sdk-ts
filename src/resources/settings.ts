@@ -8,10 +8,7 @@ export class Settings extends APIResource {
   /**
    * Update settings for an organization
    */
-  update(
-    body: SettingUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<SettingUpdateResponse> {
+  update(body: SettingUpdateParams, options?: RequestOptions): APIPromise<SettingUpdateResponse> {
     return this._client.patch('/v3/settings', { body, ...options });
   }
 

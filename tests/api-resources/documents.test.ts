@@ -10,7 +10,7 @@ const client = new Supermemory({
 describe('resource documents', () => {
   // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.documents.update('id');
+    const responsePromise = client.documents.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,36 +18,11 @@ describe('resource documents', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.documents.update(
-        'id',
-        {
-          containerTag: 'user_123',
-          containerTags: ['user_123', 'project_123'],
-          content: 'This is a detailed article about machine learning concepts...',
-          customId: 'mem_abc123',
-          metadata: {
-            category: 'technology',
-            isPublic: true,
-            readingTime: 5,
-            source: 'web',
-            tag_1: 'ai',
-            tag_2: 'machine-learning',
-          },
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.documents.list();
+    const responsePromise = client.documents.list({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -55,44 +30,6 @@ describe('resource documents', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.documents.list(
-        {
-          containerTags: ['user_123', 'project_123'],
-          filters: {
-            AND: [
-              {
-                key: 'group',
-                value: 'jira_users',
-                filterType: 'metadata',
-                ignoreCase: true,
-                negate: false,
-                numericOperator: '>',
-              },
-              {
-                key: 'timestamp',
-                value: '1742745777',
-                filterType: 'numeric',
-                ignoreCase: true,
-                negate: false,
-                numericOperator: '>',
-              },
-            ],
-          },
-          includeContent: false,
-          limit: 10,
-          order: 'desc',
-          page: 1,
-          sort: 'createdAt',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -180,7 +117,7 @@ describe('resource documents', () => {
 
   // Mock server tests are disabled
   test.skip('deleteBulk', async () => {
-    const responsePromise = client.documents.deleteBulk();
+    const responsePromise = client.documents.deleteBulk({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -188,20 +125,6 @@ describe('resource documents', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('deleteBulk: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.documents.deleteBulk(
-        {
-          containerTags: ['user_123', 'project_123'],
-          ids: ['acxV5LHMEsG2hMSNb4umbn', 'bxcV5LHMEsG2hMSNb4umbn'],
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // Mock server tests are disabled

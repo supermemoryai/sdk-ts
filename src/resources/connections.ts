@@ -19,7 +19,7 @@ export class Connections extends APIResource {
    */
   create(
     provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
-    body: ConnectionCreateParams | null | undefined = {},
+    body: ConnectionCreateParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionCreateResponse> {
     return this._client.post(path`/v3/connections/${provider}`, { body, ...options });
@@ -33,10 +33,7 @@ export class Connections extends APIResource {
    * const connections = await client.connections.list();
    * ```
    */
-  list(
-    body: ConnectionListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ConnectionListResponse> {
+  list(body: ConnectionListParams, options?: RequestOptions): APIPromise<ConnectionListResponse> {
     return this._client.post('/v3/connections/list', { body, ...options });
   }
 
@@ -143,7 +140,7 @@ export class Connections extends APIResource {
    */
   import(
     provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
-    body: ConnectionImportParams | null | undefined = {},
+    body: ConnectionImportParams,
     options?: RequestOptions,
   ): APIPromise<string> {
     return this._client.post(path`/v3/connections/${provider}/import`, {
@@ -165,7 +162,7 @@ export class Connections extends APIResource {
    */
   listDocuments(
     provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
-    body: ConnectionListDocumentsParams | null | undefined = {},
+    body: ConnectionListDocumentsParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionListDocumentsResponse> {
     return this._client.post(path`/v3/connections/${provider}/documents`, { body, ...options });
