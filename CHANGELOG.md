@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.17.1 (2026-03-14)
+
+Full Changelog: [v4.17.0...v4.17.1](https://github.com/supermemoryai/sdk-ts/compare/v4.17.0...v4.17.1)
+
+### Chores
+
+* **internal:** make generated MCP servers compatible with Cloudflare worker environments ([604dc1e](https://github.com/supermemoryai/sdk-ts/commit/604dc1ee13d13cd8abf280477401ce926d04f704))
+* **internal:** support x-stainless-mcp-client-envs header in MCP servers ([4cd7ba2](https://github.com/supermemoryai/sdk-ts/commit/4cd7ba227d28c1a83169e540fe617827a4143a28))
+
 ## 4.17.0 (2026-03-12)
 
 Full Changelog: [v4.16.0...v4.17.0](https://github.com/supermemoryai/sdk-ts/compare/v4.16.0...v4.17.0)
