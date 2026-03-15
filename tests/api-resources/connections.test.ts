@@ -10,7 +10,7 @@ const client = new Supermemory({
 describe('resource connections', () => {
   // Mock server tests are disabled
   test.skip('create', async () => {
-    const responsePromise = client.connections.create('notion');
+    const responsePromise = client.connections.create('notion', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,29 +18,11 @@ describe('resource connections', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('create: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.connections.create(
-        'notion',
-        {
-          containerTag: 'containerTag',
-          containerTags: ['_:_k--W2K_1V'],
-          documentLimit: 1,
-          metadata: { foo: 'string' },
-          redirectUrl: 'redirectUrl',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.connections.list();
+    const responsePromise = client.connections.list({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -48,17 +30,6 @@ describe('resource connections', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.connections.list(
-        { containerTags: ['user_123', 'project_123'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -158,7 +129,7 @@ describe('resource connections', () => {
 
   // Mock server tests are disabled
   test.skip('import', async () => {
-    const responsePromise = client.connections.import('notion');
+    const responsePromise = client.connections.import('notion', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -166,23 +137,11 @@ describe('resource connections', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('import: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.connections.import(
-        'notion',
-        { containerTags: ['user_123', 'project_123'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // Mock server tests are disabled
   test.skip('listDocuments', async () => {
-    const responsePromise = client.connections.listDocuments('notion');
+    const responsePromise = client.connections.listDocuments('notion', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -190,18 +149,6 @@ describe('resource connections', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('listDocuments: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.connections.listDocuments(
-        'notion',
-        { containerTags: ['user_123', 'project_123'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Supermemory.NotFoundError);
   });
 
   // Mock server tests are disabled
