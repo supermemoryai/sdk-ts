@@ -60289,18 +60289,18 @@ var configSetCommand = defineCliCommand({
     const value = args.value;
     const scope = parseEnumArg(args.scope, "scope", VALID_SCOPES);
     if (!scope) {
-      throw new Error(`Invalid scope. Valid scopes: ${VALID_SCOPES.join(", ")}`);
+      throw new ValidationError(`Invalid scope. Valid scopes: ${VALID_SCOPES.join(", ")}`);
     }
     const matrix = KEY_SCOPE_MATRIX[key];
     if (!matrix) {
-      throw new Error(`Unknown config key "${key}". Valid keys: ${VALID_SET_KEYS.join(", ")}`);
+      throw new ValidationError(`Unknown config key "${key}". Valid keys: ${VALID_SET_KEYS.join(", ")}`);
     }
     const scopeRule = matrix[scope];
     if (typeof scopeRule === "string") {
-      throw new Error(scopeRule);
+      throw new ValidationError(scopeRule);
     }
     if (!scopeRule) {
-      throw new Error(`Cannot set "${key}" in ${scope} scope.`);
+      throw new ValidationError(`Cannot set "${key}" in ${scope} scope.`);
     }
     if (key === "output") {
       parseEnumArg(value, "output", ["auto", "json", "human"]);
@@ -60692,30 +60692,69 @@ var docsListCommand = defineCliCommand({
     }
   },
   async handler({ args, flags }) {
-    const query = {};
-    if (args.tag)
-      query.containerTag = args.tag;
-    query.limit = parseIntArg(args.limit, "limit", {
+    const explicitTag = args.tag;
+    const tag = explicitTag || getConfig().tag;
+    if (!tag) {
+      throw new ValidationError("Container tag is required. Use --tag <name> or set a default with: supermemory config set tag <name>");
+    }
+    const tagSource = explicitTag ? "flag" : "config";
+    const limit = parseIntArg(args.limit, "limit", {
       min: 1
     });
-    query.page = parseIntArg(args.page, "page", {
+    const page = parseIntArg(args.page, "page", {
       min: 1
     });
-    const { data } = await apiRequest("/v3/documents", { query });
-    output(data, () => {
-      const results = data.results ?? [];
-      if (results.length === 0) {
-        return "  No documents found.";
+    const { data } = await apiRequest("/v3/documents/documents", {
+      method: "POST",
+      body: {
+        containerTags: [tag],
+        page,
+        limit,
+        sort: "updatedAt",
+        order: "desc"
       }
-      return formatTable(["ID", "TITLE", "STATUS", "TAG", "CREATED"], results.map((doc) => {
+    });
+    output(data, () => {
+      const tagLabel = `  ${source_default.dim("Container tag:")} ${source_default.bold(tag)} ${source_default.dim(`(from ${tagSource})`)}`;
+      const results = data.documents ?? [];
+      if (results.length === 0) {
+        const hints2 = [
+          `${source_default.dim("Add content:")} supermemory add <url-or-text> --tag ${tag}`
+        ];
+        return `${tagLabel}
+
+  No documents found.
+
+${hints2.map((h2) => `  ${h2}`).join(`
+`)}`;
+      }
+      const table = formatTable(["ID", "TITLE", "STATUS", "CREATED"], results.map((doc) => {
         return [
           doc.id,
           truncate(doc.title ?? "", 40),
           doc.status,
-          doc.containerTag ?? "",
           formatRelativeTime(doc.createdAt)
         ];
       }));
+      const lines = [tagLabel, "", table];
+      const { pagination } = data;
+      if (pagination && pagination.totalPages > 1) {
+        lines.push(`
+  Page ${pagination.currentPage} of ${pagination.totalPages} (${pagination.totalItems} total)`);
+      }
+      const hints = [];
+      if (pagination && pagination.currentPage < pagination.totalPages) {
+        hints.push(`${source_default.dim("Next page:")} supermemory docs list --tag ${tag} --page ${pagination.currentPage + 1}`);
+      }
+      const processing = results.find((d2) => d2.status !== "done" && d2.status !== "failed");
+      if (processing) {
+        hints.push(`${source_default.dim("Check pipeline:")} supermemory docs status ${processing.id}`);
+      }
+      hints.push(`${source_default.dim("View details:")} supermemory docs get <id>`);
+      lines.push(`
+${hints.map((h2) => `  ${h2}`).join(`
+`)}`);
+      return lines.join("");
     }, flags);
   }
 });
@@ -60739,7 +60778,7 @@ var docsGetCommand = defineCliCommand({
         ["ID:", data.id],
         ["Title:", data.title ?? ""],
         ["Status:", data.status],
-        ["Tag:", data.containerTag ?? ""],
+        ["Container Tag:", data.containerTag ?? ""],
         ["Content:", contentPreview],
         ["Created:", formatRelativeTime(data.createdAt)],
         [
@@ -62152,9 +62191,18 @@ var searchCommand = defineCliCommand({
       const numbered = items.map((item, i2) => `  ${source_default.dim(`${i2 + 1}.`)} ${item}`).join(`
 
 `);
+      const hints = [];
+      const firstWithDoc = results.find((r3) => r3.documents?.length);
+      if (firstWithDoc?.documents?.[0]) {
+        hints.push(`${source_default.dim("View source doc:")} supermemory docs get ${firstWithDoc.documents[0].id}`);
+      }
+      hints.push(`${source_default.dim("Try hybrid mode:")} supermemory search "${args.query}" --tag ${tag} --mode hybrid`);
       return `${header}
 
-${numbered}`;
+${numbered}
+
+${hints.map((h2) => `  ${h2}`).join(`
+`)}`;
     }, flags);
   }
 });
@@ -62224,15 +62272,29 @@ var tagsListCommand = defineCliCommand({
     output(data, () => {
       const tags = Array.isArray(data) ? data : [];
       if (tags.length === 0) {
-        return "  No container tags found.";
+        const hints2 = [
+          `${source_default.dim("Create tag:")} supermemory tags create <name>`
+        ];
+        return `  No container tags found.
+
+${hints2.map((h2) => `  ${h2}`).join(`
+`)}`;
       }
-      return formatTable(["TAG", "NAME", "DOCS", "MEMORIES", "LAST ACTIVITY"], tags.map((t2) => [
+      const table = formatTable(["TAG", "DOCS", "MEMORIES", "LAST ACTIVITY"], tags.map((t2) => [
         t2.containerTag,
-        t2.name ?? "",
         String(t2.documentCount ?? 0),
         String(t2.memoryCount ?? 0),
         t2.lastActivityAt ? new Date(t2.lastActivityAt).toLocaleDateString() : source_default.dim("never")
       ]));
+      const firstTag = tags[0].containerTag;
+      const hints = [
+        `${source_default.dim("View docs:")} supermemory docs list --tag ${firstTag}`,
+        `${source_default.dim("Tag details:")} supermemory tags info ${firstTag}`
+      ];
+      return `${table}
+
+${hints.map((h2) => `  ${h2}`).join(`
+`)}`;
     }, flags);
   }
 });
