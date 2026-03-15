@@ -19,7 +19,7 @@ export class Documents extends APIResource {
    */
   update(
     id: string,
-    body: DocumentUpdateParams | null | undefined = {},
+    body: DocumentUpdateParams,
     options?: RequestOptions,
   ): APIPromise<DocumentUpdateResponse> {
     return this._client.patch(path`/v3/documents/${id}`, { body, ...options });
@@ -33,10 +33,7 @@ export class Documents extends APIResource {
    * const documents = await client.documents.list();
    * ```
    */
-  list(
-    body: DocumentListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<DocumentListResponse> {
+  list(body: DocumentListParams, options?: RequestOptions): APIPromise<DocumentListResponse> {
     return this._client.post('/v3/documents/list', { body, ...options });
   }
 
@@ -98,7 +95,7 @@ export class Documents extends APIResource {
    * ```
    */
   deleteBulk(
-    body: DocumentDeleteBulkParams | null | undefined = {},
+    body: DocumentDeleteBulkParams,
     options?: RequestOptions,
   ): APIPromise<DocumentDeleteBulkResponse> {
     return this._client.delete('/v3/documents/bulk', { body, ...options });
