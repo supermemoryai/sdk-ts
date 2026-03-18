@@ -280,19 +280,44 @@ export interface DocumentAddResponse {
   status: string;
 }
 
-export type DocumentBatchAddResponse = Array<DocumentBatchAddResponse.DocumentBatchAddResponseItem>;
+export interface DocumentBatchAddResponse {
+  /**
+   * Count of documents that failed to add
+   */
+  failed: number;
+
+  /**
+   * Array of results for each document in the batch
+   */
+  results: Array<DocumentBatchAddResponse.Result>;
+
+  /**
+   * Count of documents successfully added
+   */
+  success: number;
+}
 
 export namespace DocumentBatchAddResponse {
-  export interface DocumentBatchAddResponseItem {
+  export interface Result {
     /**
-     * Unique identifier of the document
+     * Unique identifier of the document (empty string for failed items)
      */
     id: string;
 
     /**
-     * Status of the document
+     * Status of the document (e.g. 'done', 'queued', 'error')
      */
     status: string;
+
+    /**
+     * Additional error details when status is 'error'
+     */
+    details?: string;
+
+    /**
+     * Error message when status is 'error'
+     */
+    error?: string;
   }
 }
 
