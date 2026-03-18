@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.18.1 (2026-03-17)
+
+Full Changelog: [v4.18.0...v4.18.1](https://github.com/supermemoryai/sdk-ts/compare/v4.18.0...v4.18.1)
+
+### Chores
+
+* **internal:** support x-stainless-mcp-client-permissions headers in MCP servers ([92811c3](https://github.com/supermemoryai/sdk-ts/commit/92811c3cca51eaecc13f2d936adf68dd8c7c42fb))
+* **internal:** tweak CI branches ([a19cd7d](https://github.com/supermemoryai/sdk-ts/commit/a19cd7d2cd3bce85ead1d2ee6e11c67d9460eca7))
+
 ## 4.18.0 (2026-03-15)
 
 Full Changelog: [v4.17.1...v4.18.0](https://github.com/supermemoryai/sdk-ts/compare/v4.17.1...v4.18.0)
