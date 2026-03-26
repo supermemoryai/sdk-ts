@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.20.0 (2026-03-26)
+
+Full Changelog: [v4.19.0...v4.20.0](https://github.com/supermemoryai/sdk-ts/compare/v4.19.0...v4.20.0)
+
+### Features
+
+* **api:** api update ([5ff6565](https://github.com/supermemoryai/sdk-ts/commit/5ff6565f0e593827583415ae73a154121748113a))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([d8462ee](https://github.com/supermemoryai/sdk-ts/commit/d8462eef3a6799047c2185311eab1c0d9cbb8e68))
+* **internal:** fix MCP server TS errors that occur with required client options ([91f8e74](https://github.com/supermemoryai/sdk-ts/commit/91f8e7468d882babddd02dcd41f934dc6dfb0bc8))
+* **internal:** update gitignore ([f600cdb](https://github.com/supermemoryai/sdk-ts/commit/f600cdb68181374e161fffd980b92537299baa46))
+
 ## 4.19.0 (2026-03-18)
 
 Full Changelog: [v4.18.1...v4.19.0](https://github.com/supermemoryai/sdk-ts/compare/v4.18.1...v4.19.0)
