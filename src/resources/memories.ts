@@ -70,6 +70,16 @@ export interface MemoryUpdateMemoryResponse {
   createdAt: string;
 
   /**
+   * When this memory will be auto-forgotten, or null if no expiry
+   */
+  forgetAfter: string | null;
+
+  /**
+   * Reason for the scheduled forgetting, or null
+   */
+  forgetReason: string | null;
+
+  /**
    * The content of the new memory version
    */
   memory: string;
@@ -136,9 +146,46 @@ export interface MemoryUpdateMemoryParams {
   content?: string;
 
   /**
+   * ISO 8601 datetime string. The memory will be auto-forgotten after this time.
+   * Pass null to clear an existing expiry. Omit to inherit from the previous
+   * version.
+   */
+  forgetAfter?: string | null;
+
+  /**
+   * Optional reason for the scheduled forgetting. Cleared automatically when
+   * forgetAfter is set to null.
+   */
+  forgetReason?: string | null;
+
+  /**
    * Optional metadata. If not provided, inherits from the previous version.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
+
+  /**
+   * Structured temporal metadata. Merged into the metadata JSON column. If omitted,
+   * existing temporalContext is preserved.
+   */
+  temporalContext?: MemoryUpdateMemoryParams.TemporalContext;
+}
+
+export namespace MemoryUpdateMemoryParams {
+  /**
+   * Structured temporal metadata. Merged into the metadata JSON column. If omitted,
+   * existing temporalContext is preserved.
+   */
+  export interface TemporalContext {
+    /**
+     * Date the document was authored
+     */
+    documentDate?: string | null;
+
+    /**
+     * Dates of events referenced in the memory
+     */
+    eventDate?: Array<string> | null;
+  }
 }
 
 export declare namespace Memories {
