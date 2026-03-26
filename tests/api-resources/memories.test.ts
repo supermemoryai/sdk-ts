@@ -52,7 +52,10 @@ describe('resource memories', () => {
       newContent: 'John now prefers light mode',
       id: 'mem_abc123',
       content: 'John prefers dark mode',
+      forgetAfter: '2026-06-01T00:00:00Z',
+      forgetReason: 'temporary project deadline',
       metadata: { foo: 'string' },
+      temporalContext: { documentDate: 'documentDate', eventDate: ['string'] },
     });
   });
 });
