@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 var __create = Object.create;
 var __getProtoOf = Object.getPrototypeOf;
 var __defProp = Object.defineProperty;
@@ -2041,11 +2040,11 @@ var require_trace = __commonJS((exports2) => {
       return this._instance;
     }
     setGlobalTracerProvider(provider) {
-      const success = (0, global_utils_1.registerGlobal)(API_NAME, this._proxyTracerProvider, diag_1.DiagAPI.instance());
-      if (success) {
+      const success2 = (0, global_utils_1.registerGlobal)(API_NAME, this._proxyTracerProvider, diag_1.DiagAPI.instance());
+      if (success2) {
         this._proxyTracerProvider.setDelegate(provider);
       }
-      return success;
+      return success2;
     }
     getTracerProvider() {
       return (0, global_utils_1.getGlobal)(API_NAME) || this._proxyTracerProvider;
@@ -38771,14 +38770,14 @@ var require_transport = __commonJS((exports2) => {
             (_a = subchannelCallStatsTracker.onCallEnd) === null || _a === undefined || _a.call(subchannelCallStatsTracker, status);
             this.removeActiveCall(call);
           },
-          onStreamEnd: (success) => {
+          onStreamEnd: (success2) => {
             var _a;
-            if (success) {
+            if (success2) {
               this.streamTracker.addCallSucceeded();
             } else {
               this.streamTracker.addCallFailed();
             }
-            (_a = subchannelCallStatsTracker.onStreamEnd) === null || _a === undefined || _a.call(subchannelCallStatsTracker, success);
+            (_a = subchannelCallStatsTracker.onStreamEnd) === null || _a === undefined || _a.call(subchannelCallStatsTracker, success2);
           }
         };
       } else {
@@ -38796,9 +38795,9 @@ var require_transport = __commonJS((exports2) => {
             (_a = subchannelCallStatsTracker.onCallEnd) === null || _a === undefined || _a.call(subchannelCallStatsTracker, status);
             this.removeActiveCall(call);
           },
-          onStreamEnd: (success) => {
+          onStreamEnd: (success2) => {
             var _a;
-            (_a = subchannelCallStatsTracker.onStreamEnd) === null || _a === undefined || _a.call(subchannelCallStatsTracker, success);
+            (_a = subchannelCallStatsTracker.onStreamEnd) === null || _a === undefined || _a.call(subchannelCallStatsTracker, success2);
           }
         };
       }
@@ -42660,8 +42659,8 @@ var require_server = __commonJS((exports2) => {
           } else {
             impl = getDefaultHandler(methodType, name);
           }
-          const success = this.register(attrs.path, impl, attrs.responseSerialize, attrs.requestDeserialize, methodType);
-          if (success === false) {
+          const success2 = this.register(attrs.path, impl, attrs.responseSerialize, attrs.requestDeserialize, methodType);
+          if (success2 === false) {
             throw new Error(`Method handler for ${attrs.path} already provided.`);
           }
         });
@@ -43253,9 +43252,9 @@ var require_server = __commonJS((exports2) => {
               this.callTracker.addCallFailed();
             }
           },
-          onStreamEnd: (success) => {
+          onStreamEnd: (success2) => {
             if (channelzSessionInfo) {
-              if (success) {
+              if (success2) {
                 channelzSessionInfo.streamTracker.addCallSucceeded();
               } else {
                 channelzSessionInfo.streamTracker.addCallFailed();
@@ -50707,7 +50706,7 @@ var require_log = __commonJS((exports2) => {
     if (logLevel === "debug")
       console.log(...messages);
   }
-  function warn(logLevel, warning) {
+  function warn2(logLevel, warning) {
     if (logLevel === "debug" || logLevel === "warn") {
       if (typeof node_process.emitWarning === "function")
         node_process.emitWarning(warning);
@@ -50716,7 +50715,7 @@ var require_log = __commonJS((exports2) => {
     }
   }
   exports2.debug = debug;
-  exports2.warn = warn;
+  exports2.warn = warn2;
 });
 
 // ../../node_modules/.bun/yaml@2.8.2/node_modules/yaml/dist/schema/yaml-1.1/merge.js
@@ -57158,6 +57157,64 @@ var require_src33 = __commonJS((exports2) => {
   } });
 });
 
+// ../../node_modules/sisteransi/src/index.js
+var require_src34 = __commonJS((exports2, module2) => {
+  var ESC2 = "\x1B";
+  var CSI2 = `${ESC2}[`;
+  var beep = "\x07";
+  var cursor = {
+    to(x2, y3) {
+      if (!y3)
+        return `${CSI2}${x2 + 1}G`;
+      return `${CSI2}${y3 + 1};${x2 + 1}H`;
+    },
+    move(x2, y3) {
+      let ret = "";
+      if (x2 < 0)
+        ret += `${CSI2}${-x2}D`;
+      else if (x2 > 0)
+        ret += `${CSI2}${x2}C`;
+      if (y3 < 0)
+        ret += `${CSI2}${-y3}A`;
+      else if (y3 > 0)
+        ret += `${CSI2}${y3}B`;
+      return ret;
+    },
+    up: (count = 1) => `${CSI2}${count}A`,
+    down: (count = 1) => `${CSI2}${count}B`,
+    forward: (count = 1) => `${CSI2}${count}C`,
+    backward: (count = 1) => `${CSI2}${count}D`,
+    nextLine: (count = 1) => `${CSI2}E`.repeat(count),
+    prevLine: (count = 1) => `${CSI2}F`.repeat(count),
+    left: `${CSI2}G`,
+    hide: `${CSI2}?25l`,
+    show: `${CSI2}?25h`,
+    save: `${ESC2}7`,
+    restore: `${ESC2}8`
+  };
+  var scroll = {
+    up: (count = 1) => `${CSI2}S`.repeat(count),
+    down: (count = 1) => `${CSI2}T`.repeat(count)
+  };
+  var erase = {
+    screen: `${CSI2}2J`,
+    up: (count = 1) => `${CSI2}1J`.repeat(count),
+    down: (count = 1) => `${CSI2}J`.repeat(count),
+    line: `${CSI2}2K`,
+    lineEnd: `${CSI2}K`,
+    lineStart: `${CSI2}1K`,
+    lines(count) {
+      let clear = "";
+      for (let i2 = 0;i2 < count; i2++)
+        clear += this.line + (i2 < count - 1 ? cursor.up() : "");
+      if (count)
+        clear += cursor.left;
+      return clear;
+    }
+  };
+  module2.exports = { cursor, scroll, erase, beep };
+});
+
 // src/index.ts
 var import_node_crypto = require("node:crypto");
 
@@ -59046,6 +59103,18 @@ function output(data, humanFormatter, flags) {
 `);
   }
 }
+function success(message, flags) {
+  if (shouldOutputJson(flags))
+    return;
+  process.stdout.write(`${source_default.green("✓")} ${message}
+`);
+}
+function warn(message, flags) {
+  if (shouldOutputJson(flags))
+    return;
+  process.stderr.write(`${source_default.yellow("⚠")} ${message}
+`);
+}
 function info(message, flags) {
   if (shouldOutputJson(flags))
     return;
@@ -59848,6 +59917,74 @@ function getDeviceInfo() {
     cliVersion: "0.1.0"
   };
 }
+function startOAuthCallbackServer(opts) {
+  const timeout = opts?.timeoutMs ?? 120000;
+  return new Promise((resolveServer, rejectServer) => {
+    let resolveCallback;
+    let rejectCallback;
+    const callbackPromise = new Promise((res, rej) => {
+      resolveCallback = res;
+      rejectCallback = rej;
+    });
+    let timeoutId;
+    const server = import_node_http.createServer((req, res) => {
+      const url = new URL(req.url ?? "/", "http://localhost");
+      if (url.pathname === "/callback") {
+        const error2 = url.searchParams.get("error");
+        if (error2) {
+          res.writeHead(400, { "Content-Type": "text/html" });
+          res.end(`
+<!DOCTYPE html>
+<html>
+<head><title>Supermemory CLI</title></head>
+<body style="font-family: system-ui; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+  <div style="text-align: center;">
+    <h1>Authorization Failed</h1>
+    <p>${error2}</p>
+  </div>
+</body>
+</html>`);
+          clearTimeout(timeoutId);
+          rejectCallback(new Error(error2));
+        } else {
+          res.writeHead(200, { "Content-Type": "text/html" });
+          res.end(`
+<!DOCTYPE html>
+<html>
+<head><title>Supermemory CLI</title></head>
+<body style="font-family: system-ui; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+  <div style="text-align: center;">
+    <h1>Connection Authorized!</h1>
+    <p>You can close this window and return to the terminal.</p>
+  </div>
+</body>
+</html>`);
+          clearTimeout(timeoutId);
+          resolveCallback();
+        }
+      } else {
+        res.writeHead(404);
+        res.end("Not found");
+      }
+    });
+    server.listen(0, "127.0.0.1", () => {
+      const addr = server.address();
+      if (!addr || typeof addr === "string") {
+        rejectServer(new Error("Failed to start callback server"));
+        return;
+      }
+      resolveServer({
+        port: addr.port,
+        waitForCallback: () => callbackPromise,
+        close: () => server.close()
+      });
+    });
+    timeoutId = setTimeout(() => {
+      rejectCallback(new Error("Authorization timed out"));
+      server.close();
+    }, timeout);
+  });
+}
 function startCallbackServer() {
   return new Promise((resolveServer, rejectServer) => {
     let resolveCallback;
@@ -60452,58 +60589,67 @@ async function confirm(message) {
   rl.close();
   return answer.toLowerCase() === "y";
 }
-function createPromptSession() {
+async function multiSelect(opts) {
   const rl = import_node_readline2.createInterface({
     input: process.stdin,
     output: process.stderr
-  });
-  rl.on("close", () => {
-    process.exit(0);
   });
   function question(prompt2) {
     return new Promise((resolve4) => {
       rl.question(prompt2, resolve4);
     });
   }
-  return {
-    async ask(label, opts) {
-      const defaultDisplay = opts?.default ? ` [${opts.default}]` : "";
-      const hint = opts?.hint ? ` ${opts.hint}` : "";
-      const answer = await question(`  ${label}${defaultDisplay}${hint}: `);
-      const trimmed = answer.trim();
-      return trimmed || opts?.default || "";
-    },
-    async select(label, options, defaultIndex = 0) {
-      const defaultDisplay = ` [${defaultIndex + 1}]`;
-      const defaultOpt = options[defaultIndex];
-      process.stderr.write(`  ${label}${defaultDisplay}:
+  process.stderr.write(`  ${opts.label}:
 `);
-      for (let i2 = 0;i2 < options.length; i2++) {
-        const opt = options[i2];
-        if (!opt)
-          continue;
-        const hint = opt.hint ? ` — ${opt.hint}` : "";
-        process.stderr.write(`    ${i2 + 1}. ${opt.label}${hint}
+  for (let i2 = 0;i2 < opts.items.length; i2++) {
+    const item = opts.items[i2];
+    if (!item)
+      continue;
+    const hint = item.hint ? ` — ${item.hint}` : "";
+    process.stderr.write(`    ${i2 + 1}. ${item.label}${hint}
 `);
-      }
-      const answer = await question("  > ");
-      const trimmed = answer.trim();
-      if (!trimmed) {
-        return defaultOpt?.value ?? "";
-      }
-      const num = Number.parseInt(trimmed, 10);
-      if (Number.isNaN(num) || num < 1 || num > options.length) {
-        process.stderr.write(`  Invalid selection. Using default: ${defaultOpt?.label}
-`);
-        return defaultOpt?.value ?? "";
-      }
-      return options[num - 1]?.value ?? "";
-    },
-    close() {
-      rl.removeAllListeners("close");
+  }
+  while (true) {
+    const answer = (await question('  Enter selections (e.g. 1,3,5 or 1-5 or "all"): ')).trim();
+    if (!answer) {
       rl.close();
+      return [];
     }
-  };
+    if (answer === "all" || answer === "*") {
+      rl.close();
+      return opts.items.map((item) => item.value);
+    }
+    const indices = new Set;
+    let valid = true;
+    for (const part of answer.split(",")) {
+      const trimmed = part.trim();
+      const rangeMatch = trimmed.match(/^(\d+)\s*-\s*(\d+)$/);
+      if (rangeMatch?.[1] && rangeMatch[2]) {
+        const start = Number.parseInt(rangeMatch[1], 10);
+        const end = Number.parseInt(rangeMatch[2], 10);
+        if (start < 1 || end > opts.items.length || start > end) {
+          valid = false;
+          break;
+        }
+        for (let i2 = start;i2 <= end; i2++)
+          indices.add(i2 - 1);
+      } else {
+        const num = Number.parseInt(trimmed, 10);
+        if (Number.isNaN(num) || num < 1 || num > opts.items.length) {
+          valid = false;
+          break;
+        }
+        indices.add(num - 1);
+      }
+    }
+    if (!valid) {
+      process.stderr.write(`  Invalid input. Try again.
+`);
+      continue;
+    }
+    rl.close();
+    return [...indices].sort((a2, b2) => a2 - b2).map((i2) => opts.items[i2]?.value).filter((v2) => v2 !== undefined);
+  }
 }
 
 // src/commands/connectors.ts
@@ -60560,23 +60706,75 @@ var connectorsConnectCommand = defineCliCommand({
       type: "boolean",
       description: "Print the URL instead of opening a browser",
       default: false
+    },
+    "skip-configure": {
+      type: "boolean",
+      description: "Skip post-OAuth configuration (e.g. repo selection)",
+      default: false
     }
   },
-  async handler({ args, flags, config }) {
-    parseEnumArg(args.provider, "provider", VALID_PROVIDERS);
-    let url = `${config.consoleUrl}/connectors/${args.provider}/connect`;
+  async handler({ args, flags }) {
+    const provider = args.provider;
+    parseEnumArg(provider, "provider", VALID_PROVIDERS);
+    const { port, waitForCallback, close } = await startOAuthCallbackServer();
+    const redirectUrl = `http://127.0.0.1:${port}/callback`;
+    const body = { redirectUrl };
     if (args.tag) {
-      url += `?tag=${encodeURIComponent(args.tag)}`;
+      body.containerTags = [args.tag];
     }
+    const { data: connection } = await apiRequest(`/v3/connections/${provider}`, {
+      method: "POST",
+      body
+    });
     if (args["no-browser"]) {
-      output({ url }, () => `  Open this URL to connect ${source_default.bold(args.provider)}:
+      output({ url: connection.authLink }, () => `  Open this URL to authorize ${source_default.bold(provider)}:
 
-  ${source_default.cyan(url)}`, flags);
+  ${source_default.cyan(connection.authLink)}`, flags);
     } else {
-      await openBrowser(url);
-      output({ url }, () => `${source_default.green("✓")} Opened browser to connect ${source_default.bold(args.provider)}
-
-  ${source_default.dim(url)}`, flags);
+      await openBrowser(connection.authLink);
+      if (!shouldOutputJson(flags)) {
+        process.stderr.write(`  Opened browser for ${source_default.bold(provider)} authorization...
+`);
+      }
+    }
+    try {
+      await waitForCallback();
+    } finally {
+      close();
+    }
+    success(`${provider} connected!`, flags);
+    if (provider === "github" && !args["skip-configure"] && !shouldOutputJson(flags) && isInputInteractive()) {
+      const { data: resourceData } = await apiRequest(`/v3/connections/${connection.id}/resources`, {
+        query: { per_page: 100 }
+      });
+      const repos = resourceData.resources ?? [];
+      if (repos.length === 0) {
+        warn("No repositories found to configure.", flags);
+      } else {
+        const selectedNames = await multiSelect({
+          label: "Select repositories to sync",
+          items: repos.map((r3) => ({
+            value: r3.full_name,
+            label: r3.full_name,
+            hint: [r3.description, r3.private ? "(private)" : undefined].filter(Boolean).join(" ") || undefined
+          }))
+        });
+        const selectedRepos = repos.filter((r3) => selectedNames.includes(r3.full_name));
+        if (selectedRepos.length > 0) {
+          const { data: configureResult } = await apiRequest(`/v3/connections/${connection.id}/configure`, {
+            method: "POST",
+            body: { resources: selectedRepos }
+          });
+          success(`Configured ${selectedRepos.length} repositories${configureResult.webhooksRegistered != null ? ` with ${configureResult.webhooksRegistered} webhooks` : ""}`, flags);
+        }
+      }
+    }
+    if (shouldOutputJson(flags)) {
+      output({
+        connectionId: connection.id,
+        provider,
+        tag: args.tag ?? null
+      }, () => "", flags);
     }
   }
 });
@@ -60593,12 +60791,16 @@ var connectorsSyncCommand = defineCliCommand({
     }
   },
   async handler({ args, flags }) {
-    const { data: connection } = await apiRequest(`/v3/connections/${args.id}`);
-    const { data } = await apiRequest(`/v3/connections/${connection.provider}/import`, {
+    const { data: connections } = await apiRequest("/v3/connections/list", { method: "POST", body: {} });
+    const connection = (Array.isArray(connections) ? connections : []).find((c3) => c3.id === args.id);
+    if (!connection) {
+      exitWithError("not_found", `Connection "${args.id}" not found.`, flags);
+    }
+    await apiRequest(`/v3/connections/${connection.provider}/import`, {
       method: "POST",
-      body: { connectionId: args.id }
+      body: {}
     });
-    output(data, () => `${source_default.green("✓")} Syncing... ${data.newDocuments != null ? `${data.newDocuments} new documents indexed` : "sync started"}`, flags);
+    output({ success: true }, () => `${source_default.green("✓")} Sync started for ${source_default.bold(connection.provider)}`, flags);
   }
 });
 var connectorsHistoryCommand = defineCliCommand({
@@ -60611,26 +60813,21 @@ var connectorsHistoryCommand = defineCliCommand({
       type: "positional",
       description: "Connection ID",
       required: true
-    },
-    limit: {
-      type: "string",
-      description: "Max results (default: 10)"
     }
   },
   async handler({ args, flags }) {
-    const query = {};
-    query.limit = parseIntArg(args.limit, "limit", { min: 1 }) ?? 10;
-    const { data } = await apiRequest(`/v3/connections/${args.id}/sync-runs`, { query });
+    const { data } = await apiRequest(`/v3/connections/${args.id}/sync-runs`);
     output(data, () => {
-      const history = data.history ?? [];
-      if (history.length === 0) {
+      const runs = Array.isArray(data) ? data : [];
+      if (runs.length === 0) {
         return "  No sync history found.";
       }
-      return formatTable(["TIMESTAMP", "STATUS", "DOCS ADDED", "DOCS UPDATED"], history.map((h2) => [
-        formatRelativeTime(h2.timestamp),
-        h2.status,
-        String(h2.docsAdded ?? 0),
-        String(h2.docsUpdated ?? 0)
+      return formatTable(["STARTED", "STATUS", "TRIGGER", "PROCESSED", "FAILED"], runs.map((r3) => [
+        formatRelativeTime(r3.startedAt),
+        r3.status,
+        r3.triggerType,
+        String(r3.itemsProcessed ?? 0),
+        String(r3.itemsFailed ?? 0)
       ]));
     }, flags);
   }
@@ -60660,7 +60857,7 @@ var connectorsDisconnectCommand = defineCliCommand({
       }
     }
     const { data } = await apiRequest(`/v3/connections/${args.id}`, { method: "DELETE" });
-    output(data, () => `${source_default.green("✓")} Disconnected connection ${source_default.dim(args.id)}`, flags);
+    output(data, () => `${source_default.green("✓")} Disconnected ${source_default.bold(data.provider)} connection ${source_default.dim(data.id)}`, flags);
   }
 });
 var connectorsResourcesCommand = defineCliCommand({
@@ -60682,11 +60879,11 @@ var connectorsResourcesCommand = defineCliCommand({
       if (resources.length === 0) {
         return "  No resources found.";
       }
-      return formatTable(["NAME", "TYPE", "STATUS", "SYNCED AT"], resources.map((r3) => [
-        r3.name,
-        r3.type,
-        r3.status,
-        r3.syncedAt ? formatRelativeTime(r3.syncedAt) : source_default.dim("never")
+      return formatTable(["NAME", "VISIBILITY", "BRANCH", "UPDATED"], resources.map((r3) => [
+        r3.full_name,
+        r3.private ? "private" : "public",
+        r3.default_branch ?? source_default.dim("--"),
+        r3.updated_at ? formatRelativeTime(r3.updated_at) : source_default.dim("--")
       ]));
     }, flags);
   }
@@ -61029,6 +61226,1100 @@ var forgetCommand = defineCliCommand({
 
 // src/commands/init.ts
 var import_node_path5 = require("node:path");
+
+// ../../node_modules/@clack/core/dist/index.mjs
+var import_node_util2 = require("node:util");
+var import_node_process4 = require("node:process");
+var import_node_readline3 = __toESM(require("node:readline"));
+
+// ../../node_modules/fast-string-truncated-width/dist/utils.js
+var isAmbiguous2 = (x2) => {
+  return x2 === 161 || x2 === 164 || x2 === 167 || x2 === 168 || x2 === 170 || x2 === 173 || x2 === 174 || x2 >= 176 && x2 <= 180 || x2 >= 182 && x2 <= 186 || x2 >= 188 && x2 <= 191 || x2 === 198 || x2 === 208 || x2 === 215 || x2 === 216 || x2 >= 222 && x2 <= 225 || x2 === 230 || x2 >= 232 && x2 <= 234 || x2 === 236 || x2 === 237 || x2 === 240 || x2 === 242 || x2 === 243 || x2 >= 247 && x2 <= 250 || x2 === 252 || x2 === 254 || x2 === 257 || x2 === 273 || x2 === 275 || x2 === 283 || x2 === 294 || x2 === 295 || x2 === 299 || x2 >= 305 && x2 <= 307 || x2 === 312 || x2 >= 319 && x2 <= 322 || x2 === 324 || x2 >= 328 && x2 <= 331 || x2 === 333 || x2 === 338 || x2 === 339 || x2 === 358 || x2 === 359 || x2 === 363 || x2 === 462 || x2 === 464 || x2 === 466 || x2 === 468 || x2 === 470 || x2 === 472 || x2 === 474 || x2 === 476 || x2 === 593 || x2 === 609 || x2 === 708 || x2 === 711 || x2 >= 713 && x2 <= 715 || x2 === 717 || x2 === 720 || x2 >= 728 && x2 <= 731 || x2 === 733 || x2 === 735 || x2 >= 768 && x2 <= 879 || x2 >= 913 && x2 <= 929 || x2 >= 931 && x2 <= 937 || x2 >= 945 && x2 <= 961 || x2 >= 963 && x2 <= 969 || x2 === 1025 || x2 >= 1040 && x2 <= 1103 || x2 === 1105 || x2 === 8208 || x2 >= 8211 && x2 <= 8214 || x2 === 8216 || x2 === 8217 || x2 === 8220 || x2 === 8221 || x2 >= 8224 && x2 <= 8226 || x2 >= 8228 && x2 <= 8231 || x2 === 8240 || x2 === 8242 || x2 === 8243 || x2 === 8245 || x2 === 8251 || x2 === 8254 || x2 === 8308 || x2 === 8319 || x2 >= 8321 && x2 <= 8324 || x2 === 8364 || x2 === 8451 || x2 === 8453 || x2 === 8457 || x2 === 8467 || x2 === 8470 || x2 === 8481 || x2 === 8482 || x2 === 8486 || x2 === 8491 || x2 === 8531 || x2 === 8532 || x2 >= 8539 && x2 <= 8542 || x2 >= 8544 && x2 <= 8555 || x2 >= 8560 && x2 <= 8569 || x2 === 8585 || x2 >= 8592 && x2 <= 8601 || x2 === 8632 || x2 === 8633 || x2 === 8658 || x2 === 8660 || x2 === 8679 || x2 === 8704 || x2 === 8706 || x2 === 8707 || x2 === 8711 || x2 === 8712 || x2 === 8715 || x2 === 8719 || x2 === 8721 || x2 === 8725 || x2 === 8730 || x2 >= 8733 && x2 <= 8736 || x2 === 8739 || x2 === 8741 || x2 >= 8743 && x2 <= 8748 || x2 === 8750 || x2 >= 8756 && x2 <= 8759 || x2 === 8764 || x2 === 8765 || x2 === 8776 || x2 === 8780 || x2 === 8786 || x2 === 8800 || x2 === 8801 || x2 >= 8804 && x2 <= 8807 || x2 === 8810 || x2 === 8811 || x2 === 8814 || x2 === 8815 || x2 === 8834 || x2 === 8835 || x2 === 8838 || x2 === 8839 || x2 === 8853 || x2 === 8857 || x2 === 8869 || x2 === 8895 || x2 === 8978 || x2 >= 9312 && x2 <= 9449 || x2 >= 9451 && x2 <= 9547 || x2 >= 9552 && x2 <= 9587 || x2 >= 9600 && x2 <= 9615 || x2 >= 9618 && x2 <= 9621 || x2 === 9632 || x2 === 9633 || x2 >= 9635 && x2 <= 9641 || x2 === 9650 || x2 === 9651 || x2 === 9654 || x2 === 9655 || x2 === 9660 || x2 === 9661 || x2 === 9664 || x2 === 9665 || x2 >= 9670 && x2 <= 9672 || x2 === 9675 || x2 >= 9678 && x2 <= 9681 || x2 >= 9698 && x2 <= 9701 || x2 === 9711 || x2 === 9733 || x2 === 9734 || x2 === 9737 || x2 === 9742 || x2 === 9743 || x2 === 9756 || x2 === 9758 || x2 === 9792 || x2 === 9794 || x2 === 9824 || x2 === 9825 || x2 >= 9827 && x2 <= 9829 || x2 >= 9831 && x2 <= 9834 || x2 === 9836 || x2 === 9837 || x2 === 9839 || x2 === 9886 || x2 === 9887 || x2 === 9919 || x2 >= 9926 && x2 <= 9933 || x2 >= 9935 && x2 <= 9939 || x2 >= 9941 && x2 <= 9953 || x2 === 9955 || x2 === 9960 || x2 === 9961 || x2 >= 9963 && x2 <= 9969 || x2 === 9972 || x2 >= 9974 && x2 <= 9977 || x2 === 9979 || x2 === 9980 || x2 === 9982 || x2 === 9983 || x2 === 10045 || x2 >= 10102 && x2 <= 10111 || x2 >= 11094 && x2 <= 11097 || x2 >= 12872 && x2 <= 12879 || x2 >= 57344 && x2 <= 63743 || x2 >= 65024 && x2 <= 65039 || x2 === 65533 || x2 >= 127232 && x2 <= 127242 || x2 >= 127248 && x2 <= 127277 || x2 >= 127280 && x2 <= 127337 || x2 >= 127344 && x2 <= 127373 || x2 === 127375 || x2 === 127376 || x2 >= 127387 && x2 <= 127404 || x2 >= 917760 && x2 <= 917999 || x2 >= 983040 && x2 <= 1048573 || x2 >= 1048576 && x2 <= 1114109;
+};
+var isFullWidth2 = (x2) => {
+  return x2 === 12288 || x2 >= 65281 && x2 <= 65376 || x2 >= 65504 && x2 <= 65510;
+};
+var isWide2 = (x2) => {
+  return x2 >= 4352 && x2 <= 4447 || x2 === 8986 || x2 === 8987 || x2 === 9001 || x2 === 9002 || x2 >= 9193 && x2 <= 9196 || x2 === 9200 || x2 === 9203 || x2 === 9725 || x2 === 9726 || x2 === 9748 || x2 === 9749 || x2 >= 9800 && x2 <= 9811 || x2 === 9855 || x2 === 9875 || x2 === 9889 || x2 === 9898 || x2 === 9899 || x2 === 9917 || x2 === 9918 || x2 === 9924 || x2 === 9925 || x2 === 9934 || x2 === 9940 || x2 === 9962 || x2 === 9970 || x2 === 9971 || x2 === 9973 || x2 === 9978 || x2 === 9981 || x2 === 9989 || x2 === 9994 || x2 === 9995 || x2 === 10024 || x2 === 10060 || x2 === 10062 || x2 >= 10067 && x2 <= 10069 || x2 === 10071 || x2 >= 10133 && x2 <= 10135 || x2 === 10160 || x2 === 10175 || x2 === 11035 || x2 === 11036 || x2 === 11088 || x2 === 11093 || x2 >= 11904 && x2 <= 11929 || x2 >= 11931 && x2 <= 12019 || x2 >= 12032 && x2 <= 12245 || x2 >= 12272 && x2 <= 12287 || x2 >= 12289 && x2 <= 12350 || x2 >= 12353 && x2 <= 12438 || x2 >= 12441 && x2 <= 12543 || x2 >= 12549 && x2 <= 12591 || x2 >= 12593 && x2 <= 12686 || x2 >= 12688 && x2 <= 12771 || x2 >= 12783 && x2 <= 12830 || x2 >= 12832 && x2 <= 12871 || x2 >= 12880 && x2 <= 19903 || x2 >= 19968 && x2 <= 42124 || x2 >= 42128 && x2 <= 42182 || x2 >= 43360 && x2 <= 43388 || x2 >= 44032 && x2 <= 55203 || x2 >= 63744 && x2 <= 64255 || x2 >= 65040 && x2 <= 65049 || x2 >= 65072 && x2 <= 65106 || x2 >= 65108 && x2 <= 65126 || x2 >= 65128 && x2 <= 65131 || x2 >= 94176 && x2 <= 94180 || x2 === 94192 || x2 === 94193 || x2 >= 94208 && x2 <= 100343 || x2 >= 100352 && x2 <= 101589 || x2 >= 101632 && x2 <= 101640 || x2 >= 110576 && x2 <= 110579 || x2 >= 110581 && x2 <= 110587 || x2 === 110589 || x2 === 110590 || x2 >= 110592 && x2 <= 110882 || x2 === 110898 || x2 >= 110928 && x2 <= 110930 || x2 === 110933 || x2 >= 110948 && x2 <= 110951 || x2 >= 110960 && x2 <= 111355 || x2 === 126980 || x2 === 127183 || x2 === 127374 || x2 >= 127377 && x2 <= 127386 || x2 >= 127488 && x2 <= 127490 || x2 >= 127504 && x2 <= 127547 || x2 >= 127552 && x2 <= 127560 || x2 === 127568 || x2 === 127569 || x2 >= 127584 && x2 <= 127589 || x2 >= 127744 && x2 <= 127776 || x2 >= 127789 && x2 <= 127797 || x2 >= 127799 && x2 <= 127868 || x2 >= 127870 && x2 <= 127891 || x2 >= 127904 && x2 <= 127946 || x2 >= 127951 && x2 <= 127955 || x2 >= 127968 && x2 <= 127984 || x2 === 127988 || x2 >= 127992 && x2 <= 128062 || x2 === 128064 || x2 >= 128066 && x2 <= 128252 || x2 >= 128255 && x2 <= 128317 || x2 >= 128331 && x2 <= 128334 || x2 >= 128336 && x2 <= 128359 || x2 === 128378 || x2 === 128405 || x2 === 128406 || x2 === 128420 || x2 >= 128507 && x2 <= 128591 || x2 >= 128640 && x2 <= 128709 || x2 === 128716 || x2 >= 128720 && x2 <= 128722 || x2 >= 128725 && x2 <= 128727 || x2 >= 128732 && x2 <= 128735 || x2 === 128747 || x2 === 128748 || x2 >= 128756 && x2 <= 128764 || x2 >= 128992 && x2 <= 129003 || x2 === 129008 || x2 >= 129292 && x2 <= 129338 || x2 >= 129340 && x2 <= 129349 || x2 >= 129351 && x2 <= 129535 || x2 >= 129648 && x2 <= 129660 || x2 >= 129664 && x2 <= 129672 || x2 >= 129680 && x2 <= 129725 || x2 >= 129727 && x2 <= 129733 || x2 >= 129742 && x2 <= 129755 || x2 >= 129760 && x2 <= 129768 || x2 >= 129776 && x2 <= 129784 || x2 >= 131072 && x2 <= 196605 || x2 >= 196608 && x2 <= 262141;
+};
+
+// ../../node_modules/fast-string-truncated-width/dist/index.js
+var ANSI_RE2 = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/y;
+var CONTROL_RE = /[\x00-\x08\x0A-\x1F\x7F-\x9F]{1,1000}/y;
+var TAB_RE = /\t{1,1000}/y;
+var EMOJI_RE = /[\u{1F1E6}-\u{1F1FF}]{2}|\u{1F3F4}[\u{E0061}-\u{E007A}]{2}[\u{E0030}-\u{E0039}\u{E0061}-\u{E007A}]{1,3}\u{E007F}|(?:\p{Emoji}\uFE0F\u20E3?|\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation})(?:\u200D(?:\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation}|\p{Emoji}\uFE0F\u20E3?))*/yu;
+var LATIN_RE = /(?:[\x20-\x7E\xA0-\xFF](?!\uFE0F)){1,1000}/y;
+var MODIFIER_RE = /\p{M}+/gu;
+var NO_TRUNCATION = { limit: Infinity, ellipsis: "" };
+var getStringTruncatedWidth = (input, truncationOptions = {}, widthOptions = {}) => {
+  const LIMIT = truncationOptions.limit ?? Infinity;
+  const ELLIPSIS = truncationOptions.ellipsis ?? "";
+  const ELLIPSIS_WIDTH = truncationOptions?.ellipsisWidth ?? (ELLIPSIS ? getStringTruncatedWidth(ELLIPSIS, NO_TRUNCATION, widthOptions).width : 0);
+  const ANSI_WIDTH = widthOptions.ansiWidth ?? 0;
+  const CONTROL_WIDTH = widthOptions.controlWidth ?? 0;
+  const TAB_WIDTH = widthOptions.tabWidth ?? 8;
+  const AMBIGUOUS_WIDTH = widthOptions.ambiguousWidth ?? 1;
+  const EMOJI_WIDTH = widthOptions.emojiWidth ?? 2;
+  const FULL_WIDTH_WIDTH = widthOptions.fullWidthWidth ?? 2;
+  const REGULAR_WIDTH = widthOptions.regularWidth ?? 1;
+  const WIDE_WIDTH = widthOptions.wideWidth ?? 2;
+  let indexPrev = 0;
+  let index = 0;
+  let length = input.length;
+  let lengthExtra = 0;
+  let truncationEnabled = false;
+  let truncationIndex = length;
+  let truncationLimit = Math.max(0, LIMIT - ELLIPSIS_WIDTH);
+  let unmatchedStart = 0;
+  let unmatchedEnd = 0;
+  let width = 0;
+  let widthExtra = 0;
+  outer:
+    while (true) {
+      if (unmatchedEnd > unmatchedStart || index >= length && index > indexPrev) {
+        const unmatched = input.slice(unmatchedStart, unmatchedEnd) || input.slice(indexPrev, index);
+        lengthExtra = 0;
+        for (const char of unmatched.replaceAll(MODIFIER_RE, "")) {
+          const codePoint = char.codePointAt(0) || 0;
+          if (isFullWidth2(codePoint)) {
+            widthExtra = FULL_WIDTH_WIDTH;
+          } else if (isWide2(codePoint)) {
+            widthExtra = WIDE_WIDTH;
+          } else if (AMBIGUOUS_WIDTH !== REGULAR_WIDTH && isAmbiguous2(codePoint)) {
+            widthExtra = AMBIGUOUS_WIDTH;
+          } else {
+            widthExtra = REGULAR_WIDTH;
+          }
+          if (width + widthExtra > truncationLimit) {
+            truncationIndex = Math.min(truncationIndex, Math.max(unmatchedStart, indexPrev) + lengthExtra);
+          }
+          if (width + widthExtra > LIMIT) {
+            truncationEnabled = true;
+            break outer;
+          }
+          lengthExtra += char.length;
+          width += widthExtra;
+        }
+        unmatchedStart = unmatchedEnd = 0;
+      }
+      if (index >= length)
+        break;
+      LATIN_RE.lastIndex = index;
+      if (LATIN_RE.test(input)) {
+        lengthExtra = LATIN_RE.lastIndex - index;
+        widthExtra = lengthExtra * REGULAR_WIDTH;
+        if (width + widthExtra > truncationLimit) {
+          truncationIndex = Math.min(truncationIndex, index + Math.floor((truncationLimit - width) / REGULAR_WIDTH));
+        }
+        if (width + widthExtra > LIMIT) {
+          truncationEnabled = true;
+          break;
+        }
+        width += widthExtra;
+        unmatchedStart = indexPrev;
+        unmatchedEnd = index;
+        index = indexPrev = LATIN_RE.lastIndex;
+        continue;
+      }
+      ANSI_RE2.lastIndex = index;
+      if (ANSI_RE2.test(input)) {
+        if (width + ANSI_WIDTH > truncationLimit) {
+          truncationIndex = Math.min(truncationIndex, index);
+        }
+        if (width + ANSI_WIDTH > LIMIT) {
+          truncationEnabled = true;
+          break;
+        }
+        width += ANSI_WIDTH;
+        unmatchedStart = indexPrev;
+        unmatchedEnd = index;
+        index = indexPrev = ANSI_RE2.lastIndex;
+        continue;
+      }
+      CONTROL_RE.lastIndex = index;
+      if (CONTROL_RE.test(input)) {
+        lengthExtra = CONTROL_RE.lastIndex - index;
+        widthExtra = lengthExtra * CONTROL_WIDTH;
+        if (width + widthExtra > truncationLimit) {
+          truncationIndex = Math.min(truncationIndex, index + Math.floor((truncationLimit - width) / CONTROL_WIDTH));
+        }
+        if (width + widthExtra > LIMIT) {
+          truncationEnabled = true;
+          break;
+        }
+        width += widthExtra;
+        unmatchedStart = indexPrev;
+        unmatchedEnd = index;
+        index = indexPrev = CONTROL_RE.lastIndex;
+        continue;
+      }
+      TAB_RE.lastIndex = index;
+      if (TAB_RE.test(input)) {
+        lengthExtra = TAB_RE.lastIndex - index;
+        widthExtra = lengthExtra * TAB_WIDTH;
+        if (width + widthExtra > truncationLimit) {
+          truncationIndex = Math.min(truncationIndex, index + Math.floor((truncationLimit - width) / TAB_WIDTH));
+        }
+        if (width + widthExtra > LIMIT) {
+          truncationEnabled = true;
+          break;
+        }
+        width += widthExtra;
+        unmatchedStart = indexPrev;
+        unmatchedEnd = index;
+        index = indexPrev = TAB_RE.lastIndex;
+        continue;
+      }
+      EMOJI_RE.lastIndex = index;
+      if (EMOJI_RE.test(input)) {
+        if (width + EMOJI_WIDTH > truncationLimit) {
+          truncationIndex = Math.min(truncationIndex, index);
+        }
+        if (width + EMOJI_WIDTH > LIMIT) {
+          truncationEnabled = true;
+          break;
+        }
+        width += EMOJI_WIDTH;
+        unmatchedStart = indexPrev;
+        unmatchedEnd = index;
+        index = indexPrev = EMOJI_RE.lastIndex;
+        continue;
+      }
+      index += 1;
+    }
+  return {
+    width: truncationEnabled ? truncationLimit : width,
+    index: truncationEnabled ? truncationIndex : length,
+    truncated: truncationEnabled,
+    ellipsed: truncationEnabled && LIMIT >= ELLIPSIS_WIDTH
+  };
+};
+var dist_default = getStringTruncatedWidth;
+
+// ../../node_modules/fast-string-width/dist/index.js
+var NO_TRUNCATION2 = {
+  limit: Infinity,
+  ellipsis: "",
+  ellipsisWidth: 0
+};
+var fastStringWidth = (input, options = {}) => {
+  return dist_default(input, NO_TRUNCATION2, options).width;
+};
+var dist_default2 = fastStringWidth;
+
+// ../../node_modules/fast-wrap-ansi/lib/main.js
+var ESC = "\x1B";
+var CSI = "";
+var END_CODE = 39;
+var ANSI_ESCAPE_BELL = "\x07";
+var ANSI_CSI = "[";
+var ANSI_OSC = "]";
+var ANSI_SGR_TERMINATOR = "m";
+var ANSI_ESCAPE_LINK = `${ANSI_OSC}8;;`;
+var GROUP_REGEX = new RegExp(`(?:\\${ANSI_CSI}(?<code>\\d+)m|\\${ANSI_ESCAPE_LINK}(?<uri>.*)${ANSI_ESCAPE_BELL})`, "y");
+var getClosingCode = (openingCode) => {
+  if (openingCode >= 30 && openingCode <= 37)
+    return 39;
+  if (openingCode >= 90 && openingCode <= 97)
+    return 39;
+  if (openingCode >= 40 && openingCode <= 47)
+    return 49;
+  if (openingCode >= 100 && openingCode <= 107)
+    return 49;
+  if (openingCode === 1 || openingCode === 2)
+    return 22;
+  if (openingCode === 3)
+    return 23;
+  if (openingCode === 4)
+    return 24;
+  if (openingCode === 7)
+    return 27;
+  if (openingCode === 8)
+    return 28;
+  if (openingCode === 9)
+    return 29;
+  if (openingCode === 0)
+    return 0;
+  return;
+};
+var wrapAnsiCode = (code) => `${ESC}${ANSI_CSI}${code}${ANSI_SGR_TERMINATOR}`;
+var wrapAnsiHyperlink = (url) => `${ESC}${ANSI_ESCAPE_LINK}${url}${ANSI_ESCAPE_BELL}`;
+var wrapWord = (rows, word, columns) => {
+  const characters = word[Symbol.iterator]();
+  let isInsideEscape = false;
+  let isInsideLinkEscape = false;
+  let lastRow = rows.at(-1);
+  let visible = lastRow === undefined ? 0 : dist_default2(lastRow);
+  let currentCharacter = characters.next();
+  let nextCharacter = characters.next();
+  let rawCharacterIndex = 0;
+  while (!currentCharacter.done) {
+    const character = currentCharacter.value;
+    const characterLength = dist_default2(character);
+    if (visible + characterLength <= columns) {
+      rows[rows.length - 1] += character;
+    } else {
+      rows.push(character);
+      visible = 0;
+    }
+    if (character === ESC || character === CSI) {
+      isInsideEscape = true;
+      isInsideLinkEscape = word.startsWith(ANSI_ESCAPE_LINK, rawCharacterIndex + 1);
+    }
+    if (isInsideEscape) {
+      if (isInsideLinkEscape) {
+        if (character === ANSI_ESCAPE_BELL) {
+          isInsideEscape = false;
+          isInsideLinkEscape = false;
+        }
+      } else if (character === ANSI_SGR_TERMINATOR) {
+        isInsideEscape = false;
+      }
+    } else {
+      visible += characterLength;
+      if (visible === columns && !nextCharacter.done) {
+        rows.push("");
+        visible = 0;
+      }
+    }
+    currentCharacter = nextCharacter;
+    nextCharacter = characters.next();
+    rawCharacterIndex += character.length;
+  }
+  lastRow = rows.at(-1);
+  if (!visible && lastRow !== undefined && lastRow.length && rows.length > 1) {
+    rows[rows.length - 2] += rows.pop();
+  }
+};
+var stringVisibleTrimSpacesRight = (string) => {
+  const words = string.split(" ");
+  let last = words.length;
+  while (last) {
+    if (dist_default2(words[last - 1])) {
+      break;
+    }
+    last--;
+  }
+  if (last === words.length) {
+    return string;
+  }
+  return words.slice(0, last).join(" ") + words.slice(last).join("");
+};
+var exec = (string, columns, options = {}) => {
+  if (options.trim !== false && string.trim() === "") {
+    return "";
+  }
+  let returnValue = "";
+  let escapeCode;
+  let escapeUrl;
+  const words = string.split(" ");
+  let rows = [""];
+  let rowLength = 0;
+  for (let index = 0;index < words.length; index++) {
+    const word = words[index];
+    if (options.trim !== false) {
+      const row = rows.at(-1) ?? "";
+      const trimmed = row.trimStart();
+      if (row.length !== trimmed.length) {
+        rows[rows.length - 1] = trimmed;
+        rowLength = dist_default2(trimmed);
+      }
+    }
+    if (index !== 0) {
+      if (rowLength >= columns && (options.wordWrap === false || options.trim === false)) {
+        rows.push("");
+        rowLength = 0;
+      }
+      if (rowLength || options.trim === false) {
+        rows[rows.length - 1] += " ";
+        rowLength++;
+      }
+    }
+    const wordLength = dist_default2(word);
+    if (options.hard && wordLength > columns) {
+      const remainingColumns = columns - rowLength;
+      const breaksStartingThisLine = 1 + Math.floor((wordLength - remainingColumns - 1) / columns);
+      const breaksStartingNextLine = Math.floor((wordLength - 1) / columns);
+      if (breaksStartingNextLine < breaksStartingThisLine) {
+        rows.push("");
+      }
+      wrapWord(rows, word, columns);
+      rowLength = dist_default2(rows.at(-1) ?? "");
+      continue;
+    }
+    if (rowLength + wordLength > columns && rowLength && wordLength) {
+      if (options.wordWrap === false && rowLength < columns) {
+        wrapWord(rows, word, columns);
+        rowLength = dist_default2(rows.at(-1) ?? "");
+        continue;
+      }
+      rows.push("");
+      rowLength = 0;
+    }
+    if (rowLength + wordLength > columns && options.wordWrap === false) {
+      wrapWord(rows, word, columns);
+      rowLength = dist_default2(rows.at(-1) ?? "");
+      continue;
+    }
+    rows[rows.length - 1] += word;
+    rowLength += wordLength;
+  }
+  if (options.trim !== false) {
+    rows = rows.map((row) => stringVisibleTrimSpacesRight(row));
+  }
+  const preString = rows.join(`
+`);
+  let inSurrogate = false;
+  for (let i2 = 0;i2 < preString.length; i2++) {
+    const character = preString[i2];
+    returnValue += character;
+    if (!inSurrogate) {
+      inSurrogate = character >= "\uD800" && character <= "\uDBFF";
+    } else {
+      continue;
+    }
+    if (character === ESC || character === CSI) {
+      GROUP_REGEX.lastIndex = i2 + 1;
+      const groupsResult = GROUP_REGEX.exec(preString);
+      const groups = groupsResult?.groups;
+      if (groups?.code !== undefined) {
+        const code = Number.parseFloat(groups.code);
+        escapeCode = code === END_CODE ? undefined : code;
+      } else if (groups?.uri !== undefined) {
+        escapeUrl = groups.uri.length === 0 ? undefined : groups.uri;
+      }
+    }
+    if (preString[i2 + 1] === `
+`) {
+      if (escapeUrl) {
+        returnValue += wrapAnsiHyperlink("");
+      }
+      const closingCode = escapeCode ? getClosingCode(escapeCode) : undefined;
+      if (escapeCode && closingCode) {
+        returnValue += wrapAnsiCode(closingCode);
+      }
+    } else if (character === `
+`) {
+      if (escapeCode && getClosingCode(escapeCode)) {
+        returnValue += wrapAnsiCode(escapeCode);
+      }
+      if (escapeUrl) {
+        returnValue += wrapAnsiHyperlink(escapeUrl);
+      }
+    }
+  }
+  return returnValue;
+};
+var CRLF_OR_LF = /\r?\n/;
+function wrapAnsi(string, columns, options) {
+  return String(string).normalize().split(CRLF_OR_LF).map((line) => exec(line, columns, options)).join(`
+`);
+}
+
+// ../../node_modules/@clack/core/dist/index.mjs
+var import_sisteransi = __toESM(require_src34(), 1);
+function d2(r3, t2, e2) {
+  if (!e2.some((o3) => !o3.disabled))
+    return r3;
+  const s2 = r3 + t2, i2 = Math.max(e2.length - 1, 0), n2 = s2 < 0 ? i2 : s2 > i2 ? 0 : s2;
+  return e2[n2].disabled ? d2(n2, t2 < 0 ? -1 : 1, e2) : n2;
+}
+var E = ["up", "down", "left", "right", "space", "enter", "cancel"];
+var G3 = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+var u3 = { actions: new Set(E), aliases: new Map([["k", "up"], ["j", "down"], ["h", "left"], ["l", "right"], ["\x03", "cancel"], ["escape", "cancel"]]), messages: { cancel: "Canceled", error: "Something went wrong" }, withGuide: true, date: { monthNames: [...G3], messages: { required: "Please enter a valid date", invalidMonth: "There are only 12 months in a year", invalidDay: (r3, t2) => `There are only ${r3} days in ${t2}`, afterMin: (r3) => `Date must be on or after ${r3.toISOString().slice(0, 10)}`, beforeMax: (r3) => `Date must be on or before ${r3.toISOString().slice(0, 10)}` } } };
+function V2(r3, t2) {
+  if (typeof r3 == "string")
+    return u3.aliases.get(r3) === t2;
+  for (const e2 of r3)
+    if (e2 !== undefined && V2(e2, t2))
+      return true;
+  return false;
+}
+function j(r3, t2) {
+  if (r3 === t2)
+    return;
+  const e2 = r3.split(`
+`), s2 = t2.split(`
+`), i2 = Math.max(e2.length, s2.length), n2 = [];
+  for (let o3 = 0;o3 < i2; o3++)
+    e2[o3] !== s2[o3] && n2.push(o3);
+  return { lines: n2, numLinesBefore: e2.length, numLinesAfter: s2.length, numLines: i2 };
+}
+var Y2 = globalThis.process.platform.startsWith("win");
+var C3 = Symbol("clack:cancel");
+function q2(r3) {
+  return r3 === C3;
+}
+function w2(r3, t2) {
+  const e2 = r3;
+  e2.isTTY && e2.setRawMode(t2);
+}
+var O3 = (r3) => ("columns" in r3) && typeof r3.columns == "number" ? r3.columns : 80;
+var A3 = (r3) => ("rows" in r3) && typeof r3.rows == "number" ? r3.rows : 20;
+function R3(r3, t2, e2, s2 = e2) {
+  const i2 = O3(r3 ?? import_node_process4.stdout);
+  return wrapAnsi(t2, i2 - e2.length, { hard: true, trim: false }).split(`
+`).map((n2, o3) => `${o3 === 0 ? s2 : e2}${n2}`).join(`
+`);
+}
+var p = class {
+  input;
+  output;
+  _abortSignal;
+  rl;
+  opts;
+  _render;
+  _track = false;
+  _prevFrame = "";
+  _subscribers = new Map;
+  _cursor = 0;
+  state = "initial";
+  error = "";
+  value;
+  userInput = "";
+  constructor(t2, e2 = true) {
+    const { input: s2 = import_node_process4.stdin, output: i2 = import_node_process4.stdout, render: n2, signal: o3, ...a2 } = t2;
+    this.opts = a2, this.onKeypress = this.onKeypress.bind(this), this.close = this.close.bind(this), this.render = this.render.bind(this), this._render = n2.bind(this), this._track = e2, this._abortSignal = o3, this.input = s2, this.output = i2;
+  }
+  unsubscribe() {
+    this._subscribers.clear();
+  }
+  setSubscriber(t2, e2) {
+    const s2 = this._subscribers.get(t2) ?? [];
+    s2.push(e2), this._subscribers.set(t2, s2);
+  }
+  on(t2, e2) {
+    this.setSubscriber(t2, { cb: e2 });
+  }
+  once(t2, e2) {
+    this.setSubscriber(t2, { cb: e2, once: true });
+  }
+  emit(t2, ...e2) {
+    const s2 = this._subscribers.get(t2) ?? [], i2 = [];
+    for (const n2 of s2)
+      n2.cb(...e2), n2.once && i2.push(() => s2.splice(s2.indexOf(n2), 1));
+    for (const n2 of i2)
+      n2();
+  }
+  prompt() {
+    return new Promise((t2) => {
+      if (this._abortSignal) {
+        if (this._abortSignal.aborted)
+          return this.state = "cancel", this.close(), t2(C3);
+        this._abortSignal.addEventListener("abort", () => {
+          this.state = "cancel", this.close();
+        }, { once: true });
+      }
+      this.rl = import_node_readline3.default.createInterface({ input: this.input, tabSize: 2, prompt: "", escapeCodeTimeout: 50, terminal: true }), this.rl.prompt(), this.opts.initialUserInput !== undefined && this._setUserInput(this.opts.initialUserInput, true), this.input.on("keypress", this.onKeypress), w2(this.input, true), this.output.on("resize", this.render), this.render(), this.once("submit", () => {
+        this.output.write(import_sisteransi.cursor.show), this.output.off("resize", this.render), w2(this.input, false), t2(this.value);
+      }), this.once("cancel", () => {
+        this.output.write(import_sisteransi.cursor.show), this.output.off("resize", this.render), w2(this.input, false), t2(C3);
+      });
+    });
+  }
+  _isActionKey(t2, e2) {
+    return t2 === "\t";
+  }
+  _setValue(t2) {
+    this.value = t2, this.emit("value", this.value);
+  }
+  _setUserInput(t2, e2) {
+    this.userInput = t2 ?? "", this.emit("userInput", this.userInput), e2 && this._track && this.rl && (this.rl.write(this.userInput), this._cursor = this.rl.cursor);
+  }
+  _clearUserInput() {
+    this.rl?.write(null, { ctrl: true, name: "u" }), this._setUserInput("");
+  }
+  onKeypress(t2, e2) {
+    if (this._track && e2.name !== "return" && (e2.name && this._isActionKey(t2, e2) && this.rl?.write(null, { ctrl: true, name: "h" }), this._cursor = this.rl?.cursor ?? 0, this._setUserInput(this.rl?.line)), this.state === "error" && (this.state = "active"), e2?.name && (!this._track && u3.aliases.has(e2.name) && this.emit("cursor", u3.aliases.get(e2.name)), u3.actions.has(e2.name) && this.emit("cursor", e2.name)), t2 && (t2.toLowerCase() === "y" || t2.toLowerCase() === "n") && this.emit("confirm", t2.toLowerCase() === "y"), this.emit("key", t2?.toLowerCase(), e2), e2?.name === "return") {
+      if (this.opts.validate) {
+        const s2 = this.opts.validate(this.value);
+        s2 && (this.error = s2 instanceof Error ? s2.message : s2, this.state = "error", this.rl?.write(this.userInput));
+      }
+      this.state !== "error" && (this.state = "submit");
+    }
+    V2([t2, e2?.name, e2?.sequence], "cancel") && (this.state = "cancel"), (this.state === "submit" || this.state === "cancel") && this.emit("finalize"), this.render(), (this.state === "submit" || this.state === "cancel") && this.close();
+  }
+  close() {
+    this.input.unpipe(), this.input.removeListener("keypress", this.onKeypress), this.output.write(`
+`), w2(this.input, false), this.rl?.close(), this.rl = undefined, this.emit(`${this.state}`, this.value), this.unsubscribe();
+  }
+  restoreCursor() {
+    const t2 = wrapAnsi(this._prevFrame, process.stdout.columns, { hard: true, trim: false }).split(`
+`).length - 1;
+    this.output.write(import_sisteransi.cursor.move(-999, t2 * -1));
+  }
+  render() {
+    const t2 = wrapAnsi(this._render(this) ?? "", process.stdout.columns, { hard: true, trim: false });
+    if (t2 !== this._prevFrame) {
+      if (this.state === "initial")
+        this.output.write(import_sisteransi.cursor.hide);
+      else {
+        const e2 = j(this._prevFrame, t2), s2 = A3(this.output);
+        if (this.restoreCursor(), e2) {
+          const i2 = Math.max(0, e2.numLinesAfter - s2), n2 = Math.max(0, e2.numLinesBefore - s2);
+          let o3 = e2.lines.find((a2) => a2 >= i2);
+          if (o3 === undefined) {
+            this._prevFrame = t2;
+            return;
+          }
+          if (e2.lines.length === 1) {
+            this.output.write(import_sisteransi.cursor.move(0, o3 - n2)), this.output.write(import_sisteransi.erase.lines(1));
+            const a2 = t2.split(`
+`);
+            this.output.write(a2[o3]), this._prevFrame = t2, this.output.write(import_sisteransi.cursor.move(0, a2.length - o3 - 1));
+            return;
+          } else if (e2.lines.length > 1) {
+            if (i2 < n2)
+              o3 = i2;
+            else {
+              const h2 = o3 - n2;
+              h2 > 0 && this.output.write(import_sisteransi.cursor.move(0, h2));
+            }
+            this.output.write(import_sisteransi.erase.down());
+            const a2 = t2.split(`
+`).slice(o3);
+            this.output.write(a2.join(`
+`)), this._prevFrame = t2;
+            return;
+          }
+        }
+        this.output.write(import_sisteransi.erase.down());
+      }
+      this.output.write(t2), this.state === "initial" && (this.state = "active"), this._prevFrame = t2;
+    }
+  }
+};
+function W2(r3, t2) {
+  if (r3 === undefined || t2.length === 0)
+    return 0;
+  const e2 = t2.findIndex((s2) => s2.value === r3);
+  return e2 !== -1 ? e2 : 0;
+}
+function B2(r3, t2) {
+  return (t2.label ?? String(t2.value)).toLowerCase().includes(r3.toLowerCase());
+}
+function J2(r3, t2) {
+  if (t2)
+    return r3 ? t2 : t2[0];
+}
+var H = class extends p {
+  filteredOptions;
+  multiple;
+  isNavigating = false;
+  selectedValues = [];
+  focusedValue;
+  #e = 0;
+  #o = "";
+  #t;
+  #n;
+  #a;
+  get cursor() {
+    return this.#e;
+  }
+  get userInputWithCursor() {
+    if (!this.userInput)
+      return import_node_util2.styleText(["inverse", "hidden"], "_");
+    if (this._cursor >= this.userInput.length)
+      return `${this.userInput}█`;
+    const t2 = this.userInput.slice(0, this._cursor), [e2, ...s2] = this.userInput.slice(this._cursor);
+    return `${t2}${import_node_util2.styleText("inverse", e2)}${s2.join("")}`;
+  }
+  get options() {
+    return typeof this.#n == "function" ? this.#n() : this.#n;
+  }
+  constructor(t2) {
+    super(t2), this.#n = t2.options, this.#a = t2.placeholder;
+    const e2 = this.options;
+    this.filteredOptions = [...e2], this.multiple = t2.multiple === true, this.#t = typeof t2.options == "function" ? t2.filter : t2.filter ?? B2;
+    let s2;
+    if (t2.initialValue && Array.isArray(t2.initialValue) ? this.multiple ? s2 = t2.initialValue : s2 = t2.initialValue.slice(0, 1) : !this.multiple && this.options.length > 0 && (s2 = [this.options[0].value]), s2)
+      for (const i2 of s2) {
+        const n2 = e2.findIndex((o3) => o3.value === i2);
+        n2 !== -1 && (this.toggleSelected(i2), this.#e = n2);
+      }
+    this.focusedValue = this.options[this.#e]?.value, this.on("key", (i2, n2) => this.#s(i2, n2)), this.on("userInput", (i2) => this.#i(i2));
+  }
+  _isActionKey(t2, e2) {
+    return t2 === "\t" || this.multiple && this.isNavigating && e2.name === "space" && t2 !== undefined && t2 !== "";
+  }
+  #s(t2, e2) {
+    const s2 = e2.name === "up", i2 = e2.name === "down", n2 = e2.name === "return", o3 = this.userInput === "" || this.userInput === "\t", a2 = this.#a, h2 = this.options, l2 = a2 !== undefined && a2 !== "" && h2.some((f3) => !f3.disabled && (this.#t ? this.#t(a2, f3) : true));
+    if (e2.name === "tab" && o3 && l2) {
+      this.userInput === "\t" && this._clearUserInput(), this._setUserInput(a2, true), this.isNavigating = false;
+      return;
+    }
+    s2 || i2 ? (this.#e = d2(this.#e, s2 ? -1 : 1, this.filteredOptions), this.focusedValue = this.filteredOptions[this.#e]?.value, this.multiple || (this.selectedValues = [this.focusedValue]), this.isNavigating = true) : n2 ? this.value = J2(this.multiple, this.selectedValues) : this.multiple ? this.focusedValue !== undefined && (e2.name === "tab" || this.isNavigating && e2.name === "space") ? this.toggleSelected(this.focusedValue) : this.isNavigating = false : (this.focusedValue && (this.selectedValues = [this.focusedValue]), this.isNavigating = false);
+  }
+  deselectAll() {
+    this.selectedValues = [];
+  }
+  toggleSelected(t2) {
+    this.filteredOptions.length !== 0 && (this.multiple ? this.selectedValues.includes(t2) ? this.selectedValues = this.selectedValues.filter((e2) => e2 !== t2) : this.selectedValues = [...this.selectedValues, t2] : this.selectedValues = [t2]);
+  }
+  #i(t2) {
+    if (t2 !== this.#o) {
+      this.#o = t2;
+      const e2 = this.options;
+      t2 && this.#t ? this.filteredOptions = e2.filter((n2) => this.#t?.(t2, n2)) : this.filteredOptions = [...e2];
+      const s2 = W2(this.focusedValue, this.filteredOptions);
+      this.#e = d2(s2, 0, this.filteredOptions);
+      const i2 = this.filteredOptions[this.#e];
+      i2 && !i2.disabled ? this.focusedValue = i2.value : this.focusedValue = undefined, this.multiple || (this.focusedValue !== undefined ? this.toggleSelected(this.focusedValue) : this.deselectAll());
+    }
+  }
+};
+var X2 = { Y: { type: "year", len: 4 }, M: { type: "month", len: 2 }, D: { type: "day", len: 2 } };
+function L3(r3) {
+  return [...r3].map((t2) => X2[t2]);
+}
+function Z(r3) {
+  const t2 = new Intl.DateTimeFormat(r3, { year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date(2000, 0, 15)), e2 = [];
+  let s2 = "/";
+  for (const i2 of t2)
+    i2.type === "literal" ? s2 = i2.value.trim() || i2.value : (i2.type === "year" || i2.type === "month" || i2.type === "day") && e2.push({ type: i2.type, len: i2.type === "year" ? 4 : 2 });
+  return { segments: e2, separator: s2 };
+}
+function k2(r3) {
+  return Number.parseInt((r3 || "0").replace(/_/g, "0"), 10) || 0;
+}
+function I3(r3) {
+  return { year: k2(r3.year), month: k2(r3.month), day: k2(r3.day) };
+}
+function T3(r3, t2) {
+  return new Date(r3 || 2001, t2 || 1, 0).getDate();
+}
+function F3(r3) {
+  const { year: t2, month: e2, day: s2 } = I3(r3);
+  if (!t2 || t2 < 0 || t2 > 9999 || !e2 || e2 < 1 || e2 > 12 || !s2 || s2 < 1)
+    return;
+  const i2 = new Date(Date.UTC(t2, e2 - 1, s2));
+  if (!(i2.getUTCFullYear() !== t2 || i2.getUTCMonth() !== e2 - 1 || i2.getUTCDate() !== s2))
+    return { year: t2, month: e2, day: s2 };
+}
+function N3(r3) {
+  const t2 = F3(r3);
+  return t2 ? new Date(Date.UTC(t2.year, t2.month - 1, t2.day)) : undefined;
+}
+function tt(r3, t2, e2, s2) {
+  const i2 = e2 ? { year: e2.getUTCFullYear(), month: e2.getUTCMonth() + 1, day: e2.getUTCDate() } : null, n2 = s2 ? { year: s2.getUTCFullYear(), month: s2.getUTCMonth() + 1, day: s2.getUTCDate() } : null;
+  return r3 === "year" ? { min: i2?.year ?? 1, max: n2?.year ?? 9999 } : r3 === "month" ? { min: i2 && t2.year === i2.year ? i2.month : 1, max: n2 && t2.year === n2.year ? n2.month : 12 } : { min: i2 && t2.year === i2.year && t2.month === i2.month ? i2.day : 1, max: n2 && t2.year === n2.year && t2.month === n2.month ? n2.day : T3(t2.year, t2.month) };
+}
+
+class et extends p {
+  #e;
+  #o;
+  #t;
+  #n;
+  #a;
+  #s = { segmentIndex: 0, positionInSegment: 0 };
+  #i = true;
+  #r = null;
+  inlineError = "";
+  get segmentCursor() {
+    return { ...this.#s };
+  }
+  get segmentValues() {
+    return { ...this.#t };
+  }
+  get segments() {
+    return this.#e;
+  }
+  get separator() {
+    return this.#o;
+  }
+  get formattedValue() {
+    return this.#c(this.#t);
+  }
+  #c(t2) {
+    return this.#e.map((e2) => t2[e2.type]).join(this.#o);
+  }
+  #h() {
+    this._setUserInput(this.#c(this.#t)), this._setValue(N3(this.#t) ?? undefined);
+  }
+  constructor(t2) {
+    const e2 = t2.format ? { segments: L3(t2.format), separator: t2.separator ?? "/" } : Z(t2.locale), s2 = t2.separator ?? e2.separator, i2 = t2.format ? L3(t2.format) : e2.segments, n2 = t2.initialValue ?? t2.defaultValue, o3 = n2 ? { year: String(n2.getUTCFullYear()).padStart(4, "0"), month: String(n2.getUTCMonth() + 1).padStart(2, "0"), day: String(n2.getUTCDate()).padStart(2, "0") } : { year: "____", month: "__", day: "__" }, a2 = i2.map((h2) => o3[h2.type]).join(s2);
+    super({ ...t2, initialUserInput: a2 }, false), this.#e = i2, this.#o = s2, this.#t = o3, this.#n = t2.minDate, this.#a = t2.maxDate, this.#h(), this.on("cursor", (h2) => this.#d(h2)), this.on("key", (h2, l2) => this.#f(h2, l2)), this.on("finalize", () => this.#g(t2));
+  }
+  #u() {
+    const t2 = Math.max(0, Math.min(this.#s.segmentIndex, this.#e.length - 1)), e2 = this.#e[t2];
+    if (e2)
+      return this.#s.positionInSegment = Math.max(0, Math.min(this.#s.positionInSegment, e2.len - 1)), { segment: e2, index: t2 };
+  }
+  #l(t2) {
+    this.inlineError = "", this.#r = null;
+    const e2 = this.#u();
+    e2 && (this.#s.segmentIndex = Math.max(0, Math.min(this.#e.length - 1, e2.index + t2)), this.#s.positionInSegment = 0, this.#i = true);
+  }
+  #p(t2) {
+    const e2 = this.#u();
+    if (!e2)
+      return;
+    const { segment: s2 } = e2, i2 = this.#t[s2.type], n2 = !i2 || i2.replace(/_/g, "") === "", o3 = Number.parseInt((i2 || "0").replace(/_/g, "0"), 10) || 0, a2 = tt(s2.type, I3(this.#t), this.#n, this.#a);
+    let h2;
+    n2 ? h2 = t2 === 1 ? a2.min : a2.max : h2 = Math.max(Math.min(a2.max, o3 + t2), a2.min), this.#t = { ...this.#t, [s2.type]: h2.toString().padStart(s2.len, "0") }, this.#i = true, this.#r = null, this.#h();
+  }
+  #d(t2) {
+    if (t2)
+      switch (t2) {
+        case "right":
+          return this.#l(1);
+        case "left":
+          return this.#l(-1);
+        case "up":
+          return this.#p(1);
+        case "down":
+          return this.#p(-1);
+      }
+  }
+  #f(t2, e2) {
+    if (e2?.name === "backspace" || e2?.sequence === "" || e2?.sequence === "\b" || t2 === "" || t2 === "\b") {
+      this.inlineError = "";
+      const s2 = this.#u();
+      if (!s2)
+        return;
+      if (!this.#t[s2.segment.type].replace(/_/g, "")) {
+        this.#l(-1);
+        return;
+      }
+      this.#t[s2.segment.type] = "_".repeat(s2.segment.len), this.#i = true, this.#s.positionInSegment = 0, this.#h();
+      return;
+    }
+    if (e2?.name === "tab") {
+      this.inlineError = "";
+      const s2 = this.#u();
+      if (!s2)
+        return;
+      const i2 = e2.shift ? -1 : 1, n2 = s2.index + i2;
+      n2 >= 0 && n2 < this.#e.length && (this.#s.segmentIndex = n2, this.#s.positionInSegment = 0, this.#i = true);
+      return;
+    }
+    if (t2 && /^[0-9]$/.test(t2)) {
+      const s2 = this.#u();
+      if (!s2)
+        return;
+      const { segment: i2 } = s2, n2 = !this.#t[i2.type].replace(/_/g, "");
+      if (this.#i && this.#r !== null && !n2) {
+        const m2 = this.#r + t2, g3 = { ...this.#t, [i2.type]: m2 }, b2 = this.#m(g3, i2);
+        if (b2) {
+          this.inlineError = b2, this.#r = null, this.#i = false;
+          return;
+        }
+        this.inlineError = "", this.#t[i2.type] = m2, this.#r = null, this.#i = false, this.#h(), s2.index < this.#e.length - 1 && (this.#s.segmentIndex = s2.index + 1, this.#s.positionInSegment = 0, this.#i = true);
+        return;
+      }
+      this.#i && !n2 && (this.#t[i2.type] = "_".repeat(i2.len), this.#s.positionInSegment = 0), this.#i = false, this.#r = null;
+      const o3 = this.#t[i2.type], a2 = o3.indexOf("_"), h2 = a2 >= 0 ? a2 : Math.min(this.#s.positionInSegment, i2.len - 1);
+      if (h2 < 0 || h2 >= i2.len)
+        return;
+      let l2 = o3.slice(0, h2) + t2 + o3.slice(h2 + 1), f3 = false;
+      if (h2 === 0 && o3 === "__" && (i2.type === "month" || i2.type === "day")) {
+        const m2 = Number.parseInt(t2, 10);
+        l2 = `0${t2}`, f3 = m2 <= (i2.type === "month" ? 1 : 2);
+      }
+      if (i2.type === "year" && (l2 = (o3.replace(/_/g, "") + t2).padStart(i2.len, "_")), !l2.includes("_")) {
+        const m2 = { ...this.#t, [i2.type]: l2 }, g3 = this.#m(m2, i2);
+        if (g3) {
+          this.inlineError = g3;
+          return;
+        }
+      }
+      this.inlineError = "", this.#t[i2.type] = l2;
+      const v2 = l2.includes("_") ? undefined : F3(this.#t);
+      if (v2) {
+        const { year: m2, month: g3 } = v2, b2 = T3(m2, g3);
+        this.#t = { year: String(Math.max(0, Math.min(9999, m2))).padStart(4, "0"), month: String(Math.max(1, Math.min(12, g3))).padStart(2, "0"), day: String(Math.max(1, Math.min(b2, v2.day))).padStart(2, "0") };
+      }
+      this.#h();
+      const U = l2.indexOf("_");
+      f3 ? (this.#i = true, this.#r = t2) : U >= 0 ? this.#s.positionInSegment = U : a2 >= 0 && s2.index < this.#e.length - 1 ? (this.#s.segmentIndex = s2.index + 1, this.#s.positionInSegment = 0, this.#i = true) : this.#s.positionInSegment = Math.min(h2 + 1, i2.len - 1);
+    }
+  }
+  #m(t2, e2) {
+    const { month: s2, day: i2 } = I3(t2);
+    if (e2.type === "month" && (s2 < 0 || s2 > 12))
+      return u3.date.messages.invalidMonth;
+    if (e2.type === "day" && (i2 < 0 || i2 > 31))
+      return u3.date.messages.invalidDay(31, "any month");
+  }
+  #g(t2) {
+    const { year: e2, month: s2, day: i2 } = I3(this.#t);
+    if (e2 && s2 && i2) {
+      const n2 = T3(e2, s2);
+      this.#t = { ...this.#t, day: String(Math.min(i2, n2)).padStart(2, "0") };
+    }
+    this.value = N3(this.#t) ?? t2.defaultValue ?? undefined;
+  }
+}
+
+class st extends p {
+  options;
+  cursor = 0;
+  #e;
+  getGroupItems(t2) {
+    return this.options.filter((e2) => e2.group === t2);
+  }
+  isGroupSelected(t2) {
+    const e2 = this.getGroupItems(t2), s2 = this.value;
+    return s2 === undefined ? false : e2.every((i2) => s2.includes(i2.value));
+  }
+  toggleValue() {
+    const t2 = this.options[this.cursor];
+    if (this.value === undefined && (this.value = []), t2.group === true) {
+      const e2 = t2.value, s2 = this.getGroupItems(e2);
+      this.isGroupSelected(e2) ? this.value = this.value.filter((i2) => s2.findIndex((n2) => n2.value === i2) === -1) : this.value = [...this.value, ...s2.map((i2) => i2.value)], this.value = Array.from(new Set(this.value));
+    } else {
+      const e2 = this.value.includes(t2.value);
+      this.value = e2 ? this.value.filter((s2) => s2 !== t2.value) : [...this.value, t2.value];
+    }
+  }
+  constructor(t2) {
+    super(t2, false);
+    const { options: e2 } = t2;
+    this.#e = t2.selectableGroups !== false, this.options = Object.entries(e2).flatMap(([s2, i2]) => [{ value: s2, group: true, label: s2 }, ...i2.map((n2) => ({ ...n2, group: s2 }))]), this.value = [...t2.initialValues ?? []], this.cursor = Math.max(this.options.findIndex(({ value: s2 }) => s2 === t2.cursorAt), this.#e ? 0 : 1), this.on("cursor", (s2) => {
+      switch (s2) {
+        case "left":
+        case "up": {
+          this.cursor = this.cursor === 0 ? this.options.length - 1 : this.cursor - 1;
+          const i2 = this.options[this.cursor]?.group === true;
+          !this.#e && i2 && (this.cursor = this.cursor === 0 ? this.options.length - 1 : this.cursor - 1);
+          break;
+        }
+        case "down":
+        case "right": {
+          this.cursor = this.cursor === this.options.length - 1 ? 0 : this.cursor + 1;
+          const i2 = this.options[this.cursor]?.group === true;
+          !this.#e && i2 && (this.cursor = this.cursor === this.options.length - 1 ? 0 : this.cursor + 1);
+          break;
+        }
+        case "space":
+          this.toggleValue();
+          break;
+      }
+    });
+  }
+}
+class nt extends p {
+  options;
+  cursor = 0;
+  get _selectedValue() {
+    return this.options[this.cursor];
+  }
+  changeValue() {
+    this.value = this._selectedValue.value;
+  }
+  constructor(t2) {
+    super(t2, false), this.options = t2.options;
+    const e2 = this.options.findIndex(({ value: i2 }) => i2 === t2.initialValue), s2 = e2 === -1 ? 0 : e2;
+    this.cursor = this.options[s2].disabled ? d2(s2, 1, this.options) : s2, this.changeValue(), this.on("cursor", (i2) => {
+      switch (i2) {
+        case "left":
+        case "up":
+          this.cursor = d2(this.cursor, -1, this.options);
+          break;
+        case "down":
+        case "right":
+          this.cursor = d2(this.cursor, 1, this.options);
+          break;
+      }
+      this.changeValue();
+    });
+  }
+}
+class at extends p {
+  get userInputWithCursor() {
+    if (this.state === "submit")
+      return this.userInput;
+    const t2 = this.userInput;
+    if (this.cursor >= t2.length)
+      return `${this.userInput}█`;
+    const e2 = t2.slice(0, this.cursor), [s2, ...i2] = t2.slice(this.cursor);
+    return `${e2}${import_node_util2.styleText("inverse", s2)}${i2.join("")}`;
+  }
+  get cursor() {
+    return this._cursor;
+  }
+  constructor(t2) {
+    super({ ...t2, initialUserInput: t2.initialUserInput ?? t2.initialValue }), this.on("userInput", (e2) => {
+      this._setValue(e2);
+    }), this.on("finalize", () => {
+      this.value || (this.value = t2.defaultValue), this.value === undefined && (this.value = "");
+    });
+  }
+}
+
+// ../../node_modules/@clack/prompts/dist/index.mjs
+var import_node_util3 = require("node:util");
+var import_node_process5 = __toESM(require("node:process"));
+var import_sisteransi2 = __toESM(require_src34(), 1);
+function Ze() {
+  return import_node_process5.default.platform !== "win32" ? import_node_process5.default.env.TERM !== "linux" : !!import_node_process5.default.env.CI || !!import_node_process5.default.env.WT_SESSION || !!import_node_process5.default.env.TERMINUS_SUBLIME || import_node_process5.default.env.ConEmuTask === "{cmd::Cmder}" || import_node_process5.default.env.TERM_PROGRAM === "Terminus-Sublime" || import_node_process5.default.env.TERM_PROGRAM === "vscode" || import_node_process5.default.env.TERM === "xterm-256color" || import_node_process5.default.env.TERM === "alacritty" || import_node_process5.default.env.TERMINAL_EMULATOR === "JetBrains-JediTerm";
+}
+var ee = Ze();
+var w3 = (e2, i2) => ee ? e2 : i2;
+var _e = w3("◆", "*");
+var oe = w3("■", "x");
+var ue = w3("▲", "x");
+var F4 = w3("◇", "o");
+var le2 = w3("┌", "T");
+var d3 = w3("│", "|");
+var E2 = w3("└", "—");
+var Ie = w3("┐", "T");
+var Ee = w3("┘", "—");
+var z3 = w3("●", ">");
+var H2 = w3("○", " ");
+var te = w3("◻", "[•]");
+var U = w3("◼", "[+]");
+var J3 = w3("◻", "[ ]");
+var xe = w3("▪", "•");
+var se = w3("─", "-");
+var ce2 = w3("╮", "+");
+var Ge = w3("├", "+");
+var $e = w3("╯", "+");
+var de = w3("╰", "+");
+var Oe = w3("╭", "+");
+var he2 = w3("●", "•");
+var pe = w3("◆", "*");
+var me = w3("▲", "!");
+var ge = w3("■", "x");
+var V3 = (e2) => {
+  switch (e2) {
+    case "initial":
+    case "active":
+      return import_node_util3.styleText("cyan", _e);
+    case "cancel":
+      return import_node_util3.styleText("red", oe);
+    case "error":
+      return import_node_util3.styleText("yellow", ue);
+    case "submit":
+      return import_node_util3.styleText("green", F4);
+  }
+};
+var ye2 = (e2) => {
+  switch (e2) {
+    case "initial":
+    case "active":
+      return import_node_util3.styleText("cyan", d3);
+    case "cancel":
+      return import_node_util3.styleText("red", d3);
+    case "error":
+      return import_node_util3.styleText("yellow", d3);
+    case "submit":
+      return import_node_util3.styleText("green", d3);
+  }
+};
+var et2 = (e2, i2, s2, r3, u4) => {
+  let n2 = i2, o3 = 0;
+  for (let c4 = s2;c4 < r3; c4++) {
+    const a2 = e2[c4];
+    if (n2 = n2 - a2.length, o3++, n2 <= u4)
+      break;
+  }
+  return { lineCount: n2, removals: o3 };
+};
+var Y3 = ({ cursor: e2, options: i2, style: s2, output: r3 = process.stdout, maxItems: u4 = Number.POSITIVE_INFINITY, columnPadding: n2 = 0, rowPadding: o3 = 4 }) => {
+  const c4 = O3(r3) - n2, a2 = A3(r3), l2 = import_node_util3.styleText("dim", "..."), $2 = Math.max(a2 - o3, 0), y4 = Math.max(Math.min(u4, $2), 5);
+  let p2 = 0;
+  e2 >= y4 - 3 && (p2 = Math.max(Math.min(e2 - y4 + 3, i2.length - y4), 0));
+  let m2 = y4 < i2.length && p2 > 0, g3 = y4 < i2.length && p2 + y4 < i2.length;
+  const S4 = Math.min(p2 + y4, i2.length), h2 = [];
+  let f3 = 0;
+  m2 && f3++, g3 && f3++;
+  const v2 = p2 + (m2 ? 1 : 0), T4 = S4 - (g3 ? 1 : 0);
+  for (let b2 = v2;b2 < T4; b2++) {
+    const x2 = wrapAnsi(s2(i2[b2], b2 === e2), c4, { hard: true, trim: false }).split(`
+`);
+    h2.push(x2), f3 += x2.length;
+  }
+  if (f3 > $2) {
+    let b2 = 0, x2 = 0, G4 = f3;
+    const M2 = e2 - v2, R4 = (j2, D2) => et2(h2, G4, j2, D2, $2);
+    m2 ? ({ lineCount: G4, removals: b2 } = R4(0, M2), G4 > $2 && ({ lineCount: G4, removals: x2 } = R4(M2 + 1, h2.length))) : ({ lineCount: G4, removals: x2 } = R4(M2 + 1, h2.length), G4 > $2 && ({ lineCount: G4, removals: b2 } = R4(0, M2))), b2 > 0 && (m2 = true, h2.splice(0, b2)), x2 > 0 && (g3 = true, h2.splice(h2.length - x2, x2));
+  }
+  const C4 = [];
+  m2 && C4.push(l2);
+  for (const b2 of h2)
+    for (const x2 of b2)
+      C4.push(x2);
+  return g3 && C4.push(l2), C4;
+};
+var Ve = { light: w3("─", "-"), heavy: w3("━", "="), block: w3("█", "#") };
+var re = (e2, i2) => e2.includes(`
+`) ? e2.split(`
+`).map((s2) => i2(s2)).join(`
+`) : i2(e2);
+var _t = (e2) => {
+  const i2 = (s2, r3) => {
+    const u4 = s2.label ?? String(s2.value);
+    switch (r3) {
+      case "disabled":
+        return `${import_node_util3.styleText("gray", H2)} ${re(u4, (n2) => import_node_util3.styleText("gray", n2))}${s2.hint ? ` ${import_node_util3.styleText("dim", `(${s2.hint ?? "disabled"})`)}` : ""}`;
+      case "selected":
+        return `${re(u4, (n2) => import_node_util3.styleText("dim", n2))}`;
+      case "active":
+        return `${import_node_util3.styleText("green", z3)} ${u4}${s2.hint ? ` ${import_node_util3.styleText("dim", `(${s2.hint})`)}` : ""}`;
+      case "cancelled":
+        return `${re(u4, (n2) => import_node_util3.styleText(["strikethrough", "dim"], n2))}`;
+      default:
+        return `${import_node_util3.styleText("dim", H2)} ${re(u4, (n2) => import_node_util3.styleText("dim", n2))}`;
+    }
+  };
+  return new nt({ options: e2.options, signal: e2.signal, input: e2.input, output: e2.output, initialValue: e2.initialValue, render() {
+    const s2 = e2.withGuide ?? u3.withGuide, r3 = `${V3(this.state)}  `, u4 = `${ye2(this.state)}  `, n2 = R3(e2.output, e2.message, u4, r3), o3 = `${s2 ? `${import_node_util3.styleText("gray", d3)}
+` : ""}${n2}
+`;
+    switch (this.state) {
+      case "submit": {
+        const c4 = s2 ? `${import_node_util3.styleText("gray", d3)}  ` : "", a2 = R3(e2.output, i2(this.options[this.cursor], "selected"), c4);
+        return `${o3}${a2}`;
+      }
+      case "cancel": {
+        const c4 = s2 ? `${import_node_util3.styleText("gray", d3)}  ` : "", a2 = R3(e2.output, i2(this.options[this.cursor], "cancelled"), c4);
+        return `${o3}${a2}${s2 ? `
+${import_node_util3.styleText("gray", d3)}` : ""}`;
+      }
+      default: {
+        const c4 = s2 ? `${import_node_util3.styleText("cyan", d3)}  ` : "", a2 = s2 ? import_node_util3.styleText("cyan", E2) : "", l2 = o3.split(`
+`).length, $2 = s2 ? 2 : 1;
+        return `${o3}${c4}${Y3({ output: e2.output, cursor: this.cursor, options: this.options, maxItems: e2.maxItems, columnPadding: c4.length, rowPadding: l2 + $2, style: (y4, p2) => i2(y4, y4.disabled ? "disabled" : p2 ? "active" : "inactive") }).join(`
+${c4}`)}
+${a2}
+`;
+      }
+    }
+  } }).prompt();
+};
+var je = `${import_node_util3.styleText("gray", d3)}  `;
+var Ot = (e2) => new at({ validate: e2.validate, placeholder: e2.placeholder, defaultValue: e2.defaultValue, initialValue: e2.initialValue, output: e2.output, signal: e2.signal, input: e2.input, render() {
+  const i2 = e2?.withGuide ?? u3.withGuide, s2 = `${`${i2 ? `${import_node_util3.styleText("gray", d3)}
+` : ""}${V3(this.state)}  `}${e2.message}
+`, r3 = e2.placeholder ? import_node_util3.styleText("inverse", e2.placeholder[0]) + import_node_util3.styleText("dim", e2.placeholder.slice(1)) : import_node_util3.styleText(["inverse", "hidden"], "_"), u4 = this.userInput ? this.userInputWithCursor : r3, n2 = this.value ?? "";
+  switch (this.state) {
+    case "error": {
+      const o3 = this.error ? `  ${import_node_util3.styleText("yellow", this.error)}` : "", c4 = i2 ? `${import_node_util3.styleText("yellow", d3)}  ` : "", a2 = i2 ? import_node_util3.styleText("yellow", E2) : "";
+      return `${s2.trim()}
+${c4}${u4}
+${a2}${o3}
+`;
+    }
+    case "submit": {
+      const o3 = n2 ? `  ${import_node_util3.styleText("dim", n2)}` : "", c4 = i2 ? import_node_util3.styleText("gray", d3) : "";
+      return `${s2}${c4}${o3}`;
+    }
+    case "cancel": {
+      const o3 = n2 ? `  ${import_node_util3.styleText(["strikethrough", "dim"], n2)}` : "", c4 = i2 ? import_node_util3.styleText("gray", d3) : "";
+      return `${s2}${c4}${o3}${n2.trim() ? `
+${c4}` : ""}`;
+    }
+    default: {
+      const o3 = i2 ? `${import_node_util3.styleText("cyan", d3)}  ` : "", c4 = i2 ? import_node_util3.styleText("cyan", E2) : "";
+      return `${s2}${o3}${u4}
+${c4}
+`;
+    }
+  }
+} }).prompt();
+
+// src/commands/init.ts
 var initCommand = defineCliCommand({
   meta: {
     name: "init",
@@ -61072,25 +62363,25 @@ var initCommand = defineCliCommand({
   }
 });
 async function runInteractive(flags) {
-  const session = createPromptSession();
   const auth = getAuthState();
   const config = resolveConfig();
-  try {
-    process.stderr.write(`
+  process.stderr.write(`
 `);
-    process.stderr.write(`  ${source_default.dim("tip: AI agents can use flags directly — run")} supermemory init --help
+  process.stderr.write(`  ${source_default.dim("tip: AI agents can use flags directly — run")} supermemory init --help
 `);
-    process.stderr.write(`
+  process.stderr.write(`
 `);
-    process.stderr.write(`  ${source_default.bold("Current config:")}
+  process.stderr.write(`  ${source_default.bold("Current config:")}
 `);
-    process.stderr.write(`    API Key:  ${auth.apiKey.masked ? `${auth.apiKey.masked}  ${source_default.dim(`(${auth.apiKey.source})`)}` : source_default.dim("(not set)")}
+  process.stderr.write(`    API Key:  ${auth.apiKey.masked ? `${auth.apiKey.masked}  ${source_default.dim(`(${auth.apiKey.source})`)}` : source_default.dim("(not set)")}
 `);
-    process.stderr.write(`    Tag:      ${auth.tag.value ? `${auth.tag.value}  ${source_default.dim(`(${auth.tag.source})`)}` : source_default.dim("(not set)")}
+  process.stderr.write(`    Tag:      ${auth.tag.value ? `${auth.tag.value}  ${source_default.dim(`(${auth.tag.source})`)}` : source_default.dim("(not set)")}
 `);
-    process.stderr.write(`
+  process.stderr.write(`
 `);
-    const scope = await session.select("Select scope", [
+  const scope = await _t({
+    message: "Select scope",
+    options: [
       {
         value: "project",
         label: "Project",
@@ -61106,25 +62397,29 @@ async function runInteractive(flags) {
         label: "Global",
         hint: "applies everywhere"
       }
-    ], 0);
-    process.stderr.write(`
-`);
-    if (scope === "project") {
-      await runProjectWizard(session, auth, config, flags);
-    } else if (scope === "team") {
-      await runTeamWizard(session, auth, flags);
-    } else {
-      await runGlobalWizard(session, config, flags);
-    }
-  } finally {
-    session.close();
+    ]
+  });
+  if (q2(scope)) {
+    process.exit(0);
+  }
+  if (scope === "project") {
+    await runProjectWizard(auth, config, flags);
+  } else if (scope === "team") {
+    await runTeamWizard(auth, flags);
+  } else {
+    await runGlobalWizard(config, flags);
   }
 }
-async function runProjectWizard(session, auth, config, flags) {
+async function runProjectWizard(auth, config, flags) {
   const existing = readProjectConfig();
-  const apiKeyAnswer = await session.ask("API Key", {
-    default: auth.apiKey.masked ?? undefined
+  const apiKeyAnswer = await Ot({
+    message: "API Key",
+    defaultValue: auth.apiKey.masked ?? undefined,
+    placeholder: auth.apiKey.masked ?? "your API key"
   });
+  if (q2(apiKeyAnswer)) {
+    process.exit(0);
+  }
   let newApiKey;
   if (apiKeyAnswer && apiKeyAnswer !== auth.apiKey.masked) {
     try {
@@ -61134,9 +62429,14 @@ async function runProjectWizard(session, auth, config, flags) {
       exitWithError("invalid_api_key", "API key validation failed. Check your key and try again.", flags);
     }
   }
-  const tagAnswer = await session.ask("Container Tag", {
-    default: auth.tag.value ?? getDefaultTag()
+  const tagAnswer = await Ot({
+    message: "Container Tag",
+    defaultValue: auth.tag.value ?? getDefaultTag(),
+    placeholder: auth.tag.value ?? getDefaultTag()
   });
+  if (q2(tagAnswer)) {
+    process.exit(0);
+  }
   const projectUpdates = {};
   if (newApiKey)
     projectUpdates.apiKey = newApiKey;
@@ -61162,15 +62462,20 @@ async function runProjectWizard(session, auth, config, flags) {
 `);
   }, flags);
 }
-async function runTeamWizard(session, auth, flags) {
+async function runTeamWizard(auth, flags) {
   const gitRoot = findGitRoot();
   if (!gitRoot) {
     exitWithError("not_git_repo", "Not in a git repository. Team config requires a git repo.", flags);
   }
   const existing = readTeamConfig();
-  const tagAnswer = await session.ask("Container Tag", {
-    default: auth.tag.value ?? getDefaultTag()
+  const tagAnswer = await Ot({
+    message: "Container Tag",
+    defaultValue: auth.tag.value ?? getDefaultTag(),
+    placeholder: auth.tag.value ?? getDefaultTag()
   });
+  if (q2(tagAnswer)) {
+    process.exit(0);
+  }
   const updates = {};
   if (tagAnswer)
     updates.tag = tagAnswer;
@@ -61194,17 +62499,31 @@ async function runTeamWizard(session, auth, flags) {
 `);
   }, flags);
 }
-async function runGlobalWizard(session, config, flags) {
-  const outputAnswer = await session.ask("Output format", {
-    default: config.output,
-    hint: source_default.dim("(auto, json, human)")
+async function runGlobalWizard(config, flags) {
+  const outputAnswer = await Ot({
+    message: "Output format",
+    defaultValue: config.output,
+    placeholder: "auto, json, human"
   });
-  const apiUrlAnswer = await session.ask("API URL", {
-    default: config.apiUrl
+  if (q2(outputAnswer)) {
+    process.exit(0);
+  }
+  const apiUrlAnswer = await Ot({
+    message: "API URL",
+    defaultValue: config.apiUrl,
+    placeholder: config.apiUrl
   });
-  const consoleUrlAnswer = await session.ask("Console URL", {
-    default: config.consoleUrl
+  if (q2(apiUrlAnswer)) {
+    process.exit(0);
+  }
+  const consoleUrlAnswer = await Ot({
+    message: "Console URL",
+    defaultValue: config.consoleUrl,
+    placeholder: config.consoleUrl
   });
+  if (q2(consoleUrlAnswer)) {
+    process.exit(0);
+  }
   const updates = {};
   if (outputAnswer && ["auto", "json", "human"].includes(outputAnswer))
     updates.output = outputAnswer;
@@ -61343,11 +62662,11 @@ var keysListCommand = defineCliCommand({
   async handler({ flags }) {
     const { data } = await apiRequest("/v3/auth/keys");
     output(data, () => {
-      const keys = (data.keys ?? []).filter((k2) => {
-        if (!k2.metadata)
+      const keys = (data.keys ?? []).filter((k3) => {
+        if (!k3.metadata)
           return true;
         try {
-          const meta = JSON.parse(k2.metadata);
+          const meta = JSON.parse(k3.metadata);
           return meta.sm_type !== "agent_cli" && meta.sm_type !== "plugin_auth";
         } catch {
           return true;
@@ -61356,12 +62675,12 @@ var keysListCommand = defineCliCommand({
       if (keys.length === 0) {
         return "  No API keys found.";
       }
-      return formatTable(["PREFIX", "NAME", "TYPE", "PERMISSION", "CREATED"], keys.map((k2) => [
-        k2.key ? maskApiKey(k2.key) : source_default.dim("--"),
-        k2.name,
-        k2.containerTag ? `scoped (${k2.containerTag})` : "full",
-        k2.permission,
-        new Date(k2.createdAt).toLocaleDateString()
+      return formatTable(["PREFIX", "NAME", "TYPE", "PERMISSION", "CREATED"], keys.map((k3) => [
+        k3.key ? maskApiKey(k3.key) : source_default.dim("--"),
+        k3.name,
+        k3.containerTags?.length ? `scoped (${k3.containerTags.join(", ")})` : k3.containerTag ? `scoped (${k3.containerTag})` : "full",
+        k3.permission,
+        new Date(k3.createdAt).toLocaleDateString()
       ]));
     }, flags);
   }
@@ -61383,7 +62702,7 @@ var keysCreateCommand = defineCliCommand({
     },
     tag: {
       type: "string",
-      description: "Scope key to a container tag"
+      description: "Scope key to container tag(s), comma-separated for multiple"
     },
     expires: {
       type: "string",
@@ -61402,8 +62721,10 @@ var keysCreateCommand = defineCliCommand({
       name: args.name,
       permission
     };
-    if (args.tag)
-      body.containerTag = args.tag;
+    if (args.tag) {
+      const tags = args.tag.split(",").map((t3) => t3.trim()).filter(Boolean);
+      body.containerTags = tags;
+    }
     if (expires !== undefined)
       body.expiresInDays = expires;
     const { data } = await apiRequest("/v3/auth/agent-key", {
@@ -61424,7 +62745,7 @@ var keysCreateCommand = defineCliCommand({
         ["Permission:", data.permission],
         [
           "Scope:",
-          data.containerTag ? `scoped (${data.containerTag})` : "full"
+          data.containerTags?.length ? `scoped (${data.containerTags.join(", ")})` : data.containerTag ? `scoped (${data.containerTag})` : "full"
         ],
         [
           "Expires:",
@@ -61704,9 +63025,9 @@ var PLUGIN_CONFIG_PATHS = {
   "claude-code": import_node_path6.join(import_node_os4.homedir(), ".claude", "settings.json"),
   cursor: import_node_path6.join(import_node_os4.homedir(), ".cursor", "settings.json"),
   opencode: import_node_path6.join(import_node_os4.homedir(), ".opencode", "config.json"),
-  clawdbot: import_node_path6.join(import_node_os4.homedir(), ".clawdbot", "config.json")
+  openclaw: import_node_path6.join(import_node_os4.homedir(), ".openclaw", "config.json")
 };
-var KNOWN_PLUGINS = ["claude-code", "cursor", "opencode", "clawdbot"];
+var KNOWN_PLUGINS = ["claude-code", "cursor", "opencode", "openclaw"];
 var pluginsListCommand = defineCliCommand({
   meta: {
     name: "list",
@@ -61715,31 +63036,31 @@ var pluginsListCommand = defineCliCommand({
   async handler({ flags }) {
     const { data } = await apiRequest("/v3/auth/keys");
     output(data, () => {
-      const plugins = (data.keys ?? []).filter((k2) => {
-        if (!k2.metadata)
+      const plugins = (data.keys ?? []).filter((k3) => {
+        if (!k3.metadata)
           return false;
         try {
-          return JSON.parse(k2.metadata).sm_type === "plugin_auth";
+          return JSON.parse(k3.metadata).sm_type === "plugin_auth";
         } catch {
           return false;
         }
-      }).map((k2) => {
-        const meta = JSON.parse(k2.metadata);
+      }).map((k3) => {
+        const meta = JSON.parse(k3.metadata);
         return {
-          pluginId: meta.sm_client ?? k2.name,
-          keyPrefix: k2.key,
-          lastUsed: k2.lastRequest,
-          createdAt: k2.createdAt
+          pluginId: meta.sm_client ?? k3.name,
+          keyPrefix: k3.key,
+          lastUsed: k3.lastRequest,
+          createdAt: k3.createdAt
         };
       });
       if (plugins.length === 0) {
         return "  No plugins connected.";
       }
-      return formatTable(["PLUGIN", "KEY PREFIX", "LAST USED", "CONNECTED"], plugins.map((p) => [
-        p.pluginId,
-        p.keyPrefix ? maskApiKey(p.keyPrefix) : source_default.dim("--"),
-        p.lastUsed ? new Date(p.lastUsed).toLocaleDateString() : source_default.dim("never"),
-        new Date(p.createdAt).toLocaleDateString()
+      return formatTable(["PLUGIN", "KEY PREFIX", "LAST USED", "CONNECTED"], plugins.map((p2) => [
+        p2.pluginId,
+        p2.keyPrefix ? maskApiKey(p2.keyPrefix) : source_default.dim("--"),
+        p2.lastUsed ? new Date(p2.lastUsed).toLocaleDateString() : source_default.dim("never"),
+        new Date(p2.createdAt).toLocaleDateString()
       ]));
     }, flags);
   }
@@ -61752,7 +63073,7 @@ var pluginsConnectCommand = defineCliCommand({
   args: {
     id: {
       type: "positional",
-      description: "Plugin ID (claude-code, cursor, opencode, clawdbot)",
+      description: "Plugin ID (claude-code, cursor, opencode, openclaw)",
       required: true
     },
     "auto-configure": {
@@ -61817,11 +63138,11 @@ var pluginsRevokeCommand = defineCliCommand({
   async handler({ args, flags }) {
     const pluginName = args.id;
     const { data: keysData } = await apiRequest("/v3/auth/keys");
-    const pluginKey = (keysData.keys ?? []).find((k2) => {
-      if (!k2.metadata)
+    const pluginKey = (keysData.keys ?? []).find((k3) => {
+      if (!k3.metadata)
         return false;
       try {
-        const meta = JSON.parse(k2.metadata);
+        const meta = JSON.parse(k3.metadata);
         return meta.sm_type === "plugin_auth" && meta.sm_client === pluginName;
       } catch {
         return false;
@@ -61850,44 +63171,44 @@ var pluginsStatusCommand = defineCliCommand({
   async handler({ flags }) {
     const { data } = await apiRequest("/v3/auth/keys");
     output(data, () => {
-      const plugins = (data.keys ?? []).filter((k2) => {
-        if (!k2.metadata)
+      const plugins = (data.keys ?? []).filter((k3) => {
+        if (!k3.metadata)
           return false;
         try {
-          return JSON.parse(k2.metadata).sm_type === "plugin_auth";
+          return JSON.parse(k3.metadata).sm_type === "plugin_auth";
         } catch {
           return false;
         }
-      }).map((k2) => {
-        const meta = JSON.parse(k2.metadata);
+      }).map((k3) => {
+        const meta = JSON.parse(k3.metadata);
         return {
-          pluginId: meta.sm_client ?? k2.name,
-          keyPrefix: k2.key,
-          lastUsed: k2.lastRequest,
-          createdAt: k2.createdAt
+          pluginId: meta.sm_client ?? k3.name,
+          keyPrefix: k3.key,
+          lastUsed: k3.lastRequest,
+          createdAt: k3.createdAt
         };
       });
       if (plugins.length === 0) {
         return "  No plugins connected.";
       }
-      const sections = plugins.map((p) => formatKeyValue([
-        ["Plugin:", source_default.bold(p.pluginId)],
+      const sections = plugins.map((p2) => formatKeyValue([
+        ["Plugin:", source_default.bold(p2.pluginId)],
         [
           "Key Prefix:",
-          p.keyPrefix ? maskApiKey(p.keyPrefix) : source_default.dim("--")
+          p2.keyPrefix ? maskApiKey(p2.keyPrefix) : source_default.dim("--")
         ],
         [
           "Last Used:",
-          p.lastUsed ? new Date(p.lastUsed).toLocaleDateString() : source_default.dim("never")
+          p2.lastUsed ? new Date(p2.lastUsed).toLocaleDateString() : source_default.dim("never")
         ],
-        ["Connected:", new Date(p.createdAt).toLocaleDateString()],
+        ["Connected:", new Date(p2.createdAt).toLocaleDateString()],
         [
           "Config Path:",
-          PLUGIN_CONFIG_PATHS[p.pluginId] ? source_default.cyan(PLUGIN_CONFIG_PATHS[p.pluginId]) : source_default.dim("--")
+          PLUGIN_CONFIG_PATHS[p2.pluginId] ? source_default.cyan(PLUGIN_CONFIG_PATHS[p2.pluginId]) : source_default.dim("--")
         ],
         [
           "Config Exists:",
-          PLUGIN_CONFIG_PATHS[p.pluginId] ? import_node_fs3.existsSync(PLUGIN_CONFIG_PATHS[p.pluginId]) ? source_default.green("yes") : source_default.dim("no") : source_default.dim("--")
+          PLUGIN_CONFIG_PATHS[p2.pluginId] ? import_node_fs3.existsSync(PLUGIN_CONFIG_PATHS[p2.pluginId]) ? source_default.green("yes") : source_default.dim("no") : source_default.dim("--")
         ]
       ]));
       return sections.join(`
@@ -62183,6 +63504,498 @@ ${hints.map((h2) => `  ${h2}`).join(`
   }
 });
 
+// src/commands/setup.ts
+var import_node_child_process2 = require("node:child_process");
+
+// src/lib/detect.ts
+var import_node_fs4 = require("node:fs");
+var import_node_path7 = require("node:path");
+var FRAMEWORK_MAP = {
+  next: "nextjs",
+  "@remix-run/node": "remix",
+  "@remix-run/react": "remix",
+  nuxt: "nuxt",
+  "@sveltejs/kit": "sveltekit",
+  svelte: "sveltekit",
+  astro: "astro",
+  hono: "hono",
+  express: "express",
+  fastify: "fastify",
+  elysia: "elysia",
+  "@elysiajs/core": "elysia"
+};
+var AI_SDK_MAP = {
+  ai: "vercel-ai",
+  "@ai-sdk/openai": "vercel-ai",
+  "@ai-sdk/anthropic": "vercel-ai",
+  "@ai-sdk/google": "vercel-ai",
+  openai: "openai",
+  "@anthropic-ai/sdk": "anthropic",
+  langchain: "langchain",
+  "@langchain/core": "langchain",
+  "@langchain/openai": "langchain",
+  crewai: "crewai",
+  "@mastra/core": "mastra",
+  langgraph: "langgraph"
+};
+var PY_FRAMEWORK_MAP = {
+  fastapi: "fastapi",
+  flask: "flask",
+  django: "django",
+  starlette: "starlette"
+};
+var PY_AI_SDK_MAP = {
+  "openai-agents": "openai-agents",
+  "langchain-openai": "langchain",
+  "langchain-core": "langchain",
+  langchain: "langchain",
+  langgraph: "langgraph",
+  openai: "openai",
+  anthropic: "anthropic",
+  crewai: "crewai",
+  agno: "agno"
+};
+function readFileSafe(path) {
+  try {
+    return import_node_fs4.readFileSync(path, "utf-8");
+  } catch {
+    return null;
+  }
+}
+function parseJsonSafe(raw) {
+  if (!raw)
+    return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+function detectPackageManager(cwd, pyprojectContent) {
+  if (import_node_fs4.existsSync(import_node_path7.join(cwd, "bun.lockb")) || import_node_fs4.existsSync(import_node_path7.join(cwd, "bun.lock")))
+    return "bun";
+  if (import_node_fs4.existsSync(import_node_path7.join(cwd, "pnpm-lock.yaml")))
+    return "pnpm";
+  if (import_node_fs4.existsSync(import_node_path7.join(cwd, "yarn.lock")))
+    return "yarn";
+  if (import_node_fs4.existsSync(import_node_path7.join(cwd, "package-lock.json")))
+    return "npm";
+  const pyproject = pyprojectContent ?? readFileSafe(import_node_path7.join(cwd, "pyproject.toml"));
+  if (pyproject?.includes("[tool.poetry]"))
+    return "poetry";
+  if (import_node_fs4.existsSync(import_node_path7.join(cwd, "requirements.txt")) || pyproject)
+    return "pip";
+  if (import_node_fs4.existsSync(import_node_path7.join(cwd, "go.mod")))
+    return "go";
+  return null;
+}
+function detectNodeProject(cwd) {
+  const pkg = parseJsonSafe(readFileSafe(import_node_path7.join(cwd, "package.json")));
+  if (!pkg) {
+    return {
+      language: "unknown",
+      framework: null,
+      aiSdk: null,
+      packageManager: detectPackageManager(cwd),
+      hasSupermemory: false
+    };
+  }
+  const allDeps = new Set([
+    ...Object.keys(pkg.dependencies ?? {}),
+    ...Object.keys(pkg.devDependencies ?? {})
+  ]);
+  const language = import_node_fs4.existsSync(import_node_path7.join(cwd, "tsconfig.json")) || allDeps.has("typescript") ? "typescript" : "javascript";
+  let framework = null;
+  for (const [dep, name] of Object.entries(FRAMEWORK_MAP)) {
+    if (allDeps.has(dep)) {
+      framework = name;
+      break;
+    }
+  }
+  let aiSdk = null;
+  for (const [dep, name] of Object.entries(AI_SDK_MAP)) {
+    if (allDeps.has(dep)) {
+      aiSdk = name;
+      break;
+    }
+  }
+  if (!aiSdk) {
+    for (const dep of allDeps) {
+      if (dep.startsWith("@ai-sdk/")) {
+        aiSdk = "vercel-ai";
+        break;
+      }
+      if (dep.startsWith("@langchain/")) {
+        aiSdk = "langchain";
+        break;
+      }
+    }
+  }
+  const hasSupermemory = allDeps.has("supermemory") || allDeps.has("@supermemory/tools");
+  return {
+    language,
+    framework,
+    aiSdk,
+    packageManager: detectPackageManager(cwd),
+    hasSupermemory
+  };
+}
+function detectPythonProject(cwd) {
+  const pyproject = readFileSafe(import_node_path7.join(cwd, "pyproject.toml"));
+  const requirements = readFileSafe(import_node_path7.join(cwd, "requirements.txt"));
+  const content = `${pyproject ?? ""}
+${requirements ?? ""}`.toLowerCase();
+  let framework = null;
+  for (const [pkg, name] of Object.entries(PY_FRAMEWORK_MAP)) {
+    if (content.includes(pkg)) {
+      framework = name;
+      break;
+    }
+  }
+  let aiSdk = null;
+  for (const [pkg, name] of Object.entries(PY_AI_SDK_MAP)) {
+    if (content.includes(pkg)) {
+      aiSdk = name;
+      break;
+    }
+  }
+  const hasSupermemory = content.includes("supermemory");
+  return {
+    language: "python",
+    framework,
+    aiSdk,
+    packageManager: detectPackageManager(cwd, pyproject),
+    hasSupermemory
+  };
+}
+var API_KEY_PREFIX = "SUPERMEMORY_API_KEY=";
+function detectApiKey(cwd) {
+  if (process.env.SUPERMEMORY_API_KEY)
+    return true;
+  for (const file of [".env", ".env.local"]) {
+    const content = readFileSafe(import_node_path7.join(cwd, file));
+    if (content) {
+      const hasKey = content.split(`
+`).some((line) => line.startsWith(API_KEY_PREFIX) && line.slice(API_KEY_PREFIX.length).trim().length > 0);
+      if (hasKey)
+        return true;
+    }
+  }
+  return false;
+}
+function detectProject() {
+  const cwd = process.cwd();
+  let result;
+  if (import_node_fs4.existsSync(import_node_path7.join(cwd, "package.json"))) {
+    result = detectNodeProject(cwd);
+  } else if (import_node_fs4.existsSync(import_node_path7.join(cwd, "pyproject.toml")) || import_node_fs4.existsSync(import_node_path7.join(cwd, "requirements.txt"))) {
+    result = detectPythonProject(cwd);
+  } else if (import_node_fs4.existsSync(import_node_path7.join(cwd, "go.mod"))) {
+    result = {
+      language: "go",
+      framework: null,
+      aiSdk: null,
+      packageManager: "go",
+      hasSupermemory: false
+    };
+  } else {
+    result = {
+      language: "unknown",
+      framework: null,
+      aiSdk: null,
+      packageManager: null,
+      hasSupermemory: false
+    };
+  }
+  return {
+    ...result,
+    hasApiKey: detectApiKey(cwd)
+  };
+}
+
+// src/lib/setup-prompt.ts
+var AGENT_OPTIONS = [
+  { value: "claude-code", label: "Claude Code" },
+  { value: "codex", label: "Codex" },
+  { value: "cline", label: "Cline" },
+  { value: "aider", label: "Aider" },
+  { value: "opencode", label: "OpenCode" },
+  { value: "goose", label: "Goose" },
+  { value: "amp", label: "Amp" }
+];
+var AGENT_COMMANDS = {
+  "claude-code": { bin: "claude", buildArgs: (p2) => [p2] },
+  codex: { bin: "codex", buildArgs: (p2) => [p2] },
+  cline: { bin: "cline", buildArgs: (p2) => [p2] },
+  aider: { bin: "aider", buildArgs: (p2) => ["-m", p2] },
+  opencode: { bin: "opencode", buildArgs: (p2) => ["--prompt", p2] },
+  goose: { bin: "goose", buildArgs: (p2) => ["run", "-t", p2] },
+  amp: { bin: "amp", buildArgs: () => [], stdin: true }
+};
+function getAgentSpawnArgs(agent, prompt2) {
+  const cmd = AGENT_COMMANDS[agent];
+  return { bin: cmd.bin, args: cmd.buildArgs(prompt2), stdin: !!cmd.stdin };
+}
+var FRAMEWORK_NAMES = {
+  nextjs: "Next.js",
+  remix: "Remix",
+  nuxt: "Nuxt",
+  sveltekit: "SvelteKit",
+  astro: "Astro",
+  hono: "Hono",
+  express: "Express",
+  fastify: "Fastify",
+  elysia: "Elysia",
+  fastapi: "FastAPI",
+  flask: "Flask",
+  django: "Django",
+  starlette: "Starlette"
+};
+var AI_SDK_NAMES = {
+  "vercel-ai": "Vercel AI SDK",
+  openai: "OpenAI SDK",
+  anthropic: "Anthropic SDK",
+  langchain: "LangChain",
+  langgraph: "LangGraph",
+  crewai: "CrewAI",
+  mastra: "Mastra",
+  "openai-agents": "OpenAI Agents SDK",
+  agno: "Agno"
+};
+var LANGUAGE_NAMES = {
+  typescript: "TypeScript",
+  javascript: "JavaScript",
+  python: "Python",
+  go: "Go",
+  unknown: "Unknown"
+};
+function formatDetection(detection) {
+  const parts = [];
+  parts.push(LANGUAGE_NAMES[detection.language] ?? detection.language);
+  if (detection.framework)
+    parts.push(FRAMEWORK_NAMES[detection.framework] ?? detection.framework);
+  if (detection.aiSdk)
+    parts.push(AI_SDK_NAMES[detection.aiSdk] ?? detection.aiSdk);
+  if (detection.packageManager)
+    parts.push(detection.packageManager);
+  return parts.join(", ");
+}
+var DOCS_BASE = "https://supermemory.ai/docs";
+var SDK_DOCS_MAP = {
+  "vercel-ai": `${DOCS_BASE}/integrations/ai-sdk`,
+  openai: `${DOCS_BASE}/integrations/openai`,
+  anthropic: `${DOCS_BASE}/integrations/claude-memory`,
+  langchain: `${DOCS_BASE}/integrations/langchain`,
+  langgraph: `${DOCS_BASE}/integrations/langgraph`,
+  crewai: `${DOCS_BASE}/integrations/crewai`,
+  mastra: `${DOCS_BASE}/integrations/mastra`,
+  "openai-agents": `${DOCS_BASE}/integrations/openai-agents-sdk`,
+  agno: `${DOCS_BASE}/integrations/agno`
+};
+function getDocsUrl(aiSdk) {
+  return SDK_DOCS_MAP[aiSdk ?? ""] ?? `${DOCS_BASE}/integrations/supermemory-sdk`;
+}
+var SUPPLEMENTARY_DOCS = [
+  { label: "User Profiles", url: `${DOCS_BASE}/concepts/user-profiles` },
+  { label: "Search API", url: `${DOCS_BASE}/search` },
+  {
+    label: "Container Tags & Filtering",
+    url: `${DOCS_BASE}/concepts/filtering`
+  },
+  { label: "Quickstart", url: `${DOCS_BASE}/quickstart` },
+  { label: "All Integrations", url: `${DOCS_BASE}/integrations` }
+];
+var ALL_INTEGRATIONS = [
+  "Vercel AI SDK",
+  "OpenAI SDK",
+  "Anthropic (Claude Memory)",
+  "LangChain",
+  "LangGraph",
+  "CrewAI",
+  "Mastra",
+  "OpenAI Agents",
+  "Agno",
+  "Pipecat",
+  "Zapier",
+  "n8n"
+];
+function getInstallInfo(detection) {
+  const { language, aiSdk, packageManager } = detection;
+  const isPython = language === "python" || packageManager === "pip" || packageManager === "poetry";
+  if (isPython) {
+    const installer = packageManager === "poetry" ? "poetry add" : "pip install";
+    const pkgMap = {
+      langchain: "langchain langchain-openai supermemory",
+      langgraph: "langgraph langchain-openai supermemory",
+      crewai: "crewai supermemory",
+      "openai-agents": "openai-agents supermemory",
+      agno: "agno supermemory",
+      openai: "supermemory-openai-sdk"
+    };
+    const packages2 = pkgMap[aiSdk ?? ""] ?? "supermemory";
+    return { command: installer, packages: packages2 };
+  }
+  if (language === "go")
+    return null;
+  const useTools = ["vercel-ai", "openai", "anthropic", "mastra"].includes(aiSdk ?? "");
+  const packages = useTools ? "@supermemory/tools" : "supermemory";
+  const installerMap = {
+    bun: "bun add",
+    pnpm: "pnpm add",
+    yarn: "yarn add",
+    npm: "npm install"
+  };
+  const command = installerMap[packageManager ?? ""] ?? "npm install";
+  return { command, packages };
+}
+function generateSetupPrompt(options) {
+  const { detection, config } = options;
+  const isPython = detection.language === "python";
+  const docsUrl = getDocsUrl(detection.aiSdk);
+  const sdkName = AI_SDK_NAMES[detection.aiSdk ?? ""] ?? (isPython ? "Python SDK" : "TypeScript SDK");
+  const installInfo = getInstallInfo(detection);
+  const lines = [];
+  lines.push("Integrate Supermemory into this project.");
+  lines.push("");
+  lines.push("## Project");
+  lines.push(`- Language: ${LANGUAGE_NAMES[detection.language] ?? detection.language}`);
+  if (detection.framework)
+    lines.push(`- Framework: ${FRAMEWORK_NAMES[detection.framework] ?? detection.framework}`);
+  if (detection.aiSdk)
+    lines.push(`- AI SDK: ${sdkName}`);
+  if (detection.packageManager)
+    lines.push(`- Package Manager: ${detection.packageManager}`);
+  lines.push(`- Supermemory: ${detection.hasSupermemory ? "already installed" : "not installed"}`);
+  lines.push("");
+  if (!detection.hasSupermemory && installInfo) {
+    lines.push("## Install");
+    lines.push(`${installInfo.command} ${installInfo.packages}`);
+    lines.push("");
+  } else if (detection.language === "go") {
+    lines.push("## Install");
+    lines.push(`No Go SDK available yet. Use the REST API directly: ${DOCS_BASE}/api-reference`);
+    lines.push("");
+  }
+  if (!detection.hasApiKey) {
+    lines.push("## Environment");
+    lines.push("Add SUPERMEMORY_API_KEY to .env — get one at https://console.supermemory.ai");
+    lines.push("");
+  }
+  lines.push("## Integration Guide");
+  lines.push(`Read and follow this integration guide for ${sdkName}:`);
+  lines.push(docsUrl);
+  lines.push("");
+  const otherIntegrations = ALL_INTEGRATIONS.filter((n2) => n2 !== sdkName);
+  lines.push("## Available Integrations");
+  lines.push(`Other integrations available if needed: ${otherIntegrations.join(", ")}.`);
+  lines.push(`If the user needs a different integration, refer to: ${DOCS_BASE}/integrations`);
+  lines.push("");
+  lines.push("## Container Tags");
+  if (isPython) {
+    lines.push('Use container tags to scope memory per user: container_tag=f"user_{user_id}"');
+  } else {
+    lines.push("Use container tags to scope memory per user: containerTag = `user_${userId}`");
+  }
+  lines.push("Each user of your app gets their own isolated memory space.");
+  if (config.tag) {
+    lines.push(`Configured tag: "${config.tag}" — use this if scoping to this project.`);
+  }
+  lines.push("");
+  lines.push("## Reference Docs");
+  for (const doc of SUPPLEMENTARY_DOCS) {
+    lines.push(`- ${doc.label}: ${doc.url}`);
+  }
+  return lines.join(`
+`);
+}
+
+// src/commands/setup.ts
+var setupCommand = defineCliCommand({
+  meta: {
+    name: "setup",
+    description: "Detect your project and launch a coding agent to integrate Supermemory"
+  },
+  noSpan: true,
+  args: {
+    prompt: {
+      type: "boolean",
+      description: "Print integration prompt for AI agents"
+    }
+  },
+  async handler({ args }) {
+    if (args.prompt || !isInputInteractive()) {
+      runPrompt();
+    } else {
+      await runInteractive2();
+    }
+  }
+});
+function runPrompt() {
+  const detection = detectProject();
+  const config = resolveConfig();
+  const prompt2 = generateSetupPrompt({
+    detection,
+    config: { tag: config.tag, apiUrl: config.apiUrl }
+  });
+  process.stdout.write(`${prompt2}
+`);
+}
+function launchAgent(agent, prompt2) {
+  const { bin, args, stdin: useStdin } = getAgentSpawnArgs(agent, prompt2);
+  const label = AGENT_OPTIONS.find((o3) => o3.value === agent)?.label ?? agent;
+  process.stderr.write(`
+  ${source_default.green("✓")} Launching ${label}...
+
+`);
+  return new Promise((resolve4) => {
+    const child = useStdin ? import_node_child_process2.spawn(bin, args, { stdio: ["pipe", "inherit", "inherit"] }) : import_node_child_process2.spawn(bin, args, { stdio: "inherit" });
+    if (useStdin) {
+      child.stdin?.write(prompt2);
+      child.stdin?.end();
+    }
+    child.on("close", (code) => resolve4(code ?? 0));
+    child.on("error", () => {
+      process.stderr.write(`
+  ${source_default.red("✗")} "${bin}" not found. Install it first.
+`);
+      resolve4(1);
+    });
+  });
+}
+async function runInteractive2() {
+  const detection = detectProject();
+  const config = resolveConfig();
+  process.stderr.write(`
+`);
+  if (detection.framework || detection.aiSdk) {
+    process.stderr.write(`  ${source_default.bold("Detected:")} ${formatDetection(detection)}
+`);
+    process.stderr.write(`
+`);
+  }
+  process.stderr.write(`  ${source_default.dim("tip: AI agents can use")} supermemory setup --prompt
+`);
+  process.stderr.write(`
+`);
+  const agentValue = await _t({
+    message: "Which coding agent are you using?",
+    options: AGENT_OPTIONS.map((o3) => ({
+      value: o3.value,
+      label: o3.label
+    }))
+  });
+  if (q2(agentValue)) {
+    process.exit(0);
+  }
+  const prompt2 = generateSetupPrompt({
+    detection,
+    agent: agentValue,
+    config: { tag: config.tag, apiUrl: config.apiUrl }
+  });
+  const exitCode = await launchAgent(agentValue, prompt2);
+  process.exit(exitCode);
+}
+
 // src/commands/status.ts
 var VALID_PERIODS = ["24h", "7d", "30d", "all"];
 var statusCommand = defineCliCommand({
@@ -62256,11 +64069,11 @@ var tagsListCommand = defineCliCommand({
 ${hints2.map((h2) => `  ${h2}`).join(`
 `)}`;
       }
-      const table = formatTable(["TAG", "DOCS", "MEMORIES", "LAST ACTIVITY"], tags.map((t2) => [
-        t2.containerTag,
-        String(t2.documentCount ?? 0),
-        String(t2.memoryCount ?? 0),
-        t2.lastActivityAt ? new Date(t2.lastActivityAt).toLocaleDateString() : source_default.dim("never")
+      const table = formatTable(["TAG", "DOCS", "MEMORIES", "LAST ACTIVITY"], tags.map((t3) => [
+        t3.containerTag,
+        String(t3.documentCount ?? 0),
+        String(t3.memoryCount ?? 0),
+        t3.lastActivityAt ? new Date(t3.lastActivityAt).toLocaleDateString() : source_default.dim("never")
       ]));
       const firstTag = tags[0]?.containerTag;
       const hints = [
@@ -63079,6 +64892,18 @@ var FULL_COMMANDS = {
       "supermemory init --scope team --tag my-project",
       "supermemory init --scope global --output json"
     ]
+  },
+  setup: {
+    description: "Detect your project and launch a coding agent to integrate Supermemory",
+    usage: "supermemory setup [--prompt]",
+    options: {
+      "--prompt": {
+        type: "boolean",
+        default: false,
+        description: "Print integration prompt for AI agents"
+      }
+    },
+    examples: ["supermemory setup", "supermemory setup --prompt"]
   }
 };
 var SCOPED_COMMAND_NAMES = [
@@ -63100,12 +64925,13 @@ var CORE_COMMAND_NAMES = [
   "whoami",
   "config",
   "tags",
-  "docs"
+  "docs",
+  "setup"
 ];
 function buildHelpJson(mode = "full", scope, authState) {
-  const commands = mode === "scoped" ? Object.fromEntries(SCOPED_COMMAND_NAMES.filter((name) => (name in FULL_COMMANDS)).map((name) => {
+  const commands = mode === "scoped" ? Object.fromEntries(SCOPED_COMMAND_NAMES.flatMap((name) => {
     const cmd = FULL_COMMANDS[name];
-    return [name, cmd];
+    return cmd ? [[name, cmd]] : [];
   })) : FULL_COMMANDS;
   const currentConfig = authState ? {
     apiKey: {
@@ -63185,7 +65011,8 @@ function formatHelpText(mode = "full", authState, options) {
     lines.push(`  ${source_default.bold("Current config:")}`);
     lines.push(`    API Key   ${authState.apiKey.masked ?? source_default.dim("—")}   ${authState.apiKey.source ? source_default.dim(`(${authState.apiKey.source})`) : source_default.dim("(not set)")}`);
     if (mode === "scoped" && options?.scope?.tag) {
-      lines.push(`    Container Tag   Scoped to "${options.scope.tag}"   ${source_default.dim(`(${options.scope.permission ?? "write"})`)}`);
+      const scopeDisplay = options.scope.tags && options.scope.tags.length > 1 ? options.scope.tags.map((t3) => `"${t3}"`).join(", ") : `"${options.scope.tag}"`;
+      lines.push(`    Container Tag   Scoped to ${scopeDisplay}   ${source_default.dim(`(${options.scope.permission ?? "write"})`)}`);
     } else {
       lines.push(`    Container Tag   ${authState.tag.value ?? source_default.dim("—")}   ${authState.tag.source ? source_default.dim(`(${authState.tag.source})`) : source_default.dim("(not set)")}`);
     }
@@ -63207,10 +65034,12 @@ async function detectScope() {
   }
   try {
     const session = await validateApiKey(config.apiKey, config.apiUrl);
+    const tags = session.scope.tags ?? (session.scope.tag ? [session.scope.tag] : undefined);
     const scope = {
       type: session.scope.type,
       permission: session.scope.permission,
-      tag: session.scope.tag,
+      tag: tags?.[0] ?? session.scope.tag,
+      tags,
       rateLimit: session.scope.rateLimit,
       expires: session.scope.expires,
       cachedAt: new Date().toISOString()
@@ -63222,6 +65051,11 @@ async function detectScope() {
   }
 }
 async function main() {
+  process.on("exit", () => {
+    if (process.stdin.isTTY && process.stdin.isRaw) {
+      process.stdin.setRawMode(false);
+    }
+  });
   await initOtel();
   const { mode, scope } = await detectScope();
   const subCommands = {
@@ -63245,7 +65079,8 @@ async function main() {
     connectors: connectorsCommand,
     open: openCommand,
     team: teamCommand,
-    init: initCommand
+    init: initCommand,
+    setup: setupCommand
   };
   subCommands.help = defineCommand({
     meta: {
@@ -63269,6 +65104,7 @@ async function main() {
       if (args.json) {
         const helpData = buildHelpJson(mode, scope ? {
           tag: scope.tag,
+          tags: scope.tags,
           rateLimit: scope.rateLimit,
           expires: scope.expires
         } : undefined, authState);
@@ -63284,6 +65120,9 @@ async function main() {
   });
   if (mode === "scoped" && scope?.tag && !process.env.SUPERMEMORY_TAG) {
     process.env.SUPERMEMORY_TAG = scope.tag;
+    if (scope.tags && scope.tags.length > 1) {
+      process.env.SUPERMEMORY_TAGS = scope.tags.join(",");
+    }
   }
   const rawArgs = process.argv.slice(2);
   if (rawArgs.includes("--help") && rawArgs.includes("--json")) {
@@ -63329,7 +65168,7 @@ async function main() {
       const showAll = rawArgs.includes("--all");
       process.stdout.write(formatHelpText(mode, authState, {
         all: showAll,
-        scope: scope ? { tag: scope.tag, permission: scope.permission } : undefined
+        scope: scope ? { tag: scope.tag, tags: scope.tags, permission: scope.permission } : undefined
       }));
     }
     await shutdownOtel();
@@ -63349,6 +65188,19 @@ async function main() {
     await shutdownOtel();
     return;
   }
+  const firstNonFlag = rawArgs.find((a2) => !a2.startsWith("-"));
+  if (firstNonFlag && !(firstNonFlag in subCommands)) {
+    process.stderr.write(`
+  Unknown command: ${source_default.bold(firstNonFlag)}
+
+`);
+    process.stderr.write(`  Run ${source_default.dim("supermemory help")} to see available commands.
+
+`);
+    process.exitCode = 1;
+    await shutdownOtel();
+    return;
+  }
   try {
     await runCommand(cli, { rawArgs });
   } catch (err) {
@@ -63360,6 +65212,26 @@ async function main() {
 `);
       }
       process.exitCode = err.exitCode;
+    } else if (err instanceof Error && "code" in err && typeof err.code === "string") {
+      const { code } = err;
+      process.stderr.write(`
+  ${err.message}
+`);
+      if (code === "E_UNKNOWN_COMMAND") {
+        process.stderr.write(`
+  Run ${source_default.dim("supermemory help")} to see available commands.
+
+`);
+      } else if (code === "EARG") {
+        process.stderr.write(`
+  Run the command with ${source_default.dim("--help")} for usage details.
+
+`);
+      } else {
+        process.stderr.write(`
+`);
+      }
+      process.exitCode = 1;
     } else {
       process.stderr.write(`${source_default.red("✗")} Unexpected error: ${err instanceof Error ? err.message : String(err)}
 `);
