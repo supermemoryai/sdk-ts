@@ -800,7 +800,13 @@ export class Supermemory {
   memories: API.Memories = new API.Memories(this);
   documents: API.Documents = new API.Documents(this);
   search: API.Search = new API.Search(this);
+  /**
+   * Organization settings
+   */
   settings: API.Settings = new API.Settings(this);
+  /**
+   * External service integrations
+   */
   connections: API.Connections = new API.Connections(this);
 }
 

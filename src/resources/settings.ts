@@ -4,6 +4,9 @@ import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
+/**
+ * Organization settings
+ */
 export class Settings extends APIResource {
   /**
    * Update settings for an organization

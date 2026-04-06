@@ -4178,6 +4178,11 @@ export interface DocumentUploadFileParams {
   file: Uploadable;
 
   /**
+   * Optional container tag (e.g., 'user_123'). Use this for a single tag.
+   */
+  containerTag?: string;
+
+  /**
    * @deprecated Optional container tags. Can be either a JSON string of an array
    * (e.g., '["user_123", "project_123"]') or a single string (e.g., 'user_123').
    * Single strings will be automatically converted to an array.
