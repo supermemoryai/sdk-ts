@@ -108,6 +108,7 @@ describe('resource search', () => {
   test.skip('memories: required and optional params', async () => {
     const response = await client.search.memories({
       q: 'machine learning concepts',
+      aggregate: false,
       containerTag: 'user_123',
       filters: {
         OR: [

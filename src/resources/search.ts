@@ -281,6 +281,11 @@ export namespace SearchMemoriesResponse {
     documents?: Array<Result.Document>;
 
     /**
+     * Indicates if this memory was created by aggregating multiple source memories
+     */
+    isAggregated?: boolean;
+
+    /**
      * The memory content (only present for memory results)
      */
     memory?: string;
@@ -7391,6 +7396,13 @@ export interface SearchMemoriesParams {
    * Search query string
    */
   q: string;
+
+  /**
+   * If true, aggregates information from multiple memories to create new synthesized
+   * memories. The result will be a mix of aggregated and non-aggregated memories,
+   * reranked by relevance to the query. Works in conjunction with reranking.
+   */
+  aggregate?: boolean;
 
   /**
    * Optional tag this search should be containerized by. This can be an ID for your
