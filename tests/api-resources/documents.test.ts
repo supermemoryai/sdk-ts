@@ -169,6 +169,7 @@ describe('resource documents', () => {
   test.skip('uploadFile: required and optional params', async () => {
     const response = await client.documents.uploadFile({
       file: await toFile(Buffer.from('Example data'), 'README.md'),
+      containerTag: 'user',
       containerTags: '["user_123", "project_123"]',
       fileType: 'image',
       metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',

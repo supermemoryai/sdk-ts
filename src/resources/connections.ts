@@ -6,6 +6,9 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * External service integrations
+ */
 export class Connections extends APIResource {
   /**
    * Initialize connection and get authorization URL
