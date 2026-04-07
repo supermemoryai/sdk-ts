@@ -797,6 +797,9 @@ export class Supermemory {
 
   static toFile = Uploads.toFile;
 
+  /**
+   * List, get, update, and delete content and memories
+   */
   memories: API.Memories = new API.Memories(this);
   documents: API.Documents = new API.Documents(this);
   search: API.Search = new API.Search(this);
