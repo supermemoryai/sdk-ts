@@ -444,9 +444,13 @@ export interface SearchDocumentsParams {
   chunkThreshold?: number;
 
   /**
-   * @deprecated Optional tags this search should be containerized by. This can be an
-   * ID for your user, a project ID, or any other identifier you wish to use to
-   * filter documents.
+   * Optional single container tag. Use this or containerTags.
+   */
+  containerTag?: string;
+
+  /**
+   * Optional tags this search should be containerized by. This can be an ID for your
+   * user, a project ID, or any other identifier you wish to use to filter documents.
    */
   containerTags?: Array<string>;
 
@@ -3927,9 +3931,13 @@ export interface SearchExecuteParams {
   chunkThreshold?: number;
 
   /**
-   * @deprecated Optional tags this search should be containerized by. This can be an
-   * ID for your user, a project ID, or any other identifier you wish to use to
-   * filter documents.
+   * Optional single container tag. Use this or containerTags.
+   */
+  containerTag?: string;
+
+  /**
+   * Optional tags this search should be containerized by. This can be an ID for your
+   * user, a project ID, or any other identifier you wish to use to filter documents.
    */
   containerTags?: Array<string>;
 
