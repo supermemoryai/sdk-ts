@@ -1,5 +1,43 @@
 # Changelog
 
+## 4.21.0 (2026-04-14)
+
+Full Changelog: [v4.20.0...v4.21.0](https://github.com/supermemoryai/sdk-ts/compare/v4.20.0...v4.21.0)
+
+### Features
+
+* add CLI binary to SDK package for npx support ([#73](https://github.com/supermemoryai/sdk-ts/issues/73)) ([8ab2efe](https://github.com/supermemoryai/sdk-ts/commit/8ab2efe78c2358ff05be0d742df0e07e8df07c78))
+* **api:** api update ([2575112](https://github.com/supermemoryai/sdk-ts/commit/2575112236cc590605d1546d774cf9be01aac63c))
+* **api:** api update ([854b629](https://github.com/supermemoryai/sdk-ts/commit/854b6292bfcefcdb9c73146dabaccd3c07dc96c4))
+* **api:** api update ([91dd1c9](https://github.com/supermemoryai/sdk-ts/commit/91dd1c992fc47d95cb6311a1cd06a7ad21c0771c))
+* **api:** api update ([a191572](https://github.com/supermemoryai/sdk-ts/commit/a19157213f3b9c778cde35f61b99bc028be10530))
+
+
+### Chores
+
+* **ci:** escape input path in publish-npm workflow ([b84e892](https://github.com/supermemoryai/sdk-ts/commit/b84e892fbae3ec9749ce9f8d4b628eed27eb56df))
+* fix example snippet imports ([c0abcb4](https://github.com/supermemoryai/sdk-ts/commit/c0abcb4d3d5d8493de38a205d507eb49c9ebb9dc))
+* **internal:** codegen related update ([1cedf56](https://github.com/supermemoryai/sdk-ts/commit/1cedf568a09ea386e130f533916b3b7eb132f4ac))
+* **internal:** codegen related update ([9bf6050](https://github.com/supermemoryai/sdk-ts/commit/9bf6050bb0759977c6cbb3e79f8cbe340559838a))
+* **internal:** codegen related update ([ca0f10f](https://github.com/supermemoryai/sdk-ts/commit/ca0f10ffb7a0a742360d38339645ecac5da7cbec))
+* **internal:** fix MCP docker image builds in yarn projects ([70672d5](https://github.com/supermemoryai/sdk-ts/commit/70672d51b98d0ee555daf6139287a756b9018f6c))
+* **internal:** fix MCP server import ordering ([57d4928](https://github.com/supermemoryai/sdk-ts/commit/57d492863e743a8d4c2fae72b93860c9a727b3a9))
+* **internal:** improve local docs search for MCP servers ([20acb62](https://github.com/supermemoryai/sdk-ts/commit/20acb6258f0b7a97784b3e47ae51a313852f5af5))
+* **internal:** improve local docs search for MCP servers ([c7fc046](https://github.com/supermemoryai/sdk-ts/commit/c7fc046196d2c58ebd747d54eb20bbdcaca0f9ff))
+* **internal:** show error causes in MCP servers when running in local mode ([eb4d266](https://github.com/supermemoryai/sdk-ts/commit/eb4d266eee177c605a86317bbd7c070769768388))
+* **internal:** support custom-instructions-path flag in MCP servers ([e08cbe5](https://github.com/supermemoryai/sdk-ts/commit/e08cbe5cf498301776fdd95291ff24ce1c951138))
+* **internal:** support local docs search in MCP servers ([e1b7e42](https://github.com/supermemoryai/sdk-ts/commit/e1b7e4285705b2e5cd33d21311b37da137b09daa))
+* **internal:** support type annotations when running MCP in local execution mode ([17592e3](https://github.com/supermemoryai/sdk-ts/commit/17592e345754aebabc045bec395d439d18ed7b51))
+* **internal:** use link instead of file in MCP server package.json files ([ae9d405](https://github.com/supermemoryai/sdk-ts/commit/ae9d4055c7c73d1bc9a71e08f2cbbfc2b951dc01))
+* **mcp-server:** add support for session id, forward client info ([f83671a](https://github.com/supermemoryai/sdk-ts/commit/f83671a5685cf0796740d0518dabb44d22d2c900))
+* **mcp-server:** increase local docs search result count from 5 to 10 ([832a2a8](https://github.com/supermemoryai/sdk-ts/commit/832a2a82481954b5f8ba1b2c75b2316274fb5f5a))
+* **mcp-server:** log client info ([0c42bbd](https://github.com/supermemoryai/sdk-ts/commit/0c42bbd8b9c06114044cd3b92860344aaaeb7664))
+
+
+### Documentation
+
+* improve examples ([3d84a18](https://github.com/supermemoryai/sdk-ts/commit/3d84a18f54a2ccf7a7cdadc8ce06e375cb6bcb5f))
+
 ## 4.20.0 (2026-03-26)
 
 Full Changelog: [v4.19.0...v4.20.0](https://github.com/supermemoryai/sdk-ts/compare/v4.19.0...v4.20.0)
