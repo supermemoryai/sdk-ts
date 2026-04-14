@@ -422,7 +422,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       typescript: {
         method: 'client.documents.uploadFile',
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.uploadFile({ file: fs.createReadStream('path/to/file') });\n\nconsole.log(response.id);",
+          "import fs from 'fs';\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.uploadFile({ file: fs.createReadStream('path/to/file') });\n\nconsole.log(response.id);",
       },
     },
   },
