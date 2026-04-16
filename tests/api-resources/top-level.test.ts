@@ -29,6 +29,7 @@ describe('top level methods', () => {
       customId: 'customId',
       entityContext: 'entityContext',
       metadata: { foo: 'string' },
+      taskType: 'memory',
     });
   });
 
