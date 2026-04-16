@@ -65,6 +65,7 @@ describe('resource documents', () => {
       customId: 'customId',
       entityContext: 'entityContext',
       metadata: { foo: 'string' },
+      taskType: 'memory',
     });
   });
 
@@ -99,6 +100,7 @@ describe('resource documents', () => {
             tag_1: 'ai',
             tag_2: 'machine-learning',
           },
+          taskType: 'memory',
         },
       ],
       containerTag: 'user_123',
@@ -112,6 +114,7 @@ describe('resource documents', () => {
         tag_1: 'ai',
         tag_2: 'machine-learning',
       },
+      taskType: 'memory',
     });
   });
 
@@ -174,6 +177,7 @@ describe('resource documents', () => {
       fileType: 'image',
       metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',
       mimeType: 'mimeType',
+      taskType: 'memory',
       useAdvancedProcessing: 'true',
     });
   });
