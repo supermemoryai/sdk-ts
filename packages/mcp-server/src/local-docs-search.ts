@@ -997,10 +997,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Fetch resources for a connection (supported providers: GitHub for now)',
     stainlessPath: '(resource) connections > (method) resources',
     qualified: 'client.connections.resources',
-    params: ['connectionId: string;', 'page?: number;', 'per_page?: number;'],
+    params: ['connectionId: string;', 'page?: number;', 'parent_id?: string;', 'per_page?: number;'],
     response: '{ resources: object[]; total_count?: number; }',
     markdown:
-      "## resources\n\n`client.connections.resources(connectionId: string, page?: number, per_page?: number): { resources: object[]; total_count?: number; }`\n\n**get** `/v3/connections/{connectionId}/resources`\n\nFetch resources for a connection (supported providers: GitHub for now)\n\n### Parameters\n\n- `connectionId: string`\n\n- `page?: number`\n\n- `per_page?: number`\n\n### Returns\n\n- `{ resources: object[]; total_count?: number; }`\n\n  - `resources: object[]`\n  - `total_count?: number`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.resources('connectionId');\n\nconsole.log(response);\n```",
+      "## resources\n\n`client.connections.resources(connectionId: string, page?: number, parent_id?: string, per_page?: number): { resources: object[]; total_count?: number; }`\n\n**get** `/v3/connections/{connectionId}/resources`\n\nFetch resources for a connection (supported providers: GitHub for now)\n\n### Parameters\n\n- `connectionId: string`\n\n- `page?: number`\n\n- `parent_id?: string`\n\n- `per_page?: number`\n\n### Returns\n\n- `{ resources: object[]; total_count?: number; }`\n\n  - `resources: object[]`\n  - `total_count?: number`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.resources('connectionId');\n\nconsole.log(response);\n```",
     perLanguage: {
       http: {
         example:
