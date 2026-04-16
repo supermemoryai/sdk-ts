@@ -377,6 +377,8 @@ export interface ConnectionListDocumentsParams {
 export interface ConnectionResourcesParams {
   page?: number;
 
+  parent_id?: string;
+
   per_page?: number;
 }
 
