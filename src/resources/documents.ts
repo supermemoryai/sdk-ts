@@ -194,6 +194,8 @@ export namespace DocumentListResponse {
      */
     customId: string | null;
 
+    filepath: string | null;
+
     /**
      * Optional metadata for the document. This is used to store additional information
      * about the document. You can use this to store any additional information you
@@ -393,6 +395,8 @@ export interface DocumentGetResponse {
    * will uniquely identify this document.
    */
   customId: string | null;
+
+  filepath: string | null;
 
   /**
    * Optional metadata for the document. This is used to store additional information
@@ -601,6 +605,12 @@ export interface DocumentUpdateParams {
   customId?: string;
 
   /**
+   * Optional file path for the document (e.g., '/documents/reports/file.pdf'). Used
+   * by supermemoryfs to map documents to filesystem paths.
+   */
+  filepath?: string;
+
+  /**
    * Optional metadata for the document. This is used to store additional information
    * about the document. You can use this to store any additional information you
    * need about the document. Metadata can be filtered through. Keys must be strings
@@ -623,6 +633,12 @@ export interface DocumentListParams {
    * group documents.
    */
   containerTags?: Array<string>;
+
+  /**
+   * Filter documents by filepath. Exact match for full paths, prefix match if ending
+   * with /
+   */
+  filepath?: string;
 
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
@@ -4091,6 +4107,12 @@ export interface DocumentAddParams {
   entityContext?: string;
 
   /**
+   * Optional file path for the document. Used by supermemoryfs to store the full
+   * path of the file.
+   */
+  filepath?: string;
+
+  /**
    * Optional metadata for the document.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
@@ -4120,6 +4142,12 @@ export interface DocumentBatchAddParams {
   containerTags?: Array<string>;
 
   content?: null;
+
+  /**
+   * Optional file path for the document (e.g., '/documents/reports/file.pdf'). Used
+   * by supermemoryfs to map documents to filesystem paths.
+   */
+  filepath?: string;
 
   /**
    * Optional metadata for the document. This is used to store additional information
@@ -4172,6 +4200,12 @@ export namespace DocumentBatchAddParams {
     customId?: string;
 
     /**
+     * Optional file path for the document (e.g., '/documents/reports/file.pdf'). Used
+     * by supermemoryfs to map documents to filesystem paths.
+     */
+    filepath?: string;
+
+    /**
      * Optional metadata for the document. This is used to store additional information
      * about the document. You can use this to store any additional information you
      * need about the document. Metadata can be filtered through. Keys must be strings
@@ -4196,6 +4230,12 @@ export interface DocumentDeleteBulkParams {
   containerTags?: Array<string>;
 
   /**
+   * Delete documents matching this filepath. Exact match for full paths, prefix
+   * match if ending with /
+   */
+  filepath?: string;
+
+  /**
    * Array of document IDs to delete (max 100 at once)
    */
   ids?: Array<string>;
@@ -4218,6 +4258,12 @@ export interface DocumentUploadFileParams {
    * Single strings will be automatically converted to an array.
    */
   containerTags?: string;
+
+  /**
+   * Optional file path for the uploaded file (e.g., '/documents/reports/file.pdf').
+   * Used by supermemoryfs to map documents to filesystem paths.
+   */
+  filepath?: string;
 
   /**
    * Optional file type override to force specific processing behavior. Valid values:

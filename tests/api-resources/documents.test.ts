@@ -64,6 +64,7 @@ describe('resource documents', () => {
       containerTags: ['string'],
       customId: 'customId',
       entityContext: 'entityContext',
+      filepath: 'filepath',
       metadata: { foo: 'string' },
       taskType: 'memory',
     });
@@ -92,6 +93,7 @@ describe('resource documents', () => {
           containerTag: 'user_123',
           containerTags: ['user_123', 'project_123'],
           customId: 'mem_abc123',
+          filepath: '/documents/reports/file.pdf',
           metadata: {
             category: 'technology',
             isPublic: true,
@@ -106,6 +108,7 @@ describe('resource documents', () => {
       containerTag: 'user_123',
       containerTags: ['user_123', 'project_123'],
       content: null,
+      filepath: '/documents/reports/file.pdf',
       metadata: {
         category: 'technology',
         isPublic: true,
@@ -174,6 +177,7 @@ describe('resource documents', () => {
       file: await toFile(Buffer.from('Example data'), 'README.md'),
       containerTag: 'user',
       containerTags: '["user_123", "project_123"]',
+      filepath: '/documents/reports/file.pdf',
       fileType: 'image',
       metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',
       mimeType: 'mimeType',
