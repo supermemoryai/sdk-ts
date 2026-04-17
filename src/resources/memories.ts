@@ -4,6 +4,9 @@ import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
+/**
+ * List, get, update, and delete content and memories
+ */
 export class Memories extends APIResource {
   /**
    * Forget (soft delete) a memory entry. The memory is marked as forgotten but not

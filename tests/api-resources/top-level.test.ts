@@ -29,6 +29,7 @@ describe('top level methods', () => {
       customId: 'customId',
       entityContext: 'entityContext',
       metadata: { foo: 'string' },
+      taskType: 'memory',
     });
   });
 
@@ -54,8 +55,8 @@ describe('top level methods', () => {
             key: 'key',
             value: 'value',
             filterType: 'metadata',
-            ignoreCase: true,
-            negate: true,
+            ignoreCase: 'true',
+            negate: 'true',
             numericOperator: '>',
           },
         ],

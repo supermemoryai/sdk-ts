@@ -169,7 +169,11 @@ describe('resource connections', () => {
     await expect(
       client.connections.resources(
         'connectionId',
-        { page: 0, per_page: 0 },
+        {
+          page: 0,
+          parent_id: 'parent_id',
+          per_page: 0,
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Supermemory.NotFoundError);

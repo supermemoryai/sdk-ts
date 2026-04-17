@@ -65,6 +65,7 @@ describe('resource documents', () => {
       customId: 'customId',
       entityContext: 'entityContext',
       metadata: { foo: 'string' },
+      taskType: 'memory',
     });
   });
 
@@ -99,6 +100,7 @@ describe('resource documents', () => {
             tag_1: 'ai',
             tag_2: 'machine-learning',
           },
+          taskType: 'memory',
         },
       ],
       containerTag: 'user_123',
@@ -112,6 +114,7 @@ describe('resource documents', () => {
         tag_1: 'ai',
         tag_2: 'machine-learning',
       },
+      taskType: 'memory',
     });
   });
 
@@ -169,10 +172,12 @@ describe('resource documents', () => {
   test.skip('uploadFile: required and optional params', async () => {
     const response = await client.documents.uploadFile({
       file: await toFile(Buffer.from('Example data'), 'README.md'),
+      containerTag: 'user',
       containerTags: '["user_123", "project_123"]',
       fileType: 'image',
       metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',
       mimeType: 'mimeType',
+      taskType: 'memory',
       useAdvancedProcessing: 'true',
     });
   });

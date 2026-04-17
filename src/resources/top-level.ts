@@ -89,6 +89,12 @@ export interface AddParams {
    * Optional metadata for the document.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
+
+  /**
+   * Task type: "memory" (default) for full context layer with SuperRAG built in,
+   * "superrag" for managed RAG as a service.
+   */
+  taskType?: 'memory' | 'superrag';
 }
 
 export interface ProfileParams {

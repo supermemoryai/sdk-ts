@@ -428,6 +428,12 @@ export interface DocumentGetResponse {
   summary: string | null;
 
   /**
+   * Task type: "memory" (default) for full context layer with SuperRAG built in,
+   * "superrag" for managed RAG as a service.
+   */
+  taskType: 'memory' | 'superrag';
+
+  /**
    * Title of the document
    */
   title: string | null;
@@ -602,6 +608,12 @@ export interface DocumentUpdateParams {
    * nest objects.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
+
+  /**
+   * Task type: "memory" (default) for full context layer with SuperRAG built in,
+   * "superrag" for managed RAG as a service.
+   */
+  taskType?: 'memory' | 'superrag';
 }
 
 export interface DocumentListParams {
@@ -4082,6 +4094,12 @@ export interface DocumentAddParams {
    * Optional metadata for the document.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
+
+  /**
+   * Task type: "memory" (default) for full context layer with SuperRAG built in,
+   * "superrag" for managed RAG as a service.
+   */
+  taskType?: 'memory' | 'superrag';
 }
 
 export interface DocumentBatchAddParams {
@@ -4111,6 +4129,12 @@ export interface DocumentBatchAddParams {
    * nest objects.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
+
+  /**
+   * Task type: "memory" (default) for full context layer with SuperRAG built in,
+   * "superrag" for managed RAG as a service.
+   */
+  taskType?: 'memory' | 'superrag';
 }
 
 export namespace DocumentBatchAddParams {
@@ -4155,6 +4179,12 @@ export namespace DocumentBatchAddParams {
      * nest objects.
      */
     metadata?: { [key: string]: string | number | boolean | Array<string> };
+
+    /**
+     * Task type: "memory" (default) for full context layer with SuperRAG built in,
+     * "superrag" for managed RAG as a service.
+     */
+    taskType?: 'memory' | 'superrag';
   }
 }
 
@@ -4176,6 +4206,11 @@ export interface DocumentUploadFileParams {
    * File to upload and process
    */
   file: Uploadable;
+
+  /**
+   * Optional container tag (e.g., 'user_123'). Use this for a single tag.
+   */
+  containerTag?: string;
 
   /**
    * @deprecated Optional container tags. Can be either a JSON string of an array
@@ -4203,6 +4238,12 @@ export interface DocumentUploadFileParams {
    * use (e.g., 'image/png', 'image/jpeg', 'video/mp4', 'video/webm')
    */
   mimeType?: string;
+
+  /**
+   * Task type: "memory" (default) for full context layer with SuperRAG built in,
+   * "superrag" for managed RAG as a service.
+   */
+  taskType?: 'memory' | 'superrag';
 
   /**
    * @deprecated DEPRECATED: This field is no longer used. Advanced PDF processing is
