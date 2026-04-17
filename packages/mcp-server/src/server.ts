@@ -28,7 +28,7 @@ export const newMcpServer = async ({
   new McpServer(
     {
       name: 'supermemory_api',
-      version: '4.21.1',
+      version: '4.22.0',
     },
     {
       instructions: await getInstructions({ stainlessApiKey, customInstructionsPath }),
