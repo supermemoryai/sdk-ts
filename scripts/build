@@ -21,6 +21,12 @@ done
 if [ -e "bin/cli" ]; then
   mkdir -p dist/bin
   cp -p "bin/cli" dist/bin/;
+  # Ensure the CLI has a shebang so it runs as a Node script
+  if ! head -1 dist/bin/cli | grep -q '^#!'; then
+    sed -i '' '1i\
+#!/usr/bin/env node
+' dist/bin/cli
+  fi
 fi
 if [ -e "bin/migration-config.json" ]; then
   mkdir -p dist/bin
