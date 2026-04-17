@@ -30,6 +30,7 @@ describe('resource search', () => {
       containerTags: ['user_123'],
       docId: 'docId',
       documentThreshold: 0,
+      filepath: '/docs/',
       filters: {
         OR: [
           {
@@ -73,6 +74,7 @@ describe('resource search', () => {
       containerTags: ['user_123'],
       docId: 'docId',
       documentThreshold: 0,
+      filepath: '/docs/',
       filters: {
         OR: [
           {
@@ -112,6 +114,7 @@ describe('resource search', () => {
       q: 'machine learning concepts',
       aggregate: false,
       containerTag: 'user_123',
+      filepath: '/docs/',
       filters: {
         OR: [
           {
