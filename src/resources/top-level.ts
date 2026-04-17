@@ -86,6 +86,12 @@ export interface AddParams {
   entityContext?: string;
 
   /**
+   * Optional file path for the document. Used by supermemoryfs to store the full
+   * path of the file.
+   */
+  filepath?: string;
+
+  /**
    * Optional metadata for the document.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };

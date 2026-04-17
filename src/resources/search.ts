@@ -281,6 +281,11 @@ export namespace SearchMemoriesResponse {
     documents?: Array<Result.Document>;
 
     /**
+     * Filepath of the source document this memory or chunk came from
+     */
+    filepath?: string | null;
+
+    /**
      * Indicates if this memory was created by aggregating multiple source memories
      */
     isAggregated?: boolean;
@@ -465,6 +470,12 @@ export interface SearchDocumentsParams {
    * now uses chunkThreshold only. This parameter will be ignored.
    */
   documentThreshold?: number;
+
+  /**
+   * Filter search results by filepath. Exact match for full paths, prefix match if
+   * ending with /
+   */
+  filepath?: string;
 
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
@@ -3954,6 +3965,12 @@ export interface SearchExecuteParams {
   documentThreshold?: number;
 
   /**
+   * Filter search results by filepath. Exact match for full paths, prefix match if
+   * ending with /
+   */
+  filepath?: string;
+
+  /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.
    */
   filters?: SearchExecuteParams.Or | SearchExecuteParams.And;
@@ -7417,6 +7434,12 @@ export interface SearchMemoriesParams {
    * user, a project ID, or any other identifier you wish to use to filter memories.
    */
   containerTag?: string;
+
+  /**
+   * Filter search results by filepath. Exact match for full paths, prefix match if
+   * ending with /
+   */
+  filepath?: string;
 
   /**
    * Optional filters to apply to the search. Can be a JSON string or Query object.

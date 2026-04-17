@@ -28,6 +28,7 @@ describe('top level methods', () => {
       containerTags: ['string'],
       customId: 'customId',
       entityContext: 'entityContext',
+      filepath: 'filepath',
       metadata: { foo: 'string' },
       taskType: 'memory',
     });
