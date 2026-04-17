@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.21.1 (2026-04-17)
+
+Full Changelog: [v4.21.0...v4.21.1](https://github.com/supermemoryai/sdk-ts/compare/v4.21.0...v4.21.1)
+
+### Bug Fixes
+
+* use npm publish instead of yarn publish ([7fa7983](https://github.com/supermemoryai/sdk-ts/commit/7fa798341b729ab5c20b04de4d9bc56dfb2e256c))
+
 ## 4.21.0 (2026-04-16)
 
 Full Changelog: [v4.20.0...v4.21.0](https://github.com/supermemoryai/sdk-ts/compare/v4.20.0...v4.21.0)
