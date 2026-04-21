@@ -254,6 +254,11 @@ export namespace DocumentListResponse {
      * Content of the document (only included when includeContent=true)
      */
     content?: string;
+
+    /**
+     * URL of the document
+     */
+    url?: string | null;
   }
 
   /**
