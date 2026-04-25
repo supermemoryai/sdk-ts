@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.23.0 (2026-04-25)
+
+Full Changelog: [v4.22.0...v4.23.0](https://github.com/supermemoryai/sdk-ts/compare/v4.22.0...v4.23.0)
+
+### Features
+
+* **api:** api update ([98b0060](https://github.com/supermemoryai/sdk-ts/commit/98b006058206ef61942af3f9effb48990d0c98aa))
+* **api:** api update ([51595b9](https://github.com/supermemoryai/sdk-ts/commit/51595b9980aedbe88b32635fde7e6d3a366fa857))
+
+
+### Chores
+
+* **internal:** more robust bootstrap script ([d179b3c](https://github.com/supermemoryai/sdk-ts/commit/d179b3cb1d4989292d28432b0978e9e39e773498))
+
 ## 4.22.0 (2026-04-17)
 
 Full Changelog: [v4.21.1...v4.22.0](https://github.com/supermemoryai/sdk-ts/compare/v4.21.1...v4.22.0)
