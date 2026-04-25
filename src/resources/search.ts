@@ -271,7 +271,8 @@ export namespace SearchMemoriesResponse {
     chunks?: Array<Result.Chunk>;
 
     /**
-     * Object containing arrays of parent and child contextual memories
+     * Object containing version history (parents/children via updates) and related
+     * memories (extends/derives)
      */
     context?: Result.Context;
 
@@ -325,12 +326,15 @@ export namespace SearchMemoriesResponse {
     }
 
     /**
-     * Object containing arrays of parent and child contextual memories
+     * Object containing version history (parents/children via updates) and related
+     * memories (extends/derives)
      */
     export interface Context {
       children?: Array<Context.Child>;
 
       parents?: Array<Context.Parent>;
+
+      related?: Array<Context.Related>;
     }
 
     export namespace Context {
@@ -388,6 +392,28 @@ export namespace SearchMemoriesResponse {
          * grand-parent, etc.)
          */
         version?: number | null;
+      }
+
+      export interface Related {
+        /**
+         * The related memory content
+         */
+        memory: string;
+
+        /**
+         * Relation type
+         */
+        relation: 'extends' | 'derives';
+
+        /**
+         * Related memory last update date
+         */
+        updatedAt: string;
+
+        /**
+         * Related memory metadata
+         */
+        metadata?: { [key: string]: unknown } | null;
       }
     }
 
