@@ -69,19 +69,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## profile\n\n`client.profile(containerTag: string, filters?: { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }, q?: string, threshold?: number): { profile: object; searchResults?: object; }`\n\n**post** `/v4/profile`\n\nGet user profile with optional search results\n\n### Parameters\n\n- `containerTag: string`\n  Tag to filter the profile by. This can be an ID for your user, a project ID, or any other identifier you wish to use to filter memories.\n\n- `filters?: { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; }[]; }`\n  Optional metadata filters to apply to profile results and search results. Supports complex AND/OR queries with multiple conditions.\n\n- `q?: string`\n  Optional search query to include search results in the response\n\n- `threshold?: number`\n  Threshold for search results. Only results with a score above this threshold will be included.\n\n### Returns\n\n- `{ profile: { dynamic: string[]; static: string[]; }; searchResults?: { results: object[]; timing: number; total: number; }; }`\n\n  - `profile: { dynamic: string[]; static: string[]; }`\n  - `searchResults?: { results: object[]; timing: number; total: number; }`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.profile({ containerTag: 'containerTag' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.profile',
         example:
-          'curl https://api.supermemory.ai/v4/profile \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTag": "containerTag"\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.profile({ containerTag: 'containerTag' });\n\nconsole.log(response.profile);",
       },
       python: {
         method: 'profile',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.profile(\n    container_tag="containerTag",\n)\nprint(response.profile)',
       },
-      typescript: {
-        method: 'client.profile',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.profile({ containerTag: 'containerTag' });\n\nconsole.log(response.profile);",
+          'curl https://api.supermemory.ai/v4/profile \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTag": "containerTag"\n        }\'',
       },
     },
   },
@@ -107,19 +107,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## add\n\n`client.add(content: string, containerTag?: string, containerTags?: string[], customId?: string, entityContext?: string, filepath?: string, metadata?: object, taskType?: 'memory' | 'superrag'): { id: string; status: string; }`\n\n**post** `/v3/documents`\n\nAdd a document with any content type (text, url, file, etc.) and metadata\n\n### Parameters\n\n- `content: string`\n  The content to extract and process into a document. This can be a URL to a website, a PDF, an image, or a video.\n\n- `containerTag?: string`\n  Optional tag this document should be containerized by. Max 100 characters, alphanumeric with hyphens, underscores, and dots only.\n\n- `containerTags?: string[]`\n\n- `customId?: string`\n  Optional custom ID of the document. Max 100 characters, alphanumeric with hyphens, underscores, and dots only.\n\n- `entityContext?: string`\n  Optional entity context for this container tag. Max 1500 characters. Used during document processing to guide memory extraction.\n\n- `filepath?: string`\n  Optional file path for the document. Used by supermemoryfs to store the full path of the file.\n\n- `metadata?: object`\n  Optional metadata for the document.\n\n- `taskType?: 'memory' | 'superrag'`\n  Task type: \"memory\" (default) for full context layer with SuperRAG built in, \"superrag\" for managed RAG as a service.\n\n### Returns\n\n- `{ id: string; status: string; }`\n\n  - `id: string`\n  - `status: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.add({ content: 'content' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.add',
         example:
-          'curl https://api.supermemory.ai/v3/documents \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "content": "content"\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.add({ content: 'content' });\n\nconsole.log(response.id);",
       },
       python: {
         method: 'add',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.add(\n    content="content",\n)\nprint(response.id)',
       },
-      typescript: {
-        method: 'client.add',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.add({ content: 'content' });\n\nconsole.log(response.id);",
+          'curl https://api.supermemory.ai/v3/documents \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "content": "content"\n        }\'',
       },
     },
   },
@@ -137,19 +137,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## forget\n\n`client.memories.forget(containerTag: string, id?: string, content?: string, reason?: string): { id: string; forgotten: boolean; }`\n\n**delete** `/v4/memories`\n\nForget (soft delete) a memory entry. The memory is marked as forgotten but not permanently deleted.\n\n### Parameters\n\n- `containerTag: string`\n  Container tag / space identifier. Required to scope the operation.\n\n- `id?: string`\n  ID of the memory entry to operate on\n\n- `content?: string`\n  Exact content match of the memory entry to operate on. Use this when you don't have the ID.\n\n- `reason?: string`\n  Optional reason for forgetting this memory\n\n### Returns\n\n- `{ id: string; forgotten: boolean; }`\n  Response after forgetting a memory\n\n  - `id: string`\n  - `forgotten: boolean`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.memories.forget({ containerTag: 'user_123' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.memories.forget',
         example:
-          'curl https://api.supermemory.ai/v4/memories \\\n    -X DELETE \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.memories.forget({ containerTag: 'user_123' });\n\nconsole.log(response.id);",
       },
       python: {
         method: 'memories.forget',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.memories.forget(\n    container_tag="user_123",\n)\nprint(response.id)',
       },
-      typescript: {
-        method: 'client.memories.forget',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.memories.forget({ containerTag: 'user_123' });\n\nconsole.log(response.id);",
+          'curl https://api.supermemory.ai/v4/memories \\\n    -X DELETE \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
       },
     },
   },
@@ -177,19 +177,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## update_memory\n\n`client.memories.updateMemory(containerTag: string, newContent: string, id?: string, content?: string, forgetAfter?: string, forgetReason?: string, metadata?: object, temporalContext?: { documentDate?: string; eventDate?: string[]; }): { id: string; createdAt: string; forgetAfter: string; forgetReason: string; memory: string; parentMemoryId: string; rootMemoryId: string; version: number; }`\n\n**patch** `/v4/memories`\n\nUpdate a memory by creating a new version. The original memory is preserved with isLatest=false.\n\n### Parameters\n\n- `containerTag: string`\n  Container tag / space identifier. Required to scope the operation.\n\n- `newContent: string`\n  The new content that will replace the existing memory\n\n- `id?: string`\n  ID of the memory entry to operate on\n\n- `content?: string`\n  Exact content match of the memory entry to operate on. Use this when you don't have the ID.\n\n- `forgetAfter?: string`\n  ISO 8601 datetime string. The memory will be auto-forgotten after this time. Pass null to clear an existing expiry. Omit to inherit from the previous version.\n\n- `forgetReason?: string`\n  Optional reason for the scheduled forgetting. Cleared automatically when forgetAfter is set to null.\n\n- `metadata?: object`\n  Optional metadata. If not provided, inherits from the previous version.\n\n- `temporalContext?: { documentDate?: string; eventDate?: string[]; }`\n  Structured temporal metadata. Merged into the metadata JSON column. If omitted, existing temporalContext is preserved.\n  - `documentDate?: string`\n    Date the document was authored\n  - `eventDate?: string[]`\n    Dates of events referenced in the memory\n\n### Returns\n\n- `{ id: string; createdAt: string; forgetAfter: string; forgetReason: string; memory: string; parentMemoryId: string; rootMemoryId: string; version: number; }`\n  Response after updating a memory\n\n  - `id: string`\n  - `createdAt: string`\n  - `forgetAfter: string`\n  - `forgetReason: string`\n  - `memory: string`\n  - `parentMemoryId: string`\n  - `rootMemoryId: string`\n  - `version: number`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.memories.updateMemory({ containerTag: 'user_123', newContent: 'John now prefers light mode' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.memories.updateMemory',
         example:
-          'curl https://api.supermemory.ai/v4/memories \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTag": "user_123",\n          "newContent": "John now prefers light mode",\n          "id": "mem_abc123",\n          "content": "John prefers dark mode",\n          "forgetAfter": "2026-06-01T00:00:00Z",\n          "forgetReason": "temporary project deadline"\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.memories.updateMemory({\n  containerTag: 'user_123',\n  newContent: 'John now prefers light mode',\n});\n\nconsole.log(response.id);",
       },
       python: {
         method: 'memories.update_memory',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.memories.update_memory(\n    container_tag="user_123",\n    new_content="John now prefers light mode",\n)\nprint(response.id)',
       },
-      typescript: {
-        method: 'client.memories.updateMemory',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.memories.updateMemory({\n  containerTag: 'user_123',\n  newContent: 'John now prefers light mode',\n});\n\nconsole.log(response.id);",
+          'curl https://api.supermemory.ai/v4/memories \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTag": "user_123",\n          "newContent": "John now prefers light mode",\n          "id": "mem_abc123",\n          "content": "John prefers dark mode",\n          "forgetAfter": "2026-06-01T00:00:00Z",\n          "forgetReason": "temporary project deadline"\n        }\'',
       },
     },
   },
@@ -215,19 +215,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## add\n\n`client.documents.add(content: string, containerTag?: string, containerTags?: string[], customId?: string, entityContext?: string, filepath?: string, metadata?: object, taskType?: 'memory' | 'superrag'): { id: string; status: string; }`\n\n**post** `/v3/documents`\n\nAdd a document with any content type (text, url, file, etc.) and metadata\n\n### Parameters\n\n- `content: string`\n  The content to extract and process into a document. This can be a URL to a website, a PDF, an image, or a video.\n\n- `containerTag?: string`\n  Optional tag this document should be containerized by. Max 100 characters, alphanumeric with hyphens, underscores, and dots only.\n\n- `containerTags?: string[]`\n\n- `customId?: string`\n  Optional custom ID of the document. Max 100 characters, alphanumeric with hyphens, underscores, and dots only.\n\n- `entityContext?: string`\n  Optional entity context for this container tag. Max 1500 characters. Used during document processing to guide memory extraction.\n\n- `filepath?: string`\n  Optional file path for the document. Used by supermemoryfs to store the full path of the file.\n\n- `metadata?: object`\n  Optional metadata for the document.\n\n- `taskType?: 'memory' | 'superrag'`\n  Task type: \"memory\" (default) for full context layer with SuperRAG built in, \"superrag\" for managed RAG as a service.\n\n### Returns\n\n- `{ id: string; status: string; }`\n\n  - `id: string`\n  - `status: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.documents.add({ content: 'content' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.documents.add',
         example:
-          'curl https://api.supermemory.ai/v3/documents \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "content": "content"\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.add({ content: 'content' });\n\nconsole.log(response.id);",
       },
       python: {
         method: 'documents.add',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.documents.add(\n    content="content",\n)\nprint(response.id)',
       },
-      typescript: {
-        method: 'client.documents.add',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.add({ content: 'content' });\n\nconsole.log(response.id);",
+          'curl https://api.supermemory.ai/v3/documents \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "content": "content"\n        }\'',
       },
     },
   },
@@ -254,19 +254,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## list\n\n`client.documents.list(containerTags?: string[], filepath?: string, filters?: { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }, includeContent?: boolean, limit?: string | number, order?: 'asc' | 'desc', page?: string | number, sort?: 'createdAt' | 'updatedAt'): { memories: object[]; pagination: object; }`\n\n**post** `/v3/documents/list`\n\nRetrieves a paginated list of documents with their metadata and workflow status\n\n### Parameters\n\n- `containerTags?: string[]`\n  Optional tags this document should be containerized by. This can be an ID for your user, a project ID, or any other identifier you wish to use to group documents.\n\n- `filepath?: string`\n  Filter documents by filepath. Exact match for full paths, prefix match if ending with /\n\n- `filters?: { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; }[]; }`\n  Optional filters to apply to the search. Can be a JSON string or Query object.\n\n- `includeContent?: boolean`\n  Whether to include the content field in the response. Warning: This can make responses significantly larger.\n\n- `limit?: string | number`\n  Number of items per page\n\n- `order?: 'asc' | 'desc'`\n  Sort order\n\n- `page?: string | number`\n  Page number to fetch\n\n- `sort?: 'createdAt' | 'updatedAt'`\n  Field to sort by\n\n### Returns\n\n- `{ memories: { id: string; connectionId: string; createdAt: string; customId: string; filepath: string; metadata: string | number | boolean | object | object[]; status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed'; summary: string; title: string; type: string; updatedAt: string; containerTags?: string[]; content?: string; url?: string; }[]; pagination: { currentPage: number; totalItems: number; totalPages: number; limit?: number; }; }`\n  List of documents\n\n  - `memories: { id: string; connectionId: string; createdAt: string; customId: string; filepath: string; metadata: string | number | boolean | object | object[]; status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed'; summary: string; title: string; type: string; updatedAt: string; containerTags?: string[]; content?: string; url?: string; }[]`\n  - `pagination: { currentPage: number; totalItems: number; totalPages: number; limit?: number; }`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst documents = await client.documents.list();\n\nconsole.log(documents);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.documents.list',
         example:
-          'curl https://api.supermemory.ai/v3/documents/list \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ],\n          "filepath": "/docs/",\n          "limit": 10,\n          "order": "desc",\n          "page": 1,\n          "sort": "createdAt"\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst documents = await client.documents.list();\n\nconsole.log(documents.memories);",
       },
       python: {
         method: 'documents.list',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\ndocuments = client.documents.list()\nprint(documents.memories)',
       },
-      typescript: {
-        method: 'client.documents.list',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst documents = await client.documents.list();\n\nconsole.log(documents.memories);",
+          'curl https://api.supermemory.ai/v3/documents/list \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ],\n          "filepath": "/docs/",\n          "limit": 10,\n          "order": "desc",\n          "page": 1,\n          "sort": "createdAt"\n        }\'',
       },
     },
   },
@@ -292,19 +292,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## update\n\n`client.documents.update(id: string, containerTag?: string, containerTags?: string[], content?: string, customId?: string, filepath?: string, metadata?: object, taskType?: 'memory' | 'superrag'): { id: string; status: string; }`\n\n**patch** `/v3/documents/{id}`\n\nUpdate a document with any content type (text, url, file, etc.) and metadata\n\n### Parameters\n\n- `id: string`\n\n- `containerTag?: string`\n  Optional tag this document should be containerized by. This can be an ID for your user, a project ID, or any other identifier you wish to use to group documents.\n\n- `containerTags?: string[]`\n  (DEPRECATED: Use containerTag instead) Optional tags this document should be containerized by. This can be an ID for your user, a project ID, or any other identifier you wish to use to group documents.\n\n- `content?: string`\n  The content to extract and process into a document. This can be a URL to a website, a PDF, an image, or a video. \n\nPlaintext: Any plaintext format\n\nURL: A URL to a website, PDF, image, or video\n\nWe automatically detect the content type from the url's response format.\n\n- `customId?: string`\n  Optional custom ID of the document. This could be an ID from your database that will uniquely identify this document.\n\n- `filepath?: string`\n  Optional file path for the document (e.g., '/documents/reports/file.pdf'). Used by supermemoryfs to map documents to filesystem paths.\n\n- `metadata?: object`\n  Optional metadata for the document. This is used to store additional information about the document. You can use this to store any additional information you need about the document. Metadata can be filtered through. Keys must be strings and are case sensitive. Values can be strings, numbers, or booleans. You cannot nest objects.\n\n- `taskType?: 'memory' | 'superrag'`\n  Task type: \"memory\" (default) for full context layer with SuperRAG built in, \"superrag\" for managed RAG as a service.\n\n### Returns\n\n- `{ id: string; status: string; }`\n\n  - `id: string`\n  - `status: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst document = await client.documents.update('id');\n\nconsole.log(document);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.documents.update',
         example:
-          'curl https://api.supermemory.ai/v3/documents/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ],\n          "content": "This is a detailed article about machine learning concepts...",\n          "customId": "mem_abc123",\n          "filepath": "/documents/reports/file.pdf",\n          "metadata": {\n            "category": "technology",\n            "isPublic": true,\n            "readingTime": 5,\n            "source": "web",\n            "tag_1": "ai",\n            "tag_2": "machine-learning"\n          },\n          "taskType": "memory"\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst document = await client.documents.update('id');\n\nconsole.log(document.id);",
       },
       python: {
         method: 'documents.update',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\ndocument = client.documents.update(\n    id="id",\n)\nprint(document.id)',
       },
-      typescript: {
-        method: 'client.documents.update',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst document = await client.documents.update('id');\n\nconsole.log(document.id);",
+          'curl https://api.supermemory.ai/v3/documents/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ],\n          "content": "This is a detailed article about machine learning concepts...",\n          "customId": "mem_abc123",\n          "filepath": "/documents/reports/file.pdf",\n          "metadata": {\n            "category": "technology",\n            "isPublic": true,\n            "readingTime": 5,\n            "source": "web",\n            "tag_1": "ai",\n            "tag_2": "machine-learning"\n          },\n          "taskType": "memory"\n        }\'',
       },
     },
   },
@@ -322,19 +322,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## get\n\n`client.documents.get(id: string): { id: string; connectionId: string; content: string; createdAt: string; customId: string; filepath: string; metadata: string | number | boolean | object | object[]; ogImage: string; raw: object; source: string; spatialPoint: object; status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed'; summary: string; taskType: 'memory' | 'superrag'; title: string; type: string; updatedAt: string; containerTags?: string[]; url?: string; }`\n\n**get** `/v3/documents/{id}`\n\nGet a document by ID\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; connectionId: string; content: string; createdAt: string; customId: string; filepath: string; metadata: string | number | boolean | object | object[]; ogImage: string; raw: object; source: string; spatialPoint: object; status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed'; summary: string; taskType: 'memory' | 'superrag'; title: string; type: string; updatedAt: string; containerTags?: string[]; url?: string; }`\n  Document object\n\n  - `id: string`\n  - `connectionId: string`\n  - `content: string`\n  - `createdAt: string`\n  - `customId: string`\n  - `filepath: string`\n  - `metadata: string | number | boolean | object | object[]`\n  - `ogImage: string`\n  - `raw: object`\n  - `source: string`\n  - `spatialPoint: object`\n  - `status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed'`\n  - `summary: string`\n  - `taskType: 'memory' | 'superrag'`\n  - `title: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `containerTags?: string[]`\n  - `url?: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst document = await client.documents.get('id');\n\nconsole.log(document);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.documents.get',
         example:
-          'curl https://api.supermemory.ai/v3/documents/$ID \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst document = await client.documents.get('id');\n\nconsole.log(document.id);",
       },
       python: {
         method: 'documents.get',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\ndocument = client.documents.get(\n    "id",\n)\nprint(document.id)',
       },
-      typescript: {
-        method: 'client.documents.get',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst document = await client.documents.get('id');\n\nconsole.log(document.id);",
+          'curl https://api.supermemory.ai/v3/documents/$ID \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
       },
     },
   },
@@ -350,19 +350,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## delete\n\n`client.documents.delete(id: string): void`\n\n**delete** `/v3/documents/{id}`\n\nDelete a document by ID or customId\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nawait client.documents.delete('id')\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.documents.delete',
         example:
-          'curl https://api.supermemory.ai/v3/documents/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.documents.delete('id');",
       },
       python: {
         method: 'documents.delete',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nclient.documents.delete(\n    "id",\n)',
       },
-      typescript: {
-        method: 'client.documents.delete',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.documents.delete('id');",
+          'curl https://api.supermemory.ai/v3/documents/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
       },
     },
   },
@@ -380,19 +380,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## delete_bulk\n\n`client.documents.deleteBulk(containerTags?: string[], filepath?: string, ids?: string[]): { deletedCount: number; success: boolean; containerTags?: string[]; errors?: object[]; }`\n\n**delete** `/v3/documents/bulk`\n\nBulk delete documents by IDs or container tags\n\n### Parameters\n\n- `containerTags?: string[]`\n  Array of container tags - all documents in these containers will be deleted\n\n- `filepath?: string`\n  Delete documents matching this filepath. Exact match for full paths, prefix match if ending with /\n\n- `ids?: string[]`\n  Array of document IDs to delete (max 100 at once)\n\n### Returns\n\n- `{ deletedCount: number; success: boolean; containerTags?: string[]; errors?: { id: string; error: string; }[]; }`\n  Response for bulk document deletion\n\n  - `deletedCount: number`\n  - `success: boolean`\n  - `containerTags?: string[]`\n  - `errors?: { id: string; error: string; }[]`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.documents.deleteBulk();\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.documents.deleteBulk',
         example:
-          'curl https://api.supermemory.ai/v3/documents/bulk \\\n    -X DELETE \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.deleteBulk();\n\nconsole.log(response.deletedCount);",
       },
       python: {
         method: 'documents.delete_bulk',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.documents.delete_bulk()\nprint(response.deleted_count)',
       },
-      typescript: {
-        method: 'client.documents.deleteBulk',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.deleteBulk();\n\nconsole.log(response.deletedCount);",
+          'curl https://api.supermemory.ai/v3/documents/bulk \\\n    -X DELETE \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
       },
     },
   },
@@ -419,19 +419,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## upload_file\n\n`client.documents.uploadFile(file: string, containerTag?: string, containerTags?: string, filepath?: string, fileType?: string, metadata?: string, mimeType?: string, taskType?: 'memory' | 'superrag', useAdvancedProcessing?: string): { id: string; status: string; }`\n\n**post** `/v3/documents/file`\n\nUpload a file to be processed\n\n### Parameters\n\n- `file: string`\n  File to upload and process\n\n- `containerTag?: string`\n  Optional container tag (e.g., 'user_123'). Use this for a single tag.\n\n- `containerTags?: string`\n  Optional container tags. Can be either a JSON string of an array (e.g., '[\"user_123\", \"project_123\"]') or a single string (e.g., 'user_123'). Single strings will be automatically converted to an array.\n\n- `filepath?: string`\n  Optional file path for the uploaded file (e.g., '/documents/reports/file.pdf'). Used by supermemoryfs to map documents to filesystem paths.\n\n- `fileType?: string`\n  Optional file type override to force specific processing behavior. Valid values: text, pdf, tweet, google_doc, google_slide, google_sheet, image, video, notion_doc, webpage, onedrive\n\n- `metadata?: string`\n  Optional metadata for the document as a JSON string. This is used to store additional information about the document. Keys must be strings and values can be strings, numbers, or booleans.\n\n- `mimeType?: string`\n  Required when fileType is 'image' or 'video'. Specifies the exact MIME type to use (e.g., 'image/png', 'image/jpeg', 'video/mp4', 'video/webm')\n\n- `taskType?: 'memory' | 'superrag'`\n  Task type: \"memory\" (default) for full context layer with SuperRAG built in, \"superrag\" for managed RAG as a service.\n\n- `useAdvancedProcessing?: string`\n  DEPRECATED: This field is no longer used. Advanced PDF processing is now automatic with our hybrid Mistral OCR + Gemini pipeline. This parameter will be accepted but ignored for backwards compatibility.\n\n### Returns\n\n- `{ id: string; status: string; }`\n\n  - `id: string`\n  - `status: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.documents.uploadFile({ file: fs.createReadStream('path/to/file') });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.documents.uploadFile',
         example:
-          'curl https://api.supermemory.ai/v3/documents/file \\\n    -H \'Content-Type: multipart/form-data\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -F \'file=@/path/to/file\' \\\n    -F containerTag=user \\\n    -F containerTags=\'["user_123", "project_123"]\' \\\n    -F filepath=/documents/reports/file.pdf \\\n    -F fileType=image \\\n    -F metadata=\'{"category": "technology", "isPublic": true, "readingTime": 5}\' \\\n    -F taskType=memory \\\n    -F useAdvancedProcessing=true',
+          "import fs from 'fs';\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.uploadFile({ file: fs.createReadStream('path/to/file') });\n\nconsole.log(response.id);",
       },
       python: {
         method: 'documents.upload_file',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.documents.upload_file(\n    file=b"Example data",\n)\nprint(response.id)',
       },
-      typescript: {
-        method: 'client.documents.uploadFile',
+      http: {
         example:
-          "import fs from 'fs';\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.uploadFile({ file: fs.createReadStream('path/to/file') });\n\nconsole.log(response.id);",
+          'curl https://api.supermemory.ai/v3/documents/file \\\n    -H \'Content-Type: multipart/form-data\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -F \'file=@/path/to/file\' \\\n    -F containerTag=user \\\n    -F containerTags=\'["user_123", "project_123"]\' \\\n    -F filepath=/documents/reports/file.pdf \\\n    -F fileType=image \\\n    -F metadata=\'{"category": "technology", "isPublic": true, "readingTime": 5}\' \\\n    -F taskType=memory \\\n    -F useAdvancedProcessing=true',
       },
     },
   },
@@ -458,19 +458,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## batch_add\n\n`client.documents.batchAdd(documents: { content: string; containerTag?: string; containerTags?: string[]; customId?: string; filepath?: string; metadata?: object; taskType?: 'memory' | 'superrag'; }[] | string[], containerTag?: string, containerTags?: string[], content?: null, filepath?: string, metadata?: object, taskType?: 'memory' | 'superrag'): { failed: number; results: object[]; success: number; }`\n\n**post** `/v3/documents/batch`\n\nAdd multiple documents in a single request. Each document can have any content type (text, url, file, etc.) and metadata\n\n### Parameters\n\n- `documents: { content: string; containerTag?: string; containerTags?: string[]; customId?: string; filepath?: string; metadata?: object; taskType?: 'memory' | 'superrag'; }[] | string[]`\n\n- `containerTag?: string`\n  Optional tag this document should be containerized by. This can be an ID for your user, a project ID, or any other identifier you wish to use to group documents.\n\n- `containerTags?: string[]`\n  (DEPRECATED: Use containerTag instead) Optional tags this document should be containerized by. This can be an ID for your user, a project ID, or any other identifier you wish to use to group documents.\n\n- `content?: null`\n\n- `filepath?: string`\n  Optional file path for the document (e.g., '/documents/reports/file.pdf'). Used by supermemoryfs to map documents to filesystem paths.\n\n- `metadata?: object`\n  Optional metadata for the document. This is used to store additional information about the document. You can use this to store any additional information you need about the document. Metadata can be filtered through. Keys must be strings and are case sensitive. Values can be strings, numbers, or booleans. You cannot nest objects.\n\n- `taskType?: 'memory' | 'superrag'`\n  Task type: \"memory\" (default) for full context layer with SuperRAG built in, \"superrag\" for managed RAG as a service.\n\n### Returns\n\n- `{ failed: number; results: { id: string; status: string; details?: string; error?: string; }[]; success: number; }`\n\n  - `failed: number`\n  - `results: { id: string; status: string; details?: string; error?: string; }[]`\n  - `success: number`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.documents.batchAdd({ documents: [{ content: 'This is a detailed article about machine learning concepts...' }] });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.documents.batchAdd',
         example:
-          'curl https://api.supermemory.ai/v3/documents/batch \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "documents": [\n            {\n              "content": "This is a detailed article about machine learning concepts..."\n            }\n          ],\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ],\n          "filepath": "/documents/reports/file.pdf",\n          "metadata": {\n            "category": "technology",\n            "isPublic": true,\n            "readingTime": 5,\n            "source": "web",\n            "tag_1": "ai",\n            "tag_2": "machine-learning"\n          },\n          "taskType": "memory"\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.batchAdd({\n  documents: [{ content: 'This is a detailed article about machine learning concepts...' }],\n});\n\nconsole.log(response.failed);",
       },
       python: {
         method: 'documents.batch_add',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.documents.batch_add(\n    documents=[{\n        "content": "This is a detailed article about machine learning concepts..."\n    }],\n)\nprint(response.failed)',
       },
-      typescript: {
-        method: 'client.documents.batchAdd',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.batchAdd({\n  documents: [{ content: 'This is a detailed article about machine learning concepts...' }],\n});\n\nconsole.log(response.failed);",
+          'curl https://api.supermemory.ai/v3/documents/batch \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "documents": [\n            {\n              "content": "This is a detailed article about machine learning concepts..."\n            }\n          ],\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ],\n          "filepath": "/documents/reports/file.pdf",\n          "metadata": {\n            "category": "technology",\n            "isPublic": true,\n            "readingTime": 5,\n            "source": "web",\n            "tag_1": "ai",\n            "tag_2": "machine-learning"\n          },\n          "taskType": "memory"\n        }\'',
       },
     },
   },
@@ -487,19 +487,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## list_processing\n\n`client.documents.listProcessing(): { documents: object[]; totalCount: number; }`\n\n**get** `/v3/documents/processing`\n\nGet documents that are currently being processed\n\n### Returns\n\n- `{ documents: { id: string; createdAt: string; customId: string; metadata: string | number | boolean | object | object[]; status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed'; title: string; type: string; updatedAt: string; containerTags?: string[]; }[]; totalCount: number; }`\n  List of documents currently being processed\n\n  - `documents: { id: string; createdAt: string; customId: string; metadata: string | number | boolean | object | object[]; status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed'; title: string; type: string; updatedAt: string; containerTags?: string[]; }[]`\n  - `totalCount: number`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.documents.listProcessing();\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.documents.listProcessing',
         example:
-          'curl https://api.supermemory.ai/v3/documents/processing \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.listProcessing();\n\nconsole.log(response.documents);",
       },
       python: {
         method: 'documents.list_processing',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.documents.list_processing()\nprint(response.documents)',
       },
-      typescript: {
-        method: 'client.documents.listProcessing',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.listProcessing();\n\nconsole.log(response.documents);",
+          'curl https://api.supermemory.ai/v3/documents/processing \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
       },
     },
   },
@@ -533,19 +533,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## execute\n\n`client.search.execute(q: string, categoriesFilter?: string[], chunkThreshold?: number, containerTag?: string, containerTags?: string[], docId?: string, documentThreshold?: number, filepath?: string, filters?: { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }, includeFullDocs?: boolean, includeSummary?: boolean, limit?: number, onlyMatchingChunks?: boolean, rerank?: boolean, rewriteQuery?: boolean): { results: object[]; timing: number; total: number; }`\n\n**post** `/v3/search`\n\nSearch memories with advanced filtering\n\n### Parameters\n\n- `q: string`\n  Search query string\n\n- `categoriesFilter?: string[]`\n  DEPRECATED: Optional category filters\n\n- `chunkThreshold?: number`\n  Threshold / sensitivity for chunk selection. 0 is least sensitive (returns most chunks, more results), 1 is most sensitive (returns lesser chunks, accurate results)\n\n- `containerTag?: string`\n  Optional single container tag. Use this or containerTags.\n\n- `containerTags?: string[]`\n  Optional tags this search should be containerized by. This can be an ID for your user, a project ID, or any other identifier you wish to use to filter documents.\n\n- `docId?: string`\n  Optional document ID to search within. You can use this to find chunks in a very large document.\n\n- `documentThreshold?: number`\n  DEPRECATED: This field is no longer used in v3 search. The search now uses chunkThreshold only. This parameter will be ignored.\n\n- `filepath?: string`\n  Filter search results by filepath. Exact match for full paths, prefix match if ending with /\n\n- `filters?: { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; }[]; }`\n  Optional filters to apply to the search. Can be a JSON string or Query object.\n\n- `includeFullDocs?: boolean`\n  If true, include full document in the response. This is helpful if you want a chatbot to know the full context of the document. \n\n- `includeSummary?: boolean`\n  If true, include document summary in the response. This is helpful if you want a chatbot to know the full context of the document. \n\n- `limit?: number`\n  Maximum number of results to return\n\n- `onlyMatchingChunks?: boolean`\n  If true, only return matching chunks without context. Normally, we send the previous and next chunk to provide more context for LLMs. If you only want the matching chunk, set this to true.\n\n- `rerank?: boolean`\n  If true, rerank the results based on the query. This is helpful if you want to ensure the most relevant results are returned.\n\n- `rewriteQuery?: boolean`\n  If true, rewrites the query to make it easier to find documents. This increases the latency by about 400ms\n\n### Returns\n\n- `{ results: { chunks: { content: string; isRelevant: boolean; score: number; }[]; createdAt: string; documentId: string; metadata: object; score: number; title: string; type: string; updatedAt: string; content?: string; summary?: string; }[]; timing: number; total: number; }`\n\n  - `results: { chunks: { content: string; isRelevant: boolean; score: number; }[]; createdAt: string; documentId: string; metadata: object; score: number; title: string; type: string; updatedAt: string; content?: string; summary?: string; }[]`\n  - `timing: number`\n  - `total: number`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.search.execute({ q: 'machine learning concepts' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.search.execute',
         example:
-          'curl https://api.supermemory.ai/v3/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "chunkThreshold": 0.5,\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123"\n          ],\n          "filepath": "/docs/",\n          "limit": 10\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.search.execute({ q: 'machine learning concepts' });\n\nconsole.log(response.results);",
       },
       python: {
         method: 'search.execute',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.search.execute(\n    q="machine learning concepts",\n)\nprint(response.results)',
       },
-      typescript: {
-        method: 'client.search.execute',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.search.execute({ q: 'machine learning concepts' });\n\nconsole.log(response.results);",
+          'curl https://api.supermemory.ai/v3/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "chunkThreshold": 0.5,\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123"\n          ],\n          "filepath": "/docs/",\n          "limit": 10\n        }\'',
       },
     },
   },
@@ -579,19 +579,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## documents\n\n`client.search.documents(q: string, categoriesFilter?: string[], chunkThreshold?: number, containerTag?: string, containerTags?: string[], docId?: string, documentThreshold?: number, filepath?: string, filters?: { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }, includeFullDocs?: boolean, includeSummary?: boolean, limit?: number, onlyMatchingChunks?: boolean, rerank?: boolean, rewriteQuery?: boolean): { results: object[]; timing: number; total: number; }`\n\n**post** `/v3/search`\n\nSearch memories with advanced filtering\n\n### Parameters\n\n- `q: string`\n  Search query string\n\n- `categoriesFilter?: string[]`\n  DEPRECATED: Optional category filters\n\n- `chunkThreshold?: number`\n  Threshold / sensitivity for chunk selection. 0 is least sensitive (returns most chunks, more results), 1 is most sensitive (returns lesser chunks, accurate results)\n\n- `containerTag?: string`\n  Optional single container tag. Use this or containerTags.\n\n- `containerTags?: string[]`\n  Optional tags this search should be containerized by. This can be an ID for your user, a project ID, or any other identifier you wish to use to filter documents.\n\n- `docId?: string`\n  Optional document ID to search within. You can use this to find chunks in a very large document.\n\n- `documentThreshold?: number`\n  DEPRECATED: This field is no longer used in v3 search. The search now uses chunkThreshold only. This parameter will be ignored.\n\n- `filepath?: string`\n  Filter search results by filepath. Exact match for full paths, prefix match if ending with /\n\n- `filters?: { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; }[]; }`\n  Optional filters to apply to the search. Can be a JSON string or Query object.\n\n- `includeFullDocs?: boolean`\n  If true, include full document in the response. This is helpful if you want a chatbot to know the full context of the document. \n\n- `includeSummary?: boolean`\n  If true, include document summary in the response. This is helpful if you want a chatbot to know the full context of the document. \n\n- `limit?: number`\n  Maximum number of results to return\n\n- `onlyMatchingChunks?: boolean`\n  If true, only return matching chunks without context. Normally, we send the previous and next chunk to provide more context for LLMs. If you only want the matching chunk, set this to true.\n\n- `rerank?: boolean`\n  If true, rerank the results based on the query. This is helpful if you want to ensure the most relevant results are returned.\n\n- `rewriteQuery?: boolean`\n  If true, rewrites the query to make it easier to find documents. This increases the latency by about 400ms\n\n### Returns\n\n- `{ results: { chunks: { content: string; isRelevant: boolean; score: number; }[]; createdAt: string; documentId: string; metadata: object; score: number; title: string; type: string; updatedAt: string; content?: string; summary?: string; }[]; timing: number; total: number; }`\n\n  - `results: { chunks: { content: string; isRelevant: boolean; score: number; }[]; createdAt: string; documentId: string; metadata: object; score: number; title: string; type: string; updatedAt: string; content?: string; summary?: string; }[]`\n  - `timing: number`\n  - `total: number`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.search.documents({ q: 'machine learning concepts' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.search.documents',
         example:
-          'curl https://api.supermemory.ai/v3/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "chunkThreshold": 0.5,\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123"\n          ],\n          "filepath": "/docs/",\n          "limit": 10\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.search.documents({ q: 'machine learning concepts' });\n\nconsole.log(response.results);",
       },
       python: {
         method: 'search.documents',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.search.documents(\n    q="machine learning concepts",\n)\nprint(response.results)',
       },
-      typescript: {
-        method: 'client.search.documents',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.search.documents({ q: 'machine learning concepts' });\n\nconsole.log(response.results);",
+          'curl https://api.supermemory.ai/v3/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "chunkThreshold": 0.5,\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123"\n          ],\n          "filepath": "/docs/",\n          "limit": 10\n        }\'',
       },
     },
   },
@@ -621,19 +621,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## memories\n\n`client.search.memories(q: string, aggregate?: boolean, containerTag?: string, filepath?: string, filters?: { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }, include?: { chunks?: boolean; documents?: boolean; forgottenMemories?: boolean; relatedMemories?: boolean; summaries?: boolean; }, limit?: number, rerank?: boolean, rewriteQuery?: boolean, searchMode?: 'memories' | 'hybrid' | 'documents', threshold?: number): { results: object[]; timing: number; total: number; }`\n\n**post** `/v4/search`\n\nSearch memory entries - Low latency for conversational\n\n### Parameters\n\n- `q: string`\n  Search query string\n\n- `aggregate?: boolean`\n  If true, aggregates information from multiple memories to create new synthesized memories. The result will be a mix of aggregated and non-aggregated memories, reranked by relevance to the query. Works in conjunction with reranking.\n\n- `containerTag?: string`\n  Optional tag this search should be containerized by. This can be an ID for your user, a project ID, or any other identifier you wish to use to filter memories.\n\n- `filepath?: string`\n  Filter search results by filepath. Exact match for full paths, prefix match if ending with /\n\n- `filters?: { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; } | { AND: { key: string; value: string; filterType?: 'metadata' | 'numeric' | 'array_contains' | 'string_contains'; ignoreCase?: boolean | 'true' | 'false'; negate?: boolean | 'true' | 'false'; numericOperator?: '>' | '<' | '>=' | '<=' | '='; } | { OR: object | object | object[]; } | { AND: object | object | object[]; }[]; }[]; }[]; }`\n  Optional filters to apply to the search. Can be a JSON string or Query object.\n\n- `include?: { chunks?: boolean; documents?: boolean; forgottenMemories?: boolean; relatedMemories?: boolean; summaries?: boolean; }`\n  - `chunks?: boolean`\n    DEPRECATED: Use searchMode='hybrid' instead. If true, automatically switches to hybrid mode. This field is kept for backward compatibility only.\n  - `documents?: boolean`\n  - `forgottenMemories?: boolean`\n    If true, include forgotten memories in search results. Forgotten memories are memories that have been explicitly forgotten or have passed their expiration date.\n  - `relatedMemories?: boolean`\n  - `summaries?: boolean`\n\n- `limit?: number`\n  Maximum number of results to return\n\n- `rerank?: boolean`\n  If true, rerank the results based on the query. This is helpful if you want to ensure the most relevant results are returned.\n\n- `rewriteQuery?: boolean`\n  If true, rewrites the query to make it easier to find documents. This increases the latency by about 400ms\n\n- `searchMode?: 'memories' | 'hybrid' | 'documents'`\n  Search mode. 'memories' searches only memory entries (default). 'hybrid' searches both memories and document chunks. 'documents' searches only document chunks.\n\n- `threshold?: number`\n  Threshold / sensitivity for memories selection. 0 is least sensitive (returns most memories, more results), 1 is most sensitive (returns lesser memories, accurate results)\n\n### Returns\n\n- `{ results: { id: string; metadata: object; similarity: number; updatedAt: string; chunk?: string; chunks?: { content: string; documentId: string; position: number; score: number; }[]; context?: { children?: object[]; parents?: object[]; related?: object[]; }; documents?: { id: string; createdAt: string; updatedAt: string; metadata?: object; summary?: string; title?: string; type?: string; }[]; filepath?: string; isAggregated?: boolean; memory?: string; version?: number; }[]; timing: number; total: number; }`\n\n  - `results: { id: string; metadata: object; similarity: number; updatedAt: string; chunk?: string; chunks?: { content: string; documentId: string; position: number; score: number; }[]; context?: { children?: { memory: string; relation: 'updates' | 'extends' | 'derives'; updatedAt: string; metadata?: object; version?: number; }[]; parents?: { memory: string; relation: 'updates' | 'extends' | 'derives'; updatedAt: string; metadata?: object; version?: number; }[]; related?: { memory: string; relation: 'extends' | 'derives'; updatedAt: string; metadata?: object; }[]; }; documents?: { id: string; createdAt: string; updatedAt: string; metadata?: object; summary?: string; title?: string; type?: string; }[]; filepath?: string; isAggregated?: boolean; memory?: string; version?: number; }[]`\n  - `timing: number`\n  - `total: number`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.search.memories({ q: 'machine learning concepts' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.search.memories',
         example:
-          'curl https://api.supermemory.ai/v4/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "containerTag": "user_123",\n          "filepath": "/docs/",\n          "limit": 10,\n          "searchMode": "memories",\n          "threshold": 0.5\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.search.memories({ q: 'machine learning concepts' });\n\nconsole.log(response.results);",
       },
       python: {
         method: 'search.memories',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.search.memories(\n    q="machine learning concepts",\n)\nprint(response.results)',
       },
-      typescript: {
-        method: 'client.search.memories',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.search.memories({ q: 'machine learning concepts' });\n\nconsole.log(response.results);",
+          'curl https://api.supermemory.ai/v4/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "containerTag": "user_123",\n          "filepath": "/docs/",\n          "limit": 10,\n          "searchMode": "memories",\n          "threshold": 0.5\n        }\'',
       },
     },
   },
@@ -650,19 +650,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## get\n\n`client.settings.get(): { chunkSize?: number; excludeItems?: string | number | boolean | object | object[]; filterPrompt?: string; githubClientId?: string; githubClientSecret?: string; githubCustomKeyEnabled?: boolean; googleDriveClientId?: string; googleDriveClientSecret?: string; googleDriveCustomKeyEnabled?: boolean; includeItems?: string | number | boolean | object | object[]; notionClientId?: string; notionClientSecret?: string; notionCustomKeyEnabled?: boolean; onedriveClientId?: string; onedriveClientSecret?: string; onedriveCustomKeyEnabled?: boolean; shouldLLMFilter?: boolean; }`\n\n**get** `/v3/settings`\n\nGet settings for an organization\n\n### Returns\n\n- `{ chunkSize?: number; excludeItems?: string | number | boolean | object | object[]; filterPrompt?: string; githubClientId?: string; githubClientSecret?: string; githubCustomKeyEnabled?: boolean; googleDriveClientId?: string; googleDriveClientSecret?: string; googleDriveCustomKeyEnabled?: boolean; includeItems?: string | number | boolean | object | object[]; notionClientId?: string; notionClientSecret?: string; notionCustomKeyEnabled?: boolean; onedriveClientId?: string; onedriveClientSecret?: string; onedriveCustomKeyEnabled?: boolean; shouldLLMFilter?: boolean; }`\n\n  - `chunkSize?: number`\n  - `excludeItems?: string | number | boolean | object | object[]`\n  - `filterPrompt?: string`\n  - `githubClientId?: string`\n  - `githubClientSecret?: string`\n  - `githubCustomKeyEnabled?: boolean`\n  - `googleDriveClientId?: string`\n  - `googleDriveClientSecret?: string`\n  - `googleDriveCustomKeyEnabled?: boolean`\n  - `includeItems?: string | number | boolean | object | object[]`\n  - `notionClientId?: string`\n  - `notionClientSecret?: string`\n  - `notionCustomKeyEnabled?: boolean`\n  - `onedriveClientId?: string`\n  - `onedriveClientSecret?: string`\n  - `onedriveCustomKeyEnabled?: boolean`\n  - `shouldLLMFilter?: boolean`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst setting = await client.settings.get();\n\nconsole.log(setting);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.settings.get',
         example:
-          'curl https://api.supermemory.ai/v3/settings \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst setting = await client.settings.get();\n\nconsole.log(setting.chunkSize);",
       },
       python: {
         method: 'settings.get',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nsetting = client.settings.get()\nprint(setting.chunk_size)',
       },
-      typescript: {
-        method: 'client.settings.get',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst setting = await client.settings.get();\n\nconsole.log(setting.chunkSize);",
+          'curl https://api.supermemory.ai/v3/settings \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
       },
     },
   },
@@ -698,19 +698,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## update\n\n`client.settings.update(chunkSize?: number, excludeItems?: string | number | boolean | object | object[], filterPrompt?: string, githubClientId?: string, githubClientSecret?: string, githubCustomKeyEnabled?: boolean, googleDriveClientId?: string, googleDriveClientSecret?: string, googleDriveCustomKeyEnabled?: boolean, includeItems?: string | number | boolean | object | object[], notionClientId?: string, notionClientSecret?: string, notionCustomKeyEnabled?: boolean, onedriveClientId?: string, onedriveClientSecret?: string, onedriveCustomKeyEnabled?: boolean, shouldLLMFilter?: boolean): { orgId: string; orgSlug: string; updated: object; }`\n\n**patch** `/v3/settings`\n\nUpdate settings for an organization\n\n### Parameters\n\n- `chunkSize?: number`\n\n- `excludeItems?: string | number | boolean | object | object[]`\n\n- `filterPrompt?: string`\n\n- `githubClientId?: string`\n\n- `githubClientSecret?: string`\n\n- `githubCustomKeyEnabled?: boolean`\n\n- `googleDriveClientId?: string`\n\n- `googleDriveClientSecret?: string`\n\n- `googleDriveCustomKeyEnabled?: boolean`\n\n- `includeItems?: string | number | boolean | object | object[]`\n\n- `notionClientId?: string`\n\n- `notionClientSecret?: string`\n\n- `notionCustomKeyEnabled?: boolean`\n\n- `onedriveClientId?: string`\n\n- `onedriveClientSecret?: string`\n\n- `onedriveCustomKeyEnabled?: boolean`\n\n- `shouldLLMFilter?: boolean`\n\n### Returns\n\n- `{ orgId: string; orgSlug: string; updated: { chunkSize?: number; excludeItems?: string | number | boolean | object | object[]; filterPrompt?: string; githubClientId?: string; githubClientSecret?: string; githubCustomKeyEnabled?: boolean; googleDriveClientId?: string; googleDriveClientSecret?: string; googleDriveCustomKeyEnabled?: boolean; includeItems?: string | number | boolean | object | object[]; notionClientId?: string; notionClientSecret?: string; notionCustomKeyEnabled?: boolean; onedriveClientId?: string; onedriveClientSecret?: string; onedriveCustomKeyEnabled?: boolean; shouldLLMFilter?: boolean; }; }`\n\n  - `orgId: string`\n  - `orgSlug: string`\n  - `updated: { chunkSize?: number; excludeItems?: string | number | boolean | object | object[]; filterPrompt?: string; githubClientId?: string; githubClientSecret?: string; githubCustomKeyEnabled?: boolean; googleDriveClientId?: string; googleDriveClientSecret?: string; googleDriveCustomKeyEnabled?: boolean; includeItems?: string | number | boolean | object | object[]; notionClientId?: string; notionClientSecret?: string; notionCustomKeyEnabled?: boolean; onedriveClientId?: string; onedriveClientSecret?: string; onedriveCustomKeyEnabled?: boolean; shouldLLMFilter?: boolean; }`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst setting = await client.settings.update();\n\nconsole.log(setting);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.settings.update',
         example:
-          "curl https://api.supermemory.ai/v3/settings \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n    -d '{}'",
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst setting = await client.settings.update();\n\nconsole.log(setting.orgId);",
       },
       python: {
         method: 'settings.update',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nsetting = client.settings.update()\nprint(setting.org_id)',
       },
-      typescript: {
-        method: 'client.settings.update',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst setting = await client.settings.update();\n\nconsole.log(setting.orgId);",
+          "curl https://api.supermemory.ai/v3/settings \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n    -d '{}'",
       },
     },
   },
@@ -734,19 +734,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## create\n\n`client.connections.create(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3', containerTag?: string, containerTags?: string[], documentLimit?: number, metadata?: object, redirectUrl?: string): { id: string; authLink: string; expiresIn: string; redirectsTo?: string; }`\n\n**post** `/v3/connections/{provider}`\n\nInitialize connection and get authorization URL\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3'`\n\n- `containerTag?: string`\n\n- `containerTags?: string[]`\n\n- `documentLimit?: number`\n\n- `metadata?: object`\n\n- `redirectUrl?: string`\n\n### Returns\n\n- `{ id: string; authLink: string; expiresIn: string; redirectsTo?: string; }`\n\n  - `id: string`\n  - `authLink: string`\n  - `expiresIn: string`\n  - `redirectsTo?: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst connection = await client.connections.create('notion');\n\nconsole.log(connection);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.connections.create',
         example:
-          "curl https://api.supermemory.ai/v3/connections/$PROVIDER \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n    -d '{}'",
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst connection = await client.connections.create('notion');\n\nconsole.log(connection.id);",
       },
       python: {
         method: 'connections.create',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nconnection = client.connections.create(\n    provider="notion",\n)\nprint(connection.id)',
       },
-      typescript: {
-        method: 'client.connections.create',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst connection = await client.connections.create('notion');\n\nconsole.log(connection.id);",
+          "curl https://api.supermemory.ai/v3/connections/$PROVIDER \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n    -d '{}'",
       },
     },
   },
@@ -764,19 +764,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## get_by_id\n\n`client.connections.getByID(connectionId: string): { id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }`\n\n**get** `/v3/connections/{connectionId}`\n\nGet connection details with id\n\n### Parameters\n\n- `connectionId: string`\n\n### Returns\n\n- `{ id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `provider: string`\n  - `containerTags?: string[]`\n  - `documentLimit?: number`\n  - `email?: string`\n  - `expiresAt?: string`\n  - `metadata?: object`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.getByID('connectionId');\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.connections.getByID',
         example:
-          'curl https://api.supermemory.ai/v3/connections/$CONNECTION_ID \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.getByID('connectionId');\n\nconsole.log(response.id);",
       },
       python: {
         method: 'connections.get_by_id',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.connections.get_by_id(\n    "connectionId",\n)\nprint(response.id)',
       },
-      typescript: {
-        method: 'client.connections.getByID',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.getByID('connectionId');\n\nconsole.log(response.id);",
+          'curl https://api.supermemory.ai/v3/connections/$CONNECTION_ID \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
       },
     },
   },
@@ -797,19 +797,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## get_by_tag\n\n`client.connections.getByTag(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3', containerTags: string[]): { id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }`\n\n**post** `/v3/connections/{provider}/connection`\n\nGet connection details with provider and container tags\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3'`\n\n- `containerTags: string[]`\n  Comma-separated list of container tags to filter connection by\n\n### Returns\n\n- `{ id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `provider: string`\n  - `containerTags?: string[]`\n  - `documentLimit?: number`\n  - `email?: string`\n  - `expiresAt?: string`\n  - `metadata?: object`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.getByTag('notion', { containerTags: ['user_123', 'project_123'] });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.connections.getByTag',
         example:
-          'curl https://api.supermemory.ai/v3/connections/$PROVIDER/connection \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ]\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.getByTag('notion', {\n  containerTags: ['user_123', 'project_123'],\n});\n\nconsole.log(response.id);",
       },
       python: {
         method: 'connections.get_by_tag',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.connections.get_by_tag(\n    provider="notion",\n    container_tags=["user_123", "project_123"],\n)\nprint(response.id)',
       },
-      typescript: {
-        method: 'client.connections.getByTag',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.getByTag('notion', {\n  containerTags: ['user_123', 'project_123'],\n});\n\nconsole.log(response.id);",
+          'curl https://api.supermemory.ai/v3/connections/$PROVIDER/connection \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ]\n        }\'',
       },
     },
   },
@@ -826,19 +826,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## delete_by_id\n\n`client.connections.deleteByID(connectionId: string, deleteDocuments?: string): { id: string; provider: string; }`\n\n**delete** `/v3/connections/{connectionId}`\n\nDelete a specific connection by ID\n\n### Parameters\n\n- `connectionId: string`\n\n- `deleteDocuments?: string`\n  Whether to also delete documents imported by this connection. Defaults to true.\n\n### Returns\n\n- `{ id: string; provider: string; }`\n\n  - `id: string`\n  - `provider: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.deleteByID('connectionId');\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.connections.deleteByID',
         example:
-          'curl https://api.supermemory.ai/v3/connections/$CONNECTION_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.deleteByID('connectionId');\n\nconsole.log(response.id);",
       },
       python: {
         method: 'connections.delete_by_id',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.connections.delete_by_id(\n    connection_id="connectionId",\n)\nprint(response.id)',
       },
-      typescript: {
-        method: 'client.connections.deleteByID',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.deleteByID('connectionId');\n\nconsole.log(response.id);",
+          'curl https://api.supermemory.ai/v3/connections/$CONNECTION_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
       },
     },
   },
@@ -858,19 +858,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## delete_by_provider\n\n`client.connections.deleteByProvider(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3', containerTags: string[]): { id: string; provider: string; }`\n\n**delete** `/v3/connections/{provider}`\n\nDelete connection for a specific provider and container tags\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3'`\n\n- `containerTags: string[]`\n  Optional comma-separated list of container tags to filter connections by\n\n### Returns\n\n- `{ id: string; provider: string; }`\n\n  - `id: string`\n  - `provider: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.deleteByProvider('notion', { containerTags: ['user_123', 'project_123'] });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.connections.deleteByProvider',
         example:
-          'curl https://api.supermemory.ai/v3/connections/$PROVIDER \\\n    -X DELETE \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.deleteByProvider('notion', {\n  containerTags: ['user_123', 'project_123'],\n});\n\nconsole.log(response.id);",
       },
       python: {
         method: 'connections.delete_by_provider',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.connections.delete_by_provider(\n    provider="notion",\n    container_tags=["user_123", "project_123"],\n)\nprint(response.id)',
       },
-      typescript: {
-        method: 'client.connections.deleteByProvider',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.deleteByProvider('notion', {\n  containerTags: ['user_123', 'project_123'],\n});\n\nconsole.log(response.id);",
+          'curl https://api.supermemory.ai/v3/connections/$PROVIDER \\\n    -X DELETE \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
       },
     },
   },
@@ -890,19 +890,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## import\n\n`client.connections.import(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3', containerTags?: string[]): string`\n\n**post** `/v3/connections/{provider}/import`\n\nInitiate a manual sync of connections\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3'`\n\n- `containerTags?: string[]`\n  Optional comma-separated list of container tags to filter connections by\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.import('notion');\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.connections.import',
         example:
-          'curl https://api.supermemory.ai/v3/connections/$PROVIDER/import \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ]\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.import('notion');\n\nconsole.log(response);",
       },
       python: {
         method: 'connections.import_',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.connections.import_(\n    provider="notion",\n)\nprint(response)',
       },
-      typescript: {
-        method: 'client.connections.import',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.import('notion');\n\nconsole.log(response);",
+          'curl https://api.supermemory.ai/v3/connections/$PROVIDER/import \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ]\n        }\'',
       },
     },
   },
@@ -920,19 +920,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## list\n\n`client.connections.list(containerTags?: string[]): { id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }[]`\n\n**post** `/v3/connections/list`\n\nList all connections\n\n### Parameters\n\n- `containerTags?: string[]`\n  Optional comma-separated list of container tags to filter documents by\n\n### Returns\n\n- `{ id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }[]`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst connections = await client.connections.list();\n\nconsole.log(connections);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.connections.list',
         example:
-          'curl https://api.supermemory.ai/v3/connections/list \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ]\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst connections = await client.connections.list();\n\nconsole.log(connections);",
       },
       python: {
         method: 'connections.list',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nconnections = client.connections.list()\nprint(connections)',
       },
-      typescript: {
-        method: 'client.connections.list',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst connections = await client.connections.list();\n\nconsole.log(connections);",
+          'curl https://api.supermemory.ai/v3/connections/list \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ]\n        }\'',
       },
     },
   },
@@ -953,19 +953,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## list_documents\n\n`client.connections.listDocuments(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3', containerTags?: string[]): { id: string; createdAt: string; status: string; summary: string; title: string; type: string; updatedAt: string; }[]`\n\n**post** `/v3/connections/{provider}/documents`\n\nList documents indexed for a provider and container tags\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3'`\n\n- `containerTags?: string[]`\n  Optional comma-separated list of container tags to filter documents by\n\n### Returns\n\n- `{ id: string; createdAt: string; status: string; summary: string; title: string; type: string; updatedAt: string; }[]`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.listDocuments('notion');\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.connections.listDocuments',
         example:
-          'curl https://api.supermemory.ai/v3/connections/$PROVIDER/documents \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ]\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.listDocuments('notion');\n\nconsole.log(response);",
       },
       python: {
         method: 'connections.list_documents',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.connections.list_documents(\n    provider="notion",\n)\nprint(response)',
       },
-      typescript: {
-        method: 'client.connections.listDocuments',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.listDocuments('notion');\n\nconsole.log(response);",
+          'curl https://api.supermemory.ai/v3/connections/$PROVIDER/documents \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ]\n        }\'',
       },
     },
   },
@@ -982,19 +982,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## configure\n\n`client.connections.configure(connectionId: string, resources: object[]): { message: string; success: boolean; webhooksRegistered?: number; }`\n\n**post** `/v3/connections/{connectionId}/configure`\n\nConfigure resources for a connection (supported providers: GitHub for now)\n\n### Parameters\n\n- `connectionId: string`\n\n- `resources: object[]`\n\n### Returns\n\n- `{ message: string; success: boolean; webhooksRegistered?: number; }`\n\n  - `message: string`\n  - `success: boolean`\n  - `webhooksRegistered?: number`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.configure('connectionId', { resources: [{ foo: 'bar' }] });\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.connections.configure',
         example:
-          'curl https://api.supermemory.ai/v3/connections/$CONNECTION_ID/configure \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "resources": [\n            {\n              "foo": "bar"\n            }\n          ]\n        }\'',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.configure('connectionId', {\n  resources: [{ foo: 'bar' }],\n});\n\nconsole.log(response.message);",
       },
       python: {
         method: 'connections.configure',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.connections.configure(\n    connection_id="connectionId",\n    resources=[{\n        "foo": "bar"\n    }],\n)\nprint(response.message)',
       },
-      typescript: {
-        method: 'client.connections.configure',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.configure('connectionId', {\n  resources: [{ foo: 'bar' }],\n});\n\nconsole.log(response.message);",
+          'curl https://api.supermemory.ai/v3/connections/$CONNECTION_ID/configure \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "resources": [\n            {\n              "foo": "bar"\n            }\n          ]\n        }\'',
       },
     },
   },
@@ -1011,19 +1011,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## resources\n\n`client.connections.resources(connectionId: string, page?: number, parent_id?: string, per_page?: number): { resources: object[]; total_count?: number; }`\n\n**get** `/v3/connections/{connectionId}/resources`\n\nFetch resources for a connection (supported providers: GitHub for now)\n\n### Parameters\n\n- `connectionId: string`\n\n- `page?: number`\n\n- `parent_id?: string`\n\n- `per_page?: number`\n\n### Returns\n\n- `{ resources: object[]; total_count?: number; }`\n\n  - `resources: object[]`\n  - `total_count?: number`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.resources('connectionId');\n\nconsole.log(response);\n```",
     perLanguage: {
-      http: {
+      typescript: {
+        method: 'client.connections.resources',
         example:
-          'curl https://api.supermemory.ai/v3/connections/$CONNECTION_ID/resources \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
+          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.resources('connectionId');\n\nconsole.log(response.resources);",
       },
       python: {
         method: 'connections.resources',
         example:
           'import os\nfrom supermemory import Supermemory\n\nclient = Supermemory(\n    api_key=os.environ.get("SUPERMEMORY_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.connections.resources(\n    connection_id="connectionId",\n)\nprint(response.resources)',
       },
-      typescript: {
-        method: 'client.connections.resources',
+      http: {
         example:
-          "import Supermemory from 'supermemory';\n\nconst client = new Supermemory({\n  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connections.resources('connectionId');\n\nconsole.log(response.resources);",
+          'curl https://api.supermemory.ai/v3/connections/$CONNECTION_ID/resources \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY"',
       },
     },
   },
