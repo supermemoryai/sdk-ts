@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.24.0 (2026-04-28)
+
+Full Changelog: [v4.23.0...v4.24.0](https://github.com/supermemoryai/sdk-ts/compare/v4.23.0...v4.24.0)
+
+### Features
+
+* support setting headers via env ([bd56a94](https://github.com/supermemoryai/sdk-ts/commit/bd56a94f19c21497549dd2117e65127cb15b22d0))
+
+
+### Chores
+
+* **internal:** codegen related update ([cefa8e1](https://github.com/supermemoryai/sdk-ts/commit/cefa8e1d0c274c3f2f03083154c8b080f4e702e4))
+* restructure docs search code ([f2a4dc0](https://github.com/supermemoryai/sdk-ts/commit/f2a4dc06941fcfce852168fb5d9037c92dab9da8))
+
 ## 4.23.0 (2026-04-25)
 
 Full Changelog: [v4.22.0...v4.23.0](https://github.com/supermemoryai/sdk-ts/compare/v4.22.0...v4.23.0)
