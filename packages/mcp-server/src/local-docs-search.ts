@@ -266,7 +266,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.supermemory.ai/v3/documents/list \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ],\n          "filepath": "/docs/",\n          "limit": 10,\n          "order": "desc",\n          "page": 1,\n          "sort": "createdAt"\n        }\'',
+          'curl https://api.supermemory.ai/v3/documents/list \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "containerTags": [\n            "user_123",\n            "project_123"\n          ],\n          "filepath": "/docs/",\n          "filters": {\n            "AND": [\n              {\n                "key": "group",\n                "value": "jira_users",\n                "filterType": "metadata",\n                "negate": false\n              },\n              {\n                "key": "timestamp",\n                "value": "1742745777",\n                "filterType": "numeric",\n                "negate": false,\n                "numericOperator": ">"\n              }\n            ]\n          },\n          "includeContent": false,\n          "limit": 10,\n          "order": "desc",\n          "page": 1,\n          "sort": "createdAt"\n        }\'',
       },
     },
   },
@@ -545,7 +545,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.supermemory.ai/v3/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "chunkThreshold": 0.5,\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123"\n          ],\n          "filepath": "/docs/",\n          "limit": 10\n        }\'',
+          'curl https://api.supermemory.ai/v3/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "chunkThreshold": 0.5,\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123"\n          ],\n          "filepath": "/docs/",\n          "includeFullDocs": false,\n          "limit": 10,\n          "rerank": false,\n          "rewriteQuery": false\n        }\'',
       },
     },
   },
@@ -591,7 +591,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.supermemory.ai/v3/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "chunkThreshold": 0.5,\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123"\n          ],\n          "filepath": "/docs/",\n          "limit": 10\n        }\'',
+          'curl https://api.supermemory.ai/v3/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "chunkThreshold": 0.5,\n          "containerTag": "user_123",\n          "containerTags": [\n            "user_123"\n          ],\n          "filepath": "/docs/",\n          "includeFullDocs": false,\n          "limit": 10,\n          "rerank": false,\n          "rewriteQuery": false\n        }\'',
       },
     },
   },
@@ -633,7 +633,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.supermemory.ai/v4/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "containerTag": "user_123",\n          "filepath": "/docs/",\n          "limit": 10,\n          "searchMode": "memories",\n          "threshold": 0.5\n        }\'',
+          'curl https://api.supermemory.ai/v4/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $SUPERMEMORY_API_KEY" \\\n    -d \'{\n          "q": "machine learning concepts",\n          "aggregate": false,\n          "containerTag": "user_123",\n          "filepath": "/docs/",\n          "limit": 10,\n          "rerank": false,\n          "rewriteQuery": false,\n          "searchMode": "memories",\n          "threshold": 0.5\n        }\'',
       },
     },
   },
