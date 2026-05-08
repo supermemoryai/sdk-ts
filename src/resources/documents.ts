@@ -4265,6 +4265,18 @@ export interface DocumentUploadFileParams {
   containerTags?: string;
 
   /**
+   * Optional custom ID of the document. Max 100 characters, alphanumeric with
+   * hyphens, underscores, and colons only.
+   */
+  customId?: string;
+
+  /**
+   * Optional entity context for this container tag. Max 1500 characters. Used during
+   * document processing to guide memory extraction.
+   */
+  entityContext?: string;
+
+  /**
    * Optional file path for the uploaded file (e.g., '/documents/reports/file.pdf').
    * Used by supermemoryfs to map documents to filesystem paths.
    */

@@ -177,6 +177,8 @@ describe('resource documents', () => {
       file: await toFile(Buffer.from('Example data'), 'README.md'),
       containerTag: 'user',
       containerTags: '["user_123", "project_123"]',
+      customId: 'mem_abc123',
+      entityContext: 'This user is a software engineer who prefers concise technical documentation.',
       filepath: '/documents/reports/file.pdf',
       fileType: 'image',
       metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',
