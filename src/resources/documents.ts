@@ -424,8 +424,6 @@ export interface DocumentGetResponse {
    */
   source: string | null;
 
-  spatialPoint: unknown;
-
   /**
    * Status of the document
    */
