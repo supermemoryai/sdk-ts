@@ -29,6 +29,7 @@ describe('top level methods', () => {
       customId: 'customId',
       entityContext: 'entityContext',
       filepath: 'filepath',
+      filterByMetadata: { foo: 'string' },
       metadata: { foo: 'string' },
       taskType: 'memory',
     });

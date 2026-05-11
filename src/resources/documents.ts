@@ -614,6 +614,14 @@ export interface DocumentUpdateParams {
   filepath?: string;
 
   /**
+   * Optional metadata filter scoping which existing memories are pulled as context
+   * during ingestion. Scalar values match exactly (AND across keys); array values
+   * match ANY (OR within key). Only memories whose source documents match this
+   * filter are used as context.
+   */
+  filterByMetadata?: { [key: string]: string | number | boolean | Array<string> };
+
+  /**
    * Optional metadata for the document. This is used to store additional information
    * about the document. You can use this to store any additional information you
    * need about the document. Metadata can be filtered through. Keys must be strings
@@ -4116,6 +4124,12 @@ export interface DocumentAddParams {
   filepath?: string;
 
   /**
+   * Optional metadata filter to apply when pulling related memories and profile
+   * during ingestion. Only memories matching these filters will be used as context.
+   */
+  filterByMetadata?: { [key: string]: string | number | boolean | Array<string> };
+
+  /**
    * Optional metadata for the document.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
@@ -4151,6 +4165,14 @@ export interface DocumentBatchAddParams {
    * by supermemoryfs to map documents to filesystem paths.
    */
   filepath?: string;
+
+  /**
+   * Optional metadata filter scoping which existing memories are pulled as context
+   * during ingestion. Scalar values match exactly (AND across keys); array values
+   * match ANY (OR within key). Only memories whose source documents match this
+   * filter are used as context.
+   */
+  filterByMetadata?: { [key: string]: string | number | boolean | Array<string> };
 
   /**
    * Optional metadata for the document. This is used to store additional information
@@ -4207,6 +4229,14 @@ export namespace DocumentBatchAddParams {
      * by supermemoryfs to map documents to filesystem paths.
      */
     filepath?: string;
+
+    /**
+     * Optional metadata filter scoping which existing memories are pulled as context
+     * during ingestion. Scalar values match exactly (AND across keys); array values
+     * match ANY (OR within key). Only memories whose source documents match this
+     * filter are used as context.
+     */
+    filterByMetadata?: { [key: string]: string | number | boolean | Array<string> };
 
     /**
      * Optional metadata for the document. This is used to store additional information
@@ -4286,6 +4316,13 @@ export interface DocumentUploadFileParams {
    * notion_doc, webpage, onedrive
    */
   fileType?: string;
+
+  /**
+   * Optional metadata filter as a JSON string. Scopes which existing memories are
+   * pulled as context during ingestion. Scalar values match exactly (AND across
+   * keys); array values match ANY (OR within key).
+   */
+  filterByMetadata?: string;
 
   /**
    * Optional metadata for the document as a JSON string. This is used to store

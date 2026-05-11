@@ -65,6 +65,7 @@ describe('resource documents', () => {
       customId: 'customId',
       entityContext: 'entityContext',
       filepath: 'filepath',
+      filterByMetadata: { foo: 'string' },
       metadata: { foo: 'string' },
       taskType: 'memory',
     });
@@ -94,6 +95,7 @@ describe('resource documents', () => {
           containerTags: ['user_123', 'project_123'],
           customId: 'mem_abc123',
           filepath: '/documents/reports/file.pdf',
+          filterByMetadata: { department: 'engineering', region: 'us' },
           metadata: {
             category: 'technology',
             isPublic: true,
@@ -109,6 +111,7 @@ describe('resource documents', () => {
       containerTags: ['user_123', 'project_123'],
       content: null,
       filepath: '/documents/reports/file.pdf',
+      filterByMetadata: { department: 'engineering', region: 'us' },
       metadata: {
         category: 'technology',
         isPublic: true,
@@ -181,6 +184,7 @@ describe('resource documents', () => {
       entityContext: 'This user is a software engineer who prefers concise technical documentation.',
       filepath: '/documents/reports/file.pdf',
       fileType: 'image',
+      filterByMetadata: '{"department": "engineering"}',
       metadata: '{"category": "technology", "isPublic": true, "readingTime": 5}',
       mimeType: 'mimeType',
       taskType: 'memory',

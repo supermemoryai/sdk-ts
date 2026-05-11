@@ -92,6 +92,12 @@ export interface AddParams {
   filepath?: string;
 
   /**
+   * Optional metadata filter to apply when pulling related memories and profile
+   * during ingestion. Only memories matching these filters will be used as context.
+   */
+  filterByMetadata?: { [key: string]: string | number | boolean | Array<string> };
+
+  /**
    * Optional metadata for the document.
    */
   metadata?: { [key: string]: string | number | boolean | Array<string> };
