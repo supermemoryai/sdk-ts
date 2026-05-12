@@ -76,7 +76,7 @@ export class Documents extends APIResource {
    *   documents: [
    *     {
    *       content:
-   *         'This is a detailed article about machine learning concepts...',
+   *         'Our API rate limits are 100 req/min on free and 1000 on pro. Clients should use exponential backoff on 429s.',
    *     },
    *   ],
    * });
@@ -4161,6 +4161,12 @@ export interface DocumentBatchAddParams {
   content?: null;
 
   /**
+   * Optional entity context for this container tag. Max 1500 characters. Used during
+   * document processing to guide memory extraction.
+   */
+  entityContext?: string;
+
+  /**
    * Optional file path for the document (e.g., '/documents/reports/file.pdf'). Used
    * by supermemoryfs to map documents to filesystem paths.
    */
@@ -4223,6 +4229,12 @@ export namespace DocumentBatchAddParams {
      * will uniquely identify this document.
      */
     customId?: string;
+
+    /**
+     * Optional entity context for this container tag. Max 1500 characters. Used during
+     * document processing to guide memory extraction.
+     */
+    entityContext?: string;
 
     /**
      * Optional file path for the document (e.g., '/documents/reports/file.pdf'). Used

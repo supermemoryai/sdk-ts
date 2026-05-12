@@ -74,7 +74,12 @@ describe('resource documents', () => {
   // Mock server tests are disabled
   test.skip('batchAdd: only required params', async () => {
     const responsePromise = client.documents.batchAdd({
-      documents: [{ content: 'This is a detailed article about machine learning concepts...' }],
+      documents: [
+        {
+          content:
+            'Our API rate limits are 100 req/min on free and 1000 on pro. Clients should use exponential backoff on 429s.',
+        },
+      ],
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -90,36 +95,25 @@ describe('resource documents', () => {
     const response = await client.documents.batchAdd({
       documents: [
         {
-          content: 'This is a detailed article about machine learning concepts...',
-          containerTag: 'user_123',
-          containerTags: ['user_123', 'project_123'],
-          customId: 'mem_abc123',
+          content:
+            'Our API rate limits are 100 req/min on free and 1000 on pro. Clients should use exponential backoff on 429s.',
+          containerTag: 'user_alex',
+          containerTags: ['_:_k--W2K_1V'],
+          customId: 'doc-api-rate-limits',
+          entityContext: "User's name is {XYZ}",
           filepath: '/documents/reports/file.pdf',
           filterByMetadata: { department: 'engineering', region: 'us' },
-          metadata: {
-            category: 'technology',
-            isPublic: true,
-            readingTime: 5,
-            source: 'web',
-            tag_1: 'ai',
-            tag_2: 'machine-learning',
-          },
+          metadata: { source: 'upload', language: 'en' },
           taskType: 'memory',
         },
       ],
-      containerTag: 'user_123',
-      containerTags: ['user_123', 'project_123'],
+      containerTag: 'user_alex',
+      containerTags: ['_:_k--W2K_1V'],
       content: null,
+      entityContext: "User's name is {XYZ}",
       filepath: '/documents/reports/file.pdf',
       filterByMetadata: { department: 'engineering', region: 'us' },
-      metadata: {
-        category: 'technology',
-        isPublic: true,
-        readingTime: 5,
-        source: 'web',
-        tag_1: 'ai',
-        tag_2: 'machine-learning',
-      },
+      metadata: { source: 'upload', language: 'en' },
       taskType: 'memory',
     });
   });
@@ -179,9 +173,9 @@ describe('resource documents', () => {
     const response = await client.documents.uploadFile({
       file: await toFile(Buffer.from('Example data'), 'README.md'),
       containerTag: 'user',
-      containerTags: '["user_123", "project_123"]',
+      containerTags: 'containerTags',
       customId: 'mem_abc123',
-      entityContext: 'This user is a software engineer who prefers concise technical documentation.',
+      entityContext: "User's name is {XYZ}",
       filepath: '/documents/reports/file.pdf',
       fileType: 'image',
       filterByMetadata: '{"department": "engineering"}',

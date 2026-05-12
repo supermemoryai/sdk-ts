@@ -11,7 +11,7 @@ export class Search extends APIResource {
    * @example
    * ```ts
    * const response = await client.search.documents({
-   *   q: 'machine learning concepts',
+   *   q: 'what are the API rate limits',
    * });
    * ```
    */
@@ -25,7 +25,7 @@ export class Search extends APIResource {
    * @example
    * ```ts
    * const response = await client.search.execute({
-   *   q: 'machine learning concepts',
+   *   q: 'what are the API rate limits',
    * });
    * ```
    */
@@ -39,7 +39,7 @@ export class Search extends APIResource {
    * @example
    * ```ts
    * const response = await client.search.memories({
-   *   q: 'machine learning concepts',
+   *   q: 'what are the API rate limits',
    * });
    * ```
    */

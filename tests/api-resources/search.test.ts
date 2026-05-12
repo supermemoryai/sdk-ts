@@ -10,7 +10,7 @@ const client = new Supermemory({
 describe('resource search', () => {
   // Mock server tests are disabled
   test.skip('documents: only required params', async () => {
-    const responsePromise = client.search.documents({ q: 'machine learning concepts' });
+    const responsePromise = client.search.documents({ q: 'what are the API rate limits' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,14 +23,14 @@ describe('resource search', () => {
   // Mock server tests are disabled
   test.skip('documents: required and optional params', async () => {
     const response = await client.search.documents({
-      q: 'machine learning concepts',
+      q: 'what are the API rate limits',
       categoriesFilter: ['string'],
       chunkThreshold: 0.5,
-      containerTag: 'user_123',
-      containerTags: ['user_123'],
+      containerTag: 'user_alex',
+      containerTags: ['_:_k--W2K_1V'],
       docId: 'docId',
       documentThreshold: 0,
-      filepath: '/docs/',
+      filepath: 'filepath',
       filters: {
         OR: [
           {
@@ -54,7 +54,7 @@ describe('resource search', () => {
 
   // Mock server tests are disabled
   test.skip('execute: only required params', async () => {
-    const responsePromise = client.search.execute({ q: 'machine learning concepts' });
+    const responsePromise = client.search.execute({ q: 'what are the API rate limits' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -67,14 +67,14 @@ describe('resource search', () => {
   // Mock server tests are disabled
   test.skip('execute: required and optional params', async () => {
     const response = await client.search.execute({
-      q: 'machine learning concepts',
+      q: 'what are the API rate limits',
       categoriesFilter: ['string'],
       chunkThreshold: 0.5,
-      containerTag: 'user_123',
-      containerTags: ['user_123'],
+      containerTag: 'user_alex',
+      containerTags: ['_:_k--W2K_1V'],
       docId: 'docId',
       documentThreshold: 0,
-      filepath: '/docs/',
+      filepath: 'filepath',
       filters: {
         OR: [
           {
@@ -98,7 +98,7 @@ describe('resource search', () => {
 
   // Mock server tests are disabled
   test.skip('memories: only required params', async () => {
-    const responsePromise = client.search.memories({ q: 'machine learning concepts' });
+    const responsePromise = client.search.memories({ q: 'what are the API rate limits' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -111,10 +111,10 @@ describe('resource search', () => {
   // Mock server tests are disabled
   test.skip('memories: required and optional params', async () => {
     const response = await client.search.memories({
-      q: 'machine learning concepts',
+      q: 'what are the API rate limits',
       aggregate: false,
-      containerTag: 'user_123',
-      filepath: '/docs/',
+      containerTag: 'user_alex',
+      filepath: 'filepath',
       filters: {
         OR: [
           {
