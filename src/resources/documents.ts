@@ -401,6 +401,8 @@ export interface DocumentGetResponse {
    */
   customId: string | null;
 
+  dreamingStatus: 'dreaming' | 'done';
+
   filepath: string | null;
 
   /**
