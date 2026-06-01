@@ -4114,6 +4114,14 @@ export interface DocumentAddParams {
   customId?: string;
 
   /**
+   * Processing mode. "dynamic" (default) groups related documents together so
+   * memories form from coherent, logical units rather than one isolated entry at a
+   * time. "instant" processes each document on its own right away, and bills one
+   * extra operation per document.
+   */
+  dreaming?: 'instant' | 'dynamic';
+
+  /**
    * Optional entity context for this container tag. Max 1500 characters. Used during
    * document processing to guide memory extraction.
    */
@@ -4161,6 +4169,14 @@ export interface DocumentBatchAddParams {
   containerTags?: Array<string>;
 
   content?: null;
+
+  /**
+   * Processing mode. "dynamic" (default) groups related documents together so
+   * memories form from coherent, logical units rather than one isolated entry at a
+   * time. "instant" processes each document on its own right away, and bills one
+   * extra operation per document.
+   */
+  dreaming?: 'instant' | 'dynamic';
 
   /**
    * Optional entity context for this container tag. Max 1500 characters. Used during
@@ -4231,6 +4247,14 @@ export namespace DocumentBatchAddParams {
      * will uniquely identify this document.
      */
     customId?: string;
+
+    /**
+     * Processing mode. "dynamic" (default) groups related documents together so
+     * memories form from coherent, logical units rather than one isolated entry at a
+     * time. "instant" processes each document on its own right away, and bills one
+     * extra operation per document.
+     */
+    dreaming?: 'instant' | 'dynamic';
 
     /**
      * Optional entity context for this container tag. Max 1500 characters. Used during
