@@ -236,7 +236,8 @@ export namespace DocumentListResponse {
       | 'notion_doc'
       | 'webpage'
       | 'onedrive'
-      | 'github_markdown';
+      | 'github_markdown'
+      | 'granola';
 
     /**
      * Last update timestamp
@@ -463,7 +464,8 @@ export interface DocumentGetResponse {
     | 'notion_doc'
     | 'webpage'
     | 'onedrive'
-    | 'github_markdown';
+    | 'github_markdown'
+    | 'granola';
 
   /**
    * Last update timestamp
@@ -548,7 +550,8 @@ export namespace DocumentListProcessingResponse {
       | 'notion_doc'
       | 'webpage'
       | 'onedrive'
-      | 'github_markdown';
+      | 'github_markdown'
+      | 'granola';
 
     /**
      * Last update timestamp

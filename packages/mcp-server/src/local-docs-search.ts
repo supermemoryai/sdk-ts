@@ -734,7 +734,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     stainlessPath: '(resource) connections > (method) create',
     qualified: 'client.connections.create',
     params: [
-      "provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3';",
+      "provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola';",
       'containerTag?: string;',
       'containerTags?: string[];',
       'documentLimit?: number;',
@@ -743,7 +743,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     ],
     response: '{ id: string; authLink: string; expiresIn: string; redirectsTo?: string; }',
     markdown:
-      "## create\n\n`client.connections.create(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3', containerTag?: string, containerTags?: string[], documentLimit?: number, metadata?: object, redirectUrl?: string): { id: string; authLink: string; expiresIn: string; redirectsTo?: string; }`\n\n**post** `/v3/connections/{provider}`\n\nInitialize connection and get authorization URL\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3'`\n\n- `containerTag?: string`\n\n- `containerTags?: string[]`\n\n- `documentLimit?: number`\n\n- `metadata?: object`\n\n- `redirectUrl?: string`\n\n### Returns\n\n- `{ id: string; authLink: string; expiresIn: string; redirectsTo?: string; }`\n\n  - `id: string`\n  - `authLink: string`\n  - `expiresIn: string`\n  - `redirectsTo?: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst connection = await client.connections.create('notion');\n\nconsole.log(connection);\n```",
+      "## create\n\n`client.connections.create(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola', containerTag?: string, containerTags?: string[], documentLimit?: number, metadata?: object, redirectUrl?: string): { id: string; authLink: string; expiresIn: string; redirectsTo?: string; }`\n\n**post** `/v3/connections/{provider}`\n\nInitialize connection and get authorization URL\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola'`\n\n- `containerTag?: string`\n\n- `containerTags?: string[]`\n\n- `documentLimit?: number`\n\n- `metadata?: object`\n\n- `redirectUrl?: string`\n\n### Returns\n\n- `{ id: string; authLink: string; expiresIn: string; redirectsTo?: string; }`\n\n  - `id: string`\n  - `authLink: string`\n  - `expiresIn: string`\n  - `redirectsTo?: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst connection = await client.connections.create('notion');\n\nconsole.log(connection);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connections.create',
@@ -800,13 +800,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     stainlessPath: '(resource) connections > (method) get_by_tag',
     qualified: 'client.connections.getByTag',
     params: [
-      "provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3';",
+      "provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola';",
       'containerTags: string[];',
     ],
     response:
       '{ id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }',
     markdown:
-      "## get_by_tag\n\n`client.connections.getByTag(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3', containerTags: string[]): { id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }`\n\n**post** `/v3/connections/{provider}/connection`\n\nGet connection details with provider and container tags\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3'`\n\n- `containerTags: string[]`\n  Comma-separated list of container tags to filter connection by\n\n### Returns\n\n- `{ id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `provider: string`\n  - `containerTags?: string[]`\n  - `documentLimit?: number`\n  - `email?: string`\n  - `expiresAt?: string`\n  - `metadata?: object`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.getByTag('notion', { containerTags: ['user_123', 'project_123'] });\n\nconsole.log(response);\n```",
+      "## get_by_tag\n\n`client.connections.getByTag(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola', containerTags: string[]): { id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }`\n\n**post** `/v3/connections/{provider}/connection`\n\nGet connection details with provider and container tags\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola'`\n\n- `containerTags: string[]`\n  Comma-separated list of container tags to filter connection by\n\n### Returns\n\n- `{ id: string; createdAt: string; provider: string; containerTags?: string[]; documentLimit?: number; email?: string; expiresAt?: string; metadata?: object; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `provider: string`\n  - `containerTags?: string[]`\n  - `documentLimit?: number`\n  - `email?: string`\n  - `expiresAt?: string`\n  - `metadata?: object`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.getByTag('notion', { containerTags: ['user_123', 'project_123'] });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connections.getByTag',
@@ -862,12 +862,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     stainlessPath: '(resource) connections > (method) delete_by_provider',
     qualified: 'client.connections.deleteByProvider',
     params: [
-      "provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3';",
+      "provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola';",
       'containerTags: string[];',
     ],
     response: '{ id: string; provider: string; }',
     markdown:
-      "## delete_by_provider\n\n`client.connections.deleteByProvider(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3', containerTags: string[]): { id: string; provider: string; }`\n\n**delete** `/v3/connections/{provider}`\n\nDelete connection for a specific provider and container tags\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3'`\n\n- `containerTags: string[]`\n  Optional comma-separated list of container tags to filter connections by\n\n### Returns\n\n- `{ id: string; provider: string; }`\n\n  - `id: string`\n  - `provider: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.deleteByProvider('notion', { containerTags: ['user_123', 'project_123'] });\n\nconsole.log(response);\n```",
+      "## delete_by_provider\n\n`client.connections.deleteByProvider(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola', containerTags: string[]): { id: string; provider: string; }`\n\n**delete** `/v3/connections/{provider}`\n\nDelete connection for a specific provider and container tags\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola'`\n\n- `containerTags: string[]`\n  Optional comma-separated list of container tags to filter connections by\n\n### Returns\n\n- `{ id: string; provider: string; }`\n\n  - `id: string`\n  - `provider: string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.deleteByProvider('notion', { containerTags: ['user_123', 'project_123'] });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connections.deleteByProvider',
@@ -894,12 +894,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     stainlessPath: '(resource) connections > (method) import',
     qualified: 'client.connections.import',
     params: [
-      "provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3';",
+      "provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola';",
       'containerTags?: string[];',
     ],
     response: 'string',
     markdown:
-      "## import\n\n`client.connections.import(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3', containerTags?: string[]): string`\n\n**post** `/v3/connections/{provider}/import`\n\nInitiate a manual sync of connections\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3'`\n\n- `containerTags?: string[]`\n  Optional comma-separated list of container tags to filter connections by\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.import('notion');\n\nconsole.log(response);\n```",
+      "## import\n\n`client.connections.import(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola', containerTags?: string[]): string`\n\n**post** `/v3/connections/{provider}/import`\n\nInitiate a manual sync of connections\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola'`\n\n- `containerTags?: string[]`\n  Optional comma-separated list of container tags to filter connections by\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.import('notion');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connections.import',
@@ -956,13 +956,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     stainlessPath: '(resource) connections > (method) list_documents',
     qualified: 'client.connections.listDocuments',
     params: [
-      "provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3';",
+      "provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola';",
       'containerTags?: string[];',
     ],
     response:
       '{ id: string; createdAt: string; status: string; summary: string; title: string; type: string; updatedAt: string; }[]',
     markdown:
-      "## list_documents\n\n`client.connections.listDocuments(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3', containerTags?: string[]): { id: string; createdAt: string; status: string; summary: string; title: string; type: string; updatedAt: string; }[]`\n\n**post** `/v3/connections/{provider}/documents`\n\nList documents indexed for a provider and container tags\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3'`\n\n- `containerTags?: string[]`\n  Optional comma-separated list of container tags to filter documents by\n\n### Returns\n\n- `{ id: string; createdAt: string; status: string; summary: string; title: string; type: string; updatedAt: string; }[]`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.listDocuments('notion');\n\nconsole.log(response);\n```",
+      "## list_documents\n\n`client.connections.listDocuments(provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola', containerTags?: string[]): { id: string; createdAt: string; status: string; summary: string; title: string; type: string; updatedAt: string; }[]`\n\n**post** `/v3/connections/{provider}/documents`\n\nList documents indexed for a provider and container tags\n\n### Parameters\n\n- `provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola'`\n\n- `containerTags?: string[]`\n  Optional comma-separated list of container tags to filter documents by\n\n### Returns\n\n- `{ id: string; createdAt: string; status: string; summary: string; title: string; type: string; updatedAt: string; }[]`\n\n### Example\n\n```typescript\nimport Supermemory from 'supermemory';\n\nconst client = new Supermemory();\n\nconst response = await client.connections.listDocuments('notion');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connections.listDocuments',

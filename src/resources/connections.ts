@@ -21,7 +21,7 @@ export class Connections extends APIResource {
    * ```
    */
   create(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
+    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola',
     body: ConnectionCreateParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionCreateResponse> {
@@ -93,7 +93,7 @@ export class Connections extends APIResource {
    * ```
    */
   deleteByProvider(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
+    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola',
     body: ConnectionDeleteByProviderParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionDeleteByProviderResponse> {
@@ -126,7 +126,7 @@ export class Connections extends APIResource {
    * ```
    */
   getByTag(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
+    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola',
     body: ConnectionGetByTagParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionGetByTagResponse> {
@@ -142,7 +142,7 @@ export class Connections extends APIResource {
    * ```
    */
   import(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
+    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola',
     body: ConnectionImportParams,
     options?: RequestOptions,
   ): APIPromise<string> {
@@ -164,7 +164,7 @@ export class Connections extends APIResource {
    * ```
    */
   listDocuments(
-    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3',
+    provider: 'notion' | 'google-drive' | 'onedrive' | 'gmail' | 'github' | 'web-crawler' | 's3' | 'granola',
     body: ConnectionListDocumentsParams,
     options?: RequestOptions,
   ): APIPromise<ConnectionListDocumentsResponse> {
