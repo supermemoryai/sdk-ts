@@ -168,6 +168,41 @@ export interface ClientOptions {
   logger?: Logger | undefined;
 }
 
+export interface LocalClientOptions extends Omit<ClientOptions, 'baseURL'> {
+  /**
+   * Override the local server URL.
+   *
+   * Defaults to process.env['SUPERMEMORY_LOCAL_URL'] or http://localhost:8787.
+   */
+  baseURL?: string | null | undefined;
+
+  /**
+   * Port to use when constructing the default local server URL.
+   *
+   * Defaults to process.env['PORT'] or 8787.
+   */
+  port?: number | undefined;
+
+  /**
+   * Install and start the local server before returning the client.
+   *
+   * @default true
+   */
+  start?: boolean | undefined;
+
+  /**
+   * Install an explicit local server version, for example "0.0.1-rc.4".
+   */
+  version?: string | undefined;
+
+  /**
+   * How long to wait for the local server to become reachable.
+   *
+   * @default 30000
+   */
+  startupTimeout?: number | undefined;
+}
+
 /**
  * API Client for interfacing with the Supermemory API.
  */
@@ -793,6 +828,34 @@ export class Supermemory {
   static Supermemory = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
+  /**
+   * Create a client for the local Supermemory server.
+   *
+   * By default this installs and starts the local server via the package CLI if
+   * it is not already reachable.
+   */
+  static async local(options: LocalClientOptions = {}): Promise<Supermemory> {
+    const { baseURL, port, start = true, version, startupTimeout = 30000, ...clientOptions } = options;
+    const localBaseURL =
+      baseURL || readEnv('SUPERMEMORY_LOCAL_URL') || `http://localhost:${port ?? readEnv('PORT') ?? 8787}`;
+
+    if (start) {
+      await ensureLocalServer({
+        baseURL: localBaseURL,
+        port,
+        version,
+        timeout: startupTimeout,
+        fetch: clientOptions.fetch,
+      });
+    }
+
+    return new Supermemory({
+      ...clientOptions,
+      apiKey: clientOptions.apiKey ?? readEnv('SUPERMEMORY_API_KEY') ?? 'local',
+      baseURL: localBaseURL,
+    });
+  }
+
   static SupermemoryError = Errors.SupermemoryError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
@@ -831,8 +894,142 @@ Supermemory.Search = Search;
 Supermemory.Settings = Settings;
 Supermemory.Connections = Connections;
 
+type EnsureLocalServerOptions = {
+  baseURL: string;
+  port?: number | undefined;
+  version?: string | undefined;
+  timeout: number;
+  fetch?: Fetch | undefined;
+};
+
+async function ensureLocalServer({
+  baseURL,
+  port,
+  version,
+  timeout,
+  fetch,
+}: EnsureLocalServerOptions): Promise<void> {
+  if (await isLocalServerReachable(baseURL, fetch)) return;
+
+  await startLocalServer({ port, version });
+
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline) {
+    if (await isLocalServerReachable(baseURL, fetch)) return;
+    await sleep(250);
+  }
+
+  throw new Errors.SupermemoryError(
+    `Timed out waiting for local Supermemory server at ${baseURL}. Try running \`npx supermemory local\` manually.`,
+  );
+}
+
+async function isLocalServerReachable(baseURL: string, fetch: Fetch | undefined): Promise<boolean> {
+  const fetchFn = fetch ?? Shims.getDefaultFetch();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 1000);
+  try {
+    await fetchFn(baseURL, { method: 'GET', signal: controller.signal } as RequestInit);
+    return true;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function startLocalServer({
+  port,
+  version,
+}: {
+  port?: number | undefined;
+  version?: string | undefined;
+}): Promise<void> {
+  const processRef = (globalThis as any).process;
+  if (!processRef?.versions?.node) {
+    throw new Errors.SupermemoryError('Supermemory.local() can only start the server in Node.js.');
+  }
+
+  const [{ spawn }, cliPath] = await Promise.all([import('node:child_process'), resolveLocalCLIPath()]);
+  const args = cliPath ? [cliPath, 'local'] : ['supermemory', 'local'];
+  if (version) args.push('--version', version);
+  if (port !== undefined) args.push('--port', String(port));
+
+  const child =
+    cliPath ?
+      spawn(processRef.execPath, args, {
+        detached: true,
+        stdio: 'ignore',
+        env: { ...processRef.env },
+      })
+    : spawn(args[0]!, args.slice(1), {
+        detached: true,
+        stdio: 'ignore',
+        env: { ...processRef.env },
+      });
+
+  await new Promise<void>((resolve, reject) => {
+    let settled = false;
+    const settle = (callback: () => void) => {
+      if (settled) return;
+      settled = true;
+      callback();
+    };
+    child.once('error', (error) => settle(() => reject(error)));
+    setTimeout(() => settle(resolve), 100);
+  });
+
+  child.unref();
+}
+
+async function resolveLocalCLIPath(): Promise<string | undefined> {
+  const processRef = (globalThis as any).process;
+  const [{ existsSync }, pathModule, urlModule] = await Promise.all([
+    import('node:fs'),
+    import('node:path'),
+    import('node:url'),
+  ]);
+  const dirname = await getCurrentModuleDir(pathModule, urlModule);
+  const candidates =
+    dirname ?
+      [
+        pathModule.join(dirname, 'bin', 'cli'),
+        pathModule.join(dirname, '..', 'bin', 'cli'),
+        pathModule.join(dirname, '..', 'dist', 'bin', 'cli'),
+      ]
+    : [];
+
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) return candidate;
+  }
+
+  if (processRef?.env?.SUPERMEMORY_CLI_PATH && existsSync(processRef.env.SUPERMEMORY_CLI_PATH)) {
+    return processRef.env.SUPERMEMORY_CLI_PATH;
+  }
+
+  return undefined;
+}
+
+async function getCurrentModuleDir(
+  pathModule: typeof import('node:path'),
+  urlModule: typeof import('node:url'),
+): Promise<string | undefined> {
+  try {
+    if (typeof __dirname !== 'undefined') return __dirname;
+  } catch {}
+
+  try {
+    const metaUrl = (0, eval)('import.meta.url') as string | undefined;
+    if (metaUrl?.startsWith('file:')) return pathModule.dirname(urlModule.fileURLToPath(metaUrl));
+  } catch {}
+
+  return undefined;
+}
+
 export declare namespace Supermemory {
   export type RequestOptions = Opts.RequestOptions;
+
+  export { type LocalClientOptions as LocalClientOptions };
 
   export {
     type AddResponse as AddResponse,

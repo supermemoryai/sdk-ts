@@ -1,7 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from 'supermemory/internal/to-file';
 import { toFile } from 'supermemory/core/uploads';
-import { File } from 'node:buffer';
 
 class MyClass {
   name: string = 'foo';
@@ -10,7 +9,7 @@ class MyClass {
 function mockResponse({ url, content }: { url: string; content?: Blob }): ResponseLike {
   return {
     url,
-    blob: async () => content || new Blob([]),
+    blob: async () => (content || new Blob([])) as any,
   };
 }
 
@@ -46,7 +45,7 @@ describe('toFile', () => {
 
   it('extracts a file name from a File', async () => {
     const input = new File(['foo'], 'input.jsonl');
-    const file = await toFile(input);
+    const file = await toFile(input as any);
     expect(file.name).toEqual('input.jsonl');
   });
 
@@ -58,7 +57,7 @@ describe('toFile', () => {
 
   it('does not copy File objects', async () => {
     const input = new File(['foo'], 'input.jsonl', { type: 'jsonl' });
-    const file = await toFile(input);
+    const file = await toFile(input as any);
     expect(file).toBe(input);
     expect(file.name).toEqual('input.jsonl');
     expect(file.type).toBe('jsonl');
@@ -66,7 +65,7 @@ describe('toFile', () => {
 
   it('is assignable to File and Blob', async () => {
     const input = new File(['foo'], 'input.jsonl', { type: 'jsonl' });
-    const result = await toFile(input);
+    const result = await toFile(input as any);
     const file: File = result;
     const blob: Blob = result;
     void file, blob;

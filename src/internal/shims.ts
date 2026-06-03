@@ -52,7 +52,7 @@ export function ReadableStreamFrom<T>(iterable: Iterable<T> | AsyncIterable<T>):
     async cancel() {
       await iter.return?.();
     },
-  });
+  } as any);
 }
 
 /**
