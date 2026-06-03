@@ -1,4 +1,265 @@
 #!/usr/bin/env node
+if (process.argv[2] === "local") {
+  (async () => {
+    const fs = require("node:fs");
+    const fsp = require("node:fs/promises");
+    const os = require("node:os");
+    const path = require("node:path");
+    const https = require("node:https");
+    const { spawn } = require("node:child_process");
+
+    const BIN_NAME = "supermemory-server";
+    const INSTALL_URL = process.env.SUPERMEMORY_LOCAL_INSTALL_URL || "https://supermemory.ai/install";
+    const INSTALL_DIR = path.resolve(process.env.SUPERMEMORY_INSTALL_DIR || path.join(os.homedir(), ".supermemory"));
+    const BIN_DIR = path.join(INSTALL_DIR, "bin");
+    const WRAPPER_BIN_DIR = path.resolve(process.env.SUPERMEMORY_BIN_DIR || path.join(os.homedir(), ".local", "bin"));
+    const ENV_FILE = path.join(INSTALL_DIR, "env");
+
+    function usage() {
+      process.stdout.write(`supermemory local
+
+Run a local self-hosted Supermemory server.
+
+Usage:
+  supermemory local [start] [--version <version>] [--port <port>] [-- <server args>]
+  supermemory local install [--version <version>] [--force]
+  supermemory local upgrade
+  supermemory local status [--url <url>]
+  supermemory local path
+  supermemory local env
+
+Options:
+  --version <version>  Install an explicit server version, for example 0.0.1-rc.4.
+  --port <port>        Port for local start. Defaults to PORT or 8787.
+  --force              Forward a force install hint to the hosted installer.
+  --no-install         Start only if the server binary is already installed.
+
+The SDK package only contains this small launcher. The native server binary and
+runtime assets are installed by ${INSTALL_URL}.
+`);
+    }
+
+    function fail(message) {
+      process.stderr.write(`supermemory local: ${message}\n`);
+      return 1;
+    }
+
+    function parseArgs(argv) {
+      const opts = { command: "start", version: "latest", force: false, install: true, port: undefined, url: undefined, serverArgs: [] };
+      const args = [...argv];
+      if (args[0] && !args[0].startsWith("-")) opts.command = args.shift();
+      while (args.length > 0) {
+        const arg = args.shift();
+        if (arg === "--") {
+          opts.serverArgs = args;
+          break;
+        }
+        if (arg === "--help" || arg === "-h") opts.help = true;
+        else if (arg === "--force") opts.force = true;
+        else if (arg === "--no-install") opts.install = false;
+        else if (arg === "--version") opts.version = args.shift() || "";
+        else if (arg === "--port") opts.port = args.shift() || "";
+        else if (arg === "--url") opts.url = args.shift() || "";
+        else return { ...opts, error: `unknown option ${arg}` };
+      }
+      return opts;
+    }
+
+    function request(url, redirects = 0) {
+      return new Promise((resolve, reject) => {
+        const req = https.get(
+          url,
+          { headers: { "user-agent": "supermemory-sdk-local-installer" } },
+          (res) => {
+            if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+              res.resume();
+              if (redirects > 5) reject(new Error(`too many redirects for ${url}`));
+              else resolve(request(new URL(res.headers.location, url).toString(), redirects + 1));
+              return;
+            }
+            if (res.statusCode < 200 || res.statusCode >= 300) {
+              res.resume();
+              reject(new Error(`request failed (${res.statusCode}) for ${url}`));
+              return;
+            }
+            resolve(res);
+          },
+        );
+        req.on("error", reject);
+      });
+    }
+
+    async function getText(url) {
+      const res = await request(url);
+      let body = "";
+      for await (const chunk of res) body += chunk;
+      return body;
+    }
+
+    async function exists(file) {
+      try {
+        await fsp.access(file, fs.constants.X_OK);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function installerUrl(version) {
+      if (!version || version === "latest") return INSTALL_URL;
+      const url = new URL(INSTALL_URL);
+      url.searchParams.set("version", version.replace(/^server-v/, ""));
+      return url.toString();
+    }
+
+    function candidateServerBins() {
+      return [
+        path.join(WRAPPER_BIN_DIR, BIN_NAME),
+        path.join(BIN_DIR, BIN_NAME),
+      ];
+    }
+
+    async function resolveServerBin() {
+      for (const candidate of candidateServerBins()) {
+        if (await exists(candidate)) return candidate;
+      }
+      return null;
+    }
+
+    async function runInstallScript(opts, { noStart = true } = {}) {
+      const version = opts.version && opts.version !== "latest" ? opts.version.replace(/^server-v/, "") : "";
+      const url = installerUrl(version);
+      process.stderr.write(`Installing local Supermemory via ${url}\n`);
+      const script = await getText(url);
+      const env = {
+        ...process.env,
+        SUPERMEMORY_INSTALL_DIR: INSTALL_DIR,
+        SUPERMEMORY_BIN_DIR: WRAPPER_BIN_DIR,
+      };
+      if (noStart) env.SUPERMEMORY_NO_START = "1";
+      if (!process.stdin.isTTY) env.SUPERMEMORY_NO_PROMPT = "1";
+      if (opts.force) env.SUPERMEMORY_FORCE = "1";
+      const args = ["-s", "--"];
+      if (version) args.push(version);
+      const child = spawn("bash", args, { stdio: ["pipe", "inherit", "inherit"], env });
+      child.stdin.end(script);
+      const code = await new Promise((resolve) => {
+        child.on("close", (exitCode) => resolve(exitCode || 0));
+        child.on("error", (error) => {
+          process.stderr.write(`failed to run bash installer: ${error.message}\n`);
+          resolve(1);
+        });
+      });
+      const installed = await resolveServerBin();
+      if (code !== 0 && installed) {
+        process.stderr.write(`Installer exited with code ${code} after installing ${installed}; continuing.\n`);
+        return { bin: installed };
+      }
+      if (code !== 0) throw new Error(`installer exited with code ${code}`);
+      if (!installed) throw new Error(`installer completed but ${BIN_NAME} was not found in ${candidateServerBins().join(" or ")}`);
+      return { bin: installed };
+    }
+
+    async function readEnvFile(file) {
+      try {
+        const text = await fsp.readFile(file, "utf8");
+        const env = {};
+        for (const rawLine of text.split(/\r?\n/)) {
+          const line = rawLine.trim();
+          if (!line || line.startsWith("#")) continue;
+          const match = /^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/.exec(line);
+          if (!match) continue;
+          let value = match[2];
+          if ((value.startsWith("'") && value.endsWith("'")) || (value.startsWith('"') && value.endsWith('"'))) {
+            value = value.slice(1, -1);
+          }
+          env[match[1]] = value;
+        }
+        return env;
+      } catch (error) {
+        if (error && error.code === "ENOENT") return {};
+        throw error;
+      }
+    }
+
+    async function startServer(opts) {
+      let installed = { bin: await resolveServerBin() };
+      if (!installed.bin) {
+        if (!opts.install) throw new Error(`${BIN_NAME} is not installed. Run supermemory local install first.`);
+        installed = await runInstallScript(opts, { noStart: true });
+      }
+      const envFile = await readEnvFile(ENV_FILE);
+      const env = { ...envFile, ...process.env };
+      if (opts.port) env.PORT = String(opts.port);
+      const child = spawn(installed.bin, opts.serverArgs || [], { stdio: "inherit", env });
+      return await new Promise((resolve) => {
+        child.on("close", (code) => resolve(code || 0));
+        child.on("error", (error) => {
+          process.stderr.write(`failed to start ${installed.bin}: ${error.message}\n`);
+          resolve(1);
+        });
+      });
+    }
+
+    async function status(opts) {
+      const current = await resolveServerBin();
+      const url = opts.url || process.env.SUPERMEMORY_LOCAL_URL || `http://localhost:${opts.port || process.env.PORT || 8787}`;
+      let reachable = false;
+      let detail = "";
+      if (typeof fetch === "function") {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 1500);
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          reachable = true;
+          detail = `HTTP ${res.status}`;
+        } catch (error) {
+          detail = error && error.name === "AbortError" ? "timed out" : error.message || String(error);
+        } finally {
+          clearTimeout(timeout);
+        }
+      } else {
+        detail = "fetch is unavailable in this Node runtime";
+      }
+      process.stdout.write(`installed: ${current || "no"}\n`);
+      process.stdout.write(`server:    ${reachable ? `reachable (${detail})` : `not reachable (${detail})`}\n`);
+      return current && reachable ? 0 : 1;
+    }
+
+    const opts = parseArgs(process.argv.slice(3));
+    if (opts.help || opts.command === "help") {
+      usage();
+      return 0;
+    }
+    if (opts.error) return fail(opts.error);
+
+    if (opts.command === "install") {
+      await runInstallScript(opts, { noStart: true });
+      return 0;
+    }
+    if (opts.command === "upgrade") {
+      await runInstallScript({ ...opts, version: "latest", force: true }, { noStart: true });
+      return 0;
+    }
+    if (opts.command === "start") return await startServer(opts);
+    if (opts.command === "status") return await status(opts);
+    if (opts.command === "path") {
+      process.stdout.write(`${(await resolveServerBin()) || path.join(WRAPPER_BIN_DIR, BIN_NAME)}\n`);
+      return 0;
+    }
+    if (opts.command === "env") {
+      process.stdout.write(`${ENV_FILE}\n`);
+      return 0;
+    }
+    return fail(`unknown command ${opts.command}`);
+  })()
+    .then((code) => process.exit(code || 0))
+    .catch((error) => {
+      process.stderr.write(`supermemory local: ${error && error.message ? error.message : String(error)}\n`);
+      process.exit(1);
+    });
+  return;
+}
 var __create = Object.create;
 var __getProtoOf = Object.getPrototypeOf;
 var __defProp = Object.defineProperty;

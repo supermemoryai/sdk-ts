@@ -19,6 +19,26 @@ describe('instantiate client', () => {
     process.env = env;
   });
 
+  describe('local', () => {
+    test('creates a client pointed at the default local server', async () => {
+      const client = await Supermemory.local({ start: false });
+
+      expect(client.baseURL).toEqual('http://localhost:8787');
+      expect(client.apiKey).toEqual('local');
+    });
+
+    test('respects local client overrides', async () => {
+      const client = await Supermemory.local({
+        start: false,
+        port: 9999,
+        apiKey: 'local-key',
+      });
+
+      expect(client.baseURL).toEqual('http://localhost:9999');
+      expect(client.apiKey).toEqual('local-key');
+    });
+  });
+
   describe('defaultHeaders', () => {
     const client = new Supermemory({
       baseURL: 'http://localhost:5000/',
