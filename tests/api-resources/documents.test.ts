@@ -178,6 +178,7 @@ describe('resource documents', () => {
       containerTag: 'user',
       containerTags: 'containerTags',
       customId: 'mem_abc123',
+      dreaming: 'instant',
       entityContext: "User's name is {XYZ}",
       filepath: '/documents/reports/file.pdf',
       fileType: 'image',
