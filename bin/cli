@@ -9,6 +9,7 @@ if (process.argv[2] === "local") {
     const { spawn } = require("node:child_process");
 
     const BIN_NAME = "supermemory-server";
+    const RELEASES_URL = "https://github.com/supermemoryai/supermemory/releases";
     const INSTALL_URL = process.env.SUPERMEMORY_LOCAL_INSTALL_URL || "https://supermemory.ai/install";
     const INSTALL_DIR = path.resolve(process.env.SUPERMEMORY_INSTALL_DIR || path.join(os.homedir(), ".supermemory"));
     const BIN_DIR = path.join(INSTALL_DIR, "bin");
@@ -23,8 +24,9 @@ Run a local self-hosted Supermemory server.
 Usage:
   supermemory local [start] [--version <version>] [--port <port>] [-- <server args>]
   supermemory local install [--version <version>] [--force]
-  supermemory local upgrade
+  supermemory local upgrade [--version <version>]
   supermemory local status [--url <url>]
+  supermemory local version
   supermemory local path
   supermemory local env
 
@@ -105,6 +107,60 @@ runtime assets are installed by ${INSTALL_URL}.
       }
     }
 
+    // The install script writes the installed version next to the real binary.
+    const VERSION_FILE = path.join(BIN_DIR, `${BIN_NAME}.version`);
+
+    async function installedVersion() {
+      try {
+        const text = await fsp.readFile(VERSION_FILE, "utf8");
+        return text.trim() || null;
+      } catch {
+        return null;
+      }
+    }
+
+    function finalUrl(url, redirects = 0) {
+      return new Promise((resolve, reject) => {
+        const req = https.get(
+          url,
+          { headers: { "user-agent": "supermemory-sdk-local-installer" } },
+          (res) => {
+            res.resume();
+            if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+              if (redirects > 5) reject(new Error(`too many redirects for ${url}`));
+              else resolve(finalUrl(new URL(res.headers.location, url).toString(), redirects + 1));
+              return;
+            }
+            if (res.statusCode < 200 || res.statusCode >= 300) {
+              reject(new Error(`request failed (${res.statusCode}) for ${url}`));
+              return;
+            }
+            resolve(url);
+          },
+        );
+        req.on("error", reject);
+      });
+    }
+
+    // /releases/latest redirects to the latest stable tag — no API rate
+    // limits. Falls back to the REST API while only prereleases exist.
+    async function latestVersion() {
+      const TAG_RE = /^server-v([0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.]+)?)$/;
+      try {
+        const url = await finalUrl(`${RELEASES_URL}/latest`);
+        const match = /\/releases\/tag\/server-v([0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.]+)?)$/.exec(url);
+        if (match) return match[1];
+      } catch {}
+      try {
+        const body = await getText("https://api.github.com/repos/supermemoryai/supermemory/releases?per_page=20");
+        const releases = JSON.parse(body).filter((r) => !r.draft && TAG_RE.test(r.tag_name));
+        const stable = releases.find((r) => !r.prerelease) || releases[0];
+        return stable ? TAG_RE.exec(stable.tag_name)[1] : null;
+      } catch {
+        return null;
+      }
+    }
+
     function installerUrl(version) {
       if (!version || version === "latest") return INSTALL_URL;
       const url = new URL(INSTALL_URL);
@@ -126,7 +182,7 @@ runtime assets are installed by ${INSTALL_URL}.
       return null;
     }
 
-    async function runInstallScript(opts, { noStart = true } = {}) {
+    async function runInstallScript(opts, { noStart = true, strict = false } = {}) {
       const version = opts.version && opts.version !== "latest" ? opts.version.replace(/^server-v/, "") : "";
       const url = installerUrl(version);
       process.stderr.write(`Installing local Supermemory via ${url}\n`);
@@ -151,7 +207,7 @@ runtime assets are installed by ${INSTALL_URL}.
         });
       });
       const installed = await resolveServerBin();
-      if (code !== 0 && installed) {
+      if (code !== 0 && installed && !strict) {
         process.stderr.write(`Installer exited with code ${code} after installing ${installed}; continuing.\n`);
         return { bin: installed };
       }
@@ -221,7 +277,8 @@ runtime assets are installed by ${INSTALL_URL}.
       } else {
         detail = "fetch is unavailable in this Node runtime";
       }
-      process.stdout.write(`installed: ${current || "no"}\n`);
+      const version = await installedVersion();
+      process.stdout.write(`installed: ${current ? `${current}${version ? ` (v${version})` : ""}` : "no"}\n`);
       process.stdout.write(`server:    ${reachable ? `reachable (${detail})` : `not reachable (${detail})`}\n`);
       return current && reachable ? 0 : 1;
     }
@@ -233,12 +290,30 @@ runtime assets are installed by ${INSTALL_URL}.
     }
     if (opts.error) return fail(opts.error);
 
-    if (opts.command === "install") {
-      await runInstallScript(opts, { noStart: true });
-      return 0;
-    }
-    if (opts.command === "upgrade") {
-      await runInstallScript({ ...opts, version: "latest", force: true }, { noStart: true });
+    if (opts.command === "install" || opts.command === "upgrade") {
+      const isUpgrade = opts.command === "upgrade";
+      const bin = await resolveServerBin();
+      const pinned = opts.version && opts.version !== "latest" ? opts.version.replace(/^server-v/, "") : null;
+      if (bin && !opts.force) {
+        const current = await installedVersion();
+        const target = pinned || (await latestVersion());
+        if (current && target && current === target) {
+          process.stdout.write(`${BIN_NAME} v${current} is already up to date.\n`);
+          return 0;
+        }
+        if (target) {
+          process.stderr.write(
+            current
+              ? `Updating ${BIN_NAME} v${current} -> v${target}\n`
+              : `Updating ${BIN_NAME} to v${target}\n`,
+          );
+        }
+      }
+      // Force when a binary already exists so the installer never skips the
+      // download (covers older installs that predate the version file).
+      await runInstallScript({ ...opts, force: opts.force || Boolean(bin) }, { noStart: true, strict: true });
+      const after = await installedVersion();
+      process.stdout.write(`${BIN_NAME}${after ? ` v${after}` : ""} ${isUpgrade ? "upgraded" : "installed"}.\n`);
       return 0;
     }
     if (opts.command === "start") return await startServer(opts);
@@ -250,6 +325,22 @@ runtime assets are installed by ${INSTALL_URL}.
     if (opts.command === "env") {
       process.stdout.write(`${ENV_FILE}\n`);
       return 0;
+    }
+    if (opts.command === "version") {
+      const bin = await resolveServerBin();
+      const current = await installedVersion();
+      const latest = await latestVersion();
+      const installedLabel = current
+        ? `v${current}`
+        : bin
+          ? "unknown version (predates version tracking)"
+          : "not installed";
+      process.stdout.write(`installed: ${installedLabel}\n`);
+      process.stdout.write(`latest:    ${latest ? `v${latest}` : "unknown"}\n`);
+      if (latest && (!current || current !== latest)) {
+        process.stdout.write(`run \`supermemory local upgrade\` to update.\n`);
+      }
+      return bin ? 0 : 1;
     }
     return fail(`unknown command ${opts.command}`);
   })()
