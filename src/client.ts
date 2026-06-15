@@ -168,6 +168,38 @@ export interface ClientOptions {
   logger?: Logger | undefined;
 }
 
+export type LocalModelProvider = 'openai-compatible' | 'ollama' | 'lmstudio' | 'llamacpp';
+
+export interface LocalModelOptions {
+  /**
+   * Local or OpenAI-compatible provider preset.
+   *
+   * - `ollama` defaults to http://localhost:11434/v1
+   * - `lmstudio` defaults to http://localhost:1234/v1
+   * - `llamacpp` defaults to http://localhost:8080/v1
+   * - `openai-compatible` uses `baseURL` directly
+   */
+  provider?: LocalModelProvider | undefined;
+
+  /** OpenAI-compatible base URL for the local model endpoint. */
+  baseURL?: string | undefined;
+
+  /** Model name exposed by the local endpoint. */
+  model?: string | undefined;
+
+  /** Optional override for the local server's fast-model env. */
+  fastModel?: string | undefined;
+
+  /** Optional override for the local server's text-model env. */
+  textModel?: string | undefined;
+
+  /**
+   * API key for the OpenAI-compatible endpoint. Loopback URLs default to a
+   * dummy local key because Ollama, LM Studio, and llama.cpp usually ignore it.
+   */
+  apiKey?: string | undefined;
+}
+
 export interface LocalClientOptions extends Omit<ClientOptions, 'baseURL'> {
   /**
    * Override the local server URL.
@@ -201,6 +233,14 @@ export interface LocalClientOptions extends Omit<ClientOptions, 'baseURL'> {
    * @default 30000
    */
   startupTimeout?: number | undefined;
+
+  /**
+   * Configure the local server to use a local/OpenAI-compatible model backend
+   * when this call starts the server. Equivalent to setting OPENAI_BASE_URL,
+   * OPENAI_MODEL, OPENAI_FAST_MODEL, OPENAI_TEXT_MODEL, and OPENAI_API_KEY for
+   * the spawned local server process.
+   */
+  localModel?: LocalModelOptions | undefined;
 }
 
 /**
@@ -835,7 +875,15 @@ export class Supermemory {
    * it is not already reachable.
    */
   static async local(options: LocalClientOptions = {}): Promise<Supermemory> {
-    const { baseURL, port, start = true, version, startupTimeout = 30000, ...clientOptions } = options;
+    const {
+      baseURL,
+      port,
+      start = true,
+      version,
+      startupTimeout = 30000,
+      localModel,
+      ...clientOptions
+    } = options;
     const localBaseURL =
       baseURL || readEnv('SUPERMEMORY_LOCAL_URL') || `http://localhost:${port ?? readEnv('PORT') ?? 8787}`;
 
@@ -846,6 +894,7 @@ export class Supermemory {
         version,
         timeout: startupTimeout,
         fetch: clientOptions.fetch,
+        localModel,
       });
     }
 
@@ -900,6 +949,7 @@ type EnsureLocalServerOptions = {
   version?: string | undefined;
   timeout: number;
   fetch?: Fetch | undefined;
+  localModel?: LocalModelOptions | undefined;
 };
 
 async function ensureLocalServer({
@@ -908,10 +958,11 @@ async function ensureLocalServer({
   version,
   timeout,
   fetch,
+  localModel,
 }: EnsureLocalServerOptions): Promise<void> {
   if (await isLocalServerReachable(baseURL, fetch)) return;
 
-  await startLocalServer({ port, version });
+  await startLocalServer({ port, version, localModel });
 
   const deadline = Date.now() + timeout;
   while (Date.now() < deadline) {
@@ -941,9 +992,11 @@ async function isLocalServerReachable(baseURL: string, fetch: Fetch | undefined)
 async function startLocalServer({
   port,
   version,
+  localModel,
 }: {
   port?: number | undefined;
   version?: string | undefined;
+  localModel?: LocalModelOptions | undefined;
 }): Promise<void> {
   const processRef = (globalThis as any).process;
   if (!processRef?.versions?.node) {
@@ -954,6 +1007,7 @@ async function startLocalServer({
   const args = cliPath ? [cliPath, 'local'] : ['supermemory', 'local'];
   if (version) args.push('--version', version);
   if (port !== undefined) args.push('--port', String(port));
+  appendLocalModelArgs(args, localModel);
 
   const child =
     cliPath ?
@@ -980,6 +1034,39 @@ async function startLocalServer({
   });
 
   child.unref();
+}
+
+function appendLocalModelArgs(args: string[], localModel: LocalModelOptions | undefined): void {
+  if (!localModel) return;
+  const provider = localModel.provider ?? 'openai-compatible';
+  if (provider === 'ollama') {
+    if (!localModel.model)
+      throw new Errors.SupermemoryError(
+        "Supermemory.local({ localModel: { provider: 'ollama' } }) requires a model.",
+      );
+    args.push('--ollama-model', localModel.model);
+    if (localModel.baseURL) args.push('--ollama-url', localModel.baseURL);
+  } else if (provider === 'lmstudio') {
+    if (!localModel.model)
+      throw new Errors.SupermemoryError(
+        "Supermemory.local({ localModel: { provider: 'lmstudio' } }) requires a model.",
+      );
+    args.push('--lmstudio-model', localModel.model);
+    if (localModel.baseURL) args.push('--lmstudio-url', localModel.baseURL);
+  } else if (provider === 'llamacpp') {
+    if (!localModel.model)
+      throw new Errors.SupermemoryError(
+        "Supermemory.local({ localModel: { provider: 'llamacpp' } }) requires a model.",
+      );
+    args.push('--llamacpp-model', localModel.model);
+    if (localModel.baseURL) args.push('--llamacpp-url', localModel.baseURL);
+  } else {
+    if (localModel.baseURL) args.push('--openai-base-url', localModel.baseURL);
+    if (localModel.model) args.push('--openai-model', localModel.model);
+  }
+  if (localModel.fastModel) args.push('--openai-fast-model', localModel.fastModel);
+  if (localModel.textModel) args.push('--openai-text-model', localModel.textModel);
+  if (localModel.apiKey) args.push('--openai-api-key', localModel.apiKey);
 }
 
 async function resolveLocalCLIPath(): Promise<string | undefined> {
