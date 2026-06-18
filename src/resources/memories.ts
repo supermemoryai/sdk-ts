@@ -88,6 +88,12 @@ export interface MemoryUpdateMemoryResponse {
   memory: string;
 
   /**
+   * Arbitrary key-value metadata attached to this memory, or null if none was
+   * provided
+   */
+  metadata: { [key: string]: unknown } | null;
+
+  /**
    * ID of the memory this version updates
    */
   parentMemoryId: string | null;
