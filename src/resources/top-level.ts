@@ -24,14 +24,19 @@ export interface ProfileResponse {
 export namespace ProfileResponse {
   export interface Profile {
     /**
+     * Per-bucket memory lists, keyed by bucket key
+     */
+    buckets?: { [key: string]: Array<string> };
+
+    /**
      * Dynamic profile information (recent memories)
      */
-    dynamic: Array<string>;
+    dynamic?: Array<string>;
 
     /**
      * Static profile information that remains relevant long-term
      */
-    static: Array<string>;
+    static?: Array<string>;
   }
 
   /**
@@ -125,10 +130,22 @@ export interface ProfileParams {
   containerTag: string;
 
   /**
+   * Specific bucket keys to return. Omit to return all configured buckets. Only
+   * relevant when "buckets" is included.
+   */
+  buckets?: Array<string>;
+
+  /**
    * Optional metadata filters to apply to profile results and search results.
    * Supports complex AND/OR queries with multiple conditions.
    */
   filters?: ProfileParams.Or | ProfileParams.And;
+
+  /**
+   * Profile sections to return. Omit to return all sections. Pass a subset to reduce
+   * payload — e.g. ["buckets"] skips static and dynamic entirely.
+   */
+  include?: Array<'static' | 'dynamic' | 'buckets'>;
 
   /**
    * Optional search query to include search results in the response

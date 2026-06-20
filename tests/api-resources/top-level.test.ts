@@ -52,6 +52,7 @@ describe('top level methods', () => {
   test.skip('profile: required and optional params', async () => {
     const response = await client.profile({
       containerTag: 'containerTag',
+      buckets: ['string'],
       filters: {
         OR: [
           {
@@ -64,6 +65,7 @@ describe('top level methods', () => {
           },
         ],
       },
+      include: ['static'],
       q: 'q',
       threshold: 0,
     });

@@ -65,7 +65,29 @@ export namespace SettingUpdateResponse {
 
     onedriveCustomKeyEnabled?: boolean | null;
 
+    /**
+     * Profile bucket definitions
+     */
+    profileBuckets?: Array<Updated.ProfileBucket>;
+
     shouldLLMFilter?: boolean | null;
+  }
+
+  export namespace Updated {
+    /**
+     * Definition of a single profile bucket
+     */
+    export interface ProfileBucket {
+      /**
+       * Stable slug for the bucket, stored on each memory
+       */
+      key: string;
+
+      /**
+       * What belongs in this bucket — used to guide the ingestion classifier.
+       */
+      description?: string;
+    }
   }
 }
 
@@ -102,7 +124,29 @@ export interface SettingGetResponse {
 
   onedriveCustomKeyEnabled?: boolean | null;
 
+  /**
+   * Profile bucket definitions
+   */
+  profileBuckets?: Array<SettingGetResponse.ProfileBucket>;
+
   shouldLLMFilter?: boolean | null;
+}
+
+export namespace SettingGetResponse {
+  /**
+   * Definition of a single profile bucket
+   */
+  export interface ProfileBucket {
+    /**
+     * Stable slug for the bucket, stored on each memory
+     */
+    key: string;
+
+    /**
+     * What belongs in this bucket — used to guide the ingestion classifier.
+     */
+    description?: string;
+  }
 }
 
 export interface SettingUpdateParams {
@@ -138,7 +182,29 @@ export interface SettingUpdateParams {
 
   onedriveCustomKeyEnabled?: boolean | null;
 
+  /**
+   * Profile bucket definitions
+   */
+  profileBuckets?: Array<SettingUpdateParams.ProfileBucket>;
+
   shouldLLMFilter?: boolean | null;
+}
+
+export namespace SettingUpdateParams {
+  /**
+   * Definition of a single profile bucket
+   */
+  export interface ProfileBucket {
+    /**
+     * Stable slug for the bucket, stored on each memory
+     */
+    key: string;
+
+    /**
+     * What belongs in this bucket — used to guide the ingestion classifier.
+     */
+    description?: string;
+  }
 }
 
 export declare namespace Settings {
