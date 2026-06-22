@@ -1,27 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export {
-  Connections,
-  type ConnectionCreateResponse,
-  type ConnectionListResponse,
-  type ConnectionConfigureResponse,
-  type ConnectionDeleteByIDResponse,
-  type ConnectionDeleteByProviderResponse,
-  type ConnectionGetByIDResponse,
-  type ConnectionGetByTagResponse,
-  type ConnectionImportResponse,
-  type ConnectionListDocumentsResponse,
-  type ConnectionResourcesResponse,
-  type ConnectionCreateParams,
-  type ConnectionListParams,
-  type ConnectionConfigureParams,
-  type ConnectionDeleteByIDParams,
-  type ConnectionDeleteByProviderParams,
-  type ConnectionGetByTagParams,
-  type ConnectionImportParams,
-  type ConnectionListDocumentsParams,
-  type ConnectionResourcesParams,
-} from './connections';
+export { Connections } from './connections';
 export {
   Documents,
   type DocumentUpdateResponse,

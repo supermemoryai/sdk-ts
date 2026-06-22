@@ -19,28 +19,7 @@ import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
 import { AddParams, AddResponse, ProfileParams, ProfileResponse } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
-import {
-  ConnectionConfigureParams,
-  ConnectionConfigureResponse,
-  ConnectionCreateParams,
-  ConnectionCreateResponse,
-  ConnectionDeleteByIDParams,
-  ConnectionDeleteByIDResponse,
-  ConnectionDeleteByProviderParams,
-  ConnectionDeleteByProviderResponse,
-  ConnectionGetByIDResponse,
-  ConnectionGetByTagParams,
-  ConnectionGetByTagResponse,
-  ConnectionImportParams,
-  ConnectionImportResponse,
-  ConnectionListDocumentsParams,
-  ConnectionListDocumentsResponse,
-  ConnectionListParams,
-  ConnectionListResponse,
-  ConnectionResourcesParams,
-  ConnectionResourcesResponse,
-  Connections,
-} from './resources/connections';
+import { Connections } from './resources/connections';
 import {
   DocumentAddParams,
   DocumentAddResponse,
@@ -827,9 +806,6 @@ export class Supermemory {
    * Organization settings
    */
   settings: API.Settings = new API.Settings(this);
-  /**
-   * External service integrations
-   */
   connections: API.Connections = new API.Connections(this);
 }
 
@@ -892,26 +868,5 @@ export declare namespace Supermemory {
     type SettingUpdateParams as SettingUpdateParams,
   };
 
-  export {
-    Connections as Connections,
-    type ConnectionCreateResponse as ConnectionCreateResponse,
-    type ConnectionListResponse as ConnectionListResponse,
-    type ConnectionConfigureResponse as ConnectionConfigureResponse,
-    type ConnectionDeleteByIDResponse as ConnectionDeleteByIDResponse,
-    type ConnectionDeleteByProviderResponse as ConnectionDeleteByProviderResponse,
-    type ConnectionGetByIDResponse as ConnectionGetByIDResponse,
-    type ConnectionGetByTagResponse as ConnectionGetByTagResponse,
-    type ConnectionImportResponse as ConnectionImportResponse,
-    type ConnectionListDocumentsResponse as ConnectionListDocumentsResponse,
-    type ConnectionResourcesResponse as ConnectionResourcesResponse,
-    type ConnectionCreateParams as ConnectionCreateParams,
-    type ConnectionListParams as ConnectionListParams,
-    type ConnectionConfigureParams as ConnectionConfigureParams,
-    type ConnectionDeleteByIDParams as ConnectionDeleteByIDParams,
-    type ConnectionDeleteByProviderParams as ConnectionDeleteByProviderParams,
-    type ConnectionGetByTagParams as ConnectionGetByTagParams,
-    type ConnectionImportParams as ConnectionImportParams,
-    type ConnectionListDocumentsParams as ConnectionListDocumentsParams,
-    type ConnectionResourcesParams as ConnectionResourcesParams,
-  };
+  export { Connections as Connections };
 }
