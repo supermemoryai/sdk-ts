@@ -118,6 +118,66 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'get',
     httpPath: '/v3/settings',
   },
+  {
+    clientCallName: 'client.connections.create',
+    fullyQualifiedName: 'connections.create',
+    httpMethod: 'post',
+    httpPath: '/v3/connections/{provider}',
+  },
+  {
+    clientCallName: 'client.connections.list',
+    fullyQualifiedName: 'connections.list',
+    httpMethod: 'post',
+    httpPath: '/v3/connections/list',
+  },
+  {
+    clientCallName: 'client.connections.configure',
+    fullyQualifiedName: 'connections.configure',
+    httpMethod: 'post',
+    httpPath: '/v3/connections/{connectionId}/configure',
+  },
+  {
+    clientCallName: 'client.connections.deleteByID',
+    fullyQualifiedName: 'connections.deleteByID',
+    httpMethod: 'delete',
+    httpPath: '/v3/connections/{connectionId}',
+  },
+  {
+    clientCallName: 'client.connections.deleteByProvider',
+    fullyQualifiedName: 'connections.deleteByProvider',
+    httpMethod: 'delete',
+    httpPath: '/v3/connections/{provider}',
+  },
+  {
+    clientCallName: 'client.connections.getByID',
+    fullyQualifiedName: 'connections.getByID',
+    httpMethod: 'get',
+    httpPath: '/v3/connections/{connectionId}',
+  },
+  {
+    clientCallName: 'client.connections.getByTag',
+    fullyQualifiedName: 'connections.getByTag',
+    httpMethod: 'post',
+    httpPath: '/v3/connections/{provider}/connection',
+  },
+  {
+    clientCallName: 'client.connections.import',
+    fullyQualifiedName: 'connections.import',
+    httpMethod: 'post',
+    httpPath: '/v3/connections/{provider}/import',
+  },
+  {
+    clientCallName: 'client.connections.listDocuments',
+    fullyQualifiedName: 'connections.listDocuments',
+    httpMethod: 'post',
+    httpPath: '/v3/connections/{provider}/documents',
+  },
+  {
+    clientCallName: 'client.connections.resources',
+    fullyQualifiedName: 'connections.resources',
+    httpMethod: 'get',
+    httpPath: '/v3/connections/{connectionId}/resources',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {
