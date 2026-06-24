@@ -1,11 +1,4 @@
 #!/usr/bin/env node
-if (process.argv[2] === "plugin" || process.argv[2] === "install-plugin") {
-  require("./plugin").run(process.argv.slice(3)).catch((error) => {
-    process.stderr.write(`supermemory plugin: ${error && error.message ? error.message : String(error)}\n`);
-    process.exit(1);
-  });
-  return;
-}
 if (process.argv[2] === "local") {
   (async () => {
     const fs = require("node:fs");
