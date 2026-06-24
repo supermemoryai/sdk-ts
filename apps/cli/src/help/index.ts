@@ -473,10 +473,16 @@ const FULL_COMMANDS: Record<string, CommandSchema> = {
 				description:
 					"Run selected installers even if the target app is not detected",
 			},
+			"--no-auth": {
+				type: "boolean",
+				default: false,
+				description: "Skip browser OAuth after installing plugins",
+			},
 		},
 		examples: [
 			"supermemory plugin",
 			"supermemory plugin --all",
+			"supermemory plugin --all --no-auth",
 			"supermemory plugin --only claude,cursor --dry-run",
 		],
 	},
