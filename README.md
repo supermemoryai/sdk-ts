@@ -40,6 +40,47 @@ const response = await client.search.documents({ q: 'documents related to python
 console.log(response.results);
 ```
 
+### Local server with local model connectors
+
+The SDK can start the local Supermemory server and point its model calls at an
+OpenAI-compatible local endpoint. This is useful for Ollama, LM Studio,
+llama.cpp, vLLM, and other local servers that expose `/v1` chat or responses
+APIs.
+
+```sh
+# Ollama OpenAI-compatible endpoint, default http://localhost:11434/v1
+npx supermemory local --ollama-model gemma3:12b
+
+# LM Studio, default http://localhost:1234/v1
+npx supermemory local --lmstudio-model google/gemma-3-12b-it
+
+# llama.cpp server, default http://localhost:8080/v1
+npx supermemory local --llamacpp-model gemma-4-12b-it-q4km-vulkan-safe
+
+# Generic OpenAI-compatible local endpoint
+npx supermemory local \
+  --openai-base-url http://localhost:8000/v1 \
+  --openai-model google/gemma-3-12b-it
+```
+
+Programmatic startup supports the same presets:
+
+```ts
+import Supermemory from 'supermemory';
+
+const client = await Supermemory.local({
+  localModel: {
+    provider: 'ollama',
+    model: 'gemma3:12b',
+  },
+});
+```
+
+For loopback endpoints, the launcher supplies a dummy `OPENAI_API_KEY` when one
+is not set because most local OpenAI-compatible servers ignore the bearer token.
+For remote OpenAI-compatible providers, set `OPENAI_API_KEY` or pass
+`--openai-api-key` explicitly.
+
 ### Request & Response types
 
 This library includes TypeScript definitions for all request params and response fields. You may import and use them like so:
