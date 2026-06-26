@@ -61,7 +61,7 @@ interface InstallResult {
 interface PluginAuthResult {
 	id: PluginId
 	label: string
-	status: "connected" | "failed"
+	status: "connected" | "upgrade" | "failed"
 	message: string
 }
 
@@ -585,7 +585,11 @@ function printPluginAuthSummary(results: PluginAuthResult[]): void {
 	process.stdout.write(`\n${chalk.bold("Supermemory plugin auth summary")}\n\n`)
 	for (const result of results) {
 		const icon =
-			result.status === "connected" ? chalk.green("[ok]") : chalk.red("[fail]")
+			result.status === "connected"
+				? chalk.green("[ok]")
+				: result.status === "upgrade"
+					? chalk.blue("[upgrade]")
+					: chalk.red("[fail]")
 		process.stdout.write(
 			`${icon} ${chalk.bold(result.label)}: ${result.message}\n`,
 		)
@@ -602,8 +606,12 @@ function printPluginAuthStart(installed: InstallResult[]): void {
 		`${chalk.cyan("│")} ${chalk.bold("One approval")} connects ${chalk.bold(labels)}.\n`,
 	)
 	process.stdout.write(
-		`${chalk.cyan("└")} ${chalk.dim("The same API key will be saved for every installed plugin.")}\n\n`,
+		`${chalk.cyan("└")} ${chalk.dim("The same API key will be saved for each plugin your plan can use.")}\n\n`,
 	)
+}
+
+function isPlanUpgradeMessage(message: string | undefined): boolean {
+	return /\b(pro plan|upgrade|requires pro)\b/i.test(message ?? "")
 }
 
 function getPluginAuthBaseUrl(consoleUrl: string): string {
@@ -690,13 +698,16 @@ async function authorizeInstalledPlugins(
 					message: `credentials saved to ${pluginCredentialsPath(result.id)}`,
 				})
 			} else {
+				const errorMessage =
+					errors[client] ?? `No key returned for ${PLUGIN_AUTH_LABELS[client]}`
+				const isUpgrade = isPlanUpgradeMessage(errorMessage)
 				authResults.push({
 					id: result.id,
 					label: result.label,
-					status: "failed",
-					message:
-						errors[client] ??
-						`No key returned for ${PLUGIN_AUTH_LABELS[client]}`,
+					status: isUpgrade ? "upgrade" : "failed",
+					message: isUpgrade
+						? `Upgrade to Pro to connect ${result.label}.`
+						: errorMessage,
 				})
 			}
 		}
