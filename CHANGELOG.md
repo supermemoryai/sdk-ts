@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.24.1 (2026-06-30)
+
+Full Changelog: [v4.24.0...v4.24.1](https://github.com/supermemoryai/sdk-ts/compare/v4.24.0...v4.24.1)
+
+### Bug Fixes
+
+* **local:** make install/upgrade actually check for and install the latest version ([6f3a241](https://github.com/supermemoryai/sdk-ts/commit/6f3a241448a597e7aa36e1c3b069d31a827b13c7))
+
 ## 4.24.0 (2026-04-28)
 
 Full Changelog: [v4.23.0...v4.24.0](https://github.com/supermemoryai/sdk-ts/compare/v4.23.0...v4.24.0)
