@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import type { AuthState } from '../lib/config.js';
+import { CLI_VERSION } from '../lib/version.js';
 
 interface CommandSchema {
   description: string;
@@ -523,7 +524,7 @@ export function buildHelpJson(
 
   return {
     name: 'supermemory',
-    version: '0.1.0',
+    version: CLI_VERSION,
     description: 'supermemory — memory layer for AI agents',
     mode,
     ...(scope ? { scope } : {}),

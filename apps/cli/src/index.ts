@@ -33,6 +33,7 @@ import {
 } from './lib/config.js';
 import { CliError } from './lib/errors.js';
 import { initOtel, shutdownOtel } from './lib/otel.js';
+import { CLI_VERSION } from './lib/version.js';
 
 async function detectScope(): Promise<{
   mode: 'full' | 'scoped';
@@ -148,10 +149,15 @@ async function main() {
     },
   }) as ReturnType<typeof defineCommand>;
 
-  if (mode === 'scoped' && scope?.tag && !process.env.SUPERMEMORY_TAG) {
-    process.env.SUPERMEMORY_TAG = scope.tag;
-    if (scope.tags && scope.tags.length > 1) {
-      process.env.SUPERMEMORY_TAGS = scope.tags.join(',');
+  if (mode === 'scoped' && scope?.tag) {
+    const enforcedTags = scope.tags?.length ? scope.tags : [scope.tag];
+    process.env.SUPERMEMORY_ENFORCED_TAG = enforcedTags[0] ?? scope.tag;
+    process.env.SUPERMEMORY_ENFORCED_TAGS = enforcedTags.join(',');
+    if (!process.env.SUPERMEMORY_TAG) {
+      process.env.SUPERMEMORY_TAG = enforcedTags[0] ?? scope.tag;
+    }
+    if (enforcedTags.length > 1) {
+      process.env.SUPERMEMORY_TAGS = enforcedTags.join(',');
     }
   }
 
@@ -172,7 +178,7 @@ async function main() {
   const cli = defineCommand({
     meta: {
       name: 'supermemory',
-      version: '0.1.0',
+      version: CLI_VERSION,
       description: 'supermemory — memory layer for AI agents',
     },
     subCommands,
@@ -226,7 +232,7 @@ async function main() {
   }
 
   if (rawArgs.length === 1 && rawArgs[0] === '--version') {
-    process.stdout.write('0.1.0\n');
+    process.stdout.write(`${CLI_VERSION}\n`);
     await shutdownOtel();
     return;
   }

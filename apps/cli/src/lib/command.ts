@@ -1,7 +1,8 @@
 import type { Span } from '@opentelemetry/api';
 import { defineCommand } from 'citty';
 import { getConfig } from './api.js';
-import type { ResolvedConfig } from './config.js';
+import { getEnforcedTags, type ResolvedConfig } from './config.js';
+import { ValidationError } from './errors.js';
 import { withSpan } from './otel.js';
 import type { OutputFlags } from './output.js';
 
@@ -18,6 +19,7 @@ const noopSpan = {
 } as unknown as Span;
 
 export interface CommandContext {
+  rawArgs: string[];
   args: Record<string, unknown>;
   flags: OutputFlags;
   config: ResolvedConfig;
@@ -50,15 +52,22 @@ export function defineCliCommand(options: {
   return defineCommand({
     meta: options.meta,
     args: allArgs,
-    async run({ args }) {
-      const flags: OutputFlags = { json: args.json as boolean };
+    async run({ args, rawArgs }) {
+      const enforcedTags = getEnforcedTags();
+      if (args.tag && enforcedTags.length > 0 && !enforcedTags.includes(args.tag as string)) {
+        throw new ValidationError(
+          `Cannot use --tag "${args.tag}". Your API key is scoped to: ${enforcedTags.join(', ')}.`,
+        );
+      }
       const config = getConfig({
         tag: args.tag as string | undefined,
       });
+      const flags: OutputFlags = { json: args.json as boolean, output: config.output };
 
       const runHandler = async (span: Span) => {
         await options.handler({
           args: args as Record<string, unknown>,
+          rawArgs,
           flags,
           config,
           span,

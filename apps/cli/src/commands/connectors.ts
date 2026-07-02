@@ -117,12 +117,29 @@ const connectorsConnectCommand = defineCliCommand({
       body,
     });
 
+    let outputAuthUrlOnly = false;
     if (!args.browser) {
-      output(
-        { url: connection.authLink },
-        () => `  Open this URL to authorize ${chalk.bold(provider)}:\n\n  ${chalk.cyan(connection.authLink)}`,
-        flags,
-      );
+      if (shouldOutputJson(flags)) {
+        outputAuthUrlOnly = true;
+        output(
+          {
+            connectionId: connection.id,
+            provider,
+            tag: args.tag ?? null,
+            url: connection.authLink,
+            expiresIn: connection.expiresIn ?? null,
+          },
+          () => '',
+          flags,
+        );
+      } else {
+        output(
+          { url: connection.authLink },
+          () =>
+            `  Open this URL to authorize ${chalk.bold(provider)}:\n\n  ${chalk.cyan(connection.authLink)}`,
+          flags,
+        );
+      }
     } else {
       await openBrowser(connection.authLink);
       if (!shouldOutputJson(flags)) {
@@ -196,7 +213,7 @@ const connectorsConnectCommand = defineCliCommand({
       }
     }
 
-    if (shouldOutputJson(flags)) {
+    if (shouldOutputJson(flags) && !outputAuthUrlOnly) {
       output(
         {
           connectionId: connection.id,

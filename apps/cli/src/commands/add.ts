@@ -76,7 +76,10 @@ export const addCommand = defineCliCommand({
 
     if (content.startsWith('http://') || content.startsWith('https://')) {
       span.setAttribute('contentType', 'url');
-      return handleUrlAdd(content, tag, args, flags);
+      return handleTextAdd(content, tag, args, flags, span, {
+        label: 'URL',
+        source: content,
+      });
     }
 
     const filePath = resolve(content);
@@ -105,6 +108,7 @@ async function handleTextAdd(
   args: Record<string, unknown>,
   flags: OutputFlags,
   span?: { setAttribute: (k: string, v: string | number) => void },
+  display?: { label: string; source: string },
 ): Promise<void> {
   const body: Record<string, unknown> = { content };
   body.containerTag = tag;
@@ -128,47 +132,11 @@ async function handleTextAdd(
   output(
     data,
     () => {
-      const lines = [`${chalk.green('✓')} Added document ${chalk.dim(data.id)} (${data.status ?? 'queued'})`];
-      if (data.containerTag || tag) {
-        lines.push(`  Tag: ${data.containerTag ?? tag}`);
-      }
-      return lines.join('\n');
-    },
-    flags,
-  );
-}
-
-async function handleUrlAdd(
-  url: string,
-  tag: string,
-  args: Record<string, unknown>,
-  flags: OutputFlags,
-): Promise<void> {
-  const body: Record<string, unknown> = { content: url };
-  body.containerTag = tag;
-  if (args.title) body.title = args.title;
-  if (args.id) body.customId = args.id;
-
-  const metadata = parseJsonArg(args.metadata as string | undefined, 'metadata');
-  if (metadata) body.metadata = metadata;
-
-  const { data } = await apiRequest<{
-    id: string;
-    status: string;
-    containerTag?: string;
-  }>('/v3/documents', {
-    method: 'POST',
-    body,
-  });
-
-  output(
-    data,
-    () => {
-      const lines = [
-        `${chalk.green('✓')} Added URL ${chalk.dim(url)} → ${chalk.dim(data.id)} (${
-          data.status ?? 'queued'
-        })`,
-      ];
+      const subject =
+        display ?
+          `${display.label} ${chalk.dim(display.source)} -> ${chalk.dim(data.id)}`
+        : `document ${chalk.dim(data.id)}`;
+      const lines = [`${chalk.green('✓')} Added ${subject} (${data.status ?? 'queued'})`];
       if (data.containerTag || tag) {
         lines.push(`  Tag: ${data.containerTag ?? tag}`);
       }

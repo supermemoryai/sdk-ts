@@ -2,6 +2,7 @@ import chalk from 'chalk';
 
 export interface OutputFlags {
   json?: boolean;
+  output?: 'auto' | 'json' | 'human';
 }
 
 export const EXIT = {
@@ -22,6 +23,8 @@ export function isInputInteractive(): boolean {
 
 export function shouldOutputJson(flags: OutputFlags): boolean {
   if (flags.json) return true;
+  if (flags.output === 'json') return true;
+  if (flags.output === 'human') return false;
   return !isInteractive();
 }
 

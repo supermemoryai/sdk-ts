@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import {
   chmodSync,
   existsSync,
+  copyFileSync,
   mkdirSync,
   readdirSync,
   readFileSync,
@@ -63,7 +64,18 @@ export function getScopeCacheDir(): string {
 }
 
 function encodeProjectPath(projectPath: string): string {
-  return projectPath.replace(new RegExp(`\\${sep}`, 'g'), '-');
+  const normalized = resolve(projectPath);
+  const safe = normalized
+    .replace(/^[a-zA-Z]:/, (drive) => drive[0] ?? '')
+    .replace(/[<>:"/\\|?*\x00-\x1F]/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+/g, '-');
+  const hash = createHash('sha256').update(normalized).digest('hex').slice(0, 8);
+  return `${safe || 'root'}-${hash}`;
+}
+
+function encodeLegacyProjectPath(projectPath: string): string {
+  return resolve(projectPath).split(sep).join('-');
 }
 
 export function getProjectDir(): string {
@@ -72,11 +84,16 @@ export function getProjectDir(): string {
   return join(PROJECTS_DIR, encoded);
 }
 
+function getLegacyProjectDir(): string {
+  const cwd = resolve(process.cwd());
+  const encoded = encodeLegacyProjectPath(cwd);
+  return join(PROJECTS_DIR, encoded);
+}
+
 function findTeamConfigDir(): string | null {
   let dir = resolve(process.cwd());
-  const root = sep;
 
-  while (dir !== root) {
+  while (true) {
     const candidate = join(dir, '.supermemory', 'config.json');
     if (existsSync(candidate)) {
       return join(dir, '.supermemory');
@@ -86,9 +103,12 @@ function findTeamConfigDir(): string | null {
       return null;
     }
 
-    dir = resolve(dir, '..');
+    const parent = dirname(dir);
+    if (parent === dir) {
+      return null;
+    }
+    dir = parent;
   }
-  return null;
 }
 
 function ensureDir(dir: string): void {
@@ -233,12 +253,23 @@ export function getAuthState(): AuthState {
 
 export function readProjectConfig(): ProjectConfig | null {
   const dir = getProjectDir();
-  return readJsonFile<ProjectConfig>(join(dir, 'config.json'));
+  return (
+    readJsonFile<ProjectConfig>(join(dir, 'config.json')) ??
+    readJsonFile<ProjectConfig>(join(getLegacyProjectDir(), 'config.json'))
+  );
 }
 
 export function writeProjectConfig(config: ProjectConfig): void {
   const dir = getProjectDir();
-  writeJsonFile(join(dir, 'config.json'), config, !!config.apiKey);
+  const configPath = join(dir, 'config.json');
+  writeJsonFile(configPath, config, !!config.apiKey);
+
+  const legacyPath = join(getLegacyProjectDir(), 'config.json');
+  if (legacyPath !== configPath && existsSync(legacyPath)) {
+    try {
+      copyFileSync(configPath, legacyPath);
+    } catch {}
+  }
 }
 
 export function updateProjectConfig(updates: Partial<ProjectConfig>): void {
@@ -288,6 +319,17 @@ export function getKeyScope(): ScopeCache | null {
   return readScopeCache(keyHash);
 }
 
+export function getEnforcedTags(): string[] {
+  const tags = process.env.SUPERMEMORY_ENFORCED_TAGS;
+  if (tags) {
+    return tags
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+  }
+  return process.env.SUPERMEMORY_ENFORCED_TAG ? [process.env.SUPERMEMORY_ENFORCED_TAG] : [];
+}
+
 export function resolveConfig(flags?: { tag?: string }): ResolvedConfig {
   const userConfig = readUserConfig();
   const credentials = readCredentials();
@@ -305,7 +347,14 @@ export function resolveConfig(flags?: { tag?: string }): ResolvedConfig {
 
   const apiKey = envApiKey ?? storedApiKey ?? null;
 
-  const tag = flags?.tag ?? process.env.SUPERMEMORY_TAG ?? teamConfig?.tag ?? projectConfig?.tag ?? null;
+  const enforcedTags = getEnforcedTags();
+  const requestedTag = flags?.tag ?? process.env.SUPERMEMORY_TAG;
+  const tag =
+    enforcedTags.length > 0 ?
+      requestedTag && enforcedTags.includes(requestedTag) ?
+        requestedTag
+      : enforcedTags[0] ?? null
+    : requestedTag ?? teamConfig?.tag ?? projectConfig?.tag ?? null;
 
   const apiUrl = process.env.SUPERMEMORY_API_URL ?? userConfig.apiUrl ?? 'https://api.supermemory.ai';
 
