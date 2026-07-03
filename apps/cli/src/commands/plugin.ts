@@ -59,6 +59,7 @@ interface PluginAuthResult {
   label: string;
   status: 'connected' | 'upgrade' | 'failed';
   message: string;
+  upgradeUrl?: string;
 }
 
 class CommandError extends Error {
@@ -71,6 +72,7 @@ class CommandError extends Error {
 }
 
 const CURSOR_PLUGIN_TARGET = join(homedir(), '.cursor', 'plugins', 'local', 'cursor-supermemory');
+const PLUGIN_BILLING_URL = 'https://app.supermemory.ai/?settings=billing';
 
 const PLUGIN_AUTH_CLIENTS: Record<PluginId, PluginClientId> = {
   claude: 'claude_code',
@@ -525,7 +527,7 @@ function startPluginAuthCallbackServer(clients: PluginClientId[]): Promise<{
     timeoutId = setTimeout(() => {
       rejectCallback(new Error('Authentication timed out'));
       server.close();
-    }, 120_000);
+    }, 10 * 60_000);
   });
 }
 
@@ -552,6 +554,9 @@ function printPluginAuthSummary(results: PluginAuthResult[]): void {
       : result.status === 'upgrade' ? chalk.blue('[upgrade]')
       : chalk.red('[fail]');
     process.stdout.write(`${icon} ${chalk.bold(result.label)}: ${result.message}\n`);
+    if (result.upgradeUrl) {
+      process.stdout.write(`    ${chalk.dim('Upgrade:')} ${chalk.cyan(result.upgradeUrl)}\n`);
+    }
   }
   process.stdout.write('\n');
 }
@@ -620,6 +625,9 @@ async function authorizeInstalledPlugins(
     cli_version: device.cliVersion,
   });
   const authUrl = `${getPluginAuthBaseUrl(config.consoleUrl)}/auth/connect?${params.toString()}`;
+  process.stdout.write(
+    `${chalk.dim('Authorize from this browser URL:')} ${chalk.cyan(authUrl)}\n\n`,
+  );
   const spinner = isInteractive() ? clack.spinner() : null;
 
   try {
@@ -654,6 +662,7 @@ async function authorizeInstalledPlugins(
           label: result.label,
           status: isUpgrade ? 'upgrade' : 'failed',
           message: isUpgrade ? `Upgrade to Pro to connect ${result.label}.` : errorMessage,
+          upgradeUrl: isUpgrade ? PLUGIN_BILLING_URL : undefined,
         });
       }
     }
@@ -667,6 +676,7 @@ async function authorizeInstalledPlugins(
         error instanceof Error ? error.message : String(error)
       }\n\n`,
     );
+    process.stdout.write(`  Rerun the command to open a fresh OAuth callback and upgrade link.\n\n`);
     return true;
   } finally {
     callback.close();
