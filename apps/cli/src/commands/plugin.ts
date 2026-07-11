@@ -92,33 +92,70 @@ interface ArrowPromptOption<T extends string> {
   disabled?: boolean;
 }
 
-const SUPERMEMORY_ART = [
-  '  ____  _   _ ____  _____ ____  __  __  ___  ____  __   __',
-  ' / ___|| | | |  _ \\| ____|  _ \\|  \\/  |/ _ \\|  _ \\ \\ \\ / /',
-  ' \\___ \\| | | | |_) |  _| | |_) | |\\/| | | | | |_) | \\ V /',
-  '  ___) | |_| |  _ <| |___|  _ <| |  | | |_| |  _ <   | |',
-  ' |____/ \\___/|_| \\_\\_____|_| \\_\\_|  |_|\\___/|_| \\_\\  |_|',
-];
+const SUPERMEMORY_GLYPHS: Record<string, string[]> = {
+  S: ['11111', '10000', '10000', '11110', '00001', '00001', '11110'],
+  U: ['10001', '10001', '10001', '10001', '10001', '10001', '01110'],
+  P: ['11110', '10001', '10001', '11110', '10000', '10000', '10000'],
+  E: ['11111', '10000', '10000', '11110', '10000', '10000', '11111'],
+  R: ['11110', '10001', '10001', '11110', '10100', '10010', '10001'],
+  M: ['10001', '11011', '10101', '10101', '10001', '10001', '10001'],
+  O: ['01110', '10001', '10001', '10001', '10001', '10001', '01110'],
+  Y: ['10001', '10001', '01010', '00100', '00100', '00100', '00100'],
+};
 
-const BANNER_SHADES = ['#60A5FA', '#3B82F6', '#2563EB', '#1D4ED8', '#163B8C'];
+const SUPERMEMORY_WORD = 'SUPERMEMORY';
+const BANNER_CELL = '\u2588\u2588';
+const BANNER_OUTLINE_CELL = '\u2592\u2592';
+const BANNER_SHADOW_CELL = '\u2591\u2591';
+const BANNER_FILL_COLORS = ['#B9F7FF', '#5BE9FF', '#22C9F4', '#168CF0', '#0B59D0'];
+const BANNER_OUTLINE_COLOR = '#0A86FF';
+const BANNER_SHADOW_COLOR = '#071D82';
 
 function printSupermemoryBanner(): void {
+  const glyphWidth = 5;
+  const glyphGap = 1;
+  const rowCount = 7;
+  const columnCount = SUPERMEMORY_WORD.length * (glyphWidth + glyphGap) - glyphGap;
+  const isFilled = (row: number, column: number): boolean => {
+    if (row < 0 || row >= rowCount || column < 0 || column >= columnCount) return false;
+    const glyphIndex = Math.floor(column / (glyphWidth + glyphGap));
+    const glyphColumn = column % (glyphWidth + glyphGap);
+    if (glyphColumn >= glyphWidth) return false;
+    const glyph = SUPERMEMORY_GLYPHS[SUPERMEMORY_WORD[glyphIndex] ?? ''];
+    return glyph?.[row]?.[glyphColumn] === '1';
+  };
+
   process.stderr.write('\n');
-  for (let rowIndex = 0; rowIndex < SUPERMEMORY_ART.length; rowIndex++) {
-    const line = SUPERMEMORY_ART[rowIndex] ?? '';
+  for (let row = 0; row < rowCount + 1; row++) {
     let rendered = '  ';
-    for (let column = 0; column < line.length; column++) {
-      const character = line[column] ?? ' ';
-      if (character === ' ') {
-        rendered += character;
-        continue;
+    for (let column = -1; column < columnCount + 2; column++) {
+      const main = isFilled(row, column);
+      const outline =
+        !main &&
+        Array.from({ length: 3 }, (_, rowOffset) => rowOffset - 1).some((rowOffset) =>
+          Array.from({ length: 3 }, (_, columnOffset) => columnOffset - 1).some((columnOffset) =>
+            isFilled(row + rowOffset, column + columnOffset),
+          ),
+        );
+      const shadow = !main && !outline && isFilled(row - 1, column - 1);
+
+      if (main) {
+        const color = BANNER_FILL_COLORS[Math.min(row, BANNER_FILL_COLORS.length - 1)] ?? '#22C9F4';
+        rendered += chalk.hex(color)(BANNER_CELL);
+      } else if (outline) {
+        rendered += chalk.hex(BANNER_OUTLINE_COLOR)(BANNER_OUTLINE_CELL);
+      } else if (shadow) {
+        rendered += chalk.hex(BANNER_SHADOW_COLOR)(BANNER_SHADOW_CELL);
+      } else {
+        rendered += '  ';
       }
-      const shade = BANNER_SHADES[(rowIndex + Math.floor(column / 12)) % BANNER_SHADES.length] ?? '#2563EB';
-      rendered += chalk.hex(shade)(character);
     }
     process.stderr.write(rendered + '\n');
   }
-  process.stderr.write(`  ${chalk.hex('#60A5FA').bold('Supermemory')} ${chalk.dim('plugin installer')}\n\n`);
+
+  const label = chalk.hex('#18BFFF')('>') + chalk.hex('#1775EF').bold(' PLUGINS');
+  const labelPadding = Math.max(2, columnCount * 2 - 2 - '> PLUGINS'.length);
+  process.stderr.write(`${' '.repeat(labelPadding)}${label}\n\n`);
 }
 function clearRenderedPrompt(renderedLines: number): void {
   if (renderedLines <= 0) return;
