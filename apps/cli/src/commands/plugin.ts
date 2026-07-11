@@ -93,14 +93,14 @@ interface ArrowPromptOption<T extends string> {
 }
 
 const SUPERMEMORY_GLYPHS: Record<string, string[]> = {
-  S: ['11111', '10000', '10000', '11110', '00001', '00001', '11110'],
-  U: ['10001', '10001', '10001', '10001', '10001', '10001', '01110'],
-  P: ['11110', '10001', '10001', '11110', '10000', '10000', '10000'],
-  E: ['11111', '10000', '10000', '11110', '10000', '10000', '11111'],
-  R: ['11110', '10001', '10001', '11110', '10100', '10010', '10001'],
-  M: ['10001', '11011', '10101', '10101', '10001', '10001', '10001'],
-  O: ['01110', '10001', '10001', '10001', '10001', '10001', '01110'],
-  Y: ['10001', '10001', '01010', '00100', '00100', '00100', '00100'],
+  S: ['11111', '10000', '11111', '00001', '11111'],
+  U: ['10001', '10001', '10001', '10001', '01110'],
+  P: ['11110', '10001', '11110', '10000', '10000'],
+  E: ['11111', '10000', '11110', '10000', '11111'],
+  R: ['11110', '10001', '11110', '10100', '10010'],
+  M: ['10001', '11011', '10101', '10001', '10001'],
+  O: ['01110', '10001', '10001', '10001', '01110'],
+  Y: ['10001', '01010', '00100', '00100', '00100'],
 };
 
 const SUPERMEMORY_WORD = 'SUPERMEMORY';
@@ -112,7 +112,7 @@ const BANNER_SHADOW_COLOR = '#071D82';
 function printSupermemoryBanner(): void {
   const glyphWidth = 5;
   const glyphGap = 1;
-  const rowCount = 7;
+  const rowCount = 5;
   const columnCount = SUPERMEMORY_WORD.length * (glyphWidth + glyphGap) - glyphGap;
   const isFilled = (row: number, column: number): boolean => {
     if (row < 0 || row >= rowCount || column < 0 || column >= columnCount) return false;
@@ -142,7 +142,7 @@ function printSupermemoryBanner(): void {
   }
 
   const label = chalk.hex('#18BFFF')('>') + chalk.hex('#1775EF').bold(' PLUGINS');
-  const labelPadding = Math.max(2, columnCount - 2 - '> PLUGINS'.length);
+  const labelPadding = Math.max(2, columnCount + 1 - '> PLUGINS'.length);
   process.stderr.write(`${' '.repeat(labelPadding)}${label}\n\n`);
 }
 function clearRenderedPrompt(renderedLines: number): void {
