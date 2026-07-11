@@ -434,8 +434,8 @@ const FULL_COMMANDS: Record<string, CommandSchema> = {
     examples: ['supermemory setup', 'supermemory setup --prompt'],
   },
   plugin: {
-    description: 'Install Supermemory integrations for Claude Code, Cursor, OpenCode, and Codex',
-    usage: 'supermemory plugin [--all|--only <targets>] [options]',
+    description: 'Install, connect, or remove Supermemory integrations',
+    usage: 'supermemory plugin [login|uninstall] [options]',
     options: {
       '--all': {
         type: 'boolean',
@@ -467,6 +467,8 @@ const FULL_COMMANDS: Record<string, CommandSchema> = {
       'supermemory plugin --all',
       'supermemory plugin --all --no-auth',
       'supermemory plugin --only claude,cursor --dry-run',
+      'supermemory plugin login',
+      'supermemory plugin uninstall',
     ],
   },
 };
