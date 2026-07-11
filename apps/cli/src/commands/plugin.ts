@@ -104,11 +104,9 @@ const SUPERMEMORY_GLYPHS: Record<string, string[]> = {
 };
 
 const SUPERMEMORY_WORD = 'SUPERMEMORY';
-const BANNER_CELL = '\u2588\u2588';
-const BANNER_OUTLINE_CELL = '\u2592\u2592';
-const BANNER_SHADOW_CELL = '\u2591\u2591';
-const BANNER_FILL_COLORS = ['#B9F7FF', '#5BE9FF', '#22C9F4', '#168CF0', '#0B59D0'];
-const BANNER_OUTLINE_COLOR = '#0A86FF';
+const BANNER_CELL = '\u2588';
+const BANNER_SHADOW_CELL = '\u2591';
+const BANNER_FILL_COLORS = ['#D6FBFF', '#67E8F9', '#22D3EE', '#0EA5E9', '#2563EB', '#1D4ED8', '#123B9A'];
 const BANNER_SHADOW_COLOR = '#071D82';
 
 function printSupermemoryBanner(): void {
@@ -128,33 +126,23 @@ function printSupermemoryBanner(): void {
   process.stderr.write('\n');
   for (let row = 0; row < rowCount + 1; row++) {
     let rendered = '  ';
-    for (let column = -1; column < columnCount + 2; column++) {
+    for (let column = 0; column < columnCount + 1; column++) {
       const main = isFilled(row, column);
-      const outline =
-        !main &&
-        Array.from({ length: 3 }, (_, rowOffset) => rowOffset - 1).some((rowOffset) =>
-          Array.from({ length: 3 }, (_, columnOffset) => columnOffset - 1).some((columnOffset) =>
-            isFilled(row + rowOffset, column + columnOffset),
-          ),
-        );
-      const shadow = !main && !outline && isFilled(row - 1, column - 1);
-
+      const shadow = !main && isFilled(row - 1, column - 1);
       if (main) {
-        const color = BANNER_FILL_COLORS[Math.min(row, BANNER_FILL_COLORS.length - 1)] ?? '#22C9F4';
+        const color = BANNER_FILL_COLORS[Math.min(row, BANNER_FILL_COLORS.length - 1)] ?? '#22D3EE';
         rendered += chalk.hex(color)(BANNER_CELL);
-      } else if (outline) {
-        rendered += chalk.hex(BANNER_OUTLINE_COLOR)(BANNER_OUTLINE_CELL);
       } else if (shadow) {
         rendered += chalk.hex(BANNER_SHADOW_COLOR)(BANNER_SHADOW_CELL);
       } else {
-        rendered += '  ';
+        rendered += ' ';
       }
     }
     process.stderr.write(rendered + '\n');
   }
 
   const label = chalk.hex('#18BFFF')('>') + chalk.hex('#1775EF').bold(' PLUGINS');
-  const labelPadding = Math.max(2, columnCount * 2 - 2 - '> PLUGINS'.length);
+  const labelPadding = Math.max(2, columnCount - 2 - '> PLUGINS'.length);
   process.stderr.write(`${' '.repeat(labelPadding)}${label}\n\n`);
 }
 function clearRenderedPrompt(renderedLines: number): void {
