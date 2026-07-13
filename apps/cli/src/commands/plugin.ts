@@ -138,7 +138,7 @@ function printSupermemoryBanner(): void {
         rendered += ' ';
       }
     }
-    process.stderr.write(rendered + '\n');
+    process.stderr.write(`${rendered}\n`);
   }
 
   const label = chalk.hex('#18BFFF')('>') + chalk.hex('#1775EF').bold(' PLUGINS');
@@ -245,7 +245,7 @@ async function arrowSelect<T extends string>(opts: {
       }
       lines.push(`${chalk.cyan(TUI_BAR)}`);
       lines.push(`${chalk.cyan(TUI_BOTTOM)} ${chalk.dim(opts.footer ?? 'Up/Down move, Enter confirm, Esc cancel')}`);
-      process.stderr.write(lines.join('\n') + '\n');
+      process.stderr.write(`${lines.join('\n')}\n`);
       return lines.length;
     },
     (key) => {
@@ -293,7 +293,7 @@ async function arrowMultiselect<T extends string>(opts: {
       if (error) lines.push(`${chalk.yellow(TUI_BAR)} ${chalk.yellow(error)}`);
       lines.push(`${chalk.cyan(TUI_BAR)}`);
       lines.push(`${chalk.cyan(TUI_BOTTOM)} ${chalk.dim(opts.footer ?? 'Up/Down move, Space select, Enter confirm, Esc back')}`);
-      process.stderr.write(lines.join('\n') + '\n');
+      process.stderr.write(`${lines.join('\n')}\n`);
       return lines.length;
     },
     (key) => {
@@ -709,7 +709,6 @@ function startPluginAuthCallbackServer(clients: PluginClientId[]): Promise<{
       rejectCallback = reject;
     });
 
-    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     const clearAuthTimeout = () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
@@ -787,7 +786,7 @@ function startPluginAuthCallbackServer(clients: PluginClientId[]): Promise<{
       rejectServer(error);
     });
 
-    timeoutId = setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       rejectCallback(new Error('Authentication timed out'));
       server.close();
     }, 10 * 60_000);
@@ -938,7 +937,7 @@ async function authorizePlugins(
         error instanceof Error ? error.message : String(error)
       }\n\n`,
     );
-    process.stdout.write(`  Rerun the command to open a fresh OAuth callback and upgrade link.\n\n`);
+    process.stdout.write("  Rerun the command to open a fresh OAuth callback and upgrade link.\n\n");
     return true;
   } finally {
     callback.close();
@@ -1187,7 +1186,7 @@ async function chooseInstalledTargetIds(action: 'connect' | 'remove'): Promise<P
     options: targets.map((target) => ({
       value: target.id,
       label: target.label,
-      hint: states.get(target.id)?.version ? 'v' + states.get(target.id)?.version : 'installed',
+      hint: states.get(target.id)?.version ? `v${states.get(target.id)?.version}` : 'installed',
     })),
   });
 
@@ -1218,9 +1217,7 @@ export async function loginInstalledPlugins(options: {
   const missing = selectedIds.filter((id) => !targets.some((target) => target.id === id));
   if (missing.length > 0) {
     throw new Error(
-      'Not installed: ' +
-        missing.map((id) => TARGETS.find((target) => target.id === id)?.label ?? id).join(', ') +
-        '. Run supermemory plugin first.',
+      `Not installed: ${missing.map((id) => TARGETS.find((target) => target.id === id)?.label ?? id).join(', ')}. Run supermemory plugin first.`,
     );
   }
 
@@ -1286,7 +1283,7 @@ async function uninstallTarget(target: PluginTarget, dryRun: boolean): Promise<U
       if (!dryRun) log = await runProcess('claude', args);
     }
     if (target.id === 'cursor') {
-      steps.push('remove ' + CURSOR_PLUGIN_TARGET);
+      steps.push(`remove ${CURSOR_PLUGIN_TARGET}`);
       if (!dryRun) rmSync(CURSOR_PLUGIN_TARGET, { recursive: true, force: true });
     }
     if (target.id === 'opencode') {
@@ -1322,17 +1319,17 @@ async function uninstallTarget(target: PluginTarget, dryRun: boolean): Promise<U
 
 function printUninstallSummary(results: UninstallResult[], dryRun: boolean): void {
   const title = dryRun ? 'Supermemory uninstall plan' : 'Supermemory uninstall summary';
-  process.stdout.write('\n' + chalk.bold(title) + '\n\n');
+  process.stdout.write(`\n${chalk.bold(title)}\n\n`);
   for (const result of results) {
     const icon =
       result.status === 'removed' ? chalk.green('[ok]')
       : result.status === 'planned' ? chalk.cyan('[plan]')
       : result.status === 'skipped' ? chalk.yellow('[skip]')
       : chalk.red('[fail]');
-    process.stdout.write(icon + ' ' + chalk.bold(result.label) + ': ' + result.message + '\n');
-    for (const step of result.steps) process.stdout.write('  ' + chalk.dim(step) + '\n');
+    process.stdout.write(`${icon} ${chalk.bold(result.label)}: ${result.message}\n`);
+    for (const step of result.steps) process.stdout.write(`  ${chalk.dim(step)}\n`);
     if (result.log && result.status === 'failed') {
-      process.stdout.write('  ' + chalk.dim(result.log) + '\n');
+      process.stdout.write(`  ${chalk.dim(result.log)}\n`);
     }
     process.stdout.write('\n');
   }
@@ -1354,7 +1351,7 @@ async function handlePluginUninstall(
     selectedIds = await chooseInstalledTargetIds('remove');
   }
   if (selectedIds.length === 0) {
-    process.stdout.write('\n' + chalk.yellow('[skip]') + ' No installed Supermemory plugins found.\n\n');
+    process.stdout.write(`\n${chalk.yellow('[skip]')} No installed Supermemory plugins found.\n\n`);
     return;
   }
 
@@ -1375,7 +1372,7 @@ async function handlePluginUninstall(
     results.push(await uninstallTarget(target, dryRun));
   }
 
-  if (flags.json) process.stdout.write(JSON.stringify({ results }, null, 2) + '\n');
+  if (flags.json) process.stdout.write(`${JSON.stringify({ results }, null, 2)}\n`);
   else printUninstallSummary(results, dryRun);
   if (results.some((result) => result.status === 'failed')) process.exitCode = 1;
 }
@@ -1415,7 +1412,7 @@ export const uninstallCommand = defineCliCommand({
       selectedIds = await chooseInstalledTargetIds('remove');
     }
     if (selectedIds.length === 0) {
-      process.stdout.write('\n' + chalk.yellow('[skip]') + ' No installed Supermemory plugins found.\n\n');
+      process.stdout.write(`\n${chalk.yellow('[skip]')} No installed Supermemory plugins found.\n\n`);
       return;
     }
 
@@ -1436,7 +1433,7 @@ export const uninstallCommand = defineCliCommand({
       results.push(await uninstallTarget(target, dryRun));
     }
 
-    if (flags.json) process.stdout.write(JSON.stringify({ results }, null, 2) + '\n');
+    if (flags.json) process.stdout.write(`${JSON.stringify({ results }, null, 2)}\n`);
     else printUninstallSummary(results, dryRun);
     if (results.some((result) => result.status === 'failed')) process.exitCode = 1;
   },
@@ -1551,7 +1548,7 @@ export const pluginCommand = defineCliCommand({
           status: 'current',
           message:
             installed.version && latestVersion ?
-              'already up to date (v' + installed.version + ')' + (dryRun || noAuth ? '' : '; continuing to OAuth')
+              `already up to date (v${installed.version})${dryRun || noAuth ? '' : '; continuing to OAuth'}`
             : 'already installed; version could not be verified, use --force to reinstall',
           steps: [],
         });

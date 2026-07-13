@@ -53,7 +53,7 @@ function readInstallState(): PluginInstallState {
 
 function writeInstallState(state: PluginInstallState): void {
   mkdirSync(dirname(PLUGIN_INSTALL_STATE_PATH), { recursive: true });
-  writeFileSync(PLUGIN_INSTALL_STATE_PATH, JSON.stringify(state, null, 2) + '\n', 'utf8');
+  writeFileSync(PLUGIN_INSTALL_STATE_PATH, `${JSON.stringify(state, null, 2)}\n`, 'utf8');
   try {
     chmodSync(PLUGIN_INSTALL_STATE_PATH, 0o600);
   } catch {}
@@ -222,7 +222,7 @@ export async function getLatestPluginVersion(id: PluginId): Promise<string | und
     const executable = process.platform === 'win32' ? (process.env.ComSpec ?? 'cmd.exe') : 'npm';
     const args =
       process.platform === 'win32' ?
-        ['/d', '/s', '/c', 'npm view ' + packageName + ' version --json']
+        ['/d', '/s', '/c', `npm view ${packageName} version --json`]
       : ['view', packageName, 'version', '--json'];
     const result = spawnSync(executable, args, {
       encoding: 'utf8',
@@ -251,7 +251,7 @@ export function removeOpenCodePlugin(): string[] {
       formattingOptions: { insertSpaces: true, tabSize: 2 },
     });
     writeFileSync(path, applyEdits(content, edits), 'utf8');
-    steps.push('removed opencode-supermemory from ' + path);
+    steps.push(`removed opencode-supermemory from ${path}`);
   }
 
   const commandDirectory = join(homedir(), '.config', 'opencode', 'command');
@@ -259,7 +259,7 @@ export function removeOpenCodePlugin(): string[] {
     const path = join(commandDirectory, file);
     if (!existsSync(path)) continue;
     unlinkSync(path);
-    steps.push('removed ' + path);
+    steps.push(`removed ${path}`);
   }
   return steps;
 }
