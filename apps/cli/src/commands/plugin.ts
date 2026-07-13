@@ -166,7 +166,10 @@ function finishArrowPrompt(message: string, value: string): void {
   process.stderr.write(`${chalk.cyan(TUI_BAR)}\n`);
 }
 
-function withRawKeypress<T>(render: () => number, onKey: (key: { name?: string; ctrl?: boolean }) => T | undefined): Promise<T> {
+function withRawKeypress<T>(
+  render: () => number,
+  onKey: (key: { name?: string; ctrl?: boolean }) => T | undefined,
+): Promise<T> {
   const input = process.stdin as NodeJS.ReadStream & { setRawMode?: (mode: boolean) => void };
   const hadRawMode = Boolean(input.isRaw);
   let renderedLines = 0;
@@ -244,7 +247,9 @@ async function arrowSelect<T extends string>(opts: {
         lines.push(`${chalk.cyan(TUI_BAR)} ${pointer} ${marker} ${label}${hint}`);
       }
       lines.push(`${chalk.cyan(TUI_BAR)}`);
-      lines.push(`${chalk.cyan(TUI_BOTTOM)} ${chalk.dim(opts.footer ?? 'Up/Down move, Enter confirm, Esc cancel')}`);
+      lines.push(
+        `${chalk.cyan(TUI_BOTTOM)} ${chalk.dim(opts.footer ?? 'Up/Down move, Enter confirm, Esc cancel')}`,
+      );
       process.stderr.write(`${lines.join('\n')}\n`);
       return lines.length;
     },
@@ -292,7 +297,11 @@ async function arrowMultiselect<T extends string>(opts: {
       }
       if (error) lines.push(`${chalk.yellow(TUI_BAR)} ${chalk.yellow(error)}`);
       lines.push(`${chalk.cyan(TUI_BAR)}`);
-      lines.push(`${chalk.cyan(TUI_BOTTOM)} ${chalk.dim(opts.footer ?? 'Up/Down move, Space select, Enter confirm, Esc back')}`);
+      lines.push(
+        `${chalk.cyan(TUI_BOTTOM)} ${chalk.dim(
+          opts.footer ?? 'Up/Down move, Space select, Enter confirm, Esc back',
+        )}`,
+      );
       process.stderr.write(`${lines.join('\n')}\n`);
       return lines.length;
     },
@@ -522,11 +531,15 @@ function printDetectionSummary(detections: Map<PluginId, Detection>) {
       );
     } else {
       process.stderr.write(
-        `${chalk.cyan(TUI_BAR)}   ${chalk.red('[missing]')} ${chalk.bold(target.label)} ${chalk.dim('not detected')}\n`,
+        `${chalk.cyan(TUI_BAR)}   ${chalk.red('[missing]')} ${chalk.bold(target.label)} ${chalk.dim(
+          'not detected',
+        )}\n`,
       );
     }
   }
-  process.stderr.write(`${chalk.cyan(TUI_BOTTOM)} ${chalk.dim('scripts can use supermemory plugin --all')}\n\n`);
+  process.stderr.write(
+    `${chalk.cyan(TUI_BOTTOM)} ${chalk.dim('scripts can use supermemory plugin --all')}\n\n`,
+  );
 }
 
 function parseOnly(value: unknown): PluginId[] {
@@ -896,7 +909,9 @@ async function authorizePlugins(
         await openBrowser(authUrl);
       } catch {
         spinner?.message('Could not open browser automatically.');
-        process.stdout.write(`  Open this URL to authorize selected plugins:\n\n  ${chalk.cyan(authUrl)}\n\n`);
+        process.stdout.write(
+          `  Open this URL to authorize selected plugins:\n\n  ${chalk.cyan(authUrl)}\n\n`,
+        );
       }
     }
 
@@ -937,7 +952,7 @@ async function authorizePlugins(
         error instanceof Error ? error.message : String(error)
       }\n\n`,
     );
-    process.stdout.write("  Rerun the command to open a fresh OAuth callback and upgrade link.\n\n");
+    process.stdout.write('  Rerun the command to open a fresh OAuth callback and upgrade link.\n\n');
     return true;
   } finally {
     callback.close();
@@ -1217,7 +1232,9 @@ export async function loginInstalledPlugins(options: {
   const missing = selectedIds.filter((id) => !targets.some((target) => target.id === id));
   if (missing.length > 0) {
     throw new Error(
-      `Not installed: ${missing.map((id) => TARGETS.find((target) => target.id === id)?.label ?? id).join(', ')}. Run supermemory plugin first.`,
+      `Not installed: ${missing
+        .map((id) => TARGETS.find((target) => target.id === id)?.label ?? id)
+        .join(', ')}. Run supermemory plugin first.`,
     );
   }
 
@@ -1439,7 +1456,6 @@ export const uninstallCommand = defineCliCommand({
   },
 });
 
-
 export const pluginCommand = defineCliCommand({
   meta: {
     name: 'plugin',
@@ -1535,11 +1551,7 @@ export const pluginCommand = defineCliCommand({
       const shouldInstall =
         force ||
         !installed.installed ||
-        Boolean(
-          installed.version &&
-            latestVersion &&
-            compareVersions(installed.version, latestVersion) < 0,
-        );
+        Boolean(installed.version && latestVersion && compareVersions(installed.version, latestVersion) < 0);
 
       if (!shouldInstall) {
         results.push({
@@ -1558,8 +1570,7 @@ export const pluginCommand = defineCliCommand({
       const result = await installTarget(target, dryRun);
       results.push(result);
       if (!dryRun && result.status === 'installed') {
-        const detectedVersion =
-          latestVersion ?? detectInstalledPlugin(id).version ?? installed.version;
+        const detectedVersion = latestVersion ?? detectInstalledPlugin(id).version ?? installed.version;
         if (detectedVersion) recordPluginVersion(id, detectedVersion);
       }
     }

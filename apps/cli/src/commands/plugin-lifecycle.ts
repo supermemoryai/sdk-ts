@@ -1,12 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import {
-  chmodSync,
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  unlinkSync,
-  writeFileSync,
-} from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { applyEdits, modify, parse } from 'jsonc-parser/lib/esm/main.js';
@@ -22,13 +15,7 @@ interface PluginInstallState {
   plugins: Partial<Record<PluginId, { version: string; installedAt: string }>>;
 }
 
-const CURSOR_PLUGIN_TARGET = join(
-  homedir(),
-  '.cursor',
-  'plugins',
-  'local',
-  'cursor-supermemory',
-);
+const CURSOR_PLUGIN_TARGET = join(homedir(), '.cursor', 'plugins', 'local', 'cursor-supermemory');
 const PLUGIN_INSTALL_STATE_PATH = join(homedir(), '.supermemory', 'plugin-installs.json');
 const OPENCODE_COMMAND_FILES = [
   'supermemory-init.md',
@@ -110,10 +97,7 @@ export function getOpenCodeConfigPaths(): string[] {
 }
 
 function isOpenCodeSupermemoryEntry(value: unknown): value is string {
-  return (
-    typeof value === 'string' &&
-    /(?:^|[/\\])opencode-supermemory(?:@|[/\\]|$)/i.test(value)
-  );
+  return typeof value === 'string' && /(?:^|[/\\])opencode-supermemory(?:@|[/\\]|$)/i.test(value);
 }
 
 function openCodeConfigHasPlugin(path: string): boolean {
@@ -161,13 +145,12 @@ export function detectInstalledPlugin(id: PluginId): InstalledPlugin {
       version = readFileSync(hook, 'utf8').match(/PLUGIN_VERSION\s*=\s*['"]([^'"]+)['"]/)?.[1];
     } catch {}
     return {
-      installed:
-        existsSync(hook) || existsSync(join(homedir(), '.codex', 'skills', 'supermemory-search')),
+      installed: existsSync(hook) || existsSync(join(homedir(), '.codex', 'skills', 'supermemory-search')),
       version: version ?? recordedVersion,
     };
   }
 
-  const executable = process.platform === 'win32' ? (process.env.ComSpec ?? 'cmd.exe') : 'claude';
+  const executable = process.platform === 'win32' ? process.env.ComSpec ?? 'cmd.exe' : 'claude';
   const args =
     process.platform === 'win32' ?
       ['/d', '/s', '/c', 'claude plugin list --json']
@@ -219,7 +202,7 @@ export async function getLatestPluginVersion(id: PluginId): Promise<string | und
 
     const packageName = NPM_PACKAGES[id];
     if (!packageName) return undefined;
-    const executable = process.platform === 'win32' ? (process.env.ComSpec ?? 'cmd.exe') : 'npm';
+    const executable = process.platform === 'win32' ? process.env.ComSpec ?? 'cmd.exe' : 'npm';
     const args =
       process.platform === 'win32' ?
         ['/d', '/s', '/c', `npm view ${packageName} version --json`]
@@ -243,9 +226,7 @@ export function removeOpenCodePlugin(): string[] {
     const content = readFileSync(path, 'utf8');
     const config = parse(content) as { plugin?: unknown };
     if (!Array.isArray(config?.plugin)) continue;
-    const plugins = config.plugin.filter(
-      (entry) => !isOpenCodeSupermemoryEntry(entry),
-    );
+    const plugins = config.plugin.filter((entry) => !isOpenCodeSupermemoryEntry(entry));
     if (plugins.length === config.plugin.length) continue;
     const edits = modify(content, ['plugin'], plugins.length > 0 ? plugins : undefined, {
       formattingOptions: { insertSpaces: true, tabSize: 2 },
