@@ -625,9 +625,7 @@ async function authorizeInstalledPlugins(
     cli_version: device.cliVersion,
   });
   const authUrl = `${getPluginAuthBaseUrl(config.consoleUrl)}/auth/connect?${params.toString()}`;
-  process.stdout.write(
-    `${chalk.dim('Authorize from this browser URL:')} ${chalk.cyan(authUrl)}\n\n`,
-  );
+  process.stdout.write(`${chalk.dim('Authorize from this browser URL:')} ${chalk.cyan(authUrl)}\n\n`);
   const spinner = isInteractive() ? clack.spinner() : null;
 
   try {
