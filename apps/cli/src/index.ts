@@ -238,12 +238,17 @@ async function main() {
     return;
   }
 
+  const errorFlags = {
+    json: rawArgs.includes('--json'),
+    output: resolveConfig().output,
+  };
+
   const firstNonFlag = rawArgs.find((a) => !a.startsWith('-'));
   if (firstNonFlag && !(firstNonFlag in subCommands)) {
     outputError(
       'E_UNKNOWN_COMMAND',
       `Unknown command: ${firstNonFlag}`,
-      { json: rawArgs.includes('--json'), output: resolveConfig().output },
+      errorFlags,
       'Run `supermemory help` to see available commands.',
     );
     process.exitCode = 1;
@@ -254,11 +259,6 @@ async function main() {
   try {
     await runCommand(cli, { rawArgs });
   } catch (err) {
-    const errorFlags = {
-      json: rawArgs.includes('--json'),
-      output: resolveConfig().output,
-    };
-
     if (err instanceof CliError) {
       outputError(err.code, err.message, errorFlags, err.hint);
       process.exitCode = err.exitCode;

@@ -228,10 +228,43 @@ async function handleBatch(
         flags,
       );
     }
+    if (item.tag && (item.tag.length > 100 || !/^[a-zA-Z0-9_:-]+$/.test(item.tag))) {
+      return exitWithError(
+        'validation_error',
+        `Batch item ${
+          index + 1
+        } tag must be at most 100 characters and contain only letters, numbers, hyphens, underscores, or colons`,
+        flags,
+      );
+    }
     if (item.tag && enforcedTags.length > 0 && !enforcedTags.includes(item.tag)) {
       return exitWithError(
         'validation_error',
         `Batch item tag "${item.tag}" is outside the API key scope: ${enforcedTags.join(', ')}.`,
+        flags,
+      );
+    }
+    if ('title' in item && typeof item.title !== 'string') {
+      return exitWithError('validation_error', `Batch item ${index + 1} title must be a string`, flags);
+    }
+    if (
+      'id' in item &&
+      (typeof item.id !== 'string' || item.id.length > 100 || !/^[a-zA-Z0-9_:-]+$/.test(item.id))
+    ) {
+      return exitWithError(
+        'validation_error',
+        `Batch item ${
+          index + 1
+        } id must be at most 100 characters and contain only letters, numbers, hyphens, underscores, or colons`,
+        flags,
+      );
+    }
+    if ('metadata' in item && !isValidMetadata(item.metadata)) {
+      return exitWithError(
+        'validation_error',
+        `Batch item ${
+          index + 1
+        } metadata must be an object with string, number, boolean, or string-array values`,
         flags,
       );
     }
@@ -257,5 +290,16 @@ async function handleBatch(
     { results, total: results.length },
     () => `${chalk.green('✓')} Added ${results.length} documents in batch`,
     flags,
+  );
+}
+
+function isValidMetadata(value: unknown): value is Record<string, string | number | boolean | string[]> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  return Object.values(value).every(
+    (entry) =>
+      typeof entry === 'string' ||
+      typeof entry === 'number' ||
+      typeof entry === 'boolean' ||
+      (Array.isArray(entry) && entry.every((item) => typeof item === 'string')),
   );
 }
