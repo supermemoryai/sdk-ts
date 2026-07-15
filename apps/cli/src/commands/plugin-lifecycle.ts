@@ -169,9 +169,15 @@ export function detectInstalledPlugin(id: PluginId): InstalledPlugin {
   if (id === 'codex') {
     const hooksDirectory = join(homedir(), '.codex', 'supermemory');
     const hooksInstalled = ['recall.js', 'flush.js'].every((file) => existsSync(join(hooksDirectory, file)));
-    const skillsInstalled = existsSync(join(homedir(), '.codex', 'skills', 'supermemory-search'));
+    const skillsDirectory = join(homedir(), '.codex', 'skills');
+    const skillsInstalled = [
+      'supermemory-forget',
+      'supermemory-login',
+      'supermemory-save',
+      'supermemory-search',
+    ].every((skill) => existsSync(join(skillsDirectory, skill, 'SKILL.md')));
     return {
-      installed: hooksInstalled || skillsInstalled,
+      installed: hooksInstalled && skillsInstalled,
       version: recordedVersion,
     };
   }

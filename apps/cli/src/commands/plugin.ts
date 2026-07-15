@@ -30,7 +30,7 @@ import {
   recordPluginVersion,
   removeOpenCodePlugin,
 } from './plugin-lifecycle.js';
-import { isInputInteractive, isInteractive } from '../lib/output.js';
+import { isInputInteractive, isInteractive, type OutputFlags, shouldOutputJson } from '../lib/output.js';
 
 type PluginClientId = 'claude_code' | 'cursor' | 'opencode' | 'codex';
 type InstallMode = 'all' | 'custom';
@@ -955,7 +955,7 @@ async function authorizePlugins(
     }
 
     printPluginAuthSummary(authResults);
-    return authResults.some((result) => result.status === 'failed');
+    return authResults.some((result) => result.status !== 'connected');
   } catch (error) {
     spinner?.stop('OAuth failed');
     process.stdout.write(
@@ -1029,11 +1029,22 @@ async function installTarget(target: PluginTarget, dryRun: boolean): Promise<Ins
 
     if (target.id === 'claude') {
       const addMarketplace = ['plugin', 'marketplace', 'add', 'supermemoryai/claude-supermemory'];
+      const updateMarketplace = ['plugin', 'marketplace', 'update', 'supermemory-plugins'];
       const installPlugin = ['plugin', 'install', 'supermemory@supermemory-plugins', '--scope', 'user'];
-      steps.push(formatStep('claude', addMarketplace));
+      steps.push(`${formatStep('claude', updateMarketplace)} (or add it when not registered)`);
       steps.push(formatStep('claude', installPlugin));
       if (!dryRun) {
-        log = await runProcess('claude', addMarketplace);
+        try {
+          log = await runProcess('claude', updateMarketplace);
+        } catch (error) {
+          if (
+            !(error instanceof CommandError) ||
+            !/not found|does not exist|unknown|not registered/i.test(error.log)
+          ) {
+            throw error;
+          }
+          log = await runProcess('claude', addMarketplace);
+        }
         log = (await runProcess('claude', installPlugin)) ?? log;
       }
     }
@@ -1372,23 +1383,21 @@ function printUninstallSummary(results: UninstallResult[], dryRun: boolean): voi
   }
 }
 
-async function handlePluginUninstall(
-  args: Record<string, unknown>,
-  flags: { json?: boolean },
-): Promise<void> {
+async function handlePluginUninstall(args: Record<string, unknown>, flags: OutputFlags): Promise<void> {
   const dryRun = args['dry-run'] === true;
+  const jsonOutput = shouldOutputJson(flags);
   const installed = installedTargets();
   let selectedIds = parseOnly(args.only);
   if (args.all === true) selectedIds = installed.map((target) => target.id);
 
   if (selectedIds.length === 0 && args.all !== true) {
-    if (!isInputInteractive() || flags.json) {
+    if (!isInputInteractive() || jsonOutput) {
       throw new Error('Choose targets with --all or --only claude,cursor,opencode,codex');
     }
     selectedIds = await chooseInstalledTargetIds('remove');
   }
   if (selectedIds.length === 0) {
-    if (flags.json) {
+    if (jsonOutput) {
       process.stdout.write(`${JSON.stringify({ results: [] }, null, 2)}\n`);
     } else {
       process.stdout.write(`\n${chalk.yellow('[skip]')} No installed Supermemory plugins found.\n\n`);
@@ -1413,7 +1422,7 @@ async function handlePluginUninstall(
     results.push(await uninstallTarget(target, dryRun));
   }
 
-  if (flags.json) process.stdout.write(`${JSON.stringify({ results }, null, 2)}\n`);
+  if (jsonOutput) process.stdout.write(`${JSON.stringify({ results }, null, 2)}\n`);
   else printUninstallSummary(results, dryRun);
   if (results.some((result) => result.status === 'failed')) process.exitCode = 1;
 }
@@ -1488,13 +1497,10 @@ export const pluginCommand = defineCliCommand({
     const dryRun = args['dry-run'] === true;
     const force = args.force === true;
     const noAuth = args['no-auth'] === true;
+    const jsonOutput = shouldOutputJson(flags);
     const detections = new Map<PluginId, Detection>(
       TARGETS.map((target) => [target.id, detectTarget(target)]),
     );
-
-    if (flags.json && !dryRun) {
-      throw new Error('--json is only supported with --dry-run for plugin');
-    }
 
     let selectedIds = parseOnly(args.only);
     if (args.all === true) {
@@ -1558,7 +1564,7 @@ export const pluginCommand = defineCliCommand({
       }
     }
 
-    if (flags.json) {
+    if (jsonOutput) {
       process.stdout.write(`${JSON.stringify({ results }, null, 2)}\n`);
     } else {
       printHumanSummary(results, dryRun, noAuth);
@@ -1570,7 +1576,7 @@ export const pluginCommand = defineCliCommand({
     const authFailed = await authorizePlugins(oauthTargets, {
       dryRun,
       noAuth,
-      json: flags.json === true,
+      json: jsonOutput,
     });
 
     if (results.some((result) => result.status === 'failed') || authFailed) {
