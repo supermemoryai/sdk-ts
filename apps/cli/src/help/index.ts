@@ -473,6 +473,37 @@ const FULL_COMMANDS: Record<string, CommandSchema> = {
   },
 };
 
+const NESTED_COMMANDS: Record<string, CommandSchema> = {
+  'plugin login': {
+    description: 'Connect installed Supermemory plugins with browser OAuth',
+    usage: 'supermemory plugin login [options]',
+    options: {
+      '--all': { type: 'boolean', default: false, description: 'Connect every installed Supermemory plugin' },
+      '--only': { type: 'string', description: 'Comma-separated targets: claude,cursor,opencode,codex' },
+      '--no-browser': { type: 'boolean', default: false, description: 'Show the OAuth URL instead of opening a browser' },
+    },
+    examples: [
+      'supermemory plugin login --all',
+      'supermemory plugin login --only codex',
+      'supermemory plugin login --all --no-browser',
+    ],
+  },
+  'plugin uninstall': {
+    description: 'Remove selected Supermemory plugin integrations',
+    usage: 'supermemory plugin uninstall [options]',
+    options: {
+      '--all': { type: 'boolean', default: false, description: 'Remove every installed Supermemory plugin' },
+      '--only': { type: 'string', description: 'Comma-separated targets: claude,cursor,opencode,codex' },
+      '--dry-run': { type: 'boolean', default: false, description: 'Show what would be removed without changing anything' },
+    },
+    examples: [
+      'supermemory plugin uninstall --all',
+      'supermemory plugin uninstall --only codex',
+      'supermemory plugin uninstall --all --dry-run',
+    ],
+  },
+};
+
 const SCOPED_COMMAND_NAMES = ['search', 'add', 'remember', 'forget', 'update', 'profile', 'whoami'];
 
 const CORE_COMMAND_NAMES = [
@@ -554,7 +585,7 @@ export function buildHelpJson(
 }
 
 export function getCommandSchema(commandName: string): CommandSchema | null {
-  return FULL_COMMANDS[commandName] ?? null;
+  return NESTED_COMMANDS[commandName] ?? FULL_COMMANDS[commandName] ?? null;
 }
 
 export function formatHelpText(

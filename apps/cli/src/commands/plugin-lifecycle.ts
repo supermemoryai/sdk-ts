@@ -167,14 +167,14 @@ export function detectInstalledPlugin(id: PluginId): InstalledPlugin {
   }
 
   if (id === 'codex') {
-    const hook = join(homedir(), '.codex', 'supermemory', 'session-start.js');
-    let version: string | undefined;
-    try {
-      version = readFileSync(hook, 'utf8').match(/PLUGIN_VERSION\s*=\s*['"]([^'"]+)['"]/)?.[1];
-    } catch {}
+    const hooksDirectory = join(homedir(), '.codex', 'supermemory');
+    const hooksInstalled = ['recall.js', 'flush.js'].every((file) =>
+      existsSync(join(hooksDirectory, file)),
+    );
+    const skillsInstalled = existsSync(join(homedir(), '.codex', 'skills', 'supermemory-search'));
     return {
-      installed: existsSync(hook) || existsSync(join(homedir(), '.codex', 'skills', 'supermemory-search')),
-      version: version ?? recordedVersion,
+      installed: hooksInstalled || skillsInstalled,
+      version: recordedVersion,
     };
   }
 

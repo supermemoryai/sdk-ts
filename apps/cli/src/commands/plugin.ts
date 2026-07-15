@@ -1532,7 +1532,10 @@ export const pluginCommand = defineCliCommand({
       const shouldInstall =
         force ||
         !installed.installed ||
-        Boolean(installed.version && latestVersion && compareVersions(installed.version, latestVersion) < 0);
+        Boolean(
+          latestVersion &&
+            (!installed.version || compareVersions(installed.version, latestVersion) < 0),
+        );
 
       if (!shouldInstall) {
         results.push({
