@@ -5,10 +5,12 @@ import { dirname, join } from 'node:path';
 import { applyEdits, modify, parse } from 'jsonc-parser/lib/esm/main.js';
 
 export type PluginId = 'claude' | 'cursor' | 'opencode' | 'codex';
+export type ClaudePluginScope = 'user' | 'project' | 'local';
 
 export interface InstalledPlugin {
   installed: boolean;
   version?: string;
+  scopes?: ClaudePluginScope[];
 }
 
 interface PluginInstallState {
@@ -91,6 +93,32 @@ function findClaudePluginVersion(value: unknown): string | undefined {
   return undefined;
 }
 
+function findClaudePluginScopes(value: unknown): ClaudePluginScope[] {
+  const scopes = new Set<ClaudePluginScope>();
+  const visit = (entry: unknown): void => {
+    if (Array.isArray(entry)) {
+      entry.forEach(visit);
+      return;
+    }
+    if (!entry || typeof entry !== 'object') return;
+
+    const record = entry as Record<string, unknown>;
+    const identity = [record.id, record.name, record.plugin, record.pluginId, record.source]
+      .filter((item): item is string => typeof item === 'string')
+      .join(' ');
+    if (/supermemory(?:@supermemory-plugins)?/i.test(identity)) {
+      const scope = [record.scope, record.installationScope, record.installation_scope].find(
+        (item): item is string => typeof item === 'string',
+      );
+      if (scope === 'user' || scope === 'project' || scope === 'local') scopes.add(scope);
+    }
+    Object.values(record).forEach(visit);
+  };
+
+  visit(value);
+  return [...scopes];
+}
+
 export function getOpenCodeConfigPaths(): string[] {
   const directory = join(homedir(), '.config', 'opencode');
   return [join(directory, 'opencode.jsonc'), join(directory, 'opencode.json')];
@@ -161,12 +189,16 @@ export function detectInstalledPlugin(id: PluginId): InstalledPlugin {
   });
   const output = result.stdout ?? '';
   let version: string | undefined;
+  let scopes: ClaudePluginScope[] = [];
   try {
-    version = findClaudePluginVersion(JSON.parse(output));
+    const parsed = JSON.parse(output);
+    version = findClaudePluginVersion(parsed);
+    scopes = findClaudePluginScopes(parsed);
   } catch {}
   return {
     installed: result.status === 0 && /supermemory/i.test(output),
     version: version ?? recordedVersion,
+    scopes: scopes.length > 0 ? scopes : undefined,
   };
 }
 

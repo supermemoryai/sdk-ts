@@ -873,9 +873,20 @@ function getPluginAuthBaseUrl(consoleUrl: string): string {
 
 async function authorizePlugins(
   targets: Array<{ id: PluginId; label: string }>,
-  options: { dryRun?: boolean; noAuth?: boolean; json?: boolean; noBrowser?: boolean },
+  options: {
+    dryRun?: boolean;
+    noAuth?: boolean;
+    json?: boolean;
+    noBrowser?: boolean;
+    allowNonInteractive?: boolean;
+  },
 ): Promise<boolean> {
-  if (options.dryRun || options.noAuth || options.json || !isInputInteractive()) {
+  if (
+    options.dryRun ||
+    options.noAuth ||
+    options.json ||
+    (!isInputInteractive() && !options.allowNonInteractive)
+  ) {
     return false;
   }
 
@@ -1241,7 +1252,10 @@ export async function loginInstalledPlugins(options: {
   const selected = targets
     .filter((target) => selectedIds.includes(target.id))
     .map(({ id, label }) => ({ id, label }));
-  const failed = await authorizePlugins(selected, { noBrowser: options.noBrowser });
+  const failed = await authorizePlugins(selected, {
+    noBrowser: options.noBrowser,
+    allowNonInteractive: true,
+  });
   if (failed) process.exitCode = 1;
   return true;
 }
@@ -1295,9 +1309,15 @@ async function uninstallTarget(target: PluginTarget, dryRun: boolean): Promise<U
   try {
     let log: string | undefined;
     if (target.id === 'claude') {
-      const args = ['plugin', 'uninstall', 'supermemory@supermemory-plugins', '--scope', 'user'];
-      steps.push(formatStep('claude', args));
-      if (!dryRun) log = await runProcess('claude', args);
+      const scopes = detectInstalledPlugin('claude').scopes ?? ['user'];
+      for (const scope of scopes) {
+        const args = ['plugin', 'uninstall', 'supermemory@supermemory-plugins', '--scope', scope];
+        steps.push(formatStep('claude', args));
+        if (!dryRun) {
+          const scopeLog = await runProcess('claude', args);
+          log = [log, scopeLog].filter(Boolean).join('\n');
+        }
+      }
     }
     if (target.id === 'cursor') {
       steps.push(`remove ${CURSOR_PLUGIN_TARGET}`);
@@ -1368,7 +1388,11 @@ async function handlePluginUninstall(
     selectedIds = await chooseInstalledTargetIds('remove');
   }
   if (selectedIds.length === 0) {
-    process.stdout.write(`\n${chalk.yellow('[skip]')} No installed Supermemory plugins found.\n\n`);
+    if (flags.json) {
+      process.stdout.write(`${JSON.stringify({ results: [] }, null, 2)}\n`);
+    } else {
+      process.stdout.write(`\n${chalk.yellow('[skip]')} No installed Supermemory plugins found.\n\n`);
+    }
     return;
   }
 
@@ -1417,42 +1441,7 @@ export const uninstallCommand = defineCliCommand({
     },
   },
   async handler({ args, flags }) {
-    const dryRun = args['dry-run'] === true;
-    const installed = installedTargets();
-    let selectedIds = parseOnly(args.only);
-    if (args.all === true) selectedIds = installed.map((target) => target.id);
-
-    if (selectedIds.length === 0 && args.all !== true) {
-      if (!isInputInteractive() || flags.json) {
-        throw new Error('Choose targets with --all or --only claude,cursor,opencode,codex');
-      }
-      selectedIds = await chooseInstalledTargetIds('remove');
-    }
-    if (selectedIds.length === 0) {
-      process.stdout.write(`\n${chalk.yellow('[skip]')} No installed Supermemory plugins found.\n\n`);
-      return;
-    }
-
-    const results: UninstallResult[] = [];
-    for (const id of selectedIds) {
-      const target = TARGETS.find((candidate) => candidate.id === id);
-      if (!target) continue;
-      if (!installed.some((candidate) => candidate.id === id)) {
-        results.push({
-          id,
-          label: target.label,
-          status: 'skipped',
-          message: 'not installed',
-          steps: [],
-        });
-        continue;
-      }
-      results.push(await uninstallTarget(target, dryRun));
-    }
-
-    if (flags.json) process.stdout.write(`${JSON.stringify({ results }, null, 2)}\n`);
-    else printUninstallSummary(results, dryRun);
-    if (results.some((result) => result.status === 'failed')) process.exitCode = 1;
+    await handlePluginUninstall(args, flags);
   },
 });
 
@@ -1488,21 +1477,13 @@ export const pluginCommand = defineCliCommand({
       default: false,
     },
   },
+  subCommands: {
+    login: pluginLoginCommand,
+    uninstall: uninstallCommand,
+  },
   async handler({ args, flags, rawArgs }) {
-    const action = rawArgs.find((arg) => !arg.startsWith('-'));
-    if (action === 'login') {
-      await handlePluginLogin({
-        all: args.all === true,
-        only: args.only,
-        noBrowser: rawArgs.includes('--no-browser'),
-        json: flags.json === true,
-      });
-      return;
-    }
-    if (action === 'uninstall') {
-      await handlePluginUninstall(args, flags);
-      return;
-    }
+    const nestedCommand = rawArgs.find((arg) => !arg.startsWith('-'));
+    if (nestedCommand === 'login' || nestedCommand === 'uninstall') return;
 
     const dryRun = args['dry-run'] === true;
     const force = args.force === true;
