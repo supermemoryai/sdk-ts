@@ -1037,12 +1037,10 @@ async function installTarget(target: PluginTarget, dryRun: boolean): Promise<Ins
         try {
           log = await runProcess('claude', updateMarketplace);
         } catch (error) {
-          if (
-            !(error instanceof CommandError) ||
-            !/not found|does not exist|unknown|not registered/i.test(error.log)
-          ) {
-            throw error;
-          }
+          const isMissingMarketplace =
+            error instanceof CommandError &&
+            /not found|does not exist|unknown|not registered/i.test(error.log ?? '');
+          if (!isMissingMarketplace) throw error;
           log = await runProcess('claude', addMarketplace);
         }
         log = (await runProcess('claude', installPlugin)) ?? log;
