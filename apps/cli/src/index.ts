@@ -185,11 +185,14 @@ async function main() {
     const commandTokens = rawArgs.filter((arg) => !arg.startsWith('-'));
     const parentCommand = commandTokens[0];
     const childCommand = commandTokens[1];
-    const parentDefinition = parentCommand ?
-      (subCommands[parentCommand] as {
-        subCommands?: Record<string, ReturnType<typeof defineCommand>>;
-      } | undefined)
-    : undefined;
+    const parentDefinition =
+      parentCommand ?
+        (subCommands[parentCommand] as
+          | {
+              subCommands?: Record<string, ReturnType<typeof defineCommand>>;
+            }
+          | undefined)
+      : undefined;
     const commandName =
       parentCommand && childCommand && parentDefinition?.subCommands?.[childCommand] ?
         `${parentCommand} ${childCommand}`

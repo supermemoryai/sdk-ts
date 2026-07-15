@@ -480,7 +480,11 @@ const NESTED_COMMANDS: Record<string, CommandSchema> = {
     options: {
       '--all': { type: 'boolean', default: false, description: 'Connect every installed Supermemory plugin' },
       '--only': { type: 'string', description: 'Comma-separated targets: claude,cursor,opencode,codex' },
-      '--no-browser': { type: 'boolean', default: false, description: 'Show the OAuth URL instead of opening a browser' },
+      '--no-browser': {
+        type: 'boolean',
+        default: false,
+        description: 'Show the OAuth URL instead of opening a browser',
+      },
     },
     examples: [
       'supermemory plugin login --all',
@@ -494,7 +498,11 @@ const NESTED_COMMANDS: Record<string, CommandSchema> = {
     options: {
       '--all': { type: 'boolean', default: false, description: 'Remove every installed Supermemory plugin' },
       '--only': { type: 'string', description: 'Comma-separated targets: claude,cursor,opencode,codex' },
-      '--dry-run': { type: 'boolean', default: false, description: 'Show what would be removed without changing anything' },
+      '--dry-run': {
+        type: 'boolean',
+        default: false,
+        description: 'Show what would be removed without changing anything',
+      },
     },
     examples: [
       'supermemory plugin uninstall --all',

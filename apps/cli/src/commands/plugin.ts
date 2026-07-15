@@ -1533,8 +1533,7 @@ export const pluginCommand = defineCliCommand({
         force ||
         !installed.installed ||
         Boolean(
-          latestVersion &&
-            (!installed.version || compareVersions(installed.version, latestVersion) < 0),
+          latestVersion && (!installed.version || compareVersions(installed.version, latestVersion) < 0),
         );
 
       if (!shouldInstall) {
