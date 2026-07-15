@@ -461,8 +461,6 @@ function startPluginAuthCallbackServer(clients: PluginClientId[]): Promise<{
       if (url.searchParams.get('state') !== stateToken) {
         res.writeHead(403, { 'Content-Type': 'text/html' });
         res.end(callbackHtml('Authentication Failed', 'Invalid callback state.'));
-        clearAuthTimeout();
-        rejectCallback(new Error('Invalid OAuth callback state'));
         return;
       }
 
@@ -484,8 +482,8 @@ function startPluginAuthCallbackServer(clients: PluginClientId[]): Promise<{
           }
         }
 
-        if (Object.keys(keysByClient).length === 0) {
-          throw new Error('No plugin keys received from callback');
+        if (Object.keys(keysByClient).length === 0 && Object.keys(errorsByClient).length === 0) {
+          throw new Error('No plugin keys or errors received from callback');
         }
 
         res.writeHead(200, { 'Content-Type': 'text/html' });
