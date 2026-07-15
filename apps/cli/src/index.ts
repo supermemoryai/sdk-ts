@@ -34,6 +34,7 @@ import {
 import { CliError } from './lib/errors.js';
 import { initOtel, shutdownOtel } from './lib/otel.js';
 import { CLI_VERSION } from './lib/version.js';
+import { error as outputError } from './lib/output.js';
 
 async function detectScope(): Promise<{
   mode: 'full' | 'scoped';
@@ -249,28 +250,24 @@ async function main() {
   try {
     await runCommand(cli, { rawArgs });
   } catch (err) {
+    const errorFlags = {
+      json: rawArgs.includes('--json'),
+      output: resolveConfig().output,
+    };
+
     if (err instanceof CliError) {
-      process.stderr.write(`${chalk.red('✗')} ${err.message}\n`);
-      if (err.hint) {
-        process.stderr.write(`  ${chalk.dim(`hint: ${err.hint}`)}\n`);
-      }
+      outputError(err.code, err.message, errorFlags, err.hint);
       process.exitCode = err.exitCode;
     } else if (err instanceof Error && 'code' in err && typeof err.code === 'string') {
-      const { code } = err;
-      process.stderr.write(`\n  ${err.message}\n`);
-      if (code === 'E_UNKNOWN_COMMAND') {
-        process.stderr.write(`\n  Run ${chalk.dim('supermemory help')} to see available commands.\n\n`);
-      } else if (code === 'EARG') {
-        process.stderr.write(`\n  Run the command with ${chalk.dim('--help')} for usage details.\n\n`);
-      } else {
-        process.stderr.write('\n');
-      }
+      const hint =
+        err.code === 'E_UNKNOWN_COMMAND' ? 'Run `supermemory help` to see available commands.'
+        : err.code === 'EARG' ? 'Run the command with `--help` for usage details.'
+        : undefined;
+      outputError(err.code, err.message, errorFlags, hint);
       process.exitCode = 1;
     } else {
-      process.stderr.write(
-        `${chalk.red('✗')} Unexpected error: ${err instanceof Error ? err.message : String(err)}\n`,
-      );
-      if (err instanceof Error && err.stack) {
+      outputError('unexpected_error', err instanceof Error ? err.message : String(err), errorFlags);
+      if (!errorFlags.json && errorFlags.output !== 'json' && err instanceof Error && err.stack) {
         process.stderr.write(`${chalk.dim(err.stack)}\n`);
       }
       process.exitCode = 1;

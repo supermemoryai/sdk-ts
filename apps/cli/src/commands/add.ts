@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { basename, resolve } from 'node:path';
 import chalk from 'chalk';
 import { apiRequest, apiRequestFormData } from '../lib/api.js';
+import { getEnforcedTags } from '../lib/config.js';
 import { defineCliCommand } from '../lib/command.js';
 import { ValidationError } from '../lib/errors.js';
 import { exitWithError, isInputInteractive, type OutputFlags, output } from '../lib/output.js';
@@ -58,7 +59,7 @@ export const addCommand = defineCliCommand({
       }
 
       if (args.batch) {
-        return handleBatch(stdinContent, tag, flags);
+        return handleBatch(stdinContent, tag, flags, getEnforcedTags());
       }
 
       return handleTextAdd(stdinContent, tag, args, flags, span);
@@ -189,7 +190,12 @@ async function handleFileAdd(
   );
 }
 
-async function handleBatch(stdinContent: string, tag: string, flags: OutputFlags): Promise<void> {
+async function handleBatch(
+  stdinContent: string,
+  tag: string,
+  flags: OutputFlags,
+  enforcedTags: string[],
+): Promise<void> {
   let items: {
     content: string;
     title?: string;
@@ -202,6 +208,16 @@ async function handleBatch(stdinContent: string, tag: string, flags: OutputFlags
     if (!Array.isArray(items)) throw new Error('Expected JSON array');
   } catch {
     return exitWithError('validation_error', 'Invalid JSON array from stdin for batch mode', flags);
+  }
+
+  const invalidTag =
+    enforcedTags.length > 0 ? items.find((item) => item.tag && !enforcedTags.includes(item.tag)) : undefined;
+  if (invalidTag?.tag) {
+    return exitWithError(
+      'validation_error',
+      `Batch item tag "${invalidTag.tag}" is outside the API key scope: ${enforcedTags.join(', ')}.`,
+      flags,
+    );
   }
 
   const results: { id: string; status: string }[] = [];

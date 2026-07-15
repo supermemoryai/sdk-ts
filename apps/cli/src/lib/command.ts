@@ -38,6 +38,7 @@ export function defineCliCommand(options: {
     }
   >;
   noSpan?: boolean;
+  subCommands?: Record<string, ReturnType<typeof defineCommand>>;
   handler: (ctx: CommandContext) => Promise<void>;
 }) {
   const allArgs = {
@@ -52,6 +53,7 @@ export function defineCliCommand(options: {
   return defineCommand({
     meta: options.meta,
     args: allArgs,
+    ...(options.subCommands ? { subCommands: options.subCommands } : {}),
     async run({ args, rawArgs }) {
       const enforcedTags = getEnforcedTags();
       if (args.tag && enforcedTags.length > 0 && !enforcedTags.includes(args.tag as string)) {
