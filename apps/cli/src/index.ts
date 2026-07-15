@@ -240,8 +240,12 @@ async function main() {
 
   const firstNonFlag = rawArgs.find((a) => !a.startsWith('-'));
   if (firstNonFlag && !(firstNonFlag in subCommands)) {
-    process.stderr.write(`\n  Unknown command: ${chalk.bold(firstNonFlag)}\n\n`);
-    process.stderr.write(`  Run ${chalk.dim('supermemory help')} to see available commands.\n\n`);
+    outputError(
+      'E_UNKNOWN_COMMAND',
+      `Unknown command: ${firstNonFlag}`,
+      { json: rawArgs.includes('--json'), output: resolveConfig().output },
+      'Run `supermemory help` to see available commands.',
+    );
     process.exitCode = 1;
     await shutdownOtel();
     return;

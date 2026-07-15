@@ -210,14 +210,31 @@ async function handleBatch(
     return exitWithError('validation_error', 'Invalid JSON array from stdin for batch mode', flags);
   }
 
-  const invalidTag =
-    enforcedTags.length > 0 ? items.find((item) => item.tag && !enforcedTags.includes(item.tag)) : undefined;
-  if (invalidTag?.tag) {
-    return exitWithError(
-      'validation_error',
-      `Batch item tag "${invalidTag.tag}" is outside the API key scope: ${enforcedTags.join(', ')}.`,
-      flags,
-    );
+  for (const [index, item] of items.entries()) {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      return exitWithError('validation_error', `Batch item ${index + 1} must be an object`, flags);
+    }
+    if (typeof item.content !== 'string' || item.content.trim().length === 0) {
+      return exitWithError(
+        'validation_error',
+        `Batch item ${index + 1} must include non-empty string content`,
+        flags,
+      );
+    }
+    if ('tag' in item && (typeof item.tag !== 'string' || item.tag.trim().length === 0)) {
+      return exitWithError(
+        'validation_error',
+        `Batch item ${index + 1} tag must be a non-empty string`,
+        flags,
+      );
+    }
+    if (item.tag && enforcedTags.length > 0 && !enforcedTags.includes(item.tag)) {
+      return exitWithError(
+        'validation_error',
+        `Batch item tag "${item.tag}" is outside the API key scope: ${enforcedTags.join(', ')}.`,
+        flags,
+      );
+    }
   }
 
   const results: { id: string; status: string }[] = [];
