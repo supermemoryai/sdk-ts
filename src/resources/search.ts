@@ -1,12 +1,26 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../core/resource';
+import type { Supermemory } from '../client';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
-export class Search extends APIResource {
+export interface Search {
+  /**
+   * Search memory entries - Low latency for conversational
+   *
+   * @example
+   * ```ts
+   * const response = await client.search({
+   *   q: 'machine learning concepts',
+   * });
+   * ```
+   */
+  (body: SearchParams, options?: RequestOptions): APIPromise<SearchResponse>;
+
   /**
    * Search memories with advanced filtering
+   *
+   * @deprecated Use `client.search()` for v4 memory search; keep this method if you need the legacy v3 document response shape.
    *
    * @example
    * ```ts
@@ -15,12 +29,12 @@ export class Search extends APIResource {
    * });
    * ```
    */
-  documents(body: SearchDocumentsParams, options?: RequestOptions): APIPromise<SearchDocumentsResponse> {
-    return this._client.post('/v3/search', { body, ...options });
-  }
+  documents(body: SearchDocumentsParams, options?: RequestOptions): APIPromise<SearchDocumentsResponse>;
 
   /**
    * Search memories with advanced filtering
+   *
+   * @deprecated Use `client.search.documents()` for the legacy v3 document search, or `client.search()` for v4 search.
    *
    * @example
    * ```ts
@@ -29,12 +43,12 @@ export class Search extends APIResource {
    * });
    * ```
    */
-  execute(body: SearchExecuteParams, options?: RequestOptions): APIPromise<SearchExecuteResponse> {
-    return this._client.post('/v3/search', { body, ...options });
-  }
+  execute(body: SearchExecuteParams, options?: RequestOptions): APIPromise<SearchExecuteResponse>;
 
   /**
    * Search memory entries - Low latency for conversational
+   *
+   * @deprecated Use `client.search()` instead.
    *
    * @example
    * ```ts
@@ -43,10 +57,45 @@ export class Search extends APIResource {
    * });
    * ```
    */
-  memories(body: SearchMemoriesParams, options?: RequestOptions): APIPromise<SearchMemoriesResponse> {
-    return this._client.post('/v4/search', { body, ...options });
-  }
+  memories(body: SearchMemoriesParams, options?: RequestOptions): APIPromise<SearchMemoriesResponse>;
 }
+
+export const Search = function Search(client: Supermemory): Search {
+  const search = ((body: SearchParams, options?: RequestOptions) =>
+    client.post<SearchResponse>('/v4/search', { body, ...options })) as Search;
+
+  Object.defineProperty(search, '_client', { value: client });
+  Object.setPrototypeOf(search, Search.prototype);
+  search.memories = search;
+
+  return search;
+} as unknown as { new (client: Supermemory): Search; prototype: Search };
+
+Search.prototype.documents = function (
+  this: Search & { _client: Supermemory },
+  body: SearchDocumentsParams,
+  options?: RequestOptions,
+): APIPromise<SearchDocumentsResponse> {
+  return this._client.post<SearchDocumentsResponse>('/v3/search', { body, ...options });
+};
+
+Search.prototype.execute = function (
+  this: Search & { _client: Supermemory },
+  body: SearchExecuteParams,
+  options?: RequestOptions,
+): APIPromise<SearchExecuteResponse> {
+  return this._client.post<SearchExecuteResponse>('/v3/search', { body, ...options });
+};
+
+Search.prototype.memories = function (
+  this: Search,
+  body: SearchMemoriesParams,
+  options?: RequestOptions,
+): APIPromise<SearchMemoriesResponse> {
+  return this(body, options);
+};
+
+export type SearchResponse = SearchMemoriesResponse;
 
 export interface SearchDocumentsResponse {
   results: Array<SearchDocumentsResponse.Result>;
@@ -455,6 +504,8 @@ export namespace SearchMemoriesResponse {
     }
   }
 }
+
+export type SearchParams = SearchMemoriesParams;
 
 export interface SearchDocumentsParams {
   /**

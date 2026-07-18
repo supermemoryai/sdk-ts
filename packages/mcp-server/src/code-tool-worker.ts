@@ -5,6 +5,7 @@ import util from 'node:util';
 import Fuse from 'fuse.js';
 import ts from 'typescript';
 import { WorkerOutput } from './code-tool-types';
+import { sdkMethods } from './methods';
 import { Supermemory, ClientOptions } from 'supermemory';
 
 async function tseval(code: string) {
@@ -107,36 +108,7 @@ function getTSDiagnostics(code: string): string[] {
 }
 
 const fuse = new Fuse(
-  [
-    'client.add',
-    'client.profile',
-    'client.memories.forget',
-    'client.memories.updateMemory',
-    'client.documents.add',
-    'client.documents.batchAdd',
-    'client.documents.delete',
-    'client.documents.deleteBulk',
-    'client.documents.get',
-    'client.documents.list',
-    'client.documents.listProcessing',
-    'client.documents.update',
-    'client.documents.uploadFile',
-    'client.search.documents',
-    'client.search.execute',
-    'client.search.memories',
-    'client.settings.get',
-    'client.settings.update',
-    'client.connections.configure',
-    'client.connections.create',
-    'client.connections.deleteByID',
-    'client.connections.deleteByProvider',
-    'client.connections.getByID',
-    'client.connections.getByTag',
-    'client.connections.import',
-    'client.connections.list',
-    'client.connections.listDocuments',
-    'client.connections.resources',
-  ],
+  sdkMethods.map((method) => method.clientCallName),
   { threshold: 1, shouldSort: true },
 );
 

@@ -67,6 +67,8 @@ import {
 } from './resources/memories';
 import {
   Search,
+  SearchParams,
+  SearchResponse,
   SearchDocumentsParams,
   SearchDocumentsResponse,
   SearchExecuteParams,
@@ -1066,9 +1068,11 @@ export declare namespace Supermemory {
 
   export {
     Search as Search,
+    type SearchResponse as SearchResponse,
     type SearchDocumentsResponse as SearchDocumentsResponse,
     type SearchExecuteResponse as SearchExecuteResponse,
     type SearchMemoriesResponse as SearchMemoriesResponse,
+    type SearchParams as SearchParams,
     type SearchDocumentsParams as SearchDocumentsParams,
     type SearchExecuteParams as SearchExecuteParams,
     type SearchMemoriesParams as SearchMemoriesParams,

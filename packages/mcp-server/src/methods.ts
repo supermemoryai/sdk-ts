@@ -89,6 +89,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v3/documents/file',
   },
   {
+    clientCallName: 'client.search',
+    fullyQualifiedName: 'search',
+    httpMethod: 'post',
+    httpPath: '/v4/search',
+  },
+  {
     clientCallName: 'client.search.documents',
     fullyQualifiedName: 'search.documents',
     httpMethod: 'post',
