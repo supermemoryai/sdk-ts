@@ -48,9 +48,11 @@ export {
 } from './memories';
 export {
   Search,
+  type SearchResponse,
   type SearchDocumentsResponse,
   type SearchExecuteResponse,
   type SearchMemoriesResponse,
+  type SearchParams,
   type SearchDocumentsParams,
   type SearchExecuteParams,
   type SearchMemoriesParams,

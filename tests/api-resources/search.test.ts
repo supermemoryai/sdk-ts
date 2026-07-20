@@ -9,6 +9,50 @@ const client = new Supermemory({
 
 describe('resource search', () => {
   // Mock server tests are disabled
+  test.skip('search: only required params', async () => {
+    const responsePromise = client.search({ q: 'machine learning concepts' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('search: required and optional params', async () => {
+    const response = await client.search({
+      q: 'machine learning concepts',
+      containerTag: 'user_123',
+      filters: {
+        OR: [
+          {
+            key: 'key',
+            value: 'value',
+            filterType: 'metadata',
+            ignoreCase: true,
+            negate: true,
+            numericOperator: '>',
+          },
+        ],
+      },
+      include: {
+        chunks: false,
+        documents: true,
+        forgottenMemories: false,
+        relatedMemories: true,
+        summaries: true,
+      },
+      limit: 10,
+      rerank: false,
+      rewriteQuery: false,
+      searchMode: 'memories',
+      threshold: 0.5,
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('documents: only required params', async () => {
     const responsePromise = client.search.documents({ q: 'machine learning concepts' });
     const rawResponse = await responsePromise.asResponse();

@@ -25,7 +25,7 @@ For example:
 
 \`\`\`
 async function run(client) {
-  const response = await client.search.documents({ q: 'documents related to python' });
+  const response = await client.search({ q: 'memories related to python' });
 
   console.log(response.results);
 }
@@ -39,6 +39,13 @@ Variables will not persist between calls, so make sure to return or log any data
 Remember that you are writing TypeScript code, so you need to be careful with your types.
 Always type dynamic key-value stores explicitly as Record<string, YourValueType> instead of {}.`;
 
+function methodCallPattern(methodName: string): RegExp {
+  const escapedSegments = methodName
+    .split('.')
+    .map((segment) => segment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  return new RegExp(`\\b${escapedSegments.join('\\s*\\.\\s*')}\\s*\\(`);
+}
+
 /**
  * A tool that runs code against a copy of the SDK.
  *
@@ -46,7 +53,7 @@ Always type dynamic key-value stores explicitly as Record<string, YourValueType>
  * we expose a single tool that can be used to search for endpoints by name, resource, operation, or tag, and then
  * a generic endpoint that can be used to invoke any endpoint with the provided arguments.
  *
- * @param blockedMethods - The methods to block for code execution. Blocking is done by simple string
+ * @param blockedMethods - The methods to block for code execution. Blocking is done by basic method-call
  * matching, so it is not secure against obfuscation. For stronger security, block in the downstream API
  * with limited API keys.
  * @param codeExecutionMode - Whether to execute code in a local Deno environment or in a remote
@@ -95,7 +102,9 @@ export function codeTool({
     // stronger security blocks are required, then these should be enforced in the downstream
     // API (e.g., by having users call the MCP server with API keys with limited permissions).
     if (blockedMethods) {
-      const blockedMatches = blockedMethods.filter((method) => code.includes(method.fullyQualifiedName));
+      const blockedMatches = blockedMethods.filter((method) =>
+        methodCallPattern(method.fullyQualifiedName).test(code),
+      );
       if (blockedMatches.length > 0) {
         return asErrorResult(
           `The following methods have been blocked by the MCP server and cannot be used in code execution: ${blockedMatches
