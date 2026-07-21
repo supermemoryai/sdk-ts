@@ -221,7 +221,21 @@ export namespace ConnectionListResponse {
 
     expiresAt?: string;
 
+    lastSyncRun?: ConnectionListResponseItem.LastSyncRun;
+
     metadata?: { [key: string]: unknown };
+  }
+
+  export namespace ConnectionListResponseItem {
+    export interface LastSyncRun {
+      status: string;
+
+      completedAt?: string;
+
+      error?: string;
+
+      startedAt?: string;
+    }
   }
 }
 
@@ -263,7 +277,21 @@ export interface ConnectionGetByIDResponse {
 
   expiresAt?: string;
 
+  lastSyncRun?: ConnectionGetByIDResponse.LastSyncRun;
+
   metadata?: { [key: string]: unknown };
+}
+
+export namespace ConnectionGetByIDResponse {
+  export interface LastSyncRun {
+    status: string;
+
+    completedAt?: string;
+
+    error?: string;
+
+    startedAt?: string;
+  }
 }
 
 export interface ConnectionGetByTagResponse {
@@ -284,7 +312,21 @@ export interface ConnectionGetByTagResponse {
 
   expiresAt?: string;
 
+  lastSyncRun?: ConnectionGetByTagResponse.LastSyncRun;
+
   metadata?: { [key: string]: unknown };
+}
+
+export namespace ConnectionGetByTagResponse {
+  export interface LastSyncRun {
+    status: string;
+
+    completedAt?: string;
+
+    error?: string;
+
+    startedAt?: string;
+  }
 }
 
 export type ConnectionImportResponse = string;
