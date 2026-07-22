@@ -232,7 +232,15 @@ export namespace ConnectionListResponse {
 
       completedAt?: string;
 
-      error?: string;
+      error?: string | null;
+
+      errorCode?:
+        | 'auth_expired'
+        | 'rate_limited'
+        | 'plan_required'
+        | 'provider_unavailable'
+        | 'internal'
+        | null;
 
       startedAt?: string;
     }
@@ -288,7 +296,15 @@ export namespace ConnectionGetByIDResponse {
 
     completedAt?: string;
 
-    error?: string;
+    error?: string | null;
+
+    errorCode?:
+      | 'auth_expired'
+      | 'rate_limited'
+      | 'plan_required'
+      | 'provider_unavailable'
+      | 'internal'
+      | null;
 
     startedAt?: string;
   }
@@ -323,7 +339,15 @@ export namespace ConnectionGetByTagResponse {
 
     completedAt?: string;
 
-    error?: string;
+    error?: string | null;
+
+    errorCode?:
+      | 'auth_expired'
+      | 'rate_limited'
+      | 'plan_required'
+      | 'provider_unavailable'
+      | 'internal'
+      | null;
 
     startedAt?: string;
   }
