@@ -175,12 +175,12 @@ export const configCommand = defineCommand({
     const firstArg = rawArgs.find((a: string) => !a.startsWith('-'));
     if (firstArg === 'set' || firstArg === 'get') return;
 
-    const flags = { json: args.json as boolean };
     const userConfig = readUserConfig();
     const teamConfig = readTeamConfig();
     const projectConfig = readProjectConfig();
     const credentials = readCredentials();
     const resolved = resolveConfig();
+    const flags = { json: args.json as boolean, output: resolved.output };
 
     const data = {
       resolved: {

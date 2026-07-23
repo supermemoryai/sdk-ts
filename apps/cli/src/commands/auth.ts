@@ -41,8 +41,8 @@ export const loginCommand = defineCommand({
     },
   },
   async run({ args }) {
-    const flags: OutputFlags = { json: args.json };
     const config = resolveConfig();
+    const flags: OutputFlags = { json: args.json, output: config.output };
 
     await withSpan('supermemory.command', { commandName: 'login' }, async () => {
       const apiKey = args['api-key'];
@@ -179,7 +179,8 @@ export const logoutCommand = defineCommand({
     },
   },
   async run({ args }) {
-    const flags: OutputFlags = { json: args.json };
+    const config = resolveConfig();
+    const flags: OutputFlags = { json: args.json, output: config.output };
 
     deleteCredentials();
     clearScopeCache();
@@ -201,8 +202,8 @@ export const whoamiCommand = defineCommand({
     },
   },
   async run({ args }) {
-    const flags: OutputFlags = { json: args.json };
     const config = resolveConfig();
+    const flags: OutputFlags = { json: args.json, output: config.output };
 
     if (!config.apiKey) {
       exitWithError(

@@ -33,6 +33,8 @@ import {
 } from './lib/config.js';
 import { CliError } from './lib/errors.js';
 import { initOtel, shutdownOtel } from './lib/otel.js';
+import { CLI_VERSION } from './lib/version.js';
+import { error as outputError } from './lib/output.js';
 
 async function detectScope(): Promise<{
   mode: 'full' | 'scoped';
@@ -148,10 +150,15 @@ async function main() {
     },
   }) as ReturnType<typeof defineCommand>;
 
-  if (mode === 'scoped' && scope?.tag && !process.env.SUPERMEMORY_TAG) {
-    process.env.SUPERMEMORY_TAG = scope.tag;
-    if (scope.tags && scope.tags.length > 1) {
-      process.env.SUPERMEMORY_TAGS = scope.tags.join(',');
+  if (mode === 'scoped' && scope?.tag) {
+    const enforcedTags = scope.tags?.length ? scope.tags : [scope.tag];
+    process.env.SUPERMEMORY_ENFORCED_TAG = enforcedTags[0] ?? scope.tag;
+    process.env.SUPERMEMORY_ENFORCED_TAGS = enforcedTags.join(',');
+    if (!process.env.SUPERMEMORY_TAG) {
+      process.env.SUPERMEMORY_TAG = enforcedTags[0] ?? scope.tag;
+    }
+    if (enforcedTags.length > 1) {
+      process.env.SUPERMEMORY_TAGS = enforcedTags.join(',');
     }
   }
 
@@ -172,7 +179,7 @@ async function main() {
   const cli = defineCommand({
     meta: {
       name: 'supermemory',
-      version: '0.1.0',
+      version: CLI_VERSION,
       description: 'supermemory — memory layer for AI agents',
     },
     subCommands,
@@ -226,15 +233,24 @@ async function main() {
   }
 
   if (rawArgs.length === 1 && rawArgs[0] === '--version') {
-    process.stdout.write('0.1.0\n');
+    process.stdout.write(`${CLI_VERSION}\n`);
     await shutdownOtel();
     return;
   }
 
+  const errorFlags = {
+    json: rawArgs.includes('--json'),
+    output: resolveConfig().output,
+  };
+
   const firstNonFlag = rawArgs.find((a) => !a.startsWith('-'));
   if (firstNonFlag && !(firstNonFlag in subCommands)) {
-    process.stderr.write(`\n  Unknown command: ${chalk.bold(firstNonFlag)}\n\n`);
-    process.stderr.write(`  Run ${chalk.dim('supermemory help')} to see available commands.\n\n`);
+    outputError(
+      'E_UNKNOWN_COMMAND',
+      `Unknown command: ${firstNonFlag}`,
+      errorFlags,
+      'Run `supermemory help` to see available commands.',
+    );
     process.exitCode = 1;
     await shutdownOtel();
     return;
@@ -244,27 +260,18 @@ async function main() {
     await runCommand(cli, { rawArgs });
   } catch (err) {
     if (err instanceof CliError) {
-      process.stderr.write(`${chalk.red('✗')} ${err.message}\n`);
-      if (err.hint) {
-        process.stderr.write(`  ${chalk.dim(`hint: ${err.hint}`)}\n`);
-      }
+      outputError(err.code, err.message, errorFlags, err.hint);
       process.exitCode = err.exitCode;
     } else if (err instanceof Error && 'code' in err && typeof err.code === 'string') {
-      const { code } = err;
-      process.stderr.write(`\n  ${err.message}\n`);
-      if (code === 'E_UNKNOWN_COMMAND') {
-        process.stderr.write(`\n  Run ${chalk.dim('supermemory help')} to see available commands.\n\n`);
-      } else if (code === 'EARG') {
-        process.stderr.write(`\n  Run the command with ${chalk.dim('--help')} for usage details.\n\n`);
-      } else {
-        process.stderr.write('\n');
-      }
+      const hint =
+        err.code === 'E_UNKNOWN_COMMAND' ? 'Run `supermemory help` to see available commands.'
+        : err.code === 'EARG' ? 'Run the command with `--help` for usage details.'
+        : undefined;
+      outputError(err.code, err.message, errorFlags, hint);
       process.exitCode = 1;
     } else {
-      process.stderr.write(
-        `${chalk.red('✗')} Unexpected error: ${err instanceof Error ? err.message : String(err)}\n`,
-      );
-      if (err instanceof Error && err.stack) {
+      outputError('unexpected_error', err instanceof Error ? err.message : String(err), errorFlags);
+      if (!errorFlags.json && errorFlags.output !== 'json' && err instanceof Error && err.stack) {
         process.stderr.write(`${chalk.dim(err.stack)}\n`);
       }
       process.exitCode = 1;

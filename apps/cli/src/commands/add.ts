@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { basename, resolve } from 'node:path';
 import chalk from 'chalk';
 import { apiRequest, apiRequestFormData } from '../lib/api.js';
+import { getEnforcedTags } from '../lib/config.js';
 import { defineCliCommand } from '../lib/command.js';
 import { ValidationError } from '../lib/errors.js';
 import { exitWithError, isInputInteractive, type OutputFlags, output } from '../lib/output.js';
@@ -58,7 +59,7 @@ export const addCommand = defineCliCommand({
       }
 
       if (args.batch) {
-        return handleBatch(stdinContent, tag, flags);
+        return handleBatch(stdinContent, tag, flags, getEnforcedTags());
       }
 
       return handleTextAdd(stdinContent, tag, args, flags, span);
@@ -76,7 +77,10 @@ export const addCommand = defineCliCommand({
 
     if (content.startsWith('http://') || content.startsWith('https://')) {
       span.setAttribute('contentType', 'url');
-      return handleUrlAdd(content, tag, args, flags);
+      return handleTextAdd(content, tag, args, flags, span, {
+        label: 'URL',
+        source: content,
+      });
     }
 
     const filePath = resolve(content);
@@ -105,6 +109,7 @@ async function handleTextAdd(
   args: Record<string, unknown>,
   flags: OutputFlags,
   span?: { setAttribute: (k: string, v: string | number) => void },
+  display?: { label: string; source: string },
 ): Promise<void> {
   const body: Record<string, unknown> = { content };
   body.containerTag = tag;
@@ -128,47 +133,11 @@ async function handleTextAdd(
   output(
     data,
     () => {
-      const lines = [`${chalk.green('✓')} Added document ${chalk.dim(data.id)} (${data.status ?? 'queued'})`];
-      if (data.containerTag || tag) {
-        lines.push(`  Tag: ${data.containerTag ?? tag}`);
-      }
-      return lines.join('\n');
-    },
-    flags,
-  );
-}
-
-async function handleUrlAdd(
-  url: string,
-  tag: string,
-  args: Record<string, unknown>,
-  flags: OutputFlags,
-): Promise<void> {
-  const body: Record<string, unknown> = { content: url };
-  body.containerTag = tag;
-  if (args.title) body.title = args.title;
-  if (args.id) body.customId = args.id;
-
-  const metadata = parseJsonArg(args.metadata as string | undefined, 'metadata');
-  if (metadata) body.metadata = metadata;
-
-  const { data } = await apiRequest<{
-    id: string;
-    status: string;
-    containerTag?: string;
-  }>('/v3/documents', {
-    method: 'POST',
-    body,
-  });
-
-  output(
-    data,
-    () => {
-      const lines = [
-        `${chalk.green('✓')} Added URL ${chalk.dim(url)} → ${chalk.dim(data.id)} (${
-          data.status ?? 'queued'
-        })`,
-      ];
+      const subject =
+        display ?
+          `${display.label} ${chalk.dim(display.source)} -> ${chalk.dim(data.id)}`
+        : `document ${chalk.dim(data.id)}`;
+      const lines = [`${chalk.green('✓')} Added ${subject} (${data.status ?? 'queued'})`];
       if (data.containerTag || tag) {
         lines.push(`  Tag: ${data.containerTag ?? tag}`);
       }
@@ -221,7 +190,12 @@ async function handleFileAdd(
   );
 }
 
-async function handleBatch(stdinContent: string, tag: string, flags: OutputFlags): Promise<void> {
+async function handleBatch(
+  stdinContent: string,
+  tag: string,
+  flags: OutputFlags,
+  enforcedTags: string[],
+): Promise<void> {
   let items: {
     content: string;
     title?: string;
@@ -234,6 +208,66 @@ async function handleBatch(stdinContent: string, tag: string, flags: OutputFlags
     if (!Array.isArray(items)) throw new Error('Expected JSON array');
   } catch {
     return exitWithError('validation_error', 'Invalid JSON array from stdin for batch mode', flags);
+  }
+
+  for (const [index, item] of items.entries()) {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      return exitWithError('validation_error', `Batch item ${index + 1} must be an object`, flags);
+    }
+    if (typeof item.content !== 'string' || item.content.trim().length === 0) {
+      return exitWithError(
+        'validation_error',
+        `Batch item ${index + 1} must include non-empty string content`,
+        flags,
+      );
+    }
+    if ('tag' in item && (typeof item.tag !== 'string' || item.tag.trim().length === 0)) {
+      return exitWithError(
+        'validation_error',
+        `Batch item ${index + 1} tag must be a non-empty string`,
+        flags,
+      );
+    }
+    if (item.tag && (item.tag.length > 100 || !/^[a-zA-Z0-9_:-]+$/.test(item.tag))) {
+      return exitWithError(
+        'validation_error',
+        `Batch item ${
+          index + 1
+        } tag must be at most 100 characters and contain only letters, numbers, hyphens, underscores, or colons`,
+        flags,
+      );
+    }
+    if (item.tag && enforcedTags.length > 0 && !enforcedTags.includes(item.tag)) {
+      return exitWithError(
+        'validation_error',
+        `Batch item tag "${item.tag}" is outside the API key scope: ${enforcedTags.join(', ')}.`,
+        flags,
+      );
+    }
+    if ('title' in item && typeof item.title !== 'string') {
+      return exitWithError('validation_error', `Batch item ${index + 1} title must be a string`, flags);
+    }
+    if (
+      'id' in item &&
+      (typeof item.id !== 'string' || item.id.length > 100 || !/^[a-zA-Z0-9_:-]+$/.test(item.id))
+    ) {
+      return exitWithError(
+        'validation_error',
+        `Batch item ${
+          index + 1
+        } id must be at most 100 characters and contain only letters, numbers, hyphens, underscores, or colons`,
+        flags,
+      );
+    }
+    if ('metadata' in item && !isValidMetadata(item.metadata)) {
+      return exitWithError(
+        'validation_error',
+        `Batch item ${
+          index + 1
+        } metadata must be an object with string, number, boolean, or string-array values`,
+        flags,
+      );
+    }
   }
 
   const results: { id: string; status: string }[] = [];
@@ -256,5 +290,16 @@ async function handleBatch(stdinContent: string, tag: string, flags: OutputFlags
     { results, total: results.length },
     () => `${chalk.green('✓')} Added ${results.length} documents in batch`,
     flags,
+  );
+}
+
+function isValidMetadata(value: unknown): value is Record<string, string | number | boolean | string[]> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  return Object.values(value).every(
+    (entry) =>
+      typeof entry === 'string' ||
+      typeof entry === 'number' ||
+      typeof entry === 'boolean' ||
+      (Array.isArray(entry) && entry.every((item) => typeof item === 'string')),
   );
 }

@@ -159,7 +159,11 @@ export const searchCommand = defineCliCommand({
             lines.push(`     ${chalk.dim('chunk:')} ${r.chunk}`);
           }
 
-          const meta = [`Score: ${chalk.bold(r.similarity.toFixed(2))}`];
+          const meta = [
+            `Score: ${
+              typeof r.similarity === 'number' ? chalk.bold(r.similarity.toFixed(2)) : chalk.dim('--')
+            }`,
+          ];
           if (r.resultType === 'chunk') meta.push('chunk');
           if (r.version) meta.push(`v${r.version}`);
           if (r.updatedAt) meta.push(`Updated: ${formatRelativeTime(r.updatedAt)}`);

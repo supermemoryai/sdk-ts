@@ -23,9 +23,9 @@ const billingShowCommand = defineCliCommand({
     output(
       data,
       () => {
-        const usage = data.usage ?? {
-          tokens: { used: 0, limit: 0 },
-          queries: { used: 0, limit: 0 },
+        const usage = {
+          tokens: { used: data.usage?.tokens?.used ?? 0, limit: data.usage?.tokens?.limit ?? 0 },
+          queries: { used: data.usage?.queries?.used ?? 0, limit: data.usage?.queries?.limit ?? 0 },
         };
 
         const pairs: [string, string][] = [['Plan:', chalk.cyan(data.plan ?? 'unknown')]];
