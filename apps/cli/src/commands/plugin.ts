@@ -1,13 +1,28 @@
 import { spawn, spawnSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
+import { randomBytes } from 'node:crypto';
+import {
+  chmodSync,
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
+import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
+import type { AddressInfo } from 'node:net';
 import { homedir, tmpdir } from 'node:os';
 import { dirname, extname, join } from 'node:path';
 import * as clack from '@clack/prompts';
 import chalk from 'chalk';
+import { getDeviceInfo, openBrowser } from '../lib/browser.js';
 import { defineCliCommand } from '../lib/command.js';
+import { resolveConfig } from '../lib/config.js';
 import { isInputInteractive, isInteractive } from '../lib/output.js';
 
 type PluginId = 'claude' | 'cursor' | 'opencode' | 'codex';
+type PluginClientId = 'claude_code' | 'cursor' | 'opencode' | 'codex';
 type InstallMode = 'all' | 'custom';
 
 type InstallStatus = 'planned' | 'installed' | 'skipped' | 'failed';
@@ -39,6 +54,14 @@ interface InstallResult {
   log?: string;
 }
 
+interface PluginAuthResult {
+  id: PluginId;
+  label: string;
+  status: 'connected' | 'upgrade' | 'failed';
+  message: string;
+  upgradeUrl?: string;
+}
+
 class CommandError extends Error {
   constructor(
     message: string,
@@ -49,6 +72,21 @@ class CommandError extends Error {
 }
 
 const CURSOR_PLUGIN_TARGET = join(homedir(), '.cursor', 'plugins', 'local', 'cursor-supermemory');
+const PLUGIN_BILLING_URL = 'https://app.supermemory.ai/?settings=billing';
+
+const PLUGIN_AUTH_CLIENTS: Record<PluginId, PluginClientId> = {
+  claude: 'claude_code',
+  cursor: 'cursor',
+  opencode: 'opencode',
+  codex: 'codex',
+};
+
+const PLUGIN_AUTH_LABELS: Record<PluginClientId, string> = {
+  claude_code: 'Claude Code',
+  cursor: 'Cursor',
+  opencode: 'OpenCode',
+  codex: 'Codex',
+};
 
 function getCursorDetectionPaths(): string[] {
   const paths = [join(homedir(), '.cursor')];
@@ -307,6 +345,340 @@ function formatStep(command: string, args: string[]): string {
   return [command, ...args].join(' ');
 }
 
+function writeSecureJson(path: string, data: unknown): void {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify(data, null, 2)}\n`, 'utf-8');
+  try {
+    chmodSync(path, 0o600);
+  } catch {}
+}
+
+function removeFileIfExists(path: string): void {
+  try {
+    if (existsSync(path)) unlinkSync(path);
+  } catch {}
+}
+
+function pluginCredentialsPath(id: PluginId): string {
+  switch (id) {
+    case 'claude':
+      return join(homedir(), '.supermemory-claude', 'credentials.json');
+    case 'cursor':
+      return join(homedir(), '.supermemory-cursor', 'credentials.json');
+    case 'opencode':
+      return join(homedir(), '.supermemory-opencode', 'credentials.json');
+    case 'codex':
+      return join(homedir(), '.codex', 'supermemory', 'credentials.json');
+  }
+}
+
+function clearPluginAuthMarkers(id: PluginId): void {
+  switch (id) {
+    case 'cursor': {
+      const dir = join(homedir(), '.supermemory-cursor');
+      removeFileIfExists(join(dir, '.auth-attempted'));
+      removeFileIfExists(join(dir, '.logged-out'));
+      break;
+    }
+    case 'opencode': {
+      const dir = join(homedir(), '.supermemory-opencode');
+      removeFileIfExists(join(dir, '.auth-attempted'));
+      removeFileIfExists(join(dir, '.logged-out'));
+      break;
+    }
+    case 'codex': {
+      const dir = join(homedir(), '.codex', 'supermemory');
+      removeFileIfExists(join(dir, '.auth-attempted'));
+      removeFileIfExists(join(dir, '.logged-out'));
+      break;
+    }
+    case 'claude':
+      break;
+  }
+}
+
+function writePluginCredentials(id: PluginId, apiKey: string): void {
+  const timestamp = new Date().toISOString();
+  const savedAtPayload = { apiKey, savedAt: timestamp };
+  const createdAtPayload = { apiKey, createdAt: timestamp };
+  const payload = id === 'cursor' || id === 'opencode' ? createdAtPayload : savedAtPayload;
+
+  writeSecureJson(pluginCredentialsPath(id), payload);
+  clearPluginAuthMarkers(id);
+}
+
+function decodeBase64UrlJson(value: string): Record<string, string> {
+  const parsed = JSON.parse(Buffer.from(value, 'base64url').toString('utf8'));
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    throw new Error('Invalid OAuth callback payload');
+  }
+
+  const result: Record<string, string> = {};
+  for (const [key, rawValue] of Object.entries(parsed)) {
+    if (typeof rawValue === 'string') result[key] = rawValue;
+  }
+  return result;
+}
+
+function startPluginAuthCallbackServer(clients: PluginClientId[]): Promise<{
+  callbackUrl: string;
+  waitForCallback: () => Promise<{
+    keys: Partial<Record<PluginClientId, string>>;
+    errors: Partial<Record<PluginClientId, string>>;
+  }>;
+  close: () => void;
+}> {
+  return new Promise((resolveServer, rejectServer) => {
+    const stateToken = randomBytes(16).toString('hex');
+    let resolveCallback: (value: {
+      keys: Partial<Record<PluginClientId, string>>;
+      errors: Partial<Record<PluginClientId, string>>;
+    }) => void;
+    let rejectCallback: (err: Error) => void;
+
+    const callbackPromise = new Promise<{
+      keys: Partial<Record<PluginClientId, string>>;
+      errors: Partial<Record<PluginClientId, string>>;
+    }>((resolve, reject) => {
+      resolveCallback = resolve;
+      rejectCallback = reject;
+    });
+
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    const clearAuthTimeout = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+
+    const server = createServer((req: IncomingMessage, res: ServerResponse) => {
+      const url = new URL(req.url ?? '/', 'http://localhost');
+
+      if (url.pathname !== '/callback') {
+        res.writeHead(404);
+        res.end('Not found');
+        return;
+      }
+
+      if (url.searchParams.get('state') !== stateToken) {
+        res.writeHead(403, { 'Content-Type': 'text/html' });
+        res.end(callbackHtml('Authentication Failed', 'Invalid callback state.'));
+        return;
+      }
+
+      try {
+        const keysPayload = url.searchParams.get('keys');
+        const errorsPayload = url.searchParams.get('errors');
+        const singleApiKey = url.searchParams.get('apikey');
+        const keysByClient: Partial<Record<PluginClientId, string>> = {};
+        const errorsByClient: Partial<Record<PluginClientId, string>> =
+          errorsPayload ?
+            (decodeBase64UrlJson(errorsPayload) as Partial<Record<PluginClientId, string>>)
+          : {};
+
+        if (keysPayload) {
+          Object.assign(keysByClient, decodeBase64UrlJson(keysPayload));
+        } else if (singleApiKey) {
+          for (const client of clients) {
+            keysByClient[client] = singleApiKey;
+          }
+        }
+
+        if (Object.keys(keysByClient).length === 0 && Object.keys(errorsByClient).length === 0) {
+          throw new Error('No plugin keys or errors received from callback');
+        }
+
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(callbackHtml('Plugins Connected', 'You can close this window and return to the terminal.'));
+        clearAuthTimeout();
+        resolveCallback({ keys: keysByClient, errors: errorsByClient });
+      } catch (error) {
+        res.writeHead(400, { 'Content-Type': 'text/html' });
+        res.end(
+          callbackHtml(
+            'Authentication Failed',
+            error instanceof Error ? error.message : 'Invalid callback payload.',
+          ),
+        );
+        clearAuthTimeout();
+        rejectCallback(error instanceof Error ? error : new Error('Invalid OAuth callback payload'));
+      }
+    });
+
+    server.listen(0, '127.0.0.1', () => {
+      const addr = server.address();
+      if (!addr || typeof addr === 'string') {
+        rejectServer(new Error('Failed to start OAuth callback server'));
+        return;
+      }
+
+      resolveServer({
+        callbackUrl: `http://127.0.0.1:${(addr as AddressInfo).port}/callback?state=${stateToken}`,
+        waitForCallback: () => callbackPromise,
+        close: () => server.close(),
+      });
+    });
+
+    server.on('error', (error) => {
+      clearAuthTimeout();
+      rejectServer(error);
+    });
+
+    timeoutId = setTimeout(() => {
+      rejectCallback(new Error('Authentication timed out'));
+      server.close();
+    }, 10 * 60_000);
+  });
+}
+
+function callbackHtml(title: string, message: string): string {
+  return `<!DOCTYPE html>
+<html>
+<head><title>Supermemory Plugins</title></head>
+<body style="font-family: system-ui; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+  <div style="text-align: center;">
+    <h1>${title}</h1>
+    <p>${message}</p>
+  </div>
+</body>
+</html>`;
+}
+
+function printPluginAuthSummary(results: PluginAuthResult[]): void {
+  if (results.length === 0) return;
+
+  process.stdout.write(`\n${chalk.bold('Supermemory plugin auth summary')}\n\n`);
+  for (const result of results) {
+    const icon =
+      result.status === 'connected' ? chalk.green('[ok]')
+      : result.status === 'upgrade' ? chalk.blue('[upgrade]')
+      : chalk.red('[fail]');
+    process.stdout.write(`${icon} ${chalk.bold(result.label)}: ${result.message}\n`);
+    if (result.upgradeUrl) {
+      process.stdout.write(`    ${chalk.dim('Upgrade:')} ${chalk.cyan(result.upgradeUrl)}\n`);
+    }
+  }
+  process.stdout.write('\n');
+}
+
+function printPluginAuthStart(installed: InstallResult[]): void {
+  const labels = installed.map((result) => result.label).join(', ');
+  process.stdout.write(`\n${chalk.cyan('┌')} ${chalk.bold('Supermemory OAuth')}\n`);
+  process.stdout.write(`${chalk.cyan('│')} ${chalk.bold('One approval')} connects ${chalk.bold(labels)}.\n`);
+  process.stdout.write(
+    `${chalk.cyan('└')} ${chalk.dim(
+      'The same API key will be saved for each plugin your plan can use.',
+    )}\n\n`,
+  );
+}
+
+function isPlanUpgradeMessage(message: string | undefined): boolean {
+  return /\b(pro plan|upgrade|requires pro)\b/i.test(message ?? '');
+}
+
+function getPluginAuthBaseUrl(consoleUrl: string): string {
+  if (process.env.SUPERMEMORY_PLUGIN_AUTH_URL) {
+    return process.env.SUPERMEMORY_PLUGIN_AUTH_URL;
+  }
+
+  if (process.env.SUPERMEMORY_WEB_URL) {
+    return process.env.SUPERMEMORY_WEB_URL;
+  }
+
+  try {
+    const url = new URL(consoleUrl);
+    if (url.hostname === 'console.supermemory.ai') {
+      url.hostname = 'app.supermemory.ai';
+      return url.origin;
+    }
+  } catch {}
+
+  return consoleUrl;
+}
+
+async function authorizeInstalledPlugins(
+  results: InstallResult[],
+  options: { dryRun: boolean; noAuth: boolean; json: boolean },
+): Promise<boolean> {
+  if (options.dryRun || options.noAuth || options.json || !isInputInteractive()) {
+    return false;
+  }
+
+  const installed = results.filter(
+    (result): result is InstallResult & { status: 'installed' } => result.status === 'installed',
+  );
+  if (installed.length === 0) return false;
+
+  printPluginAuthStart(installed);
+
+  const clients = installed.map((result) => PLUGIN_AUTH_CLIENTS[result.id]);
+  const callback = await startPluginAuthCallbackServer(clients);
+  const config = resolveConfig();
+  const device = getDeviceInfo();
+  const params = new URLSearchParams({
+    callback: callback.callbackUrl,
+    client: clients[0] ?? '',
+    clients: clients.join(','),
+    hostname: device.hostname,
+    os: device.os,
+    cwd: device.cwd,
+    cli_version: device.cliVersion,
+  });
+  const authUrl = `${getPluginAuthBaseUrl(config.consoleUrl)}/auth/connect?${params.toString()}`;
+  process.stdout.write(`${chalk.dim('Authorize from this browser URL:')} ${chalk.cyan(authUrl)}\n\n`);
+  const spinner = isInteractive() ? clack.spinner() : null;
+
+  try {
+    spinner?.start('Opening one-click Supermemory OAuth...');
+    try {
+      await openBrowser(authUrl);
+    } catch {
+      spinner?.message('Could not open browser automatically.');
+      process.stdout.write(`  Open this URL to authorize selected plugins:\n\n  ${chalk.cyan(authUrl)}\n\n`);
+    }
+
+    const { keys, errors } = await callback.waitForCallback();
+    spinner?.stop('OAuth complete');
+
+    const authResults: PluginAuthResult[] = [];
+    for (const result of installed) {
+      const client = PLUGIN_AUTH_CLIENTS[result.id];
+      const apiKey = keys[client];
+      if (apiKey?.startsWith('sm_')) {
+        writePluginCredentials(result.id, apiKey);
+        authResults.push({
+          id: result.id,
+          label: result.label,
+          status: 'connected',
+          message: `credentials saved to ${pluginCredentialsPath(result.id)}`,
+        });
+      } else {
+        const errorMessage = errors[client] ?? `No key returned for ${PLUGIN_AUTH_LABELS[client]}`;
+        const isUpgrade = isPlanUpgradeMessage(errorMessage);
+        authResults.push({
+          id: result.id,
+          label: result.label,
+          status: isUpgrade ? 'upgrade' : 'failed',
+          message: isUpgrade ? `Upgrade to Pro to connect ${result.label}.` : errorMessage,
+          upgradeUrl: isUpgrade ? PLUGIN_BILLING_URL : undefined,
+        });
+      }
+    }
+
+    printPluginAuthSummary(authResults);
+    return authResults.some((result) => result.status === 'failed');
+  } catch (error) {
+    spinner?.stop('OAuth failed');
+    process.stdout.write(
+      `\n${chalk.red('[fail]')} ${chalk.bold('Plugin auth')}: ${
+        error instanceof Error ? error.message : String(error)
+      }\n\n`,
+    );
+    process.stdout.write(`  Rerun the command to open a fresh OAuth callback and upgrade link.\n\n`);
+    return true;
+  } finally {
+    callback.close();
+  }
+}
+
 async function installCursorPlugin(dryRun: boolean): Promise<string[]> {
   const steps = [
     'npm install cursor-supermemory@latest into a temporary directory',
@@ -419,7 +791,7 @@ async function installTarget(target: PluginTarget, dryRun: boolean): Promise<Ins
   }
 }
 
-function printHumanSummary(results: InstallResult[], dryRun: boolean) {
+function printHumanSummary(results: InstallResult[], dryRun: boolean, noAuth: boolean) {
   const title = dryRun ? 'Supermemory plugin install plan' : 'Supermemory plugin install summary';
   process.stdout.write(`\n${chalk.bold(title)}\n\n`);
 
@@ -451,6 +823,17 @@ function printHumanSummary(results: InstallResult[], dryRun: boolean) {
     process.stdout.write('\n');
   }
 
+  const authTargets = results.filter(
+    (r) => r.status !== 'skipped' && ['claude', 'cursor', 'opencode', 'codex'].includes(r.id),
+  );
+  if (authTargets.length > 0 && !dryRun && !noAuth && isInputInteractive()) {
+    process.stdout.write(
+      `  ${chalk.dim('Auth:')} one browser approval will connect successfully installed plugins.\n\n`,
+    );
+  }
+  if (authTargets.length > 0 && noAuth) {
+    process.stdout.write(`  ${chalk.dim('Auth:')} skipped because --no-auth was used.\n\n`);
+  }
   if (results.some((r) => r.id === 'claude' && r.status !== 'skipped')) {
     process.stdout.write(
       `  ${chalk.dim('Claude reload:')} run ${chalk.bold(
@@ -548,10 +931,16 @@ export const pluginCommand = defineCliCommand({
       description: 'Run selected installers even when the target app is not detected',
       default: false,
     },
+    'no-auth': {
+      type: 'boolean',
+      description: 'Skip browser OAuth after installing plugins',
+      default: false,
+    },
   },
   async handler({ args, flags }) {
     const dryRun = args['dry-run'] === true;
     const force = args.force === true;
+    const noAuth = args['no-auth'] === true;
     const detections = new Map<PluginId, Detection>(
       TARGETS.map((target) => [target.id, detectTarget(target)]),
     );
@@ -597,10 +986,16 @@ export const pluginCommand = defineCliCommand({
     if (flags.json) {
       process.stdout.write(`${JSON.stringify({ results }, null, 2)}\n`);
     } else {
-      printHumanSummary(results, dryRun);
+      printHumanSummary(results, dryRun, noAuth);
     }
 
-    if (results.some((result) => result.status === 'failed')) {
+    const authFailed = await authorizeInstalledPlugins(results, {
+      dryRun,
+      noAuth,
+      json: flags.json === true,
+    });
+
+    if (results.some((result) => result.status === 'failed') || authFailed) {
       process.exitCode = 1;
     }
   },
