@@ -69,6 +69,23 @@ async function detectScope(): Promise<{
   }
 }
 
+function normalizePluginInstallArgs(args: string[]): string[] {
+  if (args[0] !== 'plugin' || args[1] === 'login' || args[1] === 'uninstall') return args;
+
+  const normalized: string[] = [];
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    const nextArgument = args[index + 1];
+    if (!argument) continue;
+    if (argument === '--only' && nextArgument && !nextArgument.startsWith('-')) {
+      normalized.push(`${argument}=${nextArgument}`);
+      index += 1;
+    } else {
+      normalized.push(argument);
+    }
+  }
+  return normalized;
+}
 async function main() {
   process.on('exit', () => {
     if (process.stdin.isTTY && process.stdin.isRaw) {
@@ -165,7 +182,21 @@ async function main() {
   const rawArgs = process.argv.slice(2);
 
   if (rawArgs.includes('--help') && rawArgs.includes('--json')) {
-    const commandName = rawArgs.find((a) => !a.startsWith('--') && a in subCommands);
+    const commandTokens = rawArgs.filter((arg) => !arg.startsWith('-'));
+    const parentCommand = commandTokens[0];
+    const childCommand = commandTokens[1];
+    const parentDefinition =
+      parentCommand ?
+        (subCommands[parentCommand] as
+          | {
+              subCommands?: Record<string, ReturnType<typeof defineCommand>>;
+            }
+          | undefined)
+      : undefined;
+    const commandName =
+      parentCommand && childCommand && parentDefinition?.subCommands?.[childCommand] ?
+        `${parentCommand} ${childCommand}`
+      : parentCommand;
     if (commandName) {
       const schema = getCommandSchema(commandName);
       if (schema) {
@@ -256,8 +287,10 @@ async function main() {
     return;
   }
 
+  const commandArgs = normalizePluginInstallArgs(rawArgs);
+
   try {
-    await runCommand(cli, { rawArgs });
+    await runCommand(cli, { rawArgs: commandArgs });
   } catch (err) {
     if (err instanceof CliError) {
       outputError(err.code, err.message, errorFlags, err.hint);

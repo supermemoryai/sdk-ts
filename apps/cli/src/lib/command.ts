@@ -1,5 +1,5 @@
 import type { Span } from '@opentelemetry/api';
-import { defineCommand } from 'citty';
+import { defineCommand, type SubCommandsDef } from 'citty';
 import { getConfig } from './api.js';
 import { getEnforcedTags, type ResolvedConfig } from './config.js';
 import { ValidationError } from './errors.js';
@@ -38,7 +38,7 @@ export function defineCliCommand(options: {
     }
   >;
   noSpan?: boolean;
-  subCommands?: Record<string, ReturnType<typeof defineCommand>>;
+  subCommands?: SubCommandsDef;
   handler: (ctx: CommandContext) => Promise<void>;
 }) {
   const allArgs = {

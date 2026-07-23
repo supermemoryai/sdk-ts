@@ -434,8 +434,8 @@ const FULL_COMMANDS: Record<string, CommandSchema> = {
     examples: ['supermemory setup', 'supermemory setup --prompt'],
   },
   plugin: {
-    description: 'Install Supermemory integrations for Claude Code, Cursor, OpenCode, and Codex',
-    usage: 'supermemory plugin [--all|--only <targets>] [options]',
+    description: 'Install, connect, or remove Supermemory integrations',
+    usage: 'supermemory plugin [login|uninstall] [options]',
     options: {
       '--all': {
         type: 'boolean',
@@ -467,6 +467,47 @@ const FULL_COMMANDS: Record<string, CommandSchema> = {
       'supermemory plugin --all',
       'supermemory plugin --all --no-auth',
       'supermemory plugin --only claude,cursor --dry-run',
+      'supermemory plugin login',
+      'supermemory plugin uninstall',
+    ],
+  },
+};
+
+const NESTED_COMMANDS: Record<string, CommandSchema> = {
+  'plugin login': {
+    description: 'Connect installed Supermemory plugins with browser OAuth',
+    usage: 'supermemory plugin login [options]',
+    options: {
+      '--all': { type: 'boolean', default: false, description: 'Connect every installed Supermemory plugin' },
+      '--only': { type: 'string', description: 'Comma-separated targets: claude,cursor,opencode,codex' },
+      '--no-browser': {
+        type: 'boolean',
+        default: false,
+        description: 'Show the OAuth URL instead of opening a browser',
+      },
+    },
+    examples: [
+      'supermemory plugin login --all',
+      'supermemory plugin login --only codex',
+      'supermemory plugin login --all --no-browser',
+    ],
+  },
+  'plugin uninstall': {
+    description: 'Remove selected Supermemory plugin integrations',
+    usage: 'supermemory plugin uninstall [options]',
+    options: {
+      '--all': { type: 'boolean', default: false, description: 'Remove every installed Supermemory plugin' },
+      '--only': { type: 'string', description: 'Comma-separated targets: claude,cursor,opencode,codex' },
+      '--dry-run': {
+        type: 'boolean',
+        default: false,
+        description: 'Show what would be removed without changing anything',
+      },
+    },
+    examples: [
+      'supermemory plugin uninstall --all',
+      'supermemory plugin uninstall --only codex',
+      'supermemory plugin uninstall --all --dry-run',
     ],
   },
 };
@@ -552,7 +593,7 @@ export function buildHelpJson(
 }
 
 export function getCommandSchema(commandName: string): CommandSchema | null {
-  return FULL_COMMANDS[commandName] ?? null;
+  return NESTED_COMMANDS[commandName] ?? FULL_COMMANDS[commandName] ?? null;
 }
 
 export function formatHelpText(

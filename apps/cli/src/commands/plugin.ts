@@ -11,6 +11,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
+import { clearScreenDown, cursorTo, emitKeypressEvents, moveCursor } from 'node:readline';
 import type { AddressInfo } from 'node:net';
 import { homedir, tmpdir } from 'node:os';
 import { dirname, extname, join } from 'node:path';
@@ -19,13 +20,22 @@ import chalk from 'chalk';
 import { getDeviceInfo, openBrowser } from '../lib/browser.js';
 import { defineCliCommand } from '../lib/command.js';
 import { resolveConfig } from '../lib/config.js';
-import { isInputInteractive, isInteractive } from '../lib/output.js';
+import {
+  compareVersions,
+  CURSOR_PLUGIN_TARGET,
+  detectInstalledPlugin,
+  forgetPluginVersion,
+  getLatestPluginVersion,
+  type PluginId,
+  recordPluginVersion,
+  removeOpenCodePlugin,
+} from './plugin-lifecycle.js';
+import { isInputInteractive, isInteractive, type OutputFlags, shouldOutputJson } from '../lib/output.js';
 
-type PluginId = 'claude' | 'cursor' | 'opencode' | 'codex';
 type PluginClientId = 'claude_code' | 'cursor' | 'opencode' | 'codex';
 type InstallMode = 'all' | 'custom';
 
-type InstallStatus = 'planned' | 'installed' | 'skipped' | 'failed';
+type InstallStatus = 'planned' | 'installed' | 'current' | 'skipped' | 'failed';
 
 interface PluginTarget {
   id: PluginId;
@@ -62,6 +72,270 @@ interface PluginAuthResult {
   upgradeUrl?: string;
 }
 
+interface UninstallResult {
+  id: PluginId;
+  label: string;
+  status: 'planned' | 'removed' | 'skipped' | 'failed';
+  message: string;
+  steps: string[];
+  log?: string;
+}
+
+const PROMPT_CANCELLED = Symbol('prompt_cancelled');
+
+type PromptCancel = typeof PROMPT_CANCELLED;
+
+interface ArrowPromptOption<T extends string> {
+  value: T;
+  label: string;
+  hint?: string;
+  disabled?: boolean;
+}
+
+const SUPERMEMORY_GLYPHS: Record<string, string[]> = {
+  S: ['11111', '10000', '11111', '00001', '11111'],
+  U: ['10001', '10001', '10001', '10001', '01110'],
+  P: ['11110', '10001', '11110', '10000', '10000'],
+  E: ['11111', '10000', '11110', '10000', '11111'],
+  R: ['11110', '10001', '11110', '10100', '10010'],
+  M: ['10001', '11011', '10101', '10001', '10001'],
+  O: ['01110', '10001', '10001', '10001', '01110'],
+  Y: ['10001', '01010', '00100', '00100', '00100'],
+};
+
+const SUPERMEMORY_WORD = 'SUPERMEMORY';
+const BANNER_CELL = '\u2588';
+const BANNER_SHADOW_CELL = '\u2591';
+const BANNER_FILL_COLORS = ['#D6FBFF', '#67E8F9', '#22D3EE', '#0EA5E9', '#2563EB', '#1D4ED8', '#123B9A'];
+const BANNER_SHADOW_COLOR = '#071D82';
+
+function printSupermemoryBanner(): void {
+  const glyphWidth = 5;
+  const glyphGap = 1;
+  const rowCount = 5;
+  const columnCount = SUPERMEMORY_WORD.length * (glyphWidth + glyphGap) - glyphGap;
+  const isFilled = (row: number, column: number): boolean => {
+    if (row < 0 || row >= rowCount || column < 0 || column >= columnCount) return false;
+    const glyphIndex = Math.floor(column / (glyphWidth + glyphGap));
+    const glyphColumn = column % (glyphWidth + glyphGap);
+    if (glyphColumn >= glyphWidth) return false;
+    const glyph = SUPERMEMORY_GLYPHS[SUPERMEMORY_WORD[glyphIndex] ?? ''];
+    return glyph?.[row]?.[glyphColumn] === '1';
+  };
+
+  process.stderr.write('\n');
+  for (let row = 0; row < rowCount + 1; row++) {
+    let rendered = '  ';
+    for (let column = 0; column < columnCount + 1; column++) {
+      const main = isFilled(row, column);
+      const shadow = !main && isFilled(row - 1, column - 1);
+      if (main) {
+        const color = BANNER_FILL_COLORS[Math.min(row, BANNER_FILL_COLORS.length - 1)] ?? '#22D3EE';
+        rendered += chalk.hex(color)(BANNER_CELL);
+      } else if (shadow) {
+        rendered += chalk.hex(BANNER_SHADOW_COLOR)(BANNER_SHADOW_CELL);
+      } else {
+        rendered += ' ';
+      }
+    }
+    process.stderr.write(`${rendered}\n`);
+  }
+
+  const label = chalk.hex('#18BFFF')('>') + chalk.hex('#1775EF').bold(' PLUGINS');
+  const labelPadding = Math.max(2, columnCount + 1 - '> PLUGINS'.length);
+  process.stderr.write(`${' '.repeat(labelPadding)}${label}\n\n`);
+}
+function clearRenderedPrompt(renderedLines: number): void {
+  if (renderedLines <= 0) return;
+  moveCursor(process.stderr, 0, -renderedLines);
+  cursorTo(process.stderr, 0);
+  clearScreenDown(process.stderr);
+}
+
+const TUI_TOP = '\u250C';
+const TUI_BAR = '\u2502';
+const TUI_BOTTOM = '\u2514';
+const TUI_SUBMIT = '\u25C7';
+const TUI_POINTER = '\u276F';
+const TUI_RADIO_ACTIVE = '\u25CF';
+const TUI_RADIO_INACTIVE = '\u25CB';
+
+function finishArrowPrompt(message: string, value: string): void {
+  process.stderr.write(`${chalk.cyan(TUI_SUBMIT)}  ${message}\n`);
+  process.stderr.write(`${chalk.cyan(TUI_BAR)}  ${value}\n`);
+  process.stderr.write(`${chalk.cyan(TUI_BAR)}\n`);
+}
+
+function withRawKeypress<T>(
+  render: () => number,
+  onKey: (key: { name?: string; ctrl?: boolean }) => T | undefined,
+): Promise<T> {
+  const input = process.stdin as NodeJS.ReadStream & { setRawMode?: (mode: boolean) => void };
+  const hadRawMode = Boolean(input.isRaw);
+  let renderedLines = 0;
+
+  return new Promise<T>((resolve) => {
+    const cleanup = (result: T) => {
+      input.off('keypress', handler);
+      if (input.setRawMode && !hadRawMode) input.setRawMode(false);
+      process.stderr.write('\u001B[?25h');
+      resolve(result);
+    };
+
+    const rerender = () => {
+      clearRenderedPrompt(renderedLines);
+      renderedLines = render();
+    };
+
+    const handler = (_input: string, key: { name?: string; ctrl?: boolean }) => {
+      if (key.ctrl && key.name === 'c') {
+        clearRenderedPrompt(renderedLines);
+        cleanup(PROMPT_CANCELLED as T);
+        return;
+      }
+      const result = onKey(key);
+      if (result !== undefined) {
+        clearRenderedPrompt(renderedLines);
+        cleanup(result);
+        return;
+      }
+      rerender();
+    };
+
+    emitKeypressEvents(input);
+    if (input.setRawMode) input.setRawMode(true);
+    input.on('keypress', handler);
+    process.stderr.write('\u001B[?25l');
+    rerender();
+  });
+}
+
+function nextEnabledIndex<T extends string>(
+  options: ArrowPromptOption<T>[],
+  current: number,
+  direction: 1 | -1,
+): number {
+  if (options.length === 0) return 0;
+  let next = current;
+  for (let i = 0; i < options.length; i++) {
+    next = (next + direction + options.length) % options.length;
+    if (!options[next]?.disabled) return next;
+  }
+  return current;
+}
+
+async function arrowSelect<T extends string>(opts: {
+  message: string;
+  options: ArrowPromptOption<T>[];
+  footer?: string;
+}): Promise<T | PromptCancel> {
+  let active = Math.max(
+    0,
+    opts.options.findIndex((option) => !option.disabled),
+  );
+
+  const result = await withRawKeypress<T | PromptCancel>(
+    () => {
+      const lines = [`${chalk.cyan(TUI_TOP)} ${chalk.bold(opts.message)}`, `${chalk.cyan(TUI_BAR)}`];
+      for (let i = 0; i < opts.options.length; i++) {
+        const option = opts.options[i];
+        if (!option) continue;
+        const pointer = i === active ? chalk.cyan(TUI_POINTER) : ' ';
+        const marker = i === active ? chalk.cyan(TUI_RADIO_ACTIVE) : chalk.dim(TUI_RADIO_INACTIVE);
+        const label = option.disabled ? chalk.dim(option.label) : option.label;
+        const hint = option.hint ? ` ${chalk.dim(option.hint)}` : '';
+        lines.push(`${chalk.cyan(TUI_BAR)} ${pointer} ${marker} ${label}${hint}`);
+      }
+      lines.push(`${chalk.cyan(TUI_BAR)}`);
+      lines.push(
+        `${chalk.cyan(TUI_BOTTOM)} ${chalk.dim(opts.footer ?? 'Up/Down move, Enter confirm, Esc cancel')}`,
+      );
+      process.stderr.write(`${lines.join('\n')}\n`);
+      return lines.length;
+    },
+    (key) => {
+      if (key.name === 'escape') return PROMPT_CANCELLED;
+      if (key.name === 'up' || key.name === 'k') active = nextEnabledIndex(opts.options, active, -1);
+      if (key.name === 'down' || key.name === 'j') active = nextEnabledIndex(opts.options, active, 1);
+      if (key.name === 'return' || key.name === 'enter') return opts.options[active]?.value;
+      return undefined;
+    },
+  );
+
+  if (result !== PROMPT_CANCELLED) {
+    const label = opts.options.find((option) => option.value === result)?.label ?? String(result);
+    finishArrowPrompt(opts.message, label);
+  }
+  return result;
+}
+
+async function arrowMultiselect<T extends string>(opts: {
+  message: string;
+  options: ArrowPromptOption<T>[];
+  initialValues?: T[];
+  footer?: string;
+}): Promise<T[] | PromptCancel> {
+  let active = Math.max(
+    0,
+    opts.options.findIndex((option) => !option.disabled),
+  );
+  let error = '';
+  const selected = new Set<T>(opts.initialValues ?? []);
+
+  const result = await withRawKeypress<T[] | PromptCancel>(
+    () => {
+      const lines = [`${chalk.cyan(TUI_TOP)} ${chalk.bold(opts.message)}`, `${chalk.cyan(TUI_BAR)}`];
+      for (let i = 0; i < opts.options.length; i++) {
+        const option = opts.options[i];
+        if (!option) continue;
+        const checked = selected.has(option.value);
+        const pointer = i === active ? chalk.cyan(TUI_POINTER) : ' ';
+        const marker = checked ? chalk.green(TUI_RADIO_ACTIVE) : chalk.dim(TUI_RADIO_INACTIVE);
+        const label = option.disabled ? chalk.dim(option.label) : option.label;
+        const hint = option.hint ? ` ${chalk.dim(option.hint)}` : '';
+        lines.push(`${chalk.cyan(TUI_BAR)} ${pointer} ${marker} ${label}${hint}`);
+      }
+      if (error) lines.push(`${chalk.yellow(TUI_BAR)} ${chalk.yellow(error)}`);
+      lines.push(`${chalk.cyan(TUI_BAR)}`);
+      lines.push(
+        `${chalk.cyan(TUI_BOTTOM)} ${chalk.dim(
+          opts.footer ?? 'Up/Down move, Space select, Enter confirm, Esc back',
+        )}`,
+      );
+      process.stderr.write(`${lines.join('\n')}\n`);
+      return lines.length;
+    },
+    (key) => {
+      if (key.name === 'escape') return PROMPT_CANCELLED;
+      if (key.name === 'up' || key.name === 'k') active = nextEnabledIndex(opts.options, active, -1);
+      if (key.name === 'down' || key.name === 'j') active = nextEnabledIndex(opts.options, active, 1);
+      if (key.name === 'space') {
+        const option = opts.options[active];
+        if (!option || option.disabled) return undefined;
+        error = '';
+        if (selected.has(option.value)) selected.delete(option.value);
+        else selected.add(option.value);
+      }
+      if (key.name === 'return' || key.name === 'enter') {
+        if (selected.size === 0) {
+          error = 'Select at least one integration.';
+          return undefined;
+        }
+        return [...selected];
+      }
+      return undefined;
+    },
+  );
+
+  if (result !== PROMPT_CANCELLED) {
+    const labels = opts.options
+      .filter((option) => result.includes(option.value))
+      .map((option) => option.label)
+      .join(', ');
+    finishArrowPrompt(opts.message, labels);
+  }
+  return result;
+}
 class CommandError extends Error {
   constructor(
     message: string,
@@ -71,7 +345,6 @@ class CommandError extends Error {
   }
 }
 
-const CURSOR_PLUGIN_TARGET = join(homedir(), '.cursor', 'plugins', 'local', 'cursor-supermemory');
 const PLUGIN_BILLING_URL = 'https://app.supermemory.ai/?settings=billing';
 
 const PLUGIN_AUTH_CLIENTS: Record<PluginId, PluginClientId> = {
@@ -246,22 +519,27 @@ function formatDetectionSource(detection: Detection): string {
 }
 
 function printDetectionSummary(detections: Map<PluginId, Detection>) {
-  process.stderr.write(`  ${chalk.bold('Detected integrations:')}\n`);
+  process.stderr.write(`${chalk.cyan(TUI_TOP)} ${chalk.bold('Supermemory plugin')}\n`);
+  process.stderr.write(`${chalk.cyan(TUI_BAR)} ${chalk.bold('Detected integrations')}\n`);
   for (const target of TARGETS) {
     const detection = detections.get(target.id);
     if (detection?.available) {
       process.stderr.write(
-        `    ${chalk.green('[ready]')} ${chalk.bold(target.label)} ${chalk.dim(
+        `${chalk.cyan(TUI_BAR)}   ${chalk.green('[ready]')} ${chalk.bold(target.label)} ${chalk.dim(
           formatDetectionSource(detection),
         )}\n`,
       );
     } else {
       process.stderr.write(
-        `    ${chalk.red('[missing]')} ${chalk.bold(target.label)} ${chalk.dim('not detected')}\n`,
+        `${chalk.cyan(TUI_BAR)}   ${chalk.red('[missing]')} ${chalk.bold(target.label)} ${chalk.dim(
+          'not detected',
+        )}\n`,
       );
     }
   }
-  process.stderr.write('\n');
+  process.stderr.write(
+    `${chalk.cyan(TUI_BOTTOM)} ${chalk.dim('scripts can use supermemory plugin --all')}\n\n`,
+  );
 }
 
 function parseOnly(value: unknown): PluginId[] {
@@ -444,7 +722,6 @@ function startPluginAuthCallbackServer(clients: PluginClientId[]): Promise<{
       rejectCallback = reject;
     });
 
-    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     const clearAuthTimeout = () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
@@ -522,7 +799,7 @@ function startPluginAuthCallbackServer(clients: PluginClientId[]): Promise<{
       rejectServer(error);
     });
 
-    timeoutId = setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       rejectCallback(new Error('Authentication timed out'));
       server.close();
     }, 10 * 60_000);
@@ -559,8 +836,8 @@ function printPluginAuthSummary(results: PluginAuthResult[]): void {
   process.stdout.write('\n');
 }
 
-function printPluginAuthStart(installed: InstallResult[]): void {
-  const labels = installed.map((result) => result.label).join(', ');
+function printPluginAuthStart(targets: Array<{ id: PluginId; label: string }>): void {
+  const labels = targets.map((target) => target.label).join(', ');
   process.stdout.write(`\n${chalk.cyan('┌')} ${chalk.bold('Supermemory OAuth')}\n`);
   process.stdout.write(`${chalk.cyan('│')} ${chalk.bold('One approval')} connects ${chalk.bold(labels)}.\n`);
   process.stdout.write(
@@ -594,22 +871,30 @@ function getPluginAuthBaseUrl(consoleUrl: string): string {
   return consoleUrl;
 }
 
-async function authorizeInstalledPlugins(
-  results: InstallResult[],
-  options: { dryRun: boolean; noAuth: boolean; json: boolean },
+async function authorizePlugins(
+  targets: Array<{ id: PluginId; label: string }>,
+  options: {
+    dryRun?: boolean;
+    noAuth?: boolean;
+    json?: boolean;
+    noBrowser?: boolean;
+    allowNonInteractive?: boolean;
+  },
 ): Promise<boolean> {
-  if (options.dryRun || options.noAuth || options.json || !isInputInteractive()) {
+  if (
+    options.dryRun ||
+    options.noAuth ||
+    options.json ||
+    (!isInputInteractive() && !options.allowNonInteractive)
+  ) {
     return false;
   }
 
-  const installed = results.filter(
-    (result): result is InstallResult & { status: 'installed' } => result.status === 'installed',
-  );
-  if (installed.length === 0) return false;
+  if (targets.length === 0) return false;
 
-  printPluginAuthStart(installed);
+  printPluginAuthStart(targets);
 
-  const clients = installed.map((result) => PLUGIN_AUTH_CLIENTS[result.id]);
+  const clients = targets.map((target) => PLUGIN_AUTH_CLIENTS[target.id]);
   const callback = await startPluginAuthCallbackServer(clients);
   const config = resolveConfig();
   const device = getDeviceInfo();
@@ -627,19 +912,25 @@ async function authorizeInstalledPlugins(
   const spinner = isInteractive() ? clack.spinner() : null;
 
   try {
-    spinner?.start('Opening one-click Supermemory OAuth...');
-    try {
-      await openBrowser(authUrl);
-    } catch {
-      spinner?.message('Could not open browser automatically.');
+    if (options.noBrowser) {
       process.stdout.write(`  Open this URL to authorize selected plugins:\n\n  ${chalk.cyan(authUrl)}\n\n`);
+    } else {
+      spinner?.start('Opening one-click Supermemory OAuth...');
+      try {
+        await openBrowser(authUrl);
+      } catch {
+        spinner?.message('Could not open browser automatically.');
+        process.stdout.write(
+          `  Open this URL to authorize selected plugins:\n\n  ${chalk.cyan(authUrl)}\n\n`,
+        );
+      }
     }
 
     const { keys, errors } = await callback.waitForCallback();
     spinner?.stop('OAuth complete');
 
     const authResults: PluginAuthResult[] = [];
-    for (const result of installed) {
+    for (const result of targets) {
       const client = PLUGIN_AUTH_CLIENTS[result.id];
       const apiKey = keys[client];
       if (apiKey?.startsWith('sm_')) {
@@ -664,7 +955,7 @@ async function authorizeInstalledPlugins(
     }
 
     printPluginAuthSummary(authResults);
-    return authResults.some((result) => result.status === 'failed');
+    return authResults.some((result) => result.status !== 'connected');
   } catch (error) {
     spinner?.stop('OAuth failed');
     process.stdout.write(
@@ -672,7 +963,7 @@ async function authorizeInstalledPlugins(
         error instanceof Error ? error.message : String(error)
       }\n\n`,
     );
-    process.stdout.write(`  Rerun the command to open a fresh OAuth callback and upgrade link.\n\n`);
+    process.stdout.write('  Rerun the command to open a fresh OAuth callback and upgrade link.\n\n');
     return true;
   } finally {
     callback.close();
@@ -738,11 +1029,20 @@ async function installTarget(target: PluginTarget, dryRun: boolean): Promise<Ins
 
     if (target.id === 'claude') {
       const addMarketplace = ['plugin', 'marketplace', 'add', 'supermemoryai/claude-supermemory'];
+      const updateMarketplace = ['plugin', 'marketplace', 'update', 'supermemory-plugins'];
       const installPlugin = ['plugin', 'install', 'supermemory@supermemory-plugins', '--scope', 'user'];
-      steps.push(formatStep('claude', addMarketplace));
+      steps.push(`${formatStep('claude', updateMarketplace)} (or add it when not registered)`);
       steps.push(formatStep('claude', installPlugin));
       if (!dryRun) {
-        log = await runProcess('claude', addMarketplace);
+        try {
+          log = await runProcess('claude', updateMarketplace);
+        } catch (error) {
+          const isMissingMarketplace =
+            error instanceof CommandError &&
+            /not found|does not exist|unknown|not registered/i.test(error.log ?? '');
+          if (!isMissingMarketplace) throw error;
+          log = await runProcess('claude', addMarketplace);
+        }
         log = (await runProcess('claude', installPlugin)) ?? log;
       }
     }
@@ -807,6 +1107,7 @@ function printHumanSummary(results: InstallResult[], dryRun: boolean, noAuth: bo
     const icon =
       result.status === 'installed' ? chalk.green('[ok]')
       : result.status === 'planned' ? chalk.cyan('[plan]')
+      : result.status === 'current' ? chalk.green('[ok]')
       : result.status === 'skipped' ? chalk.yellow('[skip]')
       : chalk.red('[fail]');
 
@@ -824,11 +1125,14 @@ function printHumanSummary(results: InstallResult[], dryRun: boolean, noAuth: bo
   }
 
   const authTargets = results.filter(
-    (r) => r.status !== 'skipped' && ['claude', 'cursor', 'opencode', 'codex'].includes(r.id),
+    (r) =>
+      (r.status === 'installed' || r.status === 'current') &&
+      ['claude', 'cursor', 'opencode', 'codex'].includes(r.id),
   );
   if (authTargets.length > 0 && !dryRun && !noAuth && isInputInteractive()) {
+    const authLabels = authTargets.map((target) => target.label).join(', ');
     process.stdout.write(
-      `  ${chalk.dim('Auth:')} one browser approval will connect successfully installed plugins.\n\n`,
+      `  ${chalk.dim('OAuth:')} install is ready; continuing to browser approval for ${authLabels}.\n\n`,
     );
   }
   if (authTargets.length > 0 && noAuth) {
@@ -848,20 +1152,15 @@ function getReadyTargetIds(detections: Map<PluginId, Detection>): PluginId[] {
 }
 
 async function chooseTargetsInteractively(detections: Map<PluginId, Detection>): Promise<PluginId[]> {
-  process.stderr.write('\n');
+  printSupermemoryBanner();
   printDetectionSummary(detections);
-  process.stderr.write(`  ${chalk.dim('tip: use Up/Down to move, Enter to confirm')}\n`);
-  process.stderr.write(
-    `  ${chalk.dim('tip: custom selection uses Space to toggle, Esc to return to install mode')}\n`,
-  );
-  process.stderr.write(`  ${chalk.dim('tip: scripts can use')} supermemory plugin --all\n\n`);
 
   const readyIds = getReadyTargetIds(detections);
-  const modeOptions: { value: InstallMode; label: string; hint?: string }[] = [
+  const modeOptions: ArrowPromptOption<InstallMode>[] = [
     {
       value: 'custom',
       label: 'Custom selection',
-      hint: 'pick plugins with Space',
+      hint: 'pick integrations with Space',
     },
   ];
 
@@ -873,37 +1172,285 @@ async function chooseTargetsInteractively(detections: Map<PluginId, Detection>):
     });
   }
 
-  const mode = await clack.select({
-    message: 'Install mode',
-    options: modeOptions,
+  while (true) {
+    const mode = await arrowSelect({
+      message: 'Which integrations should Supermemory install?',
+      options: modeOptions,
+    });
+
+    if (mode === PROMPT_CANCELLED) {
+      clack.cancel('Install cancelled.');
+      process.exit(0);
+    }
+
+    if (mode === 'all') return readyIds;
+
+    const selected = await arrowMultiselect({
+      message: 'Select integrations',
+      footer: 'Up/Down move, Space select, Enter confirm, Esc return to install mode',
+      options: TARGETS.map((target) => {
+        const detection = detections.get(target.id);
+        const display = formatOptionDisplay(target, detection);
+        return {
+          value: target.id,
+          label: display.label,
+          hint: display.hint,
+          disabled: !detection?.available,
+        };
+      }),
+      initialValues: readyIds.length === 1 ? readyIds : [],
+    });
+
+    if (selected === PROMPT_CANCELLED) continue;
+
+    return selected.filter((id): id is PluginId => id in ALIASES);
+  }
+}
+function installedTargets(): PluginTarget[] {
+  return TARGETS.filter((target) => detectInstalledPlugin(target.id).installed);
+}
+
+async function chooseInstalledTargetIds(action: 'connect' | 'remove'): Promise<PluginId[]> {
+  const targets = installedTargets();
+  const states = new Map(targets.map((target) => [target.id, detectInstalledPlugin(target.id)]));
+  if (targets.length === 0) return [];
+
+  printSupermemoryBanner();
+  const selected = await arrowMultiselect({
+    message: action === 'connect' ? 'Select plugins to connect' : 'Select plugins to remove',
+    options: targets.map((target) => ({
+      value: target.id,
+      label: target.label,
+      hint: states.get(target.id)?.version ? `v${states.get(target.id)?.version}` : 'installed',
+    })),
   });
 
-  if (clack.isCancel(mode)) {
-    clack.cancel('Install cancelled.');
+  if (selected === PROMPT_CANCELLED) {
+    clack.cancel(action === 'connect' ? 'Login cancelled.' : 'Uninstall cancelled.');
     process.exit(0);
   }
+  return selected.filter((id): id is PluginId => TARGETS.some((target) => target.id === id));
+}
 
-  if (mode === 'all') return readyIds;
+export async function loginInstalledPlugins(options: {
+  all?: boolean;
+  only?: unknown;
+  noBrowser?: boolean;
+  json?: boolean;
+}): Promise<boolean> {
+  const targets = installedTargets();
+  if (targets.length === 0) return false;
+  if (options.json) throw new Error('--json is not supported for browser OAuth');
 
-  const selected = await clack.multiselect({
-    message: 'Choose integrations to install',
-    required: true,
-    options: TARGETS.map((target) => {
-      const display = formatOptionDisplay(target, detections.get(target.id));
-      return {
-        value: target.id,
-        label: display.label,
-        hint: display.hint,
-      };
-    }),
-  });
-
-  if (clack.isCancel(selected)) {
-    return chooseTargetsInteractively(detections);
+  let selectedIds = parseOnly(options.only);
+  if (options.all) selectedIds = targets.map((target) => target.id);
+  if (selectedIds.length === 0) {
+    if (!isInputInteractive()) return false;
+    selectedIds = await chooseInstalledTargetIds('connect');
   }
 
-  return selected.filter((id): id is PluginId => id in ALIASES);
+  const missing = selectedIds.filter((id) => !targets.some((target) => target.id === id));
+  if (missing.length > 0) {
+    throw new Error(
+      `Not installed: ${missing
+        .map((id) => TARGETS.find((target) => target.id === id)?.label ?? id)
+        .join(', ')}. Run supermemory plugin first.`,
+    );
+  }
+
+  const selected = targets
+    .filter((target) => selectedIds.includes(target.id))
+    .map(({ id, label }) => ({ id, label }));
+  const failed = await authorizePlugins(selected, {
+    noBrowser: options.noBrowser,
+    allowNonInteractive: true,
+  });
+  if (failed) process.exitCode = 1;
+  return true;
 }
+
+async function handlePluginLogin(options: {
+  all: boolean;
+  only: unknown;
+  noBrowser: boolean;
+  json: boolean;
+}): Promise<void> {
+  const handled = await loginInstalledPlugins(options);
+  if (!handled) {
+    throw new Error('No installed Supermemory plugins found. Run supermemory plugin first.');
+  }
+}
+
+export const pluginLoginCommand = defineCliCommand({
+  meta: {
+    name: 'login',
+    description: 'Connect installed Supermemory plugins with browser OAuth',
+  },
+  noSpan: true,
+  args: {
+    all: {
+      type: 'boolean',
+      description: 'Connect every installed Supermemory plugin',
+      default: false,
+    },
+    only: {
+      type: 'string',
+      description: 'Comma-separated targets: claude,cursor,opencode,codex',
+    },
+    browser: {
+      type: 'boolean',
+      description: 'Open the OAuth page in a browser (use --no-browser to show the URL)',
+      default: true,
+    },
+  },
+  async handler({ args, flags }) {
+    await handlePluginLogin({
+      all: args.all === true,
+      only: args.only,
+      noBrowser: args.browser !== true,
+      json: flags.json === true,
+    });
+  },
+});
+
+async function uninstallTarget(target: PluginTarget, dryRun: boolean): Promise<UninstallResult> {
+  const steps: string[] = [];
+  try {
+    let log: string | undefined;
+    if (target.id === 'claude') {
+      const scopes = detectInstalledPlugin('claude').scopes ?? ['user'];
+      for (const scope of scopes) {
+        const args = ['plugin', 'uninstall', 'supermemory@supermemory-plugins', '--scope', scope];
+        steps.push(formatStep('claude', args));
+        if (!dryRun) {
+          const scopeLog = await runProcess('claude', args);
+          log = [log, scopeLog].filter(Boolean).join('\n');
+        }
+      }
+    }
+    if (target.id === 'cursor') {
+      steps.push(`remove ${CURSOR_PLUGIN_TARGET}`);
+      if (!dryRun) rmSync(CURSOR_PLUGIN_TARGET, { recursive: true, force: true });
+    }
+    if (target.id === 'opencode') {
+      steps.push('remove opencode-supermemory from OpenCode config and generated commands');
+      if (!dryRun) steps.splice(0, steps.length, ...removeOpenCodePlugin());
+    }
+    if (target.id === 'codex') {
+      const args = ['-y', 'codex-supermemory@latest', 'uninstall'];
+      steps.push(formatStep('npx', args));
+      if (!dryRun) log = await runProcess('npx', args);
+    }
+
+    if (!dryRun) forgetPluginVersion(target.id);
+    return {
+      id: target.id,
+      label: target.label,
+      status: dryRun ? 'planned' : 'removed',
+      message: dryRun ? 'would be removed' : 'removed; credentials and memories were kept',
+      steps,
+      log,
+    };
+  } catch (error) {
+    return {
+      id: target.id,
+      label: target.label,
+      status: 'failed',
+      message: error instanceof Error ? error.message : String(error),
+      steps,
+      log: error instanceof CommandError ? error.log : undefined,
+    };
+  }
+}
+
+function printUninstallSummary(results: UninstallResult[], dryRun: boolean): void {
+  const title = dryRun ? 'Supermemory uninstall plan' : 'Supermemory uninstall summary';
+  process.stdout.write(`\n${chalk.bold(title)}\n\n`);
+  for (const result of results) {
+    const icon =
+      result.status === 'removed' ? chalk.green('[ok]')
+      : result.status === 'planned' ? chalk.cyan('[plan]')
+      : result.status === 'skipped' ? chalk.yellow('[skip]')
+      : chalk.red('[fail]');
+    process.stdout.write(`${icon} ${chalk.bold(result.label)}: ${result.message}\n`);
+    for (const step of result.steps) process.stdout.write(`  ${chalk.dim(step)}\n`);
+    if (result.log && result.status === 'failed') {
+      process.stdout.write(`  ${chalk.dim(result.log)}\n`);
+    }
+    process.stdout.write('\n');
+  }
+}
+
+async function handlePluginUninstall(args: Record<string, unknown>, flags: OutputFlags): Promise<void> {
+  const dryRun = args['dry-run'] === true;
+  const jsonOutput = shouldOutputJson(flags);
+  const installed = installedTargets();
+  let selectedIds = parseOnly(args.only);
+  if (args.all === true) selectedIds = installed.map((target) => target.id);
+
+  if (selectedIds.length === 0 && args.all !== true) {
+    if (!isInputInteractive() || jsonOutput) {
+      throw new Error('Choose targets with --all or --only claude,cursor,opencode,codex');
+    }
+    selectedIds = await chooseInstalledTargetIds('remove');
+  }
+  if (selectedIds.length === 0) {
+    if (jsonOutput) {
+      process.stdout.write(`${JSON.stringify({ results: [] }, null, 2)}\n`);
+    } else {
+      process.stdout.write(`\n${chalk.yellow('[skip]')} No installed Supermemory plugins found.\n\n`);
+    }
+    return;
+  }
+
+  const results: UninstallResult[] = [];
+  for (const id of selectedIds) {
+    const target = TARGETS.find((candidate) => candidate.id === id);
+    if (!target) continue;
+    if (!installed.some((candidate) => candidate.id === id)) {
+      results.push({
+        id,
+        label: target.label,
+        status: 'skipped',
+        message: 'not installed',
+        steps: [],
+      });
+      continue;
+    }
+    results.push(await uninstallTarget(target, dryRun));
+  }
+
+  if (jsonOutput) process.stdout.write(`${JSON.stringify({ results }, null, 2)}\n`);
+  else printUninstallSummary(results, dryRun);
+  if (results.some((result) => result.status === 'failed')) process.exitCode = 1;
+}
+
+export const uninstallCommand = defineCliCommand({
+  meta: {
+    name: 'uninstall',
+    description: 'Remove selected Supermemory plugin integrations',
+  },
+  noSpan: true,
+  args: {
+    all: {
+      type: 'boolean',
+      description: 'Remove every installed Supermemory plugin',
+      default: false,
+    },
+    only: {
+      type: 'string',
+      description: 'Comma-separated targets: claude,cursor,opencode,codex',
+    },
+    'dry-run': {
+      type: 'boolean',
+      description: 'Show what would be removed without changing anything',
+      default: false,
+    },
+  },
+  async handler({ args, flags }) {
+    await handlePluginUninstall(args, flags);
+  },
+});
 
 export const pluginCommand = defineCliCommand({
   meta: {
@@ -937,17 +1484,21 @@ export const pluginCommand = defineCliCommand({
       default: false,
     },
   },
-  async handler({ args, flags }) {
+  subCommands: {
+    login: pluginLoginCommand,
+    uninstall: uninstallCommand,
+  },
+  async handler({ args, flags, rawArgs }) {
+    const nestedCommand = rawArgs.find((arg) => !arg.startsWith('-'));
+    if (nestedCommand === 'login' || nestedCommand === 'uninstall') return;
+
     const dryRun = args['dry-run'] === true;
     const force = args.force === true;
     const noAuth = args['no-auth'] === true;
+    const jsonOutput = shouldOutputJson(flags);
     const detections = new Map<PluginId, Detection>(
       TARGETS.map((target) => [target.id, detectTarget(target)]),
     );
-
-    if (flags.json && !dryRun) {
-      throw new Error('--json is only supported with --dry-run for plugin');
-    }
 
     let selectedIds = parseOnly(args.only);
     if (args.all === true) {
@@ -980,19 +1531,50 @@ export const pluginCommand = defineCliCommand({
         continue;
       }
 
-      results.push(await installTarget(target, dryRun));
+      const installed = detectInstalledPlugin(id);
+      const latestVersion = await getLatestPluginVersion(id);
+      const shouldInstall =
+        force ||
+        !installed.installed ||
+        Boolean(
+          latestVersion && (!installed.version || compareVersions(installed.version, latestVersion) < 0),
+        );
+
+      if (!shouldInstall) {
+        results.push({
+          id,
+          label: target.label,
+          status: 'current',
+          message:
+            installed.version && latestVersion ?
+              `already up to date (v${installed.version})${dryRun || noAuth ? '' : '; continuing to OAuth'}`
+            : 'already installed; version could not be verified, use --force to reinstall',
+          steps: [],
+        });
+        continue;
+      }
+
+      const result = await installTarget(target, dryRun);
+      results.push(result);
+      if (!dryRun && result.status === 'installed') {
+        const detectedVersion = latestVersion ?? detectInstalledPlugin(id).version ?? installed.version;
+        if (detectedVersion) recordPluginVersion(id, detectedVersion);
+      }
     }
 
-    if (flags.json) {
+    if (jsonOutput) {
       process.stdout.write(`${JSON.stringify({ results }, null, 2)}\n`);
     } else {
       printHumanSummary(results, dryRun, noAuth);
     }
 
-    const authFailed = await authorizeInstalledPlugins(results, {
+    const oauthTargets = results
+      .filter((result) => result.status === 'installed' || result.status === 'current')
+      .map(({ id, label }) => ({ id, label }));
+    const authFailed = await authorizePlugins(oauthTargets, {
       dryRun,
       noAuth,
-      json: flags.json === true,
+      json: jsonOutput,
     });
 
     if (results.some((result) => result.status === 'failed') || authFailed) {
