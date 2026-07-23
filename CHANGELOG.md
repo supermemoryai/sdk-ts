@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.25.1 (2026-07-23)
+
+Full Changelog: [v4.25.0...v4.25.1](https://github.com/supermemoryai/sdk-ts/compare/v4.25.0...v4.25.1)
+
 ## 4.25.0 (2026-07-20)
 
 Full Changelog: [v4.24.2...v4.25.0](https://github.com/supermemoryai/sdk-ts/compare/v4.24.2...v4.25.0)
