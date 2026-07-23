@@ -9,8 +9,8 @@ const client = new Supermemory({
 
 describe('resource settings', () => {
   // Mock server tests are disabled
-  test.skip('update: only required params', async () => {
-    const responsePromise = client.settings.update({ workspacePrompt: 'workspacePrompt' });
+  test.skip('update', async () => {
+    const responsePromise = client.settings.update({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,11 +18,6 @@ describe('resource settings', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: required and optional params', async () => {
-    const response = await client.settings.update({ workspacePrompt: 'workspacePrompt' });
   });
 
   // Mock server tests are disabled
