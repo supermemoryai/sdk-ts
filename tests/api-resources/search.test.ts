@@ -114,6 +114,7 @@ describe('resource search', () => {
       q: 'what are the API rate limits',
       aggregate: false,
       containerTag: 'user_alex',
+      containerTags: ['user_alex'],
       filepath: 'filepath',
       filters: {
         OR: [

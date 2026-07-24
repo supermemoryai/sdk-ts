@@ -7462,6 +7462,12 @@ export interface SearchMemoriesParams {
   containerTag?: string;
 
   /**
+   * Optional tags this search should be containerized by. Search is scoped to
+   * memories under these tags.
+   */
+  containerTags?: Array<string>;
+
+  /**
    * Filter search results by filepath. Exact match for full paths, prefix match if
    * ending with /
    */
