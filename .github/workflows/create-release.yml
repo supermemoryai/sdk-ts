@@ -1,0 +1,68 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+
+concurrency:
+  group: create-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: create release
+    runs-on: ubuntu-latest
+    if: github.repository == 'supermemoryai/sdk-ts'
+    permissions:
+      actions: write
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check for version change
+        id: version
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          current_version=$(node -p "require('./package.json').version")
+          previous_version=$(git show "$BEFORE_SHA:package.json" 2>/dev/null | node -e "let data = ''; process.stdin.on('data', chunk => data += chunk); process.stdin.on('end', () => console.log(JSON.parse(data).version));" || true)
+
+          echo "current=$current_version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$current_version" >> "$GITHUB_OUTPUT"
+
+          if [ "$current_version" != "$previous_version" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create GitHub release
+        id: release
+        if: steps.version.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; skipping."
+            echo "created=false" >> "$GITHUB_OUTPUT"
+          else
+            gh release create "$TAG" \
+              --target "$GITHUB_SHA" \
+              --title "$TAG" \
+              --generate-notes
+            echo "created=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish packages
+        if: steps.release.outputs.created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: gh workflow run publish-npm.yml --ref main -f path=. -f release_tag="$TAG"

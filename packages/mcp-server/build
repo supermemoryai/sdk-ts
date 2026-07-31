@@ -42,7 +42,7 @@ node scripts/copy-bundle-files.cjs
 
 # install runtime deps
 cd dist-bundle
-npm install
+npm install --allow-remote=root
 cd ..
 
 # pack bundle
