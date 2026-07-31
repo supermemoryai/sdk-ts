@@ -6,8 +6,11 @@ on:
   workflow_dispatch:
     inputs:
       path:
-        description: The path to run the release in, e.g. '.' or 'packages/mcp-server'
-        required: true
+        description: The path to release, e.g. '.' or 'packages/mcp-server'. Leave empty to release all packages.
+        required: false
+      release_tag:
+        description: The GitHub release tag to upload assets to when dispatched by another workflow.
+        required: false
 
   release:
     types: [published]
@@ -56,8 +59,10 @@ jobs:
           INPUT_PATH: ${{ github.event.inputs.path }}
 
       - name: Upload MCP Server DXT GitHub release asset
+        if: github.event_name == 'release' || (github.event.inputs.release_tag != '' && github.event.inputs.path != '.')
         run: |
-          gh release upload ${{ github.event.release.tag_name }} \
+          gh release upload "$RELEASE_TAG" \
             packages/mcp-server/supermemory_api.mcpb
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
