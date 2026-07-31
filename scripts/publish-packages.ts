@@ -61,12 +61,7 @@ function main() {
     console.error(JSON.stringify(outputs, null, 2));
     throw new Error('Expected outputs to contain a truthy `paths_released` property');
   }
-  if (typeof rawPaths !== 'string') {
-    console.error(JSON.stringify(outputs, null, 2));
-    throw new Error('Expected outputs `paths_released` property to be a JSON string');
-  }
-
-  const paths = JSON.parse(rawPaths);
+  const paths = typeof rawPaths === 'string' ? JSON.parse(rawPaths) : rawPaths;
   if (!Array.isArray(paths)) {
     console.error(JSON.stringify(outputs, null, 2));
     throw new Error('Expected outputs `paths_released` property to be an array');
