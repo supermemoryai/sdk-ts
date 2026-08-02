@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.25.1 (2026-08-02)
+
+Full Changelog: [v4.25.0...v4.25.1](https://github.com/supermemoryai/sdk-ts/compare/v4.25.0...v4.25.1)
+
+### Bug Fixes
+
+* repair main-branch npm publish automation ([#101](https://github.com/supermemoryai/sdk-ts/issues/101)) ([c15daee](https://github.com/supermemoryai/sdk-ts/commit/c15daeee53ee3c372fdb778bc251ed13b91e300d))
+
 ## 4.25.0 (2026-07-20)
 
 Full Changelog: [v4.24.2...v4.25.0](https://github.com/supermemoryai/sdk-ts/compare/v4.24.2...v4.25.0)
