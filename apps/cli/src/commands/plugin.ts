@@ -67,9 +67,8 @@ interface InstallResult {
 interface PluginAuthResult {
   id: PluginId;
   label: string;
-  status: 'connected' | 'upgrade' | 'failed';
+  status: 'connected' | 'failed';
   message: string;
-  upgradeUrl?: string;
 }
 
 interface UninstallResult {
@@ -344,8 +343,6 @@ class CommandError extends Error {
     super(message);
   }
 }
-
-const PLUGIN_BILLING_URL = 'https://app.supermemory.ai/?settings=billing';
 
 const PLUGIN_AUTH_CLIENTS: Record<PluginId, PluginClientId> = {
   claude: 'claude_code',
@@ -824,14 +821,8 @@ function printPluginAuthSummary(results: PluginAuthResult[]): void {
 
   process.stdout.write(`\n${chalk.bold('Supermemory plugin auth summary')}\n\n`);
   for (const result of results) {
-    const icon =
-      result.status === 'connected' ? chalk.green('[ok]')
-      : result.status === 'upgrade' ? chalk.blue('[upgrade]')
-      : chalk.red('[fail]');
+    const icon = result.status === 'connected' ? chalk.green('[ok]') : chalk.red('[fail]');
     process.stdout.write(`${icon} ${chalk.bold(result.label)}: ${result.message}\n`);
-    if (result.upgradeUrl) {
-      process.stdout.write(`    ${chalk.dim('Upgrade:')} ${chalk.cyan(result.upgradeUrl)}\n`);
-    }
   }
   process.stdout.write('\n');
 }
@@ -841,14 +832,8 @@ function printPluginAuthStart(targets: Array<{ id: PluginId; label: string }>): 
   process.stdout.write(`\n${chalk.cyan('┌')} ${chalk.bold('Supermemory OAuth')}\n`);
   process.stdout.write(`${chalk.cyan('│')} ${chalk.bold('One approval')} connects ${chalk.bold(labels)}.\n`);
   process.stdout.write(
-    `${chalk.cyan('└')} ${chalk.dim(
-      'The same API key will be saved for each plugin your plan can use.',
-    )}\n\n`,
+    `${chalk.cyan('└')} ${chalk.dim('The same API key will be saved for each selected plugin.')}\n\n`,
   );
-}
-
-function isPlanUpgradeMessage(message: string | undefined): boolean {
-  return /\b(pro plan|upgrade|requires pro)\b/i.test(message ?? '');
 }
 
 function getPluginAuthBaseUrl(consoleUrl: string): string {
@@ -943,13 +928,11 @@ async function authorizePlugins(
         });
       } else {
         const errorMessage = errors[client] ?? `No key returned for ${PLUGIN_AUTH_LABELS[client]}`;
-        const isUpgrade = isPlanUpgradeMessage(errorMessage);
         authResults.push({
           id: result.id,
           label: result.label,
-          status: isUpgrade ? 'upgrade' : 'failed',
-          message: isUpgrade ? `Upgrade to Pro to connect ${result.label}.` : errorMessage,
-          upgradeUrl: isUpgrade ? PLUGIN_BILLING_URL : undefined,
+          status: 'failed',
+          message: errorMessage,
         });
       }
     }
@@ -963,7 +946,7 @@ async function authorizePlugins(
         error instanceof Error ? error.message : String(error)
       }\n\n`,
     );
-    process.stdout.write('  Rerun the command to open a fresh OAuth callback and upgrade link.\n\n');
+    process.stdout.write('  Rerun the command to open a fresh OAuth callback.\n\n');
     return true;
   } finally {
     callback.close();
