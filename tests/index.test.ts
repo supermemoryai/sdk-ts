@@ -37,6 +37,21 @@ describe('instantiate client', () => {
       expect(client.baseURL).toEqual('http://localhost:9999');
       expect(client.apiKey).toEqual('local-key');
     });
+
+    test('accepts local model connector options without changing client routing', async () => {
+      const client = await Supermemory.local({
+        start: false,
+        port: 9999,
+        apiKey: 'local-key',
+        localModel: {
+          provider: 'ollama',
+          model: 'gemma3:12b',
+        },
+      });
+
+      expect(client.baseURL).toEqual('http://localhost:9999');
+      expect(client.apiKey).toEqual('local-key');
+    });
   });
 
   describe('defaultHeaders', () => {

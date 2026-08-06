@@ -30,11 +30,32 @@ Usage:
   supermemory local path
   supermemory local env
 
+Local model shortcuts:
+  supermemory local --ollama-model <model> [--ollama-url <url>]
+  supermemory local --lmstudio-model <model> [--lmstudio-url <url>]
+  supermemory local --llamacpp-model <model> [--llamacpp-url <url>]
+  supermemory local --openai-base-url <url> --openai-model <model>
+
 Options:
   --version <version>  Install an explicit server version, for example 0.0.1-rc.4.
   --port <port>        Port for local start. Defaults to PORT or 8787.
   --force              Forward a force install hint to the hosted installer.
   --no-install         Start only if the server binary is already installed.
+  --ollama-model       Use Ollama via its OpenAI-compatible endpoint.
+  --ollama-url         Ollama OpenAI-compatible base URL (default http://localhost:11434/v1).
+  --lmstudio-model     Use LM Studio via its OpenAI-compatible endpoint.
+  --lmstudio-url       LM Studio base URL (default http://localhost:1234/v1).
+  --llamacpp-model     Use llama.cpp server via its OpenAI-compatible endpoint.
+  --llamacpp-url       llama.cpp base URL (default http://localhost:8080/v1).
+  --openai-base-url    Generic OpenAI-compatible base URL for local/vended models.
+  --openai-model       Model name for OPENAI_MODEL, OPENAI_FAST_MODEL, and OPENAI_TEXT_MODEL.
+  --openai-fast-model  Override the fast-model env separately.
+  --openai-text-model  Override the text-model env separately.
+  --openai-api-key     API key for the OpenAI-compatible endpoint; loopback URLs default to a local dummy key.
+
+The local server currently speaks to model backends through OpenAI-compatible
+settings. Ollama, LM Studio, llama.cpp, vLLM, and similar servers can be used
+without cloud model calls when they expose /v1-compatible chat/responses APIs.
 
 The SDK package only contains this small launcher. The native server binary and
 runtime assets are installed by ${INSTALL_URL}.
@@ -47,7 +68,26 @@ runtime assets are installed by ${INSTALL_URL}.
     }
 
     function parseArgs(argv) {
-      const opts = { command: "start", version: "latest", force: false, install: true, port: undefined, url: undefined, serverArgs: [] };
+      const opts = {
+        command: "start",
+        version: "latest",
+        force: false,
+        install: true,
+        port: undefined,
+        url: undefined,
+        serverArgs: [],
+        openaiBaseUrl: undefined,
+        openaiModel: undefined,
+        openaiFastModel: undefined,
+        openaiTextModel: undefined,
+        openaiApiKey: undefined,
+        ollamaModel: undefined,
+        ollamaUrl: undefined,
+        lmstudioModel: undefined,
+        lmstudioUrl: undefined,
+        llamacppModel: undefined,
+        llamacppUrl: undefined,
+      };
       const args = [...argv];
       if (args[0] && !args[0].startsWith("-")) opts.command = args.shift();
       while (args.length > 0) {
@@ -62,6 +102,17 @@ runtime assets are installed by ${INSTALL_URL}.
         else if (arg === "--version") opts.version = args.shift() || "";
         else if (arg === "--port") opts.port = args.shift() || "";
         else if (arg === "--url") opts.url = args.shift() || "";
+        else if (arg === "--openai-base-url" || arg === "--openai-compatible-url") opts.openaiBaseUrl = args.shift() || "";
+        else if (arg === "--openai-model") opts.openaiModel = args.shift() || "";
+        else if (arg === "--openai-fast-model") opts.openaiFastModel = args.shift() || "";
+        else if (arg === "--openai-text-model") opts.openaiTextModel = args.shift() || "";
+        else if (arg === "--openai-api-key") opts.openaiApiKey = args.shift() || "";
+        else if (arg === "--ollama-model") opts.ollamaModel = args.shift() || "";
+        else if (arg === "--ollama-url") opts.ollamaUrl = args.shift() || "";
+        else if (arg === "--lmstudio-model") opts.lmstudioModel = args.shift() || "";
+        else if (arg === "--lmstudio-url") opts.lmstudioUrl = args.shift() || "";
+        else if (arg === "--llamacpp-model" || arg === "--llama-cpp-model") opts.llamacppModel = args.shift() || "";
+        else if (arg === "--llamacpp-url" || arg === "--llama-cpp-url") opts.llamacppUrl = args.shift() || "";
         else return { ...opts, error: `unknown option ${arg}` };
       }
       return opts;
@@ -238,6 +289,56 @@ runtime assets are installed by ${INSTALL_URL}.
       }
     }
 
+
+    function isLoopbackUrl(value) {
+      try {
+        const host = new URL(value).hostname;
+        return host === "localhost" || host === "127.0.0.1" || host === "::1" || host === "[::1]";
+      } catch {
+        return false;
+      }
+    }
+
+    function localModelEnv(opts, baseEnv) {
+      const selected = [
+        opts.ollamaModel ? "ollama" : null,
+        opts.lmstudioModel ? "lmstudio" : null,
+        opts.llamacppModel ? "llamacpp" : null,
+      ].filter(Boolean);
+      if (selected.length > 1) throw new Error(`choose only one local model shortcut, got ${selected.join(", ")}`);
+
+      let baseUrl = opts.openaiBaseUrl;
+      let model = opts.openaiModel;
+      let apiKey = opts.openaiApiKey;
+
+      if (opts.ollamaModel) {
+        baseUrl = opts.ollamaUrl || "http://localhost:11434/v1";
+        model = opts.ollamaModel;
+        apiKey = apiKey || "ollama";
+      } else if (opts.lmstudioModel) {
+        baseUrl = opts.lmstudioUrl || "http://localhost:1234/v1";
+        model = opts.lmstudioModel;
+        apiKey = apiKey || "lmstudio";
+      } else if (opts.llamacppModel) {
+        baseUrl = opts.llamacppUrl || "http://localhost:8080/v1";
+        model = opts.llamacppModel;
+        apiKey = apiKey || "llamacpp";
+      }
+
+      const env = { ...baseEnv };
+      if (baseUrl) env.OPENAI_BASE_URL = baseUrl;
+      if (model) {
+        env.OPENAI_MODEL = model;
+        env.OPENAI_FAST_MODEL = opts.openaiFastModel || model;
+        env.OPENAI_TEXT_MODEL = opts.openaiTextModel || model;
+      }
+      if (opts.openaiFastModel) env.OPENAI_FAST_MODEL = opts.openaiFastModel;
+      if (opts.openaiTextModel) env.OPENAI_TEXT_MODEL = opts.openaiTextModel;
+      if (apiKey) env.OPENAI_API_KEY = apiKey;
+      else if (baseUrl && isLoopbackUrl(baseUrl) && !env.OPENAI_API_KEY) env.OPENAI_API_KEY = "local-supermemory";
+      return env;
+    }
+
     async function startServer(opts) {
       let installed = { bin: await resolveServerBin() };
       if (!installed.bin) {
@@ -245,7 +346,7 @@ runtime assets are installed by ${INSTALL_URL}.
         installed = await runInstallScript(opts, { noStart: true });
       }
       const envFile = await readEnvFile(ENV_FILE);
-      const env = { ...envFile, ...process.env };
+      const env = localModelEnv(opts, { ...envFile, ...process.env });
       if (opts.port) env.PORT = String(opts.port);
       const child = spawn(installed.bin, opts.serverArgs || [], { stdio: "inherit", env });
       return await new Promise((resolve) => {
