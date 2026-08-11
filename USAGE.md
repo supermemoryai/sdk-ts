@@ -7,7 +7,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.ingest.postV3Documents({
+  const result = await supermemory.ingest.addDocument({
     content: "<value>",
   });
 

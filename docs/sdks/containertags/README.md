@@ -2,18 +2,16 @@
 
 ## Overview
 
-List and manage container tags (spaces) — settings, merge, and delete
-
 ### Available Operations
 
-* [getV3ContainerTagsList](#getv3containertagslist) - List all container tags
-* [getV3ContainerTagsByContainerTag](#getv3containertagsbycontainertag) - Get container tag settings
-* [patchV3ContainerTagsByContainerTag](#patchv3containertagsbycontainertag) - Update container tag settings
-* [deleteV3ContainerTagsByContainerTag](#deletev3containertagsbycontainertag) - Delete container tag
-* [postV3ContainerTagsMerge](#postv3containertagsmerge) - Merge container tags
-* [getV3ContainerTagsMergeByMergeId](#getv3containertagsmergebymergeid) - Get container tag merge status
+* [list](#list) - List all container tags
+* [getByContainerTag](#getbycontainertag) - Get container tag settings
+* [update](#update) - Update container tag settings
+* [delete](#delete) - Delete container tag
+* [merge](#merge) - Merge container tags
+* [getMergeStatus](#getmergestatus) - Get container tag merge status
 
-## getV3ContainerTagsList
+## list
 
 List all container tags with isNova flag
 
@@ -28,7 +26,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.containerTags.getV3ContainerTagsList();
+  const result = await supermemory.containerTags.list();
 
   console.log(result);
 }
@@ -42,7 +40,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { containerTagsGetV3ContainerTagsList } from "supermemory/funcs/container-tags-get-v3-container-tags-list.js";
+import { containerTagsList } from "supermemory/funcs/container-tags-list.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -51,12 +49,12 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await containerTagsGetV3ContainerTagsList(supermemory);
+  const res = await containerTagsList(supermemory);
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("containerTagsGetV3ContainerTagsList failed:", res.error);
+    console.log("containerTagsList failed:", res.error);
   }
 }
 
@@ -83,7 +81,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getV3ContainerTagsByContainerTag
+## getByContainerTag
 
 Get settings for a container tag
 
@@ -98,7 +96,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.containerTags.getV3ContainerTagsByContainerTag({
+  const result = await supermemory.containerTags.getByContainerTag({
     containerTag: "<value>",
   });
 
@@ -114,7 +112,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { containerTagsGetV3ContainerTagsByContainerTag } from "supermemory/funcs/container-tags-get-v3-container-tags-by-container-tag.js";
+import { containerTagsGetByContainerTag } from "supermemory/funcs/container-tags-get-by-container-tag.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -123,14 +121,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await containerTagsGetV3ContainerTagsByContainerTag(supermemory, {
+  const res = await containerTagsGetByContainerTag(supermemory, {
     containerTag: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("containerTagsGetV3ContainerTagsByContainerTag failed:", res.error);
+    console.log("containerTagsGetByContainerTag failed:", res.error);
   }
 }
 
@@ -158,7 +156,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## patchV3ContainerTagsByContainerTag
+## update
 
 Update settings for a container tag
 
@@ -173,7 +171,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.containerTags.patchV3ContainerTagsByContainerTag({
+  const result = await supermemory.containerTags.update({
     containerTag: "<value>",
     body: {
       name: "Research Notes",
@@ -197,7 +195,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { containerTagsPatchV3ContainerTagsByContainerTag } from "supermemory/funcs/container-tags-patch-v3-container-tags-by-container-tag.js";
+import { containerTagsUpdate } from "supermemory/funcs/container-tags-update.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -206,7 +204,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await containerTagsPatchV3ContainerTagsByContainerTag(supermemory, {
+  const res = await containerTagsUpdate(supermemory, {
     containerTag: "<value>",
     body: {
       name: "Research Notes",
@@ -221,7 +219,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("containerTagsPatchV3ContainerTagsByContainerTag failed:", res.error);
+    console.log("containerTagsUpdate failed:", res.error);
   }
 }
 
@@ -248,7 +246,7 @@ run();
 | errors.ErrorResponse           | 400, 401, 404                  | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## deleteV3ContainerTagsByContainerTag
+## delete
 
 Delete a container tag and all its documents and memories. Only organization owners and admins can perform this action.
 
@@ -263,7 +261,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.containerTags.deleteV3ContainerTagsByContainerTag({
+  const result = await supermemory.containerTags.delete({
     containerTag: "<value>",
   });
 
@@ -279,7 +277,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { containerTagsDeleteV3ContainerTagsByContainerTag } from "supermemory/funcs/container-tags-delete-v3-container-tags-by-container-tag.js";
+import { containerTagsDelete } from "supermemory/funcs/container-tags-delete.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -288,14 +286,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await containerTagsDeleteV3ContainerTagsByContainerTag(supermemory, {
+  const res = await containerTagsDelete(supermemory, {
     containerTag: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("containerTagsDeleteV3ContainerTagsByContainerTag failed:", res.error);
+    console.log("containerTagsDelete failed:", res.error);
   }
 }
 
@@ -323,7 +321,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3ContainerTagsMerge
+## merge
 
 Merge multiple container tags into a target tag. All documents from the source tags will be updated to reference the target tag, and the source tags will be deleted after successful merge.
 
@@ -338,7 +336,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.containerTags.postV3ContainerTagsMerge({
+  const result = await supermemory.containerTags.merge({
     containerTags: [
       "<value 1>",
     ],
@@ -357,7 +355,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { containerTagsPostV3ContainerTagsMerge } from "supermemory/funcs/container-tags-post-v3-container-tags-merge.js";
+import { containerTagsMerge } from "supermemory/funcs/container-tags-merge.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -366,7 +364,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await containerTagsPostV3ContainerTagsMerge(supermemory, {
+  const res = await containerTagsMerge(supermemory, {
     containerTags: [
       "<value 1>",
     ],
@@ -376,7 +374,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("containerTagsPostV3ContainerTagsMerge failed:", res.error);
+    console.log("containerTagsMerge failed:", res.error);
   }
 }
 
@@ -404,7 +402,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getV3ContainerTagsMergeByMergeId
+## getMergeStatus
 
 Get queued container tag merge status
 
@@ -419,7 +417,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.containerTags.getV3ContainerTagsMergeByMergeId({
+  const result = await supermemory.containerTags.getMergeStatus({
     mergeId: "<id>",
   });
 
@@ -435,7 +433,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { containerTagsGetV3ContainerTagsMergeByMergeId } from "supermemory/funcs/container-tags-get-v3-container-tags-merge-by-merge-id.js";
+import { containerTagsGetMergeStatus } from "supermemory/funcs/container-tags-get-merge-status.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -444,14 +442,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await containerTagsGetV3ContainerTagsMergeByMergeId(supermemory, {
+  const res = await containerTagsGetMergeStatus(supermemory, {
     mergeId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("containerTagsGetV3ContainerTagsMergeByMergeId failed:", res.error);
+    console.log("containerTagsGetMergeStatus failed:", res.error);
   }
 }
 

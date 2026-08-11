@@ -6,14 +6,14 @@ List, get, and search documents
 
 ### Available Operations
 
-* [getV3DocumentsById](#getv3documentsbyid) - Get document
-* [postV3DocumentsList](#postv3documentslist) - List documents
-* [getV3DocumentsProcessing](#getv3documentsprocessing) - Get processing documents
-* [getV3DocumentsByIdChunks](#getv3documentsbyidchunks) - Get document chunks
-* [getV3DocumentsByIdFileUrl](#getv3documentsbyidfileurl) - Get presigned file URL
-* [postV3Search](#postv3search) - Search documents
+* [getById](#getbyid) - Get document
+* [list](#list) - List documents
+* [getProcessing](#getprocessing) - Get processing documents
+* [getChunksById](#getchunksbyid) - Get document chunks
+* [getFileUrl](#getfileurl) - Get presigned file URL
+* [search](#search) - Search documents
 
-## getV3DocumentsById
+## getById
 
 Get a document by ID
 
@@ -28,7 +28,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.documents.getV3DocumentsById({
+  const result = await supermemory.documents.getById({
     id: "<id>",
   });
 
@@ -44,7 +44,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { documentsGetV3DocumentsById } from "supermemory/funcs/documents-get-v3-documents-by-id.js";
+import { documentsGetById } from "supermemory/funcs/documents-get-by-id.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -53,14 +53,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await documentsGetV3DocumentsById(supermemory, {
+  const res = await documentsGetById(supermemory, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("documentsGetV3DocumentsById failed:", res.error);
+    console.log("documentsGetById failed:", res.error);
   }
 }
 
@@ -88,7 +88,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3DocumentsList
+## list
 
 Retrieves a paginated list of documents with their metadata and workflow status
 
@@ -103,7 +103,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.documents.postV3DocumentsList({
+  const result = await supermemory.documents.list({
     filters: {
       and: [
         {
@@ -138,7 +138,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { documentsPostV3DocumentsList } from "supermemory/funcs/documents-post-v3-documents-list.js";
+import { documentsList } from "supermemory/funcs/documents-list.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -147,7 +147,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await documentsPostV3DocumentsList(supermemory, {
+  const res = await documentsList(supermemory, {
     filters: {
       and: [
         {
@@ -173,7 +173,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("documentsPostV3DocumentsList failed:", res.error);
+    console.log("documentsList failed:", res.error);
   }
 }
 
@@ -201,7 +201,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getV3DocumentsProcessing
+## getProcessing
 
 Get documents that are currently being processed
 
@@ -216,7 +216,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.documents.getV3DocumentsProcessing();
+  const result = await supermemory.documents.getProcessing();
 
   console.log(result);
 }
@@ -230,7 +230,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { documentsGetV3DocumentsProcessing } from "supermemory/funcs/documents-get-v3-documents-processing.js";
+import { documentsGetProcessing } from "supermemory/funcs/documents-get-processing.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -239,12 +239,12 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await documentsGetV3DocumentsProcessing(supermemory);
+  const res = await documentsGetProcessing(supermemory);
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("documentsGetV3DocumentsProcessing failed:", res.error);
+    console.log("documentsGetProcessing failed:", res.error);
   }
 }
 
@@ -271,7 +271,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getV3DocumentsByIdChunks
+## getChunksById
 
 Get all chunks for a document, ordered by position
 
@@ -286,7 +286,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.documents.getV3DocumentsByIdChunks({
+  const result = await supermemory.documents.getChunksById({
     id: "<id>",
   });
 
@@ -302,7 +302,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { documentsGetV3DocumentsByIdChunks } from "supermemory/funcs/documents-get-v3-documents-by-id-chunks.js";
+import { documentsGetChunksById } from "supermemory/funcs/documents-get-chunks-by-id.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -311,14 +311,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await documentsGetV3DocumentsByIdChunks(supermemory, {
+  const res = await documentsGetChunksById(supermemory, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("documentsGetV3DocumentsByIdChunks failed:", res.error);
+    console.log("documentsGetChunksById failed:", res.error);
   }
 }
 
@@ -346,7 +346,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getV3DocumentsByIdFileUrl
+## getFileUrl
 
 Get a fresh presigned URL for a document's file. Returns a time-limited URL (24h) that can be used to download the file.
 
@@ -361,7 +361,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.documents.getV3DocumentsByIdFileUrl({
+  const result = await supermemory.documents.getFileUrl({
     id: "<id>",
   });
 
@@ -377,7 +377,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { documentsGetV3DocumentsByIdFileUrl } from "supermemory/funcs/documents-get-v3-documents-by-id-file-url.js";
+import { documentsGetFileUrl } from "supermemory/funcs/documents-get-file-url.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -386,14 +386,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await documentsGetV3DocumentsByIdFileUrl(supermemory, {
+  const res = await documentsGetFileUrl(supermemory, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("documentsGetV3DocumentsByIdFileUrl failed:", res.error);
+    console.log("documentsGetFileUrl failed:", res.error);
   }
 }
 
@@ -420,7 +420,7 @@ run();
 | errors.ErrorResponse           | 401, 404                       | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3Search
+## search
 
 Search memories with advanced filtering
 
@@ -435,7 +435,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.documents.postV3Search({
+  const result = await supermemory.documents.search({
     chunkThreshold: 0.5,
     containerTag: "user_alex",
     q: "what are the API rate limits",
@@ -453,7 +453,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { documentsPostV3Search } from "supermemory/funcs/documents-post-v3-search.js";
+import { documentsSearch } from "supermemory/funcs/documents-search.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -462,7 +462,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await documentsPostV3Search(supermemory, {
+  const res = await documentsSearch(supermemory, {
     chunkThreshold: 0.5,
     containerTag: "user_alex",
     q: "what are the API rate limits",
@@ -471,7 +471,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("documentsPostV3Search failed:", res.error);
+    console.log("documentsSearch failed:", res.error);
   }
 }
 

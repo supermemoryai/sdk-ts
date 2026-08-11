@@ -2,17 +2,15 @@
 
 ## Overview
 
-List, get, update, and delete content and memories
-
 ### Available Operations
 
-* [postV4Memories](#postv4memories) - Create memories directly
-* [deleteV4Memories](#deletev4memories) - Forget a memory
-* [patchV4Memories](#patchv4memories) - Update a memory (creates new version)
-* [postV4MemoriesForgetMatching](#postv4memoriesforgetmatching) - Forget memories matching a prompt/query
-* [postV4MemoriesList](#postv4memorieslist) - List memory entries with history
+* [createMemories](#creatememories) - Create memories directly
+* [forgetMemory](#forgetmemory) - Forget a memory
+* [updateMemory](#updatememory) - Update a memory (creates new version)
+* [forgetMatchingMemories](#forgetmatchingmemories) - Forget memories matching a prompt/query
+* [listMemories](#listmemories) - List memory entries with history
 
-## postV4Memories
+## createMemories
 
 Create memories directly, bypassing the document ingestion workflow. Generates embeddings and makes them immediately searchable.
 
@@ -27,7 +25,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.contentManagement.postV4Memories({
+  const result = await supermemory.contentManagement.createMemories({
     memories: [
       {
         content: "John prefers dark mode",
@@ -51,7 +49,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { contentManagementPostV4Memories } from "supermemory/funcs/content-management-post-v4-memories.js";
+import { contentManagementCreateMemories } from "supermemory/funcs/content-management-create-memories.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -60,7 +58,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await contentManagementPostV4Memories(supermemory, {
+  const res = await contentManagementCreateMemories(supermemory, {
     memories: [
       {
         content: "John prefers dark mode",
@@ -75,7 +73,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("contentManagementPostV4Memories failed:", res.error);
+    console.log("contentManagementCreateMemories failed:", res.error);
   }
 }
 
@@ -103,7 +101,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## deleteV4Memories
+## forgetMemory
 
 Forget (soft delete) a memory entry. The memory is marked as forgotten but not permanently deleted.
 
@@ -118,7 +116,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.contentManagement.deleteV4Memories({
+  const result = await supermemory.contentManagement.forgetMemory({
     id: "mem_abc123",
     content: "John prefers dark mode",
     containerTag: "user_123",
@@ -137,7 +135,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { contentManagementDeleteV4Memories } from "supermemory/funcs/content-management-delete-v4-memories.js";
+import { contentManagementForgetMemory } from "supermemory/funcs/content-management-forget-memory.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -146,7 +144,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await contentManagementDeleteV4Memories(supermemory, {
+  const res = await contentManagementForgetMemory(supermemory, {
     id: "mem_abc123",
     content: "John prefers dark mode",
     containerTag: "user_123",
@@ -156,7 +154,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("contentManagementDeleteV4Memories failed:", res.error);
+    console.log("contentManagementForgetMemory failed:", res.error);
   }
 }
 
@@ -184,7 +182,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## patchV4Memories
+## updateMemory
 
 Update a memory by creating a new version. The original memory is preserved with isLatest=false.
 
@@ -199,7 +197,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.contentManagement.patchV4Memories({
+  const result = await supermemory.contentManagement.updateMemory({
     id: "mem_abc123",
     content: "John prefers dark mode",
     containerTag: "user_123",
@@ -220,7 +218,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { contentManagementPatchV4Memories } from "supermemory/funcs/content-management-patch-v4-memories.js";
+import { contentManagementUpdateMemory } from "supermemory/funcs/content-management-update-memory.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -229,7 +227,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await contentManagementPatchV4Memories(supermemory, {
+  const res = await contentManagementUpdateMemory(supermemory, {
     id: "mem_abc123",
     content: "John prefers dark mode",
     containerTag: "user_123",
@@ -241,7 +239,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("contentManagementPatchV4Memories failed:", res.error);
+    console.log("contentManagementUpdateMemory failed:", res.error);
   }
 }
 
@@ -269,7 +267,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV4MemoriesForgetMatching
+## forgetMatchingMemories
 
 Agentic mass-forget. Given a prompt or query, a tool-calling agent searches the container's memories and soft-deletes everything matching the target. Use dryRun to preview first.
 
@@ -284,7 +282,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.contentManagement.postV4MemoriesForgetMatching({
+  const result = await supermemory.contentManagement.forgetMatchingMemories({
     query: "forget everything about Project Titan",
     ids: [
       "abc123",
@@ -306,7 +304,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { contentManagementPostV4MemoriesForgetMatching } from "supermemory/funcs/content-management-post-v4-memories-forget-matching.js";
+import { contentManagementForgetMatchingMemories } from "supermemory/funcs/content-management-forget-matching-memories.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -315,7 +313,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await contentManagementPostV4MemoriesForgetMatching(supermemory, {
+  const res = await contentManagementForgetMatchingMemories(supermemory, {
     query: "forget everything about Project Titan",
     ids: [
       "abc123",
@@ -328,7 +326,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("contentManagementPostV4MemoriesForgetMatching failed:", res.error);
+    console.log("contentManagementForgetMatchingMemories failed:", res.error);
   }
 }
 
@@ -356,7 +354,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV4MemoriesList
+## listMemories
 
 List all latest memory entries from specified container tags with their update history and source documents
 
@@ -371,7 +369,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.contentManagement.postV4MemoriesList({
+  const result = await supermemory.contentManagement.listMemories({
     containerTags: [
       "<value 1>",
       "<value 2>",
@@ -393,7 +391,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { contentManagementPostV4MemoriesList } from "supermemory/funcs/content-management-post-v4-memories-list.js";
+import { contentManagementListMemories } from "supermemory/funcs/content-management-list-memories.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -402,7 +400,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await contentManagementPostV4MemoriesList(supermemory, {
+  const res = await contentManagementListMemories(supermemory, {
     containerTags: [
       "<value 1>",
       "<value 2>",
@@ -415,7 +413,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("contentManagementPostV4MemoriesList failed:", res.error);
+    console.log("contentManagementListMemories failed:", res.error);
   }
 }
 

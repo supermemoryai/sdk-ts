@@ -6,10 +6,10 @@ Entity profiles for users, participants, or any entity — includes profile sear
 
 ### Available Operations
 
-* [postV4Profile](#postv4profile) - Get user profile
-* [postV4ProfileBuckets](#postv4profilebuckets) - Get profile buckets
+* [get](#get) - Get user profile
+* [getBuckets](#getbuckets) - Get profile buckets
 
-## postV4Profile
+## get
 
 Get user profile with optional search results
 
@@ -24,7 +24,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.profiles.postV4Profile({
+  const result = await supermemory.profiles.get({
     containerTag: "<value>",
   });
 
@@ -40,7 +40,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { profilesPostV4Profile } from "supermemory/funcs/profiles-post-v4-profile.js";
+import { profilesGet } from "supermemory/funcs/profiles-get.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -49,14 +49,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await profilesPostV4Profile(supermemory, {
+  const res = await profilesGet(supermemory, {
     containerTag: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("profilesPostV4Profile failed:", res.error);
+    console.log("profilesGet failed:", res.error);
   }
 }
 
@@ -84,7 +84,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV4ProfileBuckets
+## getBuckets
 
 Returns the effective profile bucket definitions for a given container tag — org-level buckets merged with any container-tag-level additions.
 
@@ -99,7 +99,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.profiles.postV4ProfileBuckets({
+  const result = await supermemory.profiles.getBuckets({
     containerTag: "<value>",
   });
 
@@ -115,7 +115,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { profilesPostV4ProfileBuckets } from "supermemory/funcs/profiles-post-v4-profile-buckets.js";
+import { profilesGetBuckets } from "supermemory/funcs/profiles-get-buckets.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -124,14 +124,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await profilesPostV4ProfileBuckets(supermemory, {
+  const res = await profilesGetBuckets(supermemory, {
     containerTag: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("profilesPostV4ProfileBuckets failed:", res.error);
+    console.log("profilesGetBuckets failed:", res.error);
   }
 }
 

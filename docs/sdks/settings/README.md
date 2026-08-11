@@ -6,12 +6,12 @@ Organization settings
 
 ### Available Operations
 
-* [getV3Settings](#getv3settings) - Get settings
-* [patchV3Settings](#patchv3settings) - Update settings
-* [postV3SettingsReset](#postv3settingsreset) - Reset organization data
-* [postV3SettingsSuggestBuckets](#postv3settingssuggestbuckets) - Suggest profile buckets
+* [get](#get) - Get settings
+* [update](#update) - Update settings
+* [resetOrganizationData](#resetorganizationdata) - Reset organization data
+* [suggestBuckets](#suggestbuckets) - Suggest profile buckets
 
-## getV3Settings
+## get
 
 Get settings for an organization
 
@@ -26,7 +26,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.settings.getV3Settings();
+  const result = await supermemory.settings.get();
 
   console.log(result);
 }
@@ -40,7 +40,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { settingsGetV3Settings } from "supermemory/funcs/settings-get-v3-settings.js";
+import { settingsGet } from "supermemory/funcs/settings-get.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -49,12 +49,12 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await settingsGetV3Settings(supermemory);
+  const res = await settingsGet(supermemory);
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("settingsGetV3Settings failed:", res.error);
+    console.log("settingsGet failed:", res.error);
   }
 }
 
@@ -81,7 +81,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## patchV3Settings
+## update
 
 Update settings for an organization
 
@@ -96,7 +96,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.settings.patchV3Settings({});
+  const result = await supermemory.settings.update({});
 
   console.log(result);
 }
@@ -110,7 +110,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { settingsPatchV3Settings } from "supermemory/funcs/settings-patch-v3-settings.js";
+import { settingsUpdate } from "supermemory/funcs/settings-update.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -119,12 +119,12 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await settingsPatchV3Settings(supermemory, {});
+  const res = await settingsUpdate(supermemory, {});
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("settingsPatchV3Settings failed:", res.error);
+    console.log("settingsUpdate failed:", res.error);
   }
 }
 
@@ -152,7 +152,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3SettingsReset
+## resetOrganizationData
 
 Reset organization content: removes documents, memories, spaces (except default project), connections, and org settings. Preserves the org, members, and billing.
 
@@ -167,7 +167,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.settings.postV3SettingsReset({
+  const result = await supermemory.settings.resetOrganizationData({
     confirmation: "<value>",
   });
 
@@ -183,7 +183,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { settingsPostV3SettingsReset } from "supermemory/funcs/settings-post-v3-settings-reset.js";
+import { settingsResetOrganizationData } from "supermemory/funcs/settings-reset-organization-data.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -192,14 +192,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await settingsPostV3SettingsReset(supermemory, {
+  const res = await settingsResetOrganizationData(supermemory, {
     confirmation: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("settingsPostV3SettingsReset failed:", res.error);
+    console.log("settingsResetOrganizationData failed:", res.error);
   }
 }
 
@@ -227,7 +227,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3SettingsSuggestBuckets
+## suggestBuckets
 
 Suggest profile bucket definitions based on the organization context prompt. Returns 3–6 bucket suggestions tailored to the use-case described in the prompt.
 
@@ -242,7 +242,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.settings.postV3SettingsSuggestBuckets();
+  const result = await supermemory.settings.suggestBuckets();
 
   console.log(result);
 }
@@ -256,7 +256,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { settingsPostV3SettingsSuggestBuckets } from "supermemory/funcs/settings-post-v3-settings-suggest-buckets.js";
+import { settingsSuggestBuckets } from "supermemory/funcs/settings-suggest-buckets.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -265,12 +265,12 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await settingsPostV3SettingsSuggestBuckets(supermemory);
+  const res = await settingsSuggestBuckets(supermemory);
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("settingsPostV3SettingsSuggestBuckets failed:", res.error);
+    console.log("settingsSuggestBuckets failed:", res.error);
   }
 }
 

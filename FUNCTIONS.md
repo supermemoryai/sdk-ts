@@ -20,7 +20,7 @@ specific category of applications.
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { ingestPostV3Documents } from "supermemory/funcs/ingest-post-v3-documents.js";
+import { ingestAddDocument } from "supermemory/funcs/ingest-add-document.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -29,14 +29,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await ingestPostV3Documents(supermemory, {
+  const res = await ingestAddDocument(supermemory, {
     content: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("ingestPostV3Documents failed:", res.error);
+    console.log("ingestAddDocument failed:", res.error);
   }
 }
 

@@ -2,13 +2,11 @@
 
 ## Overview
 
-Semantic recall across your content — supports memories, hybrid, and documents modes
-
 ### Available Operations
 
-* [postV4Search](#postv4search) - Search memory entries
+* [search](#search) - Search memory entries
 
-## postV4Search
+## search
 
 Search memory entries - Low latency for conversational
 
@@ -23,7 +21,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.recallSearch.postV4Search({
+  const result = await supermemory.recallSearch.search({
     containerTag: "user_alex",
     containerTags: [
       "user_alex",
@@ -45,7 +43,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { recallSearchPostV4Search } from "supermemory/funcs/recall-search-post-v4-search.js";
+import { recallSearchSearch } from "supermemory/funcs/recall-search-search.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -54,7 +52,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await recallSearchPostV4Search(supermemory, {
+  const res = await recallSearchSearch(supermemory, {
     containerTag: "user_alex",
     containerTags: [
       "user_alex",
@@ -67,7 +65,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("recallSearchPostV4Search failed:", res.error);
+    console.log("recallSearchSearch failed:", res.error);
   }
 }
 

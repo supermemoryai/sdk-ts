@@ -6,15 +6,15 @@ Ingest documents, files, URLs, conversations, and other content
 
 ### Available Operations
 
-* [postV3Documents](#postv3documents) - Add document
-* [postV3DocumentsBatch](#postv3documentsbatch) - Batch add documents
-* [patchV3DocumentsById](#patchv3documentsbyid) - Update document
-* [deleteV3DocumentsById](#deletev3documentsbyid) - Delete document by ID or customId
-* [postV3DocumentsFile](#postv3documentsfile) - Upload a file
-* [deleteV3DocumentsBulk](#deletev3documentsbulk) - Bulk delete documents
-* [postV4Conversations](#postv4conversations) - Ingest or update conversation
+* [addDocument](#adddocument) - Add document
+* [batchAdd](#batchadd) - Batch add documents
+* [updateDocument](#updatedocument) - Update document
+* [deleteDocumentById](#deletedocumentbyid) - Delete document by ID or customId
+* [uploadFile](#uploadfile) - Upload a file
+* [bulkDelete](#bulkdelete) - Bulk delete documents
+* [updateConversation](#updateconversation) - Ingest or update conversation
 
-## postV3Documents
+## addDocument
 
 Add a document with any content type (text, url, file, etc.) and metadata
 
@@ -29,7 +29,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.ingest.postV3Documents({
+  const result = await supermemory.ingest.addDocument({
     content: "<value>",
   });
 
@@ -45,7 +45,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { ingestPostV3Documents } from "supermemory/funcs/ingest-post-v3-documents.js";
+import { ingestAddDocument } from "supermemory/funcs/ingest-add-document.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -54,14 +54,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await ingestPostV3Documents(supermemory, {
+  const res = await ingestAddDocument(supermemory, {
     content: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("ingestPostV3Documents failed:", res.error);
+    console.log("ingestAddDocument failed:", res.error);
   }
 }
 
@@ -89,7 +89,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3DocumentsBatch
+## batchAdd
 
 Add multiple documents in a single request. Each document can have any content type (text, url, file, etc.) and metadata
 
@@ -104,7 +104,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.ingest.postV3DocumentsBatch({
+  const result = await supermemory.ingest.batchAdd({
     containerTag: "user_alex",
     metadata: {
       "source": "upload",
@@ -135,7 +135,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { ingestPostV3DocumentsBatch } from "supermemory/funcs/ingest-post-v3-documents-batch.js";
+import { ingestBatchAdd } from "supermemory/funcs/ingest-batch-add.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -144,7 +144,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await ingestPostV3DocumentsBatch(supermemory, {
+  const res = await ingestBatchAdd(supermemory, {
     containerTag: "user_alex",
     metadata: {
       "source": "upload",
@@ -166,7 +166,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("ingestPostV3DocumentsBatch failed:", res.error);
+    console.log("ingestBatchAdd failed:", res.error);
   }
 }
 
@@ -194,7 +194,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## patchV3DocumentsById
+## updateDocument
 
 Update a document with any content type (text, url, file, etc.) and metadata
 
@@ -209,7 +209,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.ingest.patchV3DocumentsById({
+  const result = await supermemory.ingest.updateDocument({
     id: "<id>",
     body: {
       containerTag: "user_alex",
@@ -240,7 +240,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { ingestPatchV3DocumentsById } from "supermemory/funcs/ingest-patch-v3-documents-by-id.js";
+import { ingestUpdateDocument } from "supermemory/funcs/ingest-update-document.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -249,7 +249,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await ingestPatchV3DocumentsById(supermemory, {
+  const res = await ingestUpdateDocument(supermemory, {
     id: "<id>",
     body: {
       containerTag: "user_alex",
@@ -271,7 +271,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("ingestPatchV3DocumentsById failed:", res.error);
+    console.log("ingestUpdateDocument failed:", res.error);
   }
 }
 
@@ -299,7 +299,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## deleteV3DocumentsById
+## deleteDocumentById
 
 Delete a document by ID or customId
 
@@ -314,7 +314,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  await supermemory.ingest.deleteV3DocumentsById({
+  await supermemory.ingest.deleteDocumentById({
     id: "<id>",
   });
 
@@ -330,7 +330,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { ingestDeleteV3DocumentsById } from "supermemory/funcs/ingest-delete-v3-documents-by-id.js";
+import { ingestDeleteDocumentById } from "supermemory/funcs/ingest-delete-document-by-id.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -339,14 +339,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await ingestDeleteV3DocumentsById(supermemory, {
+  const res = await ingestDeleteDocumentById(supermemory, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     
   } else {
-    console.log("ingestDeleteV3DocumentsById failed:", res.error);
+    console.log("ingestDeleteDocumentById failed:", res.error);
   }
 }
 
@@ -374,7 +374,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3DocumentsFile
+## uploadFile
 
 Upload a file to be processed
 
@@ -390,7 +390,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.ingest.postV3DocumentsFile({
+  const result = await supermemory.ingest.uploadFile({
     file: await openAsBlob("example.file"),
     containerTag: "user",
   });
@@ -408,7 +408,7 @@ The standalone function version of this method:
 ```typescript
 import { openAsBlob } from "node:fs";
 import { SupermemoryCore } from "supermemory/core.js";
-import { ingestPostV3DocumentsFile } from "supermemory/funcs/ingest-post-v3-documents-file.js";
+import { ingestUploadFile } from "supermemory/funcs/ingest-upload-file.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -417,7 +417,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await ingestPostV3DocumentsFile(supermemory, {
+  const res = await ingestUploadFile(supermemory, {
     file: await openAsBlob("example.file"),
     containerTag: "user",
   });
@@ -425,7 +425,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("ingestPostV3DocumentsFile failed:", res.error);
+    console.log("ingestUploadFile failed:", res.error);
   }
 }
 
@@ -453,7 +453,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## deleteV3DocumentsBulk
+## bulkDelete
 
 Bulk delete documents by IDs or container tags
 
@@ -468,7 +468,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.ingest.deleteV3DocumentsBulk({
+  const result = await supermemory.ingest.bulkDelete({
     ids: [
       "acxV5LHMEsG2hMSNb4umbn",
       "bxcV5LHMEsG2hMSNb4umbn",
@@ -487,7 +487,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { ingestDeleteV3DocumentsBulk } from "supermemory/funcs/ingest-delete-v3-documents-bulk.js";
+import { ingestBulkDelete } from "supermemory/funcs/ingest-bulk-delete.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -496,7 +496,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await ingestDeleteV3DocumentsBulk(supermemory, {
+  const res = await ingestBulkDelete(supermemory, {
     ids: [
       "acxV5LHMEsG2hMSNb4umbn",
       "bxcV5LHMEsG2hMSNb4umbn",
@@ -506,7 +506,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("ingestDeleteV3DocumentsBulk failed:", res.error);
+    console.log("ingestBulkDelete failed:", res.error);
   }
 }
 
@@ -534,7 +534,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV4Conversations
+## updateConversation
 
 Ingest or update a conversation
 
@@ -549,7 +549,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  await supermemory.ingest.postV4Conversations({
+  await supermemory.ingest.updateConversation({
     conversationId: "<id>",
     messages: [],
   });
@@ -566,7 +566,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { ingestPostV4Conversations } from "supermemory/funcs/ingest-post-v4-conversations.js";
+import { ingestUpdateConversation } from "supermemory/funcs/ingest-update-conversation.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -575,7 +575,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await ingestPostV4Conversations(supermemory, {
+  const res = await ingestUpdateConversation(supermemory, {
     conversationId: "<id>",
     messages: [],
   });
@@ -583,7 +583,7 @@ async function run() {
     const { value: result } = res;
     
   } else {
-    console.log("ingestPostV4Conversations failed:", res.error);
+    console.log("ingestUpdateConversation failed:", res.error);
   }
 }
 

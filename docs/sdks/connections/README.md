@@ -6,18 +6,18 @@ External service integrations
 
 ### Available Operations
 
-* [postV3ConnectionsList](#postv3connectionslist) - List connections
-* [postV3ConnectionsByProvider](#postv3connectionsbyprovider) - Create connection
-* [deleteV3ConnectionsByProvider](#deletev3connectionsbyprovider) - Delete connection
-* [getV3ConnectionsByConnectionIdResources](#getv3connectionsbyconnectionidresources) - Fetch resources
-* [postV3ConnectionsByConnectionIdConfigure](#postv3connectionsbyconnectionidconfigure) - Configure connection
-* [getV3ConnectionsByConnectionId](#getv3connectionsbyconnectionid) - Get connection (by id)
-* [deleteV3ConnectionsByConnectionId](#deletev3connectionsbyconnectionid) - Delete connection by ID
-* [postV3ConnectionsByProviderConnection](#postv3connectionsbyproviderconnection) - Get connection (by provider)
-* [postV3ConnectionsByProviderDocuments](#postv3connectionsbyproviderdocuments) - List documents
-* [postV3ConnectionsByProviderImport](#postv3connectionsbyproviderimport) - Sync connection
+* [list](#list) - List connections
+* [createWithProvider](#createwithprovider) - Create connection
+* [deleteByProvider](#deletebyprovider) - Delete connection
+* [getResources](#getresources) - Fetch resources
+* [configure](#configure) - Configure connection
+* [getById](#getbyid) - Get connection (by id)
+* [deleteById](#deletebyid) - Delete connection by ID
+* [getConnection](#getconnection) - Get connection (by provider)
+* [listDocuments](#listdocuments) - List documents
+* [syncByProvider](#syncbyprovider) - Sync connection
 
-## postV3ConnectionsList
+## list
 
 List all connections
 
@@ -32,7 +32,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.connections.postV3ConnectionsList({
+  const result = await supermemory.connections.list({
     containerTags: [
       "user_123",
       "project_123",
@@ -51,7 +51,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsPostV3ConnectionsList } from "supermemory/funcs/connections-post-v3-connections-list.js";
+import { connectionsList } from "supermemory/funcs/connections-list.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -60,7 +60,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await connectionsPostV3ConnectionsList(supermemory, {
+  const res = await connectionsList(supermemory, {
     containerTags: [
       "user_123",
       "project_123",
@@ -70,7 +70,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsPostV3ConnectionsList failed:", res.error);
+    console.log("connectionsList failed:", res.error);
   }
 }
 
@@ -98,7 +98,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3ConnectionsByProvider
+## createWithProvider
 
 Initialize connection and get authorization URL
 
@@ -113,7 +113,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.connections.postV3ConnectionsByProvider({
+  const result = await supermemory.connections.createWithProvider({
     provider: "google-drive",
     body: {},
   });
@@ -130,7 +130,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsPostV3ConnectionsByProvider } from "supermemory/funcs/connections-post-v3-connections-by-provider.js";
+import { connectionsCreateWithProvider } from "supermemory/funcs/connections-create-with-provider.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -139,7 +139,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await connectionsPostV3ConnectionsByProvider(supermemory, {
+  const res = await connectionsCreateWithProvider(supermemory, {
     provider: "google-drive",
     body: {},
   });
@@ -147,7 +147,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsPostV3ConnectionsByProvider failed:", res.error);
+    console.log("connectionsCreateWithProvider failed:", res.error);
   }
 }
 
@@ -174,7 +174,7 @@ run();
 | errors.ErrorResponse           | 401                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## deleteV3ConnectionsByProvider
+## deleteByProvider
 
 Delete connection for a specific provider and container tags
 
@@ -189,7 +189,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.connections.deleteV3ConnectionsByProvider({
+  const result = await supermemory.connections.deleteByProvider({
     provider: "notion",
     body: {
       containerTags: [
@@ -211,7 +211,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsDeleteV3ConnectionsByProvider } from "supermemory/funcs/connections-delete-v3-connections-by-provider.js";
+import { connectionsDeleteByProvider } from "supermemory/funcs/connections-delete-by-provider.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -220,7 +220,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await connectionsDeleteV3ConnectionsByProvider(supermemory, {
+  const res = await connectionsDeleteByProvider(supermemory, {
     provider: "notion",
     body: {
       containerTags: [
@@ -233,7 +233,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsDeleteV3ConnectionsByProvider failed:", res.error);
+    console.log("connectionsDeleteByProvider failed:", res.error);
   }
 }
 
@@ -261,7 +261,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getV3ConnectionsByConnectionIdResources
+## getResources
 
 Fetch resources for a connection (supported providers: GitHub for now)
 
@@ -276,7 +276,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.connections.getV3ConnectionsByConnectionIdResources({
+  const result = await supermemory.connections.getResources({
     connectionId: "<id>",
   });
 
@@ -292,7 +292,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsGetV3ConnectionsByConnectionIdResources } from "supermemory/funcs/connections-get-v3-connections-by-connection-id-resources.js";
+import { connectionsGetResources } from "supermemory/funcs/connections-get-resources.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -301,14 +301,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await connectionsGetV3ConnectionsByConnectionIdResources(supermemory, {
+  const res = await connectionsGetResources(supermemory, {
     connectionId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsGetV3ConnectionsByConnectionIdResources failed:", res.error);
+    console.log("connectionsGetResources failed:", res.error);
   }
 }
 
@@ -336,7 +336,7 @@ run();
 | errors.ErrorResponse           | 501                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3ConnectionsByConnectionIdConfigure
+## configure
 
 Configure resources for a connection (supported providers: GitHub for now)
 
@@ -351,7 +351,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.connections.postV3ConnectionsByConnectionIdConfigure({
+  const result = await supermemory.connections.configure({
     connectionId: "<id>",
     body: {
       resources: [
@@ -374,7 +374,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsPostV3ConnectionsByConnectionIdConfigure } from "supermemory/funcs/connections-post-v3-connections-by-connection-id-configure.js";
+import { connectionsConfigure } from "supermemory/funcs/connections-configure.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -383,7 +383,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await connectionsPostV3ConnectionsByConnectionIdConfigure(supermemory, {
+  const res = await connectionsConfigure(supermemory, {
     connectionId: "<id>",
     body: {
       resources: [
@@ -397,7 +397,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsPostV3ConnectionsByConnectionIdConfigure failed:", res.error);
+    console.log("connectionsConfigure failed:", res.error);
   }
 }
 
@@ -425,7 +425,7 @@ run();
 | errors.ErrorResponse           | 501                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getV3ConnectionsByConnectionId
+## getById
 
 Get connection details with id
 
@@ -440,7 +440,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.connections.getV3ConnectionsByConnectionId({
+  const result = await supermemory.connections.getById({
     connectionId: "<id>",
   });
 
@@ -456,7 +456,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsGetV3ConnectionsByConnectionId } from "supermemory/funcs/connections-get-v3-connections-by-connection-id.js";
+import { connectionsGetById } from "supermemory/funcs/connections-get-by-id.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -465,14 +465,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await connectionsGetV3ConnectionsByConnectionId(supermemory, {
+  const res = await connectionsGetById(supermemory, {
     connectionId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsGetV3ConnectionsByConnectionId failed:", res.error);
+    console.log("connectionsGetById failed:", res.error);
   }
 }
 
@@ -500,7 +500,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## deleteV3ConnectionsByConnectionId
+## deleteById
 
 Delete a specific connection by ID
 
@@ -515,7 +515,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.connections.deleteV3ConnectionsByConnectionId({
+  const result = await supermemory.connections.deleteById({
     connectionId: "<id>",
   });
 
@@ -531,7 +531,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsDeleteV3ConnectionsByConnectionId } from "supermemory/funcs/connections-delete-v3-connections-by-connection-id.js";
+import { connectionsDeleteById } from "supermemory/funcs/connections-delete-by-id.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -540,14 +540,14 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await connectionsDeleteV3ConnectionsByConnectionId(supermemory, {
+  const res = await connectionsDeleteById(supermemory, {
     connectionId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsDeleteV3ConnectionsByConnectionId failed:", res.error);
+    console.log("connectionsDeleteById failed:", res.error);
   }
 }
 
@@ -575,7 +575,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3ConnectionsByProviderConnection
+## getConnection
 
 Get connection details with provider and container tags
 
@@ -590,7 +590,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.connections.postV3ConnectionsByProviderConnection({
+  const result = await supermemory.connections.getConnection({
     provider: "web-crawler",
     body: {
       containerTags: [
@@ -612,7 +612,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsPostV3ConnectionsByProviderConnection } from "supermemory/funcs/connections-post-v3-connections-by-provider-connection.js";
+import { connectionsGetConnection } from "supermemory/funcs/connections-get-connection.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -621,7 +621,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await connectionsPostV3ConnectionsByProviderConnection(supermemory, {
+  const res = await connectionsGetConnection(supermemory, {
     provider: "web-crawler",
     body: {
       containerTags: [
@@ -634,7 +634,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsPostV3ConnectionsByProviderConnection failed:", res.error);
+    console.log("connectionsGetConnection failed:", res.error);
   }
 }
 
@@ -662,7 +662,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3ConnectionsByProviderDocuments
+## listDocuments
 
 List documents indexed for a provider and container tags
 
@@ -677,7 +677,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.connections.postV3ConnectionsByProviderDocuments({
+  const result = await supermemory.connections.listDocuments({
     provider: "notion",
     body: {
       containerTags: [
@@ -699,7 +699,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsPostV3ConnectionsByProviderDocuments } from "supermemory/funcs/connections-post-v3-connections-by-provider-documents.js";
+import { connectionsListDocuments } from "supermemory/funcs/connections-list-documents.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -708,7 +708,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await connectionsPostV3ConnectionsByProviderDocuments(supermemory, {
+  const res = await connectionsListDocuments(supermemory, {
     provider: "notion",
     body: {
       containerTags: [
@@ -721,7 +721,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsPostV3ConnectionsByProviderDocuments failed:", res.error);
+    console.log("connectionsListDocuments failed:", res.error);
   }
 }
 
@@ -749,7 +749,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## postV3ConnectionsByProviderImport
+## syncByProvider
 
 Initiate a manual sync of connections
 
@@ -764,7 +764,7 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.connections.postV3ConnectionsByProviderImport({
+  const result = await supermemory.connections.syncByProvider({
     provider: "google-drive",
     body: {
       containerTags: [
@@ -786,7 +786,7 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsPostV3ConnectionsByProviderImport } from "supermemory/funcs/connections-post-v3-connections-by-provider-import.js";
+import { connectionsSyncByProvider } from "supermemory/funcs/connections-sync-by-provider.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -795,7 +795,7 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await connectionsPostV3ConnectionsByProviderImport(supermemory, {
+  const res = await connectionsSyncByProvider(supermemory, {
     provider: "google-drive",
     body: {
       containerTags: [
@@ -808,7 +808,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsPostV3ConnectionsByProviderImport failed:", res.error);
+    console.log("connectionsSyncByProvider failed:", res.error);
   }
 }
 
