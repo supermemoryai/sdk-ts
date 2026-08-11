@@ -2,6 +2,9 @@
   "name": "supermemory",
   "version": "0.0.3",
   "author": "Speakeasy",
+  "bin": {
+    "supermemory": "bin/cli.mjs"
+  },
   "type": "module",
   "main": "./esm/index.js",
   "exports": {
@@ -47,6 +50,7 @@
     "lint": "oxlint --max-warnings=0 --deny-warnings --no-error-on-unmatched-pattern src",
     "build": "tsgo",
     "prepublishOnly": "npm run build",
+    "build:cli": "bun ../../scripts/build-sdk-cli.ts",
     "check-types": "tsgo --noEmit"
   },
   "peerDependencies": {
