@@ -1,0 +1,49 @@
+name: Publish to npm
+permissions:
+  contents: read
+  id-token: write # npm provenance
+"on":
+  workflow_dispatch:
+    inputs:
+      dist_tag:
+        description: npm dist-tag to publish under (use `rc` for prereleases; `latest` only for stable releases)
+        type: string
+        required: true
+        default: rc
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The published package bundles the supermemory CLI, whose source lives
+      # in the (private) monorepo. MONO_READ_TOKEN needs read access to
+      # supermemoryai/mono.
+      - uses: actions/checkout@v4
+        with:
+          repository: supermemoryai/mono
+          token: ${{ secrets.MONO_READ_TOKEN }}
+          path: .mono
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Build SDK
+        run: npm install --ignore-scripts && npm run build
+
+      - name: Bundle CLI from monorepo
+        run: |
+          cd .mono && bun install --ignore-scripts && cd ..
+          bun build .mono/apps/cli/src/index.ts --outfile bin/cli.mjs --target node --format esm
+          grep -q '^#!' bin/cli.mjs || sed -i '1i #!/usr/bin/env node' bin/cli.mjs
+          chmod +x bin/cli.mjs
+          node bin/cli.mjs --version
+
+      - name: Publish
+        run: npm publish --provenance --tag "${{ github.event.inputs.dist_tag }}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

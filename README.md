@@ -1,397 +1,572 @@
-# Supermemory TypeScript API Library
+# supermemory
 
-[![NPM version](<https://img.shields.io/npm/v/supermemory.svg?label=npm%20(stable)>)](https://npmjs.org/package/supermemory) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/supermemory)
+Developer-friendly & type-safe Typescript SDK specifically catered to leverage *supermemory* API.
 
-This library provides convenient access to the Supermemory REST API from server-side TypeScript or JavaScript.
+[![Built by Speakeasy](https://img.shields.io/badge/Built_by-SPEAKEASY-374151?style=for-the-badge&labelColor=f3f4f6)](https://www.speakeasy.com/?utm_source=supermemory&utm_campaign=typescript)
+[![License: MIT](https://img.shields.io/badge/LICENSE_//_MIT-3b5bdb?style=for-the-badge&labelColor=eff6ff)](https://opensource.org/licenses/MIT)
 
-The REST API documentation can be found on [docs.supermemory.ai](https://docs.supermemory.ai). The full API of this library can be found in [api.md](api.md).
 
-It is generated with [Stainless](https://www.stainless.com/).
-
-## MCP Server
-
-Use the Supermemory MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
-
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=supermemory-mcp&config=eyJuYW1lIjoic3VwZXJtZW1vcnktbWNwIiwidHJhbnNwb3J0IjoiaHR0cCIsInVybCI6Imh0dHBzOi8vc3VwZXJtZW1vcnktbmV3LnN0bG1jcC5jb20iLCJoZWFkZXJzIjp7Ingtc3VwZXJtZW1vcnktYXBpLWtleSI6Ik15IEFQSSBLZXkifX0)
-[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22supermemory-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fsupermemory-new.stlmcp.com%22%2C%22headers%22%3A%7B%22x-supermemory-api-key%22%3A%22My%20API%20Key%22%7D%7D)
-
-> Note: You may need to set environment variables in your MCP client.
-
-## Installation
-
-```sh
-npm install supermemory
-```
-
-## Usage
-
-The full API of this library can be found in [api.md](api.md).
-
-<!-- prettier-ignore -->
-```js
-import Supermemory from 'supermemory';
-
-const client = new Supermemory({
-  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted
-});
-
-const response = await client.search({ q: 'memories related to python' });
-
-console.log(response.results);
-```
-
-### Request & Response types
-
-This library includes TypeScript definitions for all request params and response fields. You may import and use them like so:
-
-<!-- prettier-ignore -->
-```ts
-import Supermemory from 'supermemory';
-
-const client = new Supermemory({
-  apiKey: process.env['SUPERMEMORY_API_KEY'], // This is the default and can be omitted
-});
-
-const params: Supermemory.AddParams = { content: 'content' };
-const response: Supermemory.AddResponse = await client.add(params);
-```
-
-Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
-
-## File uploads
-
-Request parameters that correspond to file uploads can be passed in many different forms:
-
-- `File` (or an object with the same structure)
-- a `fetch` `Response` (or an object with the same structure)
-- an `fs.ReadStream`
-- the return value of our `toFile` helper
-
-```ts
-import fs from 'fs';
-import Supermemory, { toFile } from 'supermemory';
-
-const client = new Supermemory();
-
-// If you have access to Node `fs` we recommend using `fs.createReadStream()`:
-await client.documents.uploadFile({ file: fs.createReadStream('/path/to/file') });
-
-// Or if you have the web `File` API you can pass a `File` instance:
-await client.documents.uploadFile({ file: new File(['my bytes'], 'file') });
-
-// You can also pass a `fetch` `Response`:
-await client.documents.uploadFile({ file: await fetch('https://somesite/file') });
-
-// Finally, if none of the above are convenient, you can use our `toFile` helper:
-await client.documents.uploadFile({ file: await toFile(Buffer.from('my bytes'), 'file') });
-await client.documents.uploadFile({ file: await toFile(new Uint8Array([0, 1, 2]), 'file') });
-```
-
-## Handling errors
-
-When the library is unable to connect to the API,
-or if the API returns a non-success status code (i.e., 4xx or 5xx response),
-a subclass of `APIError` will be thrown:
-
-<!-- prettier-ignore -->
-```ts
-const response = await client.add({ content: 'content' }).catch(async (err) => {
-  if (err instanceof Supermemory.APIError) {
-    console.log(err.status); // 400
-    console.log(err.name); // BadRequestError
-    console.log(err.headers); // {server: 'nginx', ...}
-  } else {
-    throw err;
-  }
-});
-```
-
-Error codes are as follows:
-
-| Status Code | Error Type                 |
-| ----------- | -------------------------- |
-| 400         | `BadRequestError`          |
-| 401         | `AuthenticationError`      |
-| 403         | `PermissionDeniedError`    |
-| 404         | `NotFoundError`            |
-| 422         | `UnprocessableEntityError` |
-| 429         | `RateLimitError`           |
-| >=500       | `InternalServerError`      |
-| N/A         | `APIConnectionError`       |
-
-### Retries
-
-Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
-Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
-429 Rate Limit, and >=500 Internal errors will all be retried by default.
-
-You can use the `maxRetries` option to configure or disable this:
-
-<!-- prettier-ignore -->
-```js
-// Configure the default for all requests:
-const client = new Supermemory({
-  maxRetries: 0, // default is 2
-});
-
-// Or, configure per-request:
-await client.add({ content: 'content' }, {
-  maxRetries: 5,
-});
-```
-
-### Timeouts
-
-Requests time out after 1 minute by default. You can configure this with a `timeout` option:
-
-<!-- prettier-ignore -->
-```ts
-// Configure the default for all requests:
-const client = new Supermemory({
-  timeout: 20 * 1000, // 20 seconds (default is 1 minute)
-});
-
-// Override per-request:
-await client.add({ content: 'content' }, {
-  timeout: 5 * 1000,
-});
-```
-
-On timeout, an `APIConnectionTimeoutError` is thrown.
-
-Note that requests which time out will be [retried twice by default](#retries).
-
-## Advanced Usage
-
-### Accessing raw Response data (e.g., headers)
-
-The "raw" `Response` returned by `fetch()` can be accessed through the `.asResponse()` method on the `APIPromise` type that all methods return.
-This method returns as soon as the headers for a successful response are received and does not consume the response body, so you are free to write custom parsing or streaming logic.
-
-You can also use the `.withResponse()` method to get the raw `Response` along with the parsed data.
-Unlike `.asResponse()` this method consumes the body, returning once it is parsed.
-
-<!-- prettier-ignore -->
-```ts
-const client = new Supermemory();
-
-const response = await client.add({ content: 'content' }).asResponse();
-console.log(response.headers.get('X-My-Header'));
-console.log(response.statusText); // access the underlying Response object
-
-const { data: response, response: raw } = await client.add({ content: 'content' }).withResponse();
-console.log(raw.headers.get('X-My-Header'));
-console.log(response.id);
-```
-
-### Logging
-
+<br /><br />
 > [!IMPORTANT]
-> All log messages are intended for debugging only. The format and content of log messages
-> may change between releases.
+> This SDK is not yet ready for production use. To complete setup please follow the steps outlined in your [workspace](https://app.speakeasy.com/org/supermemory-hnj/supermemory). Delete this section before > publishing to a package manager.
 
-#### Log levels
+<!-- Start Summary [summary] -->
+## Summary
 
-The log level can be configured in two ways:
+supermemory API: The Memory API for the AI era. OpenAPI operations include x-codeSamples for the official TypeScript and Python SDKs (Mintlify-compatible).
+<!-- End Summary [summary] -->
 
-1. Via the `SUPERMEMORY_LOG` environment variable
-2. Using the `logLevel` client option (overrides the environment variable if set)
+<!-- Start Table of Contents [toc] -->
+## Table of Contents
+<!-- $toc-max-depth=2 -->
+* [supermemory](#supermemory)
+  * [SDK Installation](#sdk-installation)
+  * [Requirements](#requirements)
+  * [SDK Example Usage](#sdk-example-usage)
+  * [Authentication](#authentication)
+  * [Available Resources and Operations](#available-resources-and-operations)
+  * [Standalone functions](#standalone-functions)
+  * [File uploads](#file-uploads)
+  * [Retries](#retries)
+  * [Error Handling](#error-handling)
+  * [Server Selection](#server-selection)
+  * [Custom HTTP Client](#custom-http-client)
+  * [Debugging](#debugging)
+* [Development](#development)
+  * [Maturity](#maturity)
+  * [Contributions](#contributions)
 
-```ts
-import Supermemory from 'supermemory';
+<!-- End Table of Contents [toc] -->
 
-const client = new Supermemory({
-  logLevel: 'debug', // Show all log messages
-});
+<!-- Start SDK Installation [installation] -->
+## SDK Installation
+
+> [!TIP]
+> To finish publishing your SDK to npm and others you must [run your first generation action](https://www.speakeasy.com/docs/github-setup#step-by-step-guide).
+
+
+The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/), [bun](https://bun.sh/) or [yarn](https://classic.yarnpkg.com/en/) package managers.
+
+### NPM
+
+```bash
+npm add <UNSET>
 ```
 
-Available log levels, from most to least verbose:
+### PNPM
 
-- `'debug'` - Show debug messages, info, warnings, and errors
-- `'info'` - Show info messages, warnings, and errors
-- `'warn'` - Show warnings and errors (default)
-- `'error'` - Show only errors
-- `'off'` - Disable all logging
-
-At the `'debug'` level, all HTTP requests and responses are logged, including headers and bodies.
-Some authentication-related headers are redacted, but sensitive data in request and response bodies
-may still be visible.
-
-#### Custom logger
-
-By default, this library logs to `globalThis.console`. You can also provide a custom logger.
-Most logging libraries are supported, including [pino](https://www.npmjs.com/package/pino), [winston](https://www.npmjs.com/package/winston), [bunyan](https://www.npmjs.com/package/bunyan), [consola](https://www.npmjs.com/package/consola), [signale](https://www.npmjs.com/package/signale), and [@std/log](https://jsr.io/@std/log). If your logger doesn't work, please open an issue.
-
-When providing a custom logger, the `logLevel` option still controls which messages are emitted, messages
-below the configured level will not be sent to your logger.
-
-```ts
-import Supermemory from 'supermemory';
-import pino from 'pino';
-
-const logger = pino();
-
-const client = new Supermemory({
-  logger: logger.child({ name: 'Supermemory' }),
-  logLevel: 'debug', // Send all messages to pino, allowing it to filter
-});
+```bash
+pnpm add <UNSET>
 ```
 
-### Making custom/undocumented requests
+### Bun
 
-This library is typed for convenient access to the documented API. If you need to access undocumented
-endpoints, params, or response properties, the library can still be used.
-
-#### Undocumented endpoints
-
-To make requests to undocumented endpoints, you can use `client.get`, `client.post`, and other HTTP verbs.
-Options on the client, such as retries, will be respected when making these requests.
-
-```ts
-await client.post('/some/path', {
-  body: { some_prop: 'foo' },
-  query: { some_query_arg: 'bar' },
-});
+```bash
+bun add <UNSET>
 ```
 
-#### Undocumented request params
+### Yarn
 
-To make requests using undocumented parameters, you may use `// @ts-expect-error` on the undocumented
-parameter. This library doesn't validate at runtime that the request matches the type, so any extra values you
-send will be sent as-is.
-
-```ts
-client.search.documents({
-  // ...
-  // @ts-expect-error baz is not yet public
-  baz: 'undocumented option',
-});
+```bash
+yarn add <UNSET>
 ```
 
-For requests with the `GET` verb, any extra params will be in the query, all other requests will send the
-extra param in the body.
+> [!NOTE]
+> This package is published as an ES Module (ESM) only. For applications using
+> CommonJS, use `await import()` to import and use this package.
+<!-- End SDK Installation [installation] -->
 
-If you want to explicitly send an extra argument, you can do so with the `query`, `body`, and `headers` request
-options.
-
-#### Undocumented response properties
-
-To access undocumented response properties, you may access the response object with `// @ts-expect-error` on
-the response object, or cast the response object to the requisite type. Like the request params, we do not
-validate or strip extra properties from the response from the API.
-
-### Customizing the fetch client
-
-By default, this library expects a global `fetch` function is defined.
-
-If you want to use a different `fetch` function, you can either polyfill the global:
-
-```ts
-import fetch from 'my-fetch';
-
-globalThis.fetch = fetch;
-```
-
-Or pass it to the client:
-
-```ts
-import Supermemory from 'supermemory';
-import fetch from 'my-fetch';
-
-const client = new Supermemory({ fetch });
-```
-
-### Fetch options
-
-If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
-
-```ts
-import Supermemory from 'supermemory';
-
-const client = new Supermemory({
-  fetchOptions: {
-    // `RequestInit` options
-  },
-});
-```
-
-#### Configuring proxies
-
-To modify proxy behavior, you can provide custom `fetchOptions` that add runtime-specific proxy
-options to requests:
-
-<img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
-
-```ts
-import Supermemory from 'supermemory';
-import * as undici from 'undici';
-
-const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
-const client = new Supermemory({
-  fetchOptions: {
-    dispatcher: proxyAgent,
-  },
-});
-```
-
-<img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
-
-```ts
-import Supermemory from 'supermemory';
-
-const client = new Supermemory({
-  fetchOptions: {
-    proxy: 'http://localhost:8888',
-  },
-});
-```
-
-<img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
-
-```ts
-import Supermemory from 'npm:supermemory';
-
-const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
-const client = new Supermemory({
-  fetchOptions: {
-    client: httpClient,
-  },
-});
-```
-
-## Frequently Asked Questions
-
-## Semantic versioning
-
-This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
-
-1. Changes that only affect static types, without breaking runtime behavior.
-2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_
-3. Changes that we do not expect to impact the vast majority of users in practice.
-
-We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
-
-We are keen for your feedback; please open an [issue](https://www.github.com/supermemoryai/sdk-ts/issues) with questions, bugs, or suggestions.
-
+<!-- Start Requirements [requirements] -->
 ## Requirements
 
-TypeScript >= 4.9 is supported.
+For supported JavaScript runtimes, please consult [RUNTIMES.md](RUNTIMES.md).
+<!-- End Requirements [requirements] -->
 
-The following runtimes are supported:
+<!-- Start SDK Example Usage [usage] -->
+## SDK Example Usage
 
-- Web browsers (Up-to-date Chrome, Firefox, Safari, Edge, and more)
-- Node.js 20 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.
-- Deno v1.28.0 or higher.
-- Bun 1.0 or later.
-- Cloudflare Workers.
-- Vercel Edge Runtime.
-- Jest 28 or greater with the `"node"` environment (`"jsdom"` is not supported at this time).
-- Nitro v2.6 or greater.
+### Example
 
-Note that React Native is not supported at this time.
+```typescript
+import { Supermemory } from "supermemory";
 
-If you are interested in other runtime environments, please open or upvote an issue on GitHub.
+const supermemory = new Supermemory({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
 
-## Contributing
+async function run() {
+  const result = await supermemory.add({
+    content: "<value>",
+  });
 
-See [the contributing documentation](./CONTRIBUTING.md)
+  console.log(result);
+}
+
+run();
+
+```
+<!-- End SDK Example Usage [usage] -->
+
+<!-- Start Authentication [security] -->
+## Authentication
+
+### Per-Client Security Schemes
+
+This SDK supports the following security scheme globally:
+
+| Name     | Type | Scheme      | Environment Variable  |
+| -------- | ---- | ----------- | --------------------- |
+| `apiKey` | http | HTTP Bearer | `SUPERMEMORY_API_KEY` |
+
+To authenticate with the API the `apiKey` parameter must be set when initializing the SDK client instance. For example:
+```typescript
+import { Supermemory } from "supermemory";
+
+const supermemory = new Supermemory({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const result = await supermemory.add({
+    content: "<value>",
+  });
+
+  console.log(result);
+}
+
+run();
+
+```
+<!-- End Authentication [security] -->
+
+<!-- Start Available Resources and Operations [operations] -->
+## Available Resources and Operations
+
+<details open>
+<summary>Available methods</summary>
+
+### [Supermemory SDK](docs/sdks/supermemory/README.md)
+
+* [add](docs/sdks/supermemory/README.md#add) - Add document
+* [profile](docs/sdks/supermemory/README.md#profile) - Get user profile
+
+### [Connections](docs/sdks/connections/README.md)
+
+* [list](docs/sdks/connections/README.md#list) - List connections
+* [create](docs/sdks/connections/README.md#create) - Create connection
+* [deleteByProvider](docs/sdks/connections/README.md#deletebyprovider) - Delete connection
+* [resources](docs/sdks/connections/README.md#resources) - Fetch resources
+* [configure](docs/sdks/connections/README.md#configure) - Configure connection
+* [getByID](docs/sdks/connections/README.md#getbyid) - Get connection (by id)
+* [deleteByID](docs/sdks/connections/README.md#deletebyid) - Delete connection by ID
+* [getByTag](docs/sdks/connections/README.md#getbytag) - Get connection (by provider)
+* [listDocuments](docs/sdks/connections/README.md#listdocuments) - List documents
+* [import](docs/sdks/connections/README.md#import) - Sync connection
+
+### [ContainerTags](docs/sdks/containertags/README.md)
+
+* [list](docs/sdks/containertags/README.md#list) - List all container tags
+* [get](docs/sdks/containertags/README.md#get) - Get container tag settings
+* [update](docs/sdks/containertags/README.md#update) - Update container tag settings
+* [delete](docs/sdks/containertags/README.md#delete) - Delete container tag
+* [merge](docs/sdks/containertags/README.md#merge) - Merge container tags
+* [mergeStatus](docs/sdks/containertags/README.md#mergestatus) - Get container tag merge status
+
+### [Conversations](docs/sdks/conversations/README.md)
+
+* [add](docs/sdks/conversations/README.md#add) - Ingest or update conversation
+
+### [Documents](docs/sdks/documents/README.md)
+
+* [batchAdd](docs/sdks/documents/README.md#batchadd) - Batch add documents
+* [update](docs/sdks/documents/README.md#update) - Update document
+* [get](docs/sdks/documents/README.md#get) - Get document
+* [delete](docs/sdks/documents/README.md#delete) - Delete document by ID or customId
+* [uploadFile](docs/sdks/documents/README.md#uploadfile) - Upload a file
+* [list](docs/sdks/documents/README.md#list) - List documents
+* [listProcessing](docs/sdks/documents/README.md#listprocessing) - Get processing documents
+* [chunks](docs/sdks/documents/README.md#chunks) - Get document chunks
+* [fileUrl](docs/sdks/documents/README.md#fileurl) - Get presigned file URL
+* [deleteBulk](docs/sdks/documents/README.md#deletebulk) - Bulk delete documents
+
+### [Memories](docs/sdks/memories/README.md)
+
+* [add](docs/sdks/memories/README.md#add) - Create memories directly
+* [forget](docs/sdks/memories/README.md#forget) - Forget a memory
+* [updateMemory](docs/sdks/memories/README.md#updatememory) - Update a memory (creates new version)
+* [forgetMatching](docs/sdks/memories/README.md#forgetmatching) - Forget memories matching a prompt/query
+* [list](docs/sdks/memories/README.md#list) - List memory entries with history
+
+### [Profiles](docs/sdks/profiles/README.md)
+
+* [buckets](docs/sdks/profiles/README.md#buckets) - Get profile buckets
+
+### [Search](docs/sdks/search/README.md)
+
+* [execute](docs/sdks/search/README.md#execute) - Search documents
+* [memories](docs/sdks/search/README.md#memories) - Search memory entries
+
+### [Settings](docs/sdks/settings/README.md)
+
+* [get](docs/sdks/settings/README.md#get) - Get settings
+* [update](docs/sdks/settings/README.md#update) - Update settings
+* [reset](docs/sdks/settings/README.md#reset) - Reset organization data
+* [suggestBuckets](docs/sdks/settings/README.md#suggestbuckets) - Suggest profile buckets
+
+</details>
+<!-- End Available Resources and Operations [operations] -->
+
+<!-- Start Standalone functions [standalone-funcs] -->
+## Standalone functions
+
+All the methods listed above are available as standalone functions. These
+functions are ideal for use in applications running in the browser, serverless
+runtimes or other environments where application bundle size is a primary
+concern. When using a bundler to build your application, all unused
+functionality will be either excluded from the final bundle or tree-shaken away.
+
+To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
+
+<details>
+
+<summary>Available standalone functions</summary>
+
+- [`add`](docs/sdks/supermemory/README.md#add) - Add document
+- [`connectionsConfigure`](docs/sdks/connections/README.md#configure) - Configure connection
+- [`connectionsCreate`](docs/sdks/connections/README.md#create) - Create connection
+- [`connectionsDeleteByID`](docs/sdks/connections/README.md#deletebyid) - Delete connection by ID
+- [`connectionsDeleteByProvider`](docs/sdks/connections/README.md#deletebyprovider) - Delete connection
+- [`connectionsGetByID`](docs/sdks/connections/README.md#getbyid) - Get connection (by id)
+- [`connectionsGetByTag`](docs/sdks/connections/README.md#getbytag) - Get connection (by provider)
+- [`connectionsImport`](docs/sdks/connections/README.md#import) - Sync connection
+- [`connectionsList`](docs/sdks/connections/README.md#list) - List connections
+- [`connectionsListDocuments`](docs/sdks/connections/README.md#listdocuments) - List documents
+- [`connectionsResources`](docs/sdks/connections/README.md#resources) - Fetch resources
+- [`containerTagsDelete`](docs/sdks/containertags/README.md#delete) - Delete container tag
+- [`containerTagsGet`](docs/sdks/containertags/README.md#get) - Get container tag settings
+- [`containerTagsList`](docs/sdks/containertags/README.md#list) - List all container tags
+- [`containerTagsMerge`](docs/sdks/containertags/README.md#merge) - Merge container tags
+- [`containerTagsMergeStatus`](docs/sdks/containertags/README.md#mergestatus) - Get container tag merge status
+- [`containerTagsUpdate`](docs/sdks/containertags/README.md#update) - Update container tag settings
+- [`conversationsAdd`](docs/sdks/conversations/README.md#add) - Ingest or update conversation
+- [`documentsBatchAdd`](docs/sdks/documents/README.md#batchadd) - Batch add documents
+- [`documentsChunks`](docs/sdks/documents/README.md#chunks) - Get document chunks
+- [`documentsDelete`](docs/sdks/documents/README.md#delete) - Delete document by ID or customId
+- [`documentsDeleteBulk`](docs/sdks/documents/README.md#deletebulk) - Bulk delete documents
+- [`documentsFileUrl`](docs/sdks/documents/README.md#fileurl) - Get presigned file URL
+- [`documentsGet`](docs/sdks/documents/README.md#get) - Get document
+- [`documentsList`](docs/sdks/documents/README.md#list) - List documents
+- [`documentsListProcessing`](docs/sdks/documents/README.md#listprocessing) - Get processing documents
+- [`documentsUpdate`](docs/sdks/documents/README.md#update) - Update document
+- [`documentsUploadFile`](docs/sdks/documents/README.md#uploadfile) - Upload a file
+- [`memoriesAdd`](docs/sdks/memories/README.md#add) - Create memories directly
+- [`memoriesForget`](docs/sdks/memories/README.md#forget) - Forget a memory
+- [`memoriesForgetMatching`](docs/sdks/memories/README.md#forgetmatching) - Forget memories matching a prompt/query
+- [`memoriesList`](docs/sdks/memories/README.md#list) - List memory entries with history
+- [`memoriesUpdateMemory`](docs/sdks/memories/README.md#updatememory) - Update a memory (creates new version)
+- [`profile`](docs/sdks/supermemory/README.md#profile) - Get user profile
+- [`profilesBuckets`](docs/sdks/profiles/README.md#buckets) - Get profile buckets
+- [`searchExecute`](docs/sdks/search/README.md#execute) - Search documents
+- [`searchMemories`](docs/sdks/search/README.md#memories) - Search memory entries
+- [`settingsGet`](docs/sdks/settings/README.md#get) - Get settings
+- [`settingsReset`](docs/sdks/settings/README.md#reset) - Reset organization data
+- [`settingsSuggestBuckets`](docs/sdks/settings/README.md#suggestbuckets) - Suggest profile buckets
+- [`settingsUpdate`](docs/sdks/settings/README.md#update) - Update settings
+
+</details>
+<!-- End Standalone functions [standalone-funcs] -->
+
+<!-- Start File uploads [file-upload] -->
+## File uploads
+
+Certain SDK methods accept files as part of a multi-part request. It is possible and typically recommended to upload files as a stream rather than reading the entire contents into memory. This avoids excessive memory consumption and potentially crashing with out-of-memory errors when working with very large files. The following example demonstrates how to attach a file stream to a request.
+
+> [!TIP]
+>
+> Depending on your JavaScript runtime, there are convenient utilities that return a handle to a file without reading the entire contents into memory:
+>
+> - **Node.js v20+:** Since v20, Node.js comes with a native `openAsBlob` function in [`node:fs`](https://nodejs.org/docs/latest-v20.x/api/fs.html#fsopenasblobpath-options).
+> - **Bun:** The native [`Bun.file`](https://bun.sh/docs/api/file-io#reading-files-bun-file) function produces a file handle that can be used for streaming file uploads.
+> - **Browsers:** All supported browsers return an instance to a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File) when reading the value from an `<input type="file">` element.
+> - **Node.js v18:** A file stream can be created using the `fileFrom` helper from [`fetch-blob/from.js`](https://www.npmjs.com/package/fetch-blob).
+
+```typescript
+import { openAsBlob } from "node:fs";
+import { Supermemory } from "supermemory";
+
+const supermemory = new Supermemory({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const result = await supermemory.documents.uploadFile({
+    file: await openAsBlob("example.file"),
+    containerTag: "user",
+  });
+
+  console.log(result);
+}
+
+run();
+
+```
+<!-- End File uploads [file-upload] -->
+
+<!-- Start Retries [retries] -->
+## Retries
+
+Some of the endpoints in this SDK support retries.  If you use the SDK without any configuration, it will fall back to the default retry strategy provided by the API.  However, the default retry strategy can be overridden on a per-operation basis, or across the entire SDK.
+
+To change the default retry strategy for a single API call, simply provide a retryConfig object to the call:
+```typescript
+import { Supermemory } from "supermemory";
+
+const supermemory = new Supermemory({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const result = await supermemory.add({
+    content: "<value>",
+  }, {
+    retries: {
+      strategy: "backoff",
+      backoff: {
+        initialInterval: 1,
+        maxInterval: 50,
+        exponent: 1.1,
+        maxElapsedTime: 100,
+      },
+      retryConnectionErrors: false,
+    },
+  });
+
+  console.log(result);
+}
+
+run();
+
+```
+
+If you'd like to override the default retry strategy for all operations that support retries, you can provide a retryConfig at SDK initialization:
+```typescript
+import { Supermemory } from "supermemory";
+
+const supermemory = new Supermemory({
+  retryConfig: {
+    strategy: "backoff",
+    backoff: {
+      initialInterval: 1,
+      maxInterval: 50,
+      exponent: 1.1,
+      maxElapsedTime: 100,
+    },
+    retryConnectionErrors: false,
+  },
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const result = await supermemory.add({
+    content: "<value>",
+  });
+
+  console.log(result);
+}
+
+run();
+
+```
+<!-- End Retries [retries] -->
+
+<!-- Start Error Handling [errors] -->
+## Error Handling
+
+[`SupermemoryError`](./src/models/errors/supermemory-error.ts) is the base class for all HTTP error responses. It has the following properties:
+
+| Property            | Type       | Description                                                                             |
+| ------------------- | ---------- | --------------------------------------------------------------------------------------- |
+| `error.message`     | `string`   | Error message                                                                           |
+| `error.statusCode`  | `number`   | HTTP response status code eg `404`                                                      |
+| `error.headers`     | `Headers`  | HTTP response headers                                                                   |
+| `error.body`        | `string`   | HTTP body. Can be empty string if no body is returned.                                  |
+| `error.rawResponse` | `Response` | Raw HTTP response                                                                       |
+| `error.data$`       |            | Optional. Some errors may contain structured data. [See Error Classes](#error-classes). |
+
+### Example
+```typescript
+import { Supermemory } from "supermemory";
+import * as errors from "supermemory/models/errors";
+
+const supermemory = new Supermemory({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  try {
+    const result = await supermemory.add({
+      content: "<value>",
+    });
+
+    console.log(result);
+  } catch (error) {
+    // The base class for HTTP error responses
+    if (error instanceof errors.SupermemoryError) {
+      console.log(error.message);
+      console.log(error.statusCode);
+      console.log(error.body);
+      console.log(error.headers);
+
+      // Depending on the method different errors may be thrown
+      if (error instanceof errors.ErrorResponse) {
+        console.log(error.data$.error); // string
+        console.log(error.data$.details); // string
+      }
+    }
+  }
+}
+
+run();
+
+```
+
+### Error Classes
+**Primary errors:**
+* [`SupermemoryError`](./src/models/errors/supermemory-error.ts): The base class for HTTP error responses.
+  * [`ErrorResponse`](./src/models/errors/error-response.ts): *
+
+<details><summary>Less common errors (6)</summary>
+
+<br />
+
+**Network errors:**
+* [`ConnectionError`](./src/models/errors/http-client-errors.ts): HTTP client was unable to make a request to a server.
+* [`RequestTimeoutError`](./src/models/errors/http-client-errors.ts): HTTP request timed out due to an AbortSignal signal.
+* [`RequestAbortedError`](./src/models/errors/http-client-errors.ts): HTTP request was aborted by the client.
+* [`InvalidRequestError`](./src/models/errors/http-client-errors.ts): Any input used to create a request is invalid.
+* [`UnexpectedClientError`](./src/models/errors/http-client-errors.ts): Unrecognised or unexpected error.
+
+
+**Inherit from [`SupermemoryError`](./src/models/errors/supermemory-error.ts)**:
+* [`ResponseValidationError`](./src/models/errors/response-validation-error.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
+
+</details>
+
+\* Check [the method documentation](#available-resources-and-operations) to see if the error is applicable.
+<!-- End Error Handling [errors] -->
+
+<!-- Start Server Selection [server] -->
+## Server Selection
+
+### Override Server URL Per-Client
+
+The default server can be overridden globally by passing a URL to the `serverURL: string` optional parameter when initializing the SDK client instance. For example:
+```typescript
+import { Supermemory } from "supermemory";
+
+const supermemory = new Supermemory({
+  serverURL: "https://api.supermemory.ai",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const result = await supermemory.add({
+    content: "<value>",
+  });
+
+  console.log(result);
+}
+
+run();
+
+```
+<!-- End Server Selection [server] -->
+
+<!-- Start Custom HTTP Client [http-client] -->
+## Custom HTTP Client
+
+The TypeScript SDK makes API calls using an `HTTPClient` that wraps the native
+[Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). This
+client is a thin wrapper around `fetch` and provides the ability to attach hooks
+around the request lifecycle that can be used to modify the request or handle
+errors and response.
+
+The `HTTPClient` constructor takes an optional `fetcher` argument that can be
+used to integrate a third-party HTTP client or when writing tests to mock out
+the HTTP client and feed in fixtures.
+
+The following example shows how to:
+- route requests through a proxy server using [undici](https://www.npmjs.com/package/undici)'s ProxyAgent
+- use the `"beforeRequest"` hook to add a custom header and a timeout to requests
+- use the `"requestError"` hook to log errors
+
+```typescript
+import { Supermemory } from "supermemory";
+import { ProxyAgent } from "undici";
+import { HTTPClient } from "supermemory/lib/http";
+
+const dispatcher = new ProxyAgent("http://proxy.example.com:8080");
+
+const httpClient = new HTTPClient({
+  // 'fetcher' takes a function that has the same signature as native 'fetch'.
+  fetcher: (input, init) =>
+    // 'dispatcher' is specific to undici and not part of the standard Fetch API.
+    fetch(input, { ...init, dispatcher } as RequestInit),
+});
+
+httpClient.addHook("beforeRequest", (request) => {
+  const nextRequest = new Request(request, {
+    signal: request.signal || AbortSignal.timeout(5000)
+  });
+
+  nextRequest.headers.set("x-custom-header", "custom value");
+
+  return nextRequest;
+});
+
+httpClient.addHook("requestError", (error, request) => {
+  console.group("Request Error");
+  console.log("Reason:", `${error}`);
+  console.log("Endpoint:", `${request.method} ${request.url}`);
+  console.groupEnd();
+});
+
+const sdk = new Supermemory({ httpClient: httpClient });
+```
+<!-- End Custom HTTP Client [http-client] -->
+
+<!-- Start Debugging [debug] -->
+## Debugging
+
+You can setup your SDK to emit debug logs for SDK requests and responses.
+
+You can pass a logger that matches `console`'s interface as an SDK option.
+
+> [!WARNING]
+> Beware that debug logging will reveal secrets, like API tokens in headers, in log messages printed to a console or files. It's recommended to use this feature only during local development and not in production.
+
+```typescript
+import { Supermemory } from "supermemory";
+
+const sdk = new Supermemory({ debugLogger: console });
+```
+
+You can also enable a default debug logger by setting an environment variable `SUPERMEMORY_DEBUG` to true.
+<!-- End Debugging [debug] -->
+
+<!-- Placeholder for Future Speakeasy SDK Sections -->
+
+# Development
+
+## Maturity
+
+This SDK is in beta, and there may be breaking changes between versions without a major version update. Therefore, we recommend pinning usage
+to a specific package version. This way, you can install the same version each time without breaking changes unless you are intentionally
+looking for the latest version.
+
+## Contributions
+
+While we value open-source contributions to this SDK, this library is generated programmatically. Any manual changes added to internal files will be overwritten on the next generation. 
+We look forward to hearing your feedback. Feel free to open a PR or an issue with a proof of concept and we'll do our best to include it in a future release. 
+
+### SDK Created by [Speakeasy](https://www.speakeasy.com/?utm_source=supermemory&utm_campaign=typescript)
