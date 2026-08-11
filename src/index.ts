@@ -8,3 +8,9 @@ export * as files from "./lib/files.js";
 export { HTTPClient } from "./lib/http.js";
 export type { Fetcher, HTTPClientOptions } from "./lib/http.js";
 export * from "./sdk/sdk.js";
+
+// Default export for drop-in compatibility with the v4 (Stainless) SDK, which
+// used `import Supermemory from "supermemory"`. Applied via
+// .speakeasy/patches/src/index.ts.patch on every regeneration.
+import { Supermemory } from "./sdk/sdk.js";
+export default Supermemory;
