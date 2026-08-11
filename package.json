@@ -1,9 +1,13 @@
 {
   "name": "supermemory",
-  "version": "5.0.0-rc.1",
+  "version": "5.0.0-rc.2",
   "author": "Speakeasy",
   "bin": {
     "supermemory": "bin/cli.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supermemoryai/sdk-ts.git"
   },
   "type": "module",
   "main": "./esm/index.js",
@@ -60,9 +64,5 @@
   },
   "dependencies": {
     "zod": "^3.25.65 || ^4.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/supermemoryai/sdk-ts.git"
   }
 }

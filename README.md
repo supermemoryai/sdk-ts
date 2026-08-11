@@ -149,6 +149,7 @@ run();
 
 * [add](docs/sdks/supermemory/README.md#add) - Add document
 * [profile](docs/sdks/supermemory/README.md#profile) - Get user profile
+* [search](docs/sdks/supermemory/README.md#search) - Search memory entries
 
 ### [Connections](docs/sdks/connections/README.md)
 
@@ -188,6 +189,7 @@ run();
 * [chunks](docs/sdks/documents/README.md#chunks) - Get document chunks
 * [fileUrl](docs/sdks/documents/README.md#fileurl) - Get presigned file URL
 * [deleteBulk](docs/sdks/documents/README.md#deletebulk) - Bulk delete documents
+* [search](docs/sdks/documents/README.md#search) - Search documents
 
 ### [Memories](docs/sdks/memories/README.md)
 
@@ -200,11 +202,6 @@ run();
 ### [Profiles](docs/sdks/profiles/README.md)
 
 * [buckets](docs/sdks/profiles/README.md#buckets) - Get profile buckets
-
-### [Search](docs/sdks/search/README.md)
-
-* [execute](docs/sdks/search/README.md#execute) - Search documents
-* [memories](docs/sdks/search/README.md#memories) - Search memory entries
 
 ### [Settings](docs/sdks/settings/README.md)
 
@@ -257,6 +254,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`documentsGet`](docs/sdks/documents/README.md#get) - Get document
 - [`documentsList`](docs/sdks/documents/README.md#list) - List documents
 - [`documentsListProcessing`](docs/sdks/documents/README.md#listprocessing) - Get processing documents
+- [`documentsSearch`](docs/sdks/documents/README.md#search) - Search documents
 - [`documentsUpdate`](docs/sdks/documents/README.md#update) - Update document
 - [`documentsUploadFile`](docs/sdks/documents/README.md#uploadfile) - Upload a file
 - [`memoriesAdd`](docs/sdks/memories/README.md#add) - Create memories directly
@@ -266,8 +264,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`memoriesUpdateMemory`](docs/sdks/memories/README.md#updatememory) - Update a memory (creates new version)
 - [`profile`](docs/sdks/supermemory/README.md#profile) - Get user profile
 - [`profilesBuckets`](docs/sdks/profiles/README.md#buckets) - Get profile buckets
-- [`searchExecute`](docs/sdks/search/README.md#execute) - Search documents
-- [`searchMemories`](docs/sdks/search/README.md#memories) - Search memory entries
+- [`search`](docs/sdks/supermemory/README.md#search) - Search memory entries
 - [`settingsGet`](docs/sdks/settings/README.md#get) - Get settings
 - [`settingsReset`](docs/sdks/settings/README.md#reset) - Reset organization data
 - [`settingsSuggestBuckets`](docs/sdks/settings/README.md#suggestbuckets) - Suggest profile buckets

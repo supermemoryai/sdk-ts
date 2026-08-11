@@ -16,7 +16,7 @@ bun i supermemory   # or npm/pnpm/yarn — same package as before
 |---|---|---|
 | Import | `import Supermemory from "supermemory"` | unchanged (named export also available) |
 | Auth | `new Supermemory({ apiKey })` / `SUPERMEMORY_API_KEY` | unchanged |
-| Method names | `client.add`, `documents.list`, `search.execute`, … | unchanged |
+| Method names | `client.add`, `documents.list`, … | unchanged except search: `client.search()` replaces the `search.*` namespace |
 | Retries | on by default (2 retries) | **opt-in** via `retryConfig` |
 | Timeout option | `timeout` (ms) | `timeoutMs` |
 | Error classes | `BadRequestError`, `RateLimitError`, … per status | one `SupermemoryError` with `.statusCode` |
@@ -47,16 +47,23 @@ Every v4 resource and method keeps its exact name, including casing:
 - `client.add(...)`, `client.profile(...)`
 - `client.documents.{add→see below, list, get, update, delete, deleteBulk, uploadFile, batchAdd, listProcessing}`
 - `client.memories.{forget, updateMemory}`
-- `client.search.{execute, memories}`
 - `client.settings.{get, update}`
 - `client.connections.{create, getByID, getByTag, deleteByID, deleteByProvider, import, list, listDocuments, configure, resources}`
 
-v4 exposed two endpoints under a second name; v5 has one method per endpoint:
+**Search is restructured** — the `search` namespace is gone in favor of a
+top-level method for the flagship memories recall:
+
+| v4 call | Endpoint | v5 call |
+|---|---|---|
+| `client.search.memories(...)` | `POST /v4/search` | `client.search(...)` |
+| `client.search.execute(...)` | `POST /v3/search` | `client.documents.search(...)` |
+| `client.search.documents(...)` | `POST /v3/search` | `client.documents.search(...)` |
+
+One other v4 alias collapsed into a single method:
 
 | v4 call | v5 replacement |
 |---|---|
 | `client.documents.add(...)` | `client.add(...)` |
-| `client.search.documents(...)` | `client.search.execute(...)` |
 
 ## 3. New in v5
 

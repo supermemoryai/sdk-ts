@@ -2,8 +2,8 @@ speakeasyVersion: 1.793.0
 sources:
     supermemory API:
         sourceNamespace: supermemory-api
-        sourceRevisionDigest: sha256:d8e5fe803b0eb97817d62a83a76c3a595809a7442657dfbe3730fc24a0448632
-        sourceBlobDigest: sha256:9d45f52064e3b2ce360edd9e2766222eecb6b4b9e0a961c9cf9d8a6c5411b027
+        sourceRevisionDigest: sha256:17fb12af72f2e153841b2626609aaed6774e7830ef9c4893551d4a82e9e1bf25
+        sourceBlobDigest: sha256:b5e91449dfd2faa8e7fc3490c816c0ba3f75bebb8ef898b2965aa8de608e60c5
         tags:
             - latest
             - 3.0.0
@@ -11,17 +11,17 @@ targets:
     supermemory:
         source: supermemory API
         sourceNamespace: supermemory-api
-        sourceRevisionDigest: sha256:d8e5fe803b0eb97817d62a83a76c3a595809a7442657dfbe3730fc24a0448632
-        sourceBlobDigest: sha256:9d45f52064e3b2ce360edd9e2766222eecb6b4b9e0a961c9cf9d8a6c5411b027
+        sourceRevisionDigest: sha256:17fb12af72f2e153841b2626609aaed6774e7830ef9c4893551d4a82e9e1bf25
+        sourceBlobDigest: sha256:b5e91449dfd2faa8e7fc3490c816c0ba3f75bebb8ef898b2965aa8de608e60c5
         codeSamplesNamespace: supermemory-api-typescript-code-samples
-        codeSamplesRevisionDigest: sha256:2a7eecd29b6b20f2f007ecff3114f755800c6b2e4b2f9fe1dac7e475b52e26f1
+        codeSamplesRevisionDigest: sha256:d0f70049d39edd0a128eae60d8657f5572f40f2c29df7e28539798ddfd20ef1b
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
     sources:
         supermemory API:
             inputs:
-                - location: ../../openapi.json
+                - location: ../openapi-fixed.json
             overlays:
                 - location: .speakeasy/speakeasy-modifications-overlay.yaml
                 - location: .speakeasy/stainless-parity-overlay.yaml

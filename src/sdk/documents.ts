@@ -11,6 +11,7 @@ import { documentsFileUrl } from "../funcs/documents-file-url.js";
 import { documentsGet } from "../funcs/documents-get.js";
 import { documentsListProcessing } from "../funcs/documents-list-processing.js";
 import { documentsList } from "../funcs/documents-list.js";
+import { documentsSearch } from "../funcs/documents-search.js";
 import { documentsUpdate } from "../funcs/documents-update.js";
 import { documentsUploadFile } from "../funcs/documents-upload-file.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
@@ -180,6 +181,23 @@ export class Documents extends ClientSDK {
     options?: RequestOptions,
   ): Promise<operations.DeleteV3DocumentsBulkResponse> {
     return unwrapAsync(documentsDeleteBulk(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Search documents
+   *
+   * @remarks
+   * Search memories with advanced filtering
+   */
+  async search(
+    request: operations.PostV3SearchRequest,
+    options?: RequestOptions,
+  ): Promise<operations.PostV3SearchResponse> {
+    return unwrapAsync(documentsSearch(
       this,
       request,
       options,

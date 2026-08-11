@@ -5,6 +5,7 @@
 
 import { add } from "../funcs/add.js";
 import { profile } from "../funcs/profile.js";
+import { search } from "../funcs/search.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
@@ -14,18 +15,12 @@ import { Conversations } from "./conversations.js";
 import { Documents } from "./documents.js";
 import { Memories } from "./memories.js";
 import { Profiles } from "./profiles.js";
-import { Search } from "./search.js";
 import { Settings } from "./settings.js";
 
 export class Supermemory extends ClientSDK {
   private _documents?: Documents;
   get documents(): Documents {
     return (this._documents ??= new Documents(this._options));
-  }
-
-  private _search?: Search;
-  get search(): Search {
-    return (this._search ??= new Search(this._options));
   }
 
   private _settings?: Settings;
@@ -86,6 +81,23 @@ export class Supermemory extends ClientSDK {
     options?: RequestOptions,
   ): Promise<operations.PostV4ProfileResponse> {
     return unwrapAsync(profile(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Search memory entries
+   *
+   * @remarks
+   * Search memory entries - Low latency for conversational
+   */
+  async search(
+    request: operations.PostV4SearchRequest,
+    options?: RequestOptions,
+  ): Promise<operations.PostV4SearchResponse> {
+    return unwrapAsync(search(
       this,
       request,
       options,

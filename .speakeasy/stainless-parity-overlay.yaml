@@ -64,10 +64,20 @@ actions:
     update: { x-speakeasy-group: memories, x-speakeasy-name-override: forgetMatching }
 
   # ---- search ----
-  - target: $.paths["/v3/search"].post
-    update: { x-speakeasy-group: search, x-speakeasy-name-override: execute }
+  # v5 surface decision: no `search` namespace. `client.search()` is the
+  # flagship memories recall (/v4/search); document search (/v3/search)
+  # lives beside its resource as `documents.search()`.
+  - target: $.paths["/v4/search"].post.tags
+    remove: true
+  # the Studio modifications overlay groups this op under recallSearch;
+  # strip that too so the method lands on the SDK root
+  - target: $.paths["/v4/search"].post.x-speakeasy-group
+    remove: true
   - target: $.paths["/v4/search"].post
-    update: { x-speakeasy-group: search, x-speakeasy-name-override: memories }
+    update:
+      x-speakeasy-name-override: search
+  - target: $.paths["/v3/search"].post
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: search }
 
   # ---- settings ----
   - target: $.paths["/v3/settings"].get
