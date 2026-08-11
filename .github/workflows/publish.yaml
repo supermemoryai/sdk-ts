@@ -11,11 +11,20 @@ permissions:
         description: Override the npm dist-tag (default = auto; prerelease versions publish to `rc`, stable versions to `latest`)
         type: string
         required: false
+defaults:
+  run:
+    working-directory: sdk
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+      # The SDK and the monorepo are checked out as SIBLING directories.
+      # The mono clone must never live inside the package root: the generated
+      # .npmignore allowlist (!/**/*.ts …) would sweep private monorepo source
+      # into the published tarball.
       - uses: actions/checkout@v4
+        with:
+          path: sdk
 
       # Skip when this version is already on npm, so merges that don't bump
       # the version (docs, workflow tweaks) are no-ops instead of failures.
@@ -39,15 +48,13 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
-      # The published package bundles the supermemory CLI, whose source lives
-      # in the (private) monorepo. MONO_READ_TOKEN needs read access to
-      # supermemoryai/mono.
+      # MONO_READ_TOKEN needs read access to supermemoryai/mono (CLI source).
       - uses: actions/checkout@v4
         if: steps.meta.outputs.publish == 'true'
         with:
           repository: supermemoryai/mono
           token: ${{ secrets.MONO_READ_TOKEN }}
-          path: .mono
+          path: mono
 
       - uses: actions/setup-node@v4
         if: steps.meta.outputs.publish == 'true'
@@ -65,11 +72,19 @@ jobs:
       - name: Bundle CLI from monorepo
         if: steps.meta.outputs.publish == 'true'
         run: |
-          cd .mono && bun install --ignore-scripts && cd ..
-          bun build .mono/apps/cli/src/index.ts --outfile bin/cli.mjs --target node --format esm
+          (cd ../mono && bun install --ignore-scripts)
+          bun build ../mono/apps/cli/src/index.ts --outfile bin/cli.mjs --target node --format esm
           grep -q '^#!' bin/cli.mjs || sed -i '1i #!/usr/bin/env node' bin/cli.mjs
           chmod +x bin/cli.mjs
           node bin/cli.mjs --version
+
+      - name: Verify tarball contents
+        if: steps.meta.outputs.publish == 'true'
+        run: |
+          if npm pack --dry-run 2>&1 | grep -E "notice.*(\.mono|mono/)" ; then
+            echo "::error::monorepo files leaked into the tarball — aborting"
+            exit 1
+          fi
 
       - name: Publish ${{ steps.meta.outputs.version }} (${{ steps.meta.outputs.tag }})
         if: steps.meta.outputs.publish == 'true'
