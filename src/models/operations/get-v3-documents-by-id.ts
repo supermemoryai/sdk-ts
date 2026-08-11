@@ -89,8 +89,42 @@ export const GetV3DocumentsByIdType = {
  */
 export type GetV3DocumentsByIdType = OpenEnum<typeof GetV3DocumentsByIdType>;
 
+export type GetV3DocumentsByIdMetadataMemory = string | number | boolean;
+
+export type GetV3DocumentsByIdMemoryMetadata = string | number | boolean | {
+  [k: string]: any;
+} | Array<any>;
+
+export type GetV3DocumentsByIdMemory = {
+  id: string;
+  memory: string;
+  /**
+   * Creation timestamp
+   */
+  createdAt: string;
+  /**
+   * Last update timestamp
+   */
+  updatedAt: string | null;
+  isLatest: boolean;
+  isForgotten: boolean;
+  isStatic: boolean;
+  isInference: boolean;
+  version: number;
+  sourceCount: number;
+  metadata:
+    | string
+    | number
+    | boolean
+    | { [k: string]: any }
+    | Array<any>
+    | null;
+  parentMemoryId: string | null;
+  rootMemoryId: string | null;
+};
+
 /**
- * Document object
+ * Successfully retrieved document
  */
 export type GetV3DocumentsByIdResponse = {
   connectionId: string | null;
@@ -141,6 +175,10 @@ export type GetV3DocumentsByIdResponse = {
   updatedAt: string;
   url?: string | null | undefined;
   filepath: string | null;
+  /**
+   * Memories extracted from this document. Omitted when the document has no memories (e.g. still processing).
+   */
+  memories?: Array<GetV3DocumentsByIdMemory> | undefined;
 };
 
 /** @internal */
@@ -225,6 +263,78 @@ export const GetV3DocumentsByIdType$inboundSchema: z.ZodMiniType<
 > = openEnums.inboundSchema(GetV3DocumentsByIdType);
 
 /** @internal */
+export const GetV3DocumentsByIdMetadataMemory$inboundSchema: z.ZodMiniType<
+  GetV3DocumentsByIdMetadataMemory,
+  unknown
+> = smartUnion([types.string(), types.number(), types.boolean()]);
+
+export function getV3DocumentsByIdMetadataMemoryFromJSON(
+  jsonString: string,
+): SafeParseResult<GetV3DocumentsByIdMetadataMemory, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => GetV3DocumentsByIdMetadataMemory$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'GetV3DocumentsByIdMetadataMemory' from JSON`,
+  );
+}
+
+/** @internal */
+export const GetV3DocumentsByIdMemoryMetadata$inboundSchema: z.ZodMiniType<
+  GetV3DocumentsByIdMemoryMetadata,
+  unknown
+> = smartUnion([
+  smartUnion([types.string(), types.number(), types.boolean()]),
+  z.record(z.string(), z.any()),
+  z.array(z.any()),
+]);
+
+export function getV3DocumentsByIdMemoryMetadataFromJSON(
+  jsonString: string,
+): SafeParseResult<GetV3DocumentsByIdMemoryMetadata, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => GetV3DocumentsByIdMemoryMetadata$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'GetV3DocumentsByIdMemoryMetadata' from JSON`,
+  );
+}
+
+/** @internal */
+export const GetV3DocumentsByIdMemory$inboundSchema: z.ZodMiniType<
+  GetV3DocumentsByIdMemory,
+  unknown
+> = z.object({
+  id: types.string(),
+  memory: types.string(),
+  createdAt: types.string(),
+  updatedAt: types.nullable(types.string()),
+  isLatest: types.boolean(),
+  isForgotten: types.boolean(),
+  isStatic: types.boolean(),
+  isInference: types.boolean(),
+  version: types.number(),
+  sourceCount: types.number(),
+  metadata: types.nullable(
+    smartUnion([
+      smartUnion([types.string(), types.number(), types.boolean()]),
+      z.record(z.string(), z.any()),
+      z.array(z.any()),
+    ]),
+  ),
+  parentMemoryId: types.nullable(types.string()),
+  rootMemoryId: types.nullable(types.string()),
+});
+
+export function getV3DocumentsByIdMemoryFromJSON(
+  jsonString: string,
+): SafeParseResult<GetV3DocumentsByIdMemory, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => GetV3DocumentsByIdMemory$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'GetV3DocumentsByIdMemory' from JSON`,
+  );
+}
+
+/** @internal */
 export const GetV3DocumentsByIdResponse$inboundSchema: z.ZodMiniType<
   GetV3DocumentsByIdResponse,
   unknown
@@ -254,6 +364,9 @@ export const GetV3DocumentsByIdResponse$inboundSchema: z.ZodMiniType<
   updatedAt: types.string(),
   url: z.optional(z.nullable(types.string())),
   filepath: types.nullable(types.string()),
+  memories: types.optional(
+    z.array(z.lazy(() => GetV3DocumentsByIdMemory$inboundSchema)),
+  ),
 });
 
 export function getV3DocumentsByIdResponseFromJSON(
