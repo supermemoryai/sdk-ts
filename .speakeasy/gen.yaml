@@ -44,6 +44,9 @@ typescript:
   additionalPackageJSON:
     bin:
       supermemory: bin/cli.mjs
+    repository:
+      type: git
+      url: git+https://github.com/supermemoryai/sdk-ts.git
   additionalScripts:
     check-types: tsgo --noEmit
   alwaysIncludeInboundAndOutbound: false
