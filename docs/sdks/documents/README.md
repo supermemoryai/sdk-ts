@@ -14,6 +14,7 @@
 * [chunks](#chunks) - Get document chunks
 * [fileUrl](#fileurl) - Get presigned file URL
 * [deleteBulk](#deletebulk) - Bulk delete documents
+* [search](#search) - Search documents
 
 ## batchAdd
 
@@ -864,5 +865,84 @@ run();
 | Error Type                     | Status Code                    | Content Type                   |
 | ------------------------------ | ------------------------------ | ------------------------------ |
 | errors.ErrorResponse           | 400, 401                       | application/json               |
+| errors.ErrorResponse           | 500                            | application/json               |
+| errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
+
+## search
+
+Search memories with advanced filtering
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="postV3Search" method="post" path="/v3/search" -->
+```typescript
+import { Supermemory } from "supermemory";
+
+const supermemory = new Supermemory({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const result = await supermemory.documents.search({
+    chunkThreshold: 0.5,
+    containerTag: "user_alex",
+    q: "what are the API rate limits",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { SupermemoryCore } from "supermemory/core.js";
+import { documentsSearch } from "supermemory/funcs/documents-search.js";
+
+// Use `SupermemoryCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const supermemory = new SupermemoryCore({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const res = await documentsSearch(supermemory, {
+    chunkThreshold: 0.5,
+    containerTag: "user_alex",
+    q: "what are the API rate limits",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("documentsSearch failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.PostV3SearchRequest](../../models/operations/post-v3-search-request.md)                                                                                            | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[operations.PostV3SearchResponse](../../models/operations/post-v3-search-response.md)\>**
+
+### Errors
+
+| Error Type                     | Status Code                    | Content Type                   |
+| ------------------------------ | ------------------------------ | ------------------------------ |
+| errors.ErrorResponse           | 400, 401, 402, 404             | application/json               |
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |

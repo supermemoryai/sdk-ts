@@ -1,9 +1,13 @@
 {
   "name": "supermemory",
-  "version": "5.0.0-rc.1",
+  "version": "5.0.0-rc.2",
   "author": "Speakeasy",
   "bin": {
     "supermemory": "bin/cli.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supermemoryai/sdk-ts.git"
   },
   "type": "module",
   "main": "./esm/index.js",
@@ -50,7 +54,6 @@
     "lint": "oxlint --max-warnings=0 --deny-warnings --no-error-on-unmatched-pattern src",
     "build": "tsgo",
     "prepublishOnly": "npm run build",
-    "build:cli": "bun ../../scripts/build-sdk-cli.ts",
     "check-types": "tsgo --noEmit"
   },
   "peerDependencies": {
