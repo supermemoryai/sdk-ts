@@ -1,0 +1,40 @@
+speakeasyVersion: 1.793.0
+sources:
+    supermemory API:
+        sourceNamespace: supermemory-api
+        sourceRevisionDigest: sha256:d8e5fe803b0eb97817d62a83a76c3a595809a7442657dfbe3730fc24a0448632
+        sourceBlobDigest: sha256:9d45f52064e3b2ce360edd9e2766222eecb6b4b9e0a961c9cf9d8a6c5411b027
+        tags:
+            - latest
+            - 3.0.0
+targets:
+    supermemory:
+        source: supermemory API
+        sourceNamespace: supermemory-api
+        sourceRevisionDigest: sha256:d8e5fe803b0eb97817d62a83a76c3a595809a7442657dfbe3730fc24a0448632
+        sourceBlobDigest: sha256:9d45f52064e3b2ce360edd9e2766222eecb6b4b9e0a961c9cf9d8a6c5411b027
+        codeSamplesNamespace: supermemory-api-typescript-code-samples
+        codeSamplesRevisionDigest: sha256:2a7eecd29b6b20f2f007ecff3114f755800c6b2e4b2f9fe1dac7e475b52e26f1
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        supermemory API:
+            inputs:
+                - location: ../../openapi.json
+            overlays:
+                - location: .speakeasy/speakeasy-modifications-overlay.yaml
+                - location: .speakeasy/stainless-parity-overlay.yaml
+            output: .speakeasy/out.openapi.yaml
+            registry:
+                location: registry.speakeasyapi.dev/supermemory-hnj/supermemory/supermemory-api
+    targets:
+        supermemory:
+            target: typescript
+            source: supermemory API
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/supermemory-hnj/supermemory/supermemory-api-typescript-code-samples
+                labelOverride:
+                    fixedValue: Typescript (SDK)
+                blocking: false
