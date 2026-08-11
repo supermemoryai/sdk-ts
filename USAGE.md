@@ -3,11 +3,11 @@
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const result = await supermemory.ingest.addDocument({
+  const result = await supermemory.add({
     content: "<value>",
   });
 

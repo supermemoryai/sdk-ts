@@ -6,13 +6,13 @@
 import * as z from "zod/v4-mini";
 
 export interface Env {
-  SUPERMEMORY_BEARER_AUTH?: string | undefined;
+  SUPERMEMORY_API_KEY?: string | undefined;
 
   SUPERMEMORY_DEBUG?: boolean | undefined;
 }
 
 export const envSchema: z.ZodMiniType<Env, unknown> = z.object({
-  SUPERMEMORY_BEARER_AUTH: z.optional(z.string()),
+  SUPERMEMORY_API_KEY: z.optional(z.string()),
 
   SUPERMEMORY_DEBUG: z.optional(z.coerce.boolean()),
 });

@@ -2,13 +2,11 @@
 
 ## Overview
 
-Organization settings
-
 ### Available Operations
 
 * [get](#get) - Get settings
 * [update](#update) - Update settings
-* [resetOrganizationData](#resetorganizationdata) - Reset organization data
+* [reset](#reset) - Reset organization data
 * [suggestBuckets](#suggestbuckets) - Suggest profile buckets
 
 ## get
@@ -22,7 +20,7 @@ Get settings for an organization
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -45,7 +43,7 @@ import { settingsGet } from "supermemory/funcs/settings-get.js";
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -92,7 +90,7 @@ Update settings for an organization
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -115,7 +113,7 @@ import { settingsUpdate } from "supermemory/funcs/settings-update.js";
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -152,7 +150,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## resetOrganizationData
+## reset
 
 Reset organization content: removes documents, memories, spaces (except default project), connections, and org settings. Preserves the org, members, and billing.
 
@@ -163,11 +161,11 @@ Reset organization content: removes documents, memories, spaces (except default 
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const result = await supermemory.settings.resetOrganizationData({
+  const result = await supermemory.settings.reset({
     confirmation: "<value>",
   });
 
@@ -183,23 +181,23 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { settingsResetOrganizationData } from "supermemory/funcs/settings-reset-organization-data.js";
+import { settingsReset } from "supermemory/funcs/settings-reset.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const res = await settingsResetOrganizationData(supermemory, {
+  const res = await settingsReset(supermemory, {
     confirmation: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("settingsResetOrganizationData failed:", res.error);
+    console.log("settingsReset failed:", res.error);
   }
 }
 
@@ -238,7 +236,7 @@ Suggest profile bucket definitions based on the organization context prompt. Ret
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -261,7 +259,7 @@ import { settingsSuggestBuckets } from "supermemory/funcs/settings-suggest-bucke
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {

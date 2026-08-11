@@ -4,9 +4,9 @@
  */
 
 import { containerTagsDelete } from "../funcs/container-tags-delete.js";
-import { containerTagsGetByContainerTag } from "../funcs/container-tags-get-by-container-tag.js";
-import { containerTagsGetMergeStatus } from "../funcs/container-tags-get-merge-status.js";
+import { containerTagsGet } from "../funcs/container-tags-get.js";
 import { containerTagsList } from "../funcs/container-tags-list.js";
+import { containerTagsMergeStatus } from "../funcs/container-tags-merge-status.js";
 import { containerTagsMerge } from "../funcs/container-tags-merge.js";
 import { containerTagsUpdate } from "../funcs/container-tags-update.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
@@ -35,11 +35,11 @@ export class ContainerTags extends ClientSDK {
    * @remarks
    * Get settings for a container tag
    */
-  async getByContainerTag(
+  async get(
     request: operations.GetV3ContainerTagsByContainerTagRequest,
     options?: RequestOptions,
   ): Promise<operations.GetV3ContainerTagsByContainerTagResponse> {
-    return unwrapAsync(containerTagsGetByContainerTag(
+    return unwrapAsync(containerTagsGet(
       this,
       request,
       options,
@@ -103,11 +103,11 @@ export class ContainerTags extends ClientSDK {
    * @remarks
    * Get queued container tag merge status
    */
-  async getMergeStatus(
+  async mergeStatus(
     request: operations.GetV3ContainerTagsMergeByMergeIdRequest,
     options?: RequestOptions,
   ): Promise<operations.GetV3ContainerTagsMergeByMergeIdResponse> {
-    return unwrapAsync(containerTagsGetMergeStatus(
+    return unwrapAsync(containerTagsMergeStatus(
       this,
       request,
       options,

@@ -20,23 +20,23 @@ specific category of applications.
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { ingestAddDocument } from "supermemory/funcs/ingest-add-document.js";
+import { add } from "supermemory/funcs/add.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const res = await ingestAddDocument(supermemory, {
+  const res = await add(supermemory, {
     content: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("ingestAddDocument failed:", res.error);
+    console.log("add failed:", res.error);
   }
 }
 

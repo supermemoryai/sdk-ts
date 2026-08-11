@@ -11,7 +11,7 @@ import * as types from "../../types/primitives.js";
 import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
-export type PostV3DocumentsBatchMetadata =
+export type PostV3DocumentsBatchMetadata1 =
   | string
   | number
   | boolean
@@ -20,18 +20,18 @@ export type PostV3DocumentsBatchMetadata =
 /**
  * Task type: "memory" (default) for full context layer with SuperRAG built in, "superrag" for managed RAG as a service.
  */
-export const PostV3DocumentsBatchTaskType = {
+export const PostV3DocumentsBatchTaskType1 = {
   Memory: "memory",
   Superrag: "superrag",
 } as const;
 /**
  * Task type: "memory" (default) for full context layer with SuperRAG built in, "superrag" for managed RAG as a service.
  */
-export type PostV3DocumentsBatchTaskType = ClosedEnum<
-  typeof PostV3DocumentsBatchTaskType
+export type PostV3DocumentsBatchTaskType1 = ClosedEnum<
+  typeof PostV3DocumentsBatchTaskType1
 >;
 
-export type PostV3DocumentsBatchFilterByMetadata =
+export type PostV3DocumentsBatchFilterByMetadata1 =
   | string
   | number
   | boolean
@@ -40,32 +40,38 @@ export type PostV3DocumentsBatchFilterByMetadata =
 /**
  * Processing mode. "dynamic" (default) groups related documents together so memories form from coherent, logical units rather than one isolated entry at a time. "instant" processes each document on its own right away, and bills one extra operation per document.
  */
-export const PostV3DocumentsBatchDreaming = {
+export const PostV3DocumentsBatchDreaming1 = {
   Instant: "instant",
   Dynamic: "dynamic",
 } as const;
 /**
  * Processing mode. "dynamic" (default) groups related documents together so memories form from coherent, logical units rather than one isolated entry at a time. "instant" processes each document on its own right away, and bills one extra operation per document.
  */
-export type PostV3DocumentsBatchDreaming = ClosedEnum<
-  typeof PostV3DocumentsBatchDreaming
+export type PostV3DocumentsBatchDreaming1 = ClosedEnum<
+  typeof PostV3DocumentsBatchDreaming1
 >;
 
-export type DocumentsMetadata = string | number | boolean | Array<string>;
+export type PostV3DocumentsBatchMetadata2 =
+  | string
+  | number
+  | boolean
+  | Array<string>;
 
 /**
  * Task type: "memory" (default) for full context layer with SuperRAG built in, "superrag" for managed RAG as a service.
  */
-export const DocumentsTaskType = {
+export const PostV3DocumentsBatchTaskType2 = {
   Memory: "memory",
   Superrag: "superrag",
 } as const;
 /**
  * Task type: "memory" (default) for full context layer with SuperRAG built in, "superrag" for managed RAG as a service.
  */
-export type DocumentsTaskType = ClosedEnum<typeof DocumentsTaskType>;
+export type PostV3DocumentsBatchTaskType2 = ClosedEnum<
+  typeof PostV3DocumentsBatchTaskType2
+>;
 
-export type DocumentsFilterByMetadata =
+export type PostV3DocumentsBatchFilterByMetadata2 =
   | string
   | number
   | boolean
@@ -74,14 +80,16 @@ export type DocumentsFilterByMetadata =
 /**
  * Processing mode. "dynamic" (default) groups related documents together so memories form from coherent, logical units rather than one isolated entry at a time. "instant" processes each document on its own right away, and bills one extra operation per document.
  */
-export const DocumentsDreaming = {
+export const PostV3DocumentsBatchDreaming2 = {
   Instant: "instant",
   Dynamic: "dynamic",
 } as const;
 /**
  * Processing mode. "dynamic" (default) groups related documents together so memories form from coherent, logical units rather than one isolated entry at a time. "instant" processes each document on its own right away, and bills one extra operation per document.
  */
-export type DocumentsDreaming = ClosedEnum<typeof DocumentsDreaming>;
+export type PostV3DocumentsBatchDreaming2 = ClosedEnum<
+  typeof PostV3DocumentsBatchDreaming2
+>;
 
 export type Documents = {
   /**
@@ -119,7 +127,7 @@ export type Documents = {
   /**
    * Task type: "memory" (default) for full context layer with SuperRAG built in, "superrag" for managed RAG as a service.
    */
-  taskType?: DocumentsTaskType | undefined;
+  taskType?: PostV3DocumentsBatchTaskType2 | undefined;
   /**
    * Optional file path for the document (e.g., '/documents/reports/file.pdf'). Used by supermemoryfs to map documents to filesystem paths.
    */
@@ -137,7 +145,7 @@ export type Documents = {
   /**
    * Processing mode. "dynamic" (default) groups related documents together so memories form from coherent, logical units rather than one isolated entry at a time. "instant" processes each document on its own right away, and bills one extra operation per document.
    */
-  dreaming?: DocumentsDreaming | undefined;
+  dreaming?: PostV3DocumentsBatchDreaming2 | undefined;
 };
 
 export type DocumentsUnion = Array<Documents> | Array<string>;
@@ -162,7 +170,7 @@ export type PostV3DocumentsBatchRequest = {
   /**
    * Task type: "memory" (default) for full context layer with SuperRAG built in, "superrag" for managed RAG as a service.
    */
-  taskType?: PostV3DocumentsBatchTaskType | undefined;
+  taskType?: PostV3DocumentsBatchTaskType1 | undefined;
   /**
    * Optional file path for the document (e.g., '/documents/reports/file.pdf'). Used by supermemoryfs to map documents to filesystem paths.
    */
@@ -180,7 +188,7 @@ export type PostV3DocumentsBatchRequest = {
   /**
    * Processing mode. "dynamic" (default) groups related documents together so memories form from coherent, logical units rather than one isolated entry at a time. "instant" processes each document on its own right away, and bills one extra operation per document.
    */
-  dreaming?: PostV3DocumentsBatchDreaming | undefined;
+  dreaming?: PostV3DocumentsBatchDreaming1 | undefined;
   documents: Array<Documents> | Array<string>;
   content?: any | null | undefined;
 };
@@ -223,112 +231,118 @@ export type PostV3DocumentsBatchResponse = {
 };
 
 /** @internal */
-export type PostV3DocumentsBatchMetadata$Outbound =
+export type PostV3DocumentsBatchMetadata1$Outbound =
   | string
   | number
   | boolean
   | Array<string>;
 
 /** @internal */
-export const PostV3DocumentsBatchMetadata$outboundSchema: z.ZodMiniType<
-  PostV3DocumentsBatchMetadata$Outbound,
-  PostV3DocumentsBatchMetadata
+export const PostV3DocumentsBatchMetadata1$outboundSchema: z.ZodMiniType<
+  PostV3DocumentsBatchMetadata1$Outbound,
+  PostV3DocumentsBatchMetadata1
 > = smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]);
 
-export function postV3DocumentsBatchMetadataToJSON(
-  postV3DocumentsBatchMetadata: PostV3DocumentsBatchMetadata,
+export function postV3DocumentsBatchMetadata1ToJSON(
+  postV3DocumentsBatchMetadata1: PostV3DocumentsBatchMetadata1,
 ): string {
   return JSON.stringify(
-    PostV3DocumentsBatchMetadata$outboundSchema.parse(
-      postV3DocumentsBatchMetadata,
+    PostV3DocumentsBatchMetadata1$outboundSchema.parse(
+      postV3DocumentsBatchMetadata1,
     ),
   );
 }
 
 /** @internal */
-export const PostV3DocumentsBatchTaskType$outboundSchema: z.ZodMiniEnum<
-  typeof PostV3DocumentsBatchTaskType
-> = z.enum(PostV3DocumentsBatchTaskType);
+export const PostV3DocumentsBatchTaskType1$outboundSchema: z.ZodMiniEnum<
+  typeof PostV3DocumentsBatchTaskType1
+> = z.enum(PostV3DocumentsBatchTaskType1);
 
 /** @internal */
-export type PostV3DocumentsBatchFilterByMetadata$Outbound =
+export type PostV3DocumentsBatchFilterByMetadata1$Outbound =
   | string
   | number
   | boolean
   | Array<string>;
 
 /** @internal */
-export const PostV3DocumentsBatchFilterByMetadata$outboundSchema: z.ZodMiniType<
-  PostV3DocumentsBatchFilterByMetadata$Outbound,
-  PostV3DocumentsBatchFilterByMetadata
-> = smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]);
+export const PostV3DocumentsBatchFilterByMetadata1$outboundSchema:
+  z.ZodMiniType<
+    PostV3DocumentsBatchFilterByMetadata1$Outbound,
+    PostV3DocumentsBatchFilterByMetadata1
+  > = smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]);
 
-export function postV3DocumentsBatchFilterByMetadataToJSON(
-  postV3DocumentsBatchFilterByMetadata: PostV3DocumentsBatchFilterByMetadata,
+export function postV3DocumentsBatchFilterByMetadata1ToJSON(
+  postV3DocumentsBatchFilterByMetadata1: PostV3DocumentsBatchFilterByMetadata1,
 ): string {
   return JSON.stringify(
-    PostV3DocumentsBatchFilterByMetadata$outboundSchema.parse(
-      postV3DocumentsBatchFilterByMetadata,
+    PostV3DocumentsBatchFilterByMetadata1$outboundSchema.parse(
+      postV3DocumentsBatchFilterByMetadata1,
     ),
   );
 }
 
 /** @internal */
-export const PostV3DocumentsBatchDreaming$outboundSchema: z.ZodMiniEnum<
-  typeof PostV3DocumentsBatchDreaming
-> = z.enum(PostV3DocumentsBatchDreaming);
+export const PostV3DocumentsBatchDreaming1$outboundSchema: z.ZodMiniEnum<
+  typeof PostV3DocumentsBatchDreaming1
+> = z.enum(PostV3DocumentsBatchDreaming1);
 
 /** @internal */
-export type DocumentsMetadata$Outbound =
+export type PostV3DocumentsBatchMetadata2$Outbound =
   | string
   | number
   | boolean
   | Array<string>;
 
 /** @internal */
-export const DocumentsMetadata$outboundSchema: z.ZodMiniType<
-  DocumentsMetadata$Outbound,
-  DocumentsMetadata
+export const PostV3DocumentsBatchMetadata2$outboundSchema: z.ZodMiniType<
+  PostV3DocumentsBatchMetadata2$Outbound,
+  PostV3DocumentsBatchMetadata2
 > = smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]);
 
-export function documentsMetadataToJSON(
-  documentsMetadata: DocumentsMetadata,
+export function postV3DocumentsBatchMetadata2ToJSON(
+  postV3DocumentsBatchMetadata2: PostV3DocumentsBatchMetadata2,
 ): string {
   return JSON.stringify(
-    DocumentsMetadata$outboundSchema.parse(documentsMetadata),
+    PostV3DocumentsBatchMetadata2$outboundSchema.parse(
+      postV3DocumentsBatchMetadata2,
+    ),
   );
 }
 
 /** @internal */
-export const DocumentsTaskType$outboundSchema: z.ZodMiniEnum<
-  typeof DocumentsTaskType
-> = z.enum(DocumentsTaskType);
+export const PostV3DocumentsBatchTaskType2$outboundSchema: z.ZodMiniEnum<
+  typeof PostV3DocumentsBatchTaskType2
+> = z.enum(PostV3DocumentsBatchTaskType2);
 
 /** @internal */
-export type DocumentsFilterByMetadata$Outbound =
+export type PostV3DocumentsBatchFilterByMetadata2$Outbound =
   | string
   | number
   | boolean
   | Array<string>;
 
 /** @internal */
-export const DocumentsFilterByMetadata$outboundSchema: z.ZodMiniType<
-  DocumentsFilterByMetadata$Outbound,
-  DocumentsFilterByMetadata
-> = smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]);
+export const PostV3DocumentsBatchFilterByMetadata2$outboundSchema:
+  z.ZodMiniType<
+    PostV3DocumentsBatchFilterByMetadata2$Outbound,
+    PostV3DocumentsBatchFilterByMetadata2
+  > = smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]);
 
-export function documentsFilterByMetadataToJSON(
-  documentsFilterByMetadata: DocumentsFilterByMetadata,
+export function postV3DocumentsBatchFilterByMetadata2ToJSON(
+  postV3DocumentsBatchFilterByMetadata2: PostV3DocumentsBatchFilterByMetadata2,
 ): string {
   return JSON.stringify(
-    DocumentsFilterByMetadata$outboundSchema.parse(documentsFilterByMetadata),
+    PostV3DocumentsBatchFilterByMetadata2$outboundSchema.parse(
+      postV3DocumentsBatchFilterByMetadata2,
+    ),
   );
 }
 
 /** @internal */
-export const DocumentsDreaming$outboundSchema: z.ZodMiniEnum<
-  typeof DocumentsDreaming
-> = z.enum(DocumentsDreaming);
+export const PostV3DocumentsBatchDreaming2$outboundSchema: z.ZodMiniEnum<
+  typeof PostV3DocumentsBatchDreaming2
+> = z.enum(PostV3DocumentsBatchDreaming2);
 
 /** @internal */
 export type Documents$Outbound = {
@@ -363,7 +377,7 @@ export const Documents$outboundSchema: z.ZodMiniType<
       smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]),
     ),
   ),
-  taskType: z.optional(DocumentsTaskType$outboundSchema),
+  taskType: z.optional(PostV3DocumentsBatchTaskType2$outboundSchema),
   filepath: z.optional(z.string()),
   filterByMetadata: z.optional(
     z.record(
@@ -372,7 +386,7 @@ export const Documents$outboundSchema: z.ZodMiniType<
     ),
   ),
   entityContext: z.optional(z.string()),
-  dreaming: z.optional(DocumentsDreaming$outboundSchema),
+  dreaming: z.optional(PostV3DocumentsBatchDreaming2$outboundSchema),
 });
 
 export function documentsToJSON(documents: Documents): string {
@@ -426,7 +440,7 @@ export const PostV3DocumentsBatchRequest$outboundSchema: z.ZodMiniType<
       smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]),
     ),
   ),
-  taskType: z.optional(PostV3DocumentsBatchTaskType$outboundSchema),
+  taskType: z.optional(PostV3DocumentsBatchTaskType1$outboundSchema),
   filepath: z.optional(z.string()),
   filterByMetadata: z.optional(
     z.record(
@@ -435,7 +449,7 @@ export const PostV3DocumentsBatchRequest$outboundSchema: z.ZodMiniType<
     ),
   ),
   entityContext: z.optional(z.string()),
-  dreaming: z.optional(PostV3DocumentsBatchDreaming$outboundSchema),
+  dreaming: z.optional(PostV3DocumentsBatchDreaming1$outboundSchema),
   documents: smartUnion([
     z.array(z.lazy(() => Documents$outboundSchema)),
     z.array(z.string()),

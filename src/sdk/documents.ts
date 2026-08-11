@@ -3,28 +3,100 @@
  * @generated-id: 2b40ad41a1b0
  */
 
-import { documentsGetById } from "../funcs/documents-get-by-id.js";
-import { documentsGetChunksById } from "../funcs/documents-get-chunks-by-id.js";
-import { documentsGetFileUrl } from "../funcs/documents-get-file-url.js";
-import { documentsGetProcessing } from "../funcs/documents-get-processing.js";
+import { documentsBatchAdd } from "../funcs/documents-batch-add.js";
+import { documentsChunks } from "../funcs/documents-chunks.js";
+import { documentsDeleteBulk } from "../funcs/documents-delete-bulk.js";
+import { documentsDelete } from "../funcs/documents-delete.js";
+import { documentsFileUrl } from "../funcs/documents-file-url.js";
+import { documentsGet } from "../funcs/documents-get.js";
+import { documentsListProcessing } from "../funcs/documents-list-processing.js";
 import { documentsList } from "../funcs/documents-list.js";
-import { documentsSearch } from "../funcs/documents-search.js";
+import { documentsUpdate } from "../funcs/documents-update.js";
+import { documentsUploadFile } from "../funcs/documents-upload-file.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
 
 export class Documents extends ClientSDK {
   /**
+   * Batch add documents
+   *
+   * @remarks
+   * Add multiple documents in a single request. Each document can have any content type (text, url, file, etc.) and metadata
+   */
+  async batchAdd(
+    request: operations.PostV3DocumentsBatchRequest,
+    options?: RequestOptions,
+  ): Promise<operations.PostV3DocumentsBatchResponse> {
+    return unwrapAsync(documentsBatchAdd(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Update document
+   *
+   * @remarks
+   * Update a document with any content type (text, url, file, etc.) and metadata
+   */
+  async update(
+    request: operations.PatchV3DocumentsByIdRequest,
+    options?: RequestOptions,
+  ): Promise<operations.PatchV3DocumentsByIdResponse> {
+    return unwrapAsync(documentsUpdate(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
    * Get document
    *
    * @remarks
    * Get a document by ID
    */
-  async getById(
+  async get(
     request: operations.GetV3DocumentsByIdRequest,
     options?: RequestOptions,
   ): Promise<operations.GetV3DocumentsByIdResponse> {
-    return unwrapAsync(documentsGetById(
+    return unwrapAsync(documentsGet(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Delete document by ID or customId
+   *
+   * @remarks
+   * Delete a document by ID or customId
+   */
+  async delete(
+    request: operations.DeleteV3DocumentsByIdRequest,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return unwrapAsync(documentsDelete(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Upload a file
+   *
+   * @remarks
+   * Upload a file to be processed
+   */
+  async uploadFile(
+    request: operations.PostV3DocumentsFileRequest,
+    options?: RequestOptions,
+  ): Promise<operations.PostV3DocumentsFileResponse> {
+    return unwrapAsync(documentsUploadFile(
       this,
       request,
       options,
@@ -54,10 +126,10 @@ export class Documents extends ClientSDK {
    * @remarks
    * Get documents that are currently being processed
    */
-  async getProcessing(
+  async listProcessing(
     options?: RequestOptions,
   ): Promise<operations.GetV3DocumentsProcessingResponse> {
-    return unwrapAsync(documentsGetProcessing(
+    return unwrapAsync(documentsListProcessing(
       this,
       options,
     ));
@@ -69,11 +141,11 @@ export class Documents extends ClientSDK {
    * @remarks
    * Get all chunks for a document, ordered by position
    */
-  async getChunksById(
+  async chunks(
     request: operations.GetV3DocumentsByIdChunksRequest,
     options?: RequestOptions,
   ): Promise<operations.GetV3DocumentsByIdChunksResponse> {
-    return unwrapAsync(documentsGetChunksById(
+    return unwrapAsync(documentsChunks(
       this,
       request,
       options,
@@ -86,11 +158,11 @@ export class Documents extends ClientSDK {
    * @remarks
    * Get a fresh presigned URL for a document's file. Returns a time-limited URL (24h) that can be used to download the file.
    */
-  async getFileUrl(
+  async fileUrl(
     request: operations.GetV3DocumentsByIdFileUrlRequest,
     options?: RequestOptions,
   ): Promise<operations.GetV3DocumentsByIdFileUrlResponse> {
-    return unwrapAsync(documentsGetFileUrl(
+    return unwrapAsync(documentsFileUrl(
       this,
       request,
       options,
@@ -98,16 +170,16 @@ export class Documents extends ClientSDK {
   }
 
   /**
-   * Search documents
+   * Bulk delete documents
    *
    * @remarks
-   * Search memories with advanced filtering
+   * Bulk delete documents by IDs or container tags
    */
-  async search(
-    request: operations.PostV3SearchRequest,
+  async deleteBulk(
+    request: operations.DeleteV3DocumentsBulkRequest,
     options?: RequestOptions,
-  ): Promise<operations.PostV3SearchResponse> {
-    return unwrapAsync(documentsSearch(
+  ): Promise<operations.DeleteV3DocumentsBulkResponse> {
+    return unwrapAsync(documentsDeleteBulk(
       this,
       request,
       options,

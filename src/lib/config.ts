@@ -19,7 +19,7 @@ export const ServerList = [
 ] as const;
 
 export type SDKOptions = {
-  bearerAuth?: string | (() => Promise<string>) | undefined;
+  apiKey?: string | (() => Promise<string>) | undefined;
 
   httpClient?: HTTPClient;
   /**

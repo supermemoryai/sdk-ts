@@ -4,7 +4,7 @@
  */
 
 import { settingsGet } from "../funcs/settings-get.js";
-import { settingsResetOrganizationData } from "../funcs/settings-reset-organization-data.js";
+import { settingsReset } from "../funcs/settings-reset.js";
 import { settingsSuggestBuckets } from "../funcs/settings-suggest-buckets.js";
 import { settingsUpdate } from "../funcs/settings-update.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
@@ -50,11 +50,11 @@ export class Settings extends ClientSDK {
    * @remarks
    * Reset organization content: removes documents, memories, spaces (except default project), connections, and org settings. Preserves the org, members, and billing.
    */
-  async resetOrganizationData(
+  async reset(
     request: operations.PostV3SettingsResetRequest,
     options?: RequestOptions,
   ): Promise<operations.PostV3SettingsResetResponse> {
-    return unwrapAsync(settingsResetOrganizationData(
+    return unwrapAsync(settingsReset(
       this,
       request,
       options,

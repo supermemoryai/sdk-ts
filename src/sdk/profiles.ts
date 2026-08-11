@@ -3,41 +3,23 @@
  * @generated-id: 9e030d2bcc0b
  */
 
-import { profilesGetBuckets } from "../funcs/profiles-get-buckets.js";
-import { profilesGet } from "../funcs/profiles-get.js";
+import { profilesBuckets } from "../funcs/profiles-buckets.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
 
 export class Profiles extends ClientSDK {
   /**
-   * Get user profile
-   *
-   * @remarks
-   * Get user profile with optional search results
-   */
-  async get(
-    request: operations.PostV4ProfileRequest,
-    options?: RequestOptions,
-  ): Promise<operations.PostV4ProfileResponse> {
-    return unwrapAsync(profilesGet(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
    * Get profile buckets
    *
    * @remarks
    * Returns the effective profile bucket definitions for a given container tag — org-level buckets merged with any container-tag-level additions.
    */
-  async getBuckets(
+  async buckets(
     request: operations.PostV4ProfileBucketsRequest,
     options?: RequestOptions,
   ): Promise<operations.PostV4ProfileBucketsResponse> {
-    return unwrapAsync(profilesGetBuckets(
+    return unwrapAsync(profilesBuckets(
       this,
       request,
       options,

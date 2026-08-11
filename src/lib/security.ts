@@ -253,7 +253,7 @@ export function resolveGlobalSecurity(
       {
         fieldName: "Authorization",
         type: "http:bearer",
-        value: security?.bearerAuth ?? env().SUPERMEMORY_BEARER_AUTH,
+        value: security?.apiKey ?? env().SUPERMEMORY_API_KEY,
       },
     ],
   ];

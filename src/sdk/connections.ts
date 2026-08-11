@@ -4,15 +4,15 @@
  */
 
 import { connectionsConfigure } from "../funcs/connections-configure.js";
-import { connectionsCreateWithProvider } from "../funcs/connections-create-with-provider.js";
-import { connectionsDeleteById } from "../funcs/connections-delete-by-id.js";
+import { connectionsCreate } from "../funcs/connections-create.js";
+import { connectionsDeleteByID } from "../funcs/connections-delete-by-id.js";
 import { connectionsDeleteByProvider } from "../funcs/connections-delete-by-provider.js";
-import { connectionsGetById } from "../funcs/connections-get-by-id.js";
-import { connectionsGetConnection } from "../funcs/connections-get-connection.js";
-import { connectionsGetResources } from "../funcs/connections-get-resources.js";
+import { connectionsGetByID } from "../funcs/connections-get-by-id.js";
+import { connectionsGetByTag } from "../funcs/connections-get-by-tag.js";
+import { connectionsImport } from "../funcs/connections-import.js";
 import { connectionsListDocuments } from "../funcs/connections-list-documents.js";
 import { connectionsList } from "../funcs/connections-list.js";
-import { connectionsSyncByProvider } from "../funcs/connections-sync-by-provider.js";
+import { connectionsResources } from "../funcs/connections-resources.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
@@ -41,11 +41,11 @@ export class Connections extends ClientSDK {
    * @remarks
    * Initialize connection and get authorization URL
    */
-  async createWithProvider(
+  async create(
     request: operations.PostV3ConnectionsByProviderRequest,
     options?: RequestOptions,
   ): Promise<operations.PostV3ConnectionsByProviderResponse> {
-    return unwrapAsync(connectionsCreateWithProvider(
+    return unwrapAsync(connectionsCreate(
       this,
       request,
       options,
@@ -75,11 +75,11 @@ export class Connections extends ClientSDK {
    * @remarks
    * Fetch resources for a connection (supported providers: GitHub for now)
    */
-  async getResources(
+  async resources(
     request: operations.GetV3ConnectionsByConnectionIdResourcesRequest,
     options?: RequestOptions,
   ): Promise<operations.GetV3ConnectionsByConnectionIdResourcesResponse> {
-    return unwrapAsync(connectionsGetResources(
+    return unwrapAsync(connectionsResources(
       this,
       request,
       options,
@@ -109,11 +109,11 @@ export class Connections extends ClientSDK {
    * @remarks
    * Get connection details with id
    */
-  async getById(
+  async getByID(
     request: operations.GetV3ConnectionsByConnectionIdRequest,
     options?: RequestOptions,
   ): Promise<operations.GetV3ConnectionsByConnectionIdResponse> {
-    return unwrapAsync(connectionsGetById(
+    return unwrapAsync(connectionsGetByID(
       this,
       request,
       options,
@@ -126,11 +126,11 @@ export class Connections extends ClientSDK {
    * @remarks
    * Delete a specific connection by ID
    */
-  async deleteById(
+  async deleteByID(
     request: operations.DeleteV3ConnectionsByConnectionIdRequest,
     options?: RequestOptions,
   ): Promise<operations.DeleteV3ConnectionsByConnectionIdResponse> {
-    return unwrapAsync(connectionsDeleteById(
+    return unwrapAsync(connectionsDeleteByID(
       this,
       request,
       options,
@@ -143,11 +143,11 @@ export class Connections extends ClientSDK {
    * @remarks
    * Get connection details with provider and container tags
    */
-  async getConnection(
+  async getByTag(
     request: operations.PostV3ConnectionsByProviderConnectionRequest,
     options?: RequestOptions,
   ): Promise<operations.PostV3ConnectionsByProviderConnectionResponse> {
-    return unwrapAsync(connectionsGetConnection(
+    return unwrapAsync(connectionsGetByTag(
       this,
       request,
       options,
@@ -177,11 +177,11 @@ export class Connections extends ClientSDK {
    * @remarks
    * Initiate a manual sync of connections
    */
-  async syncByProvider(
+  async import(
     request: operations.PostV3ConnectionsByProviderImportRequest,
     options?: RequestOptions,
   ): Promise<string> {
-    return unwrapAsync(connectionsSyncByProvider(
+    return unwrapAsync(connectionsImport(
       this,
       request,
       options,

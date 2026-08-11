@@ -5,11 +5,11 @@
 ### Available Operations
 
 * [list](#list) - List all container tags
-* [getByContainerTag](#getbycontainertag) - Get container tag settings
+* [get](#get) - Get container tag settings
 * [update](#update) - Update container tag settings
 * [delete](#delete) - Delete container tag
 * [merge](#merge) - Merge container tags
-* [getMergeStatus](#getmergestatus) - Get container tag merge status
+* [mergeStatus](#mergestatus) - Get container tag merge status
 
 ## list
 
@@ -22,7 +22,7 @@ List all container tags with isNova flag
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -45,7 +45,7 @@ import { containerTagsList } from "supermemory/funcs/container-tags-list.js";
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -81,7 +81,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getByContainerTag
+## get
 
 Get settings for a container tag
 
@@ -92,11 +92,11 @@ Get settings for a container tag
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const result = await supermemory.containerTags.getByContainerTag({
+  const result = await supermemory.containerTags.get({
     containerTag: "<value>",
   });
 
@@ -112,23 +112,23 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { containerTagsGetByContainerTag } from "supermemory/funcs/container-tags-get-by-container-tag.js";
+import { containerTagsGet } from "supermemory/funcs/container-tags-get.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const res = await containerTagsGetByContainerTag(supermemory, {
+  const res = await containerTagsGet(supermemory, {
     containerTag: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("containerTagsGetByContainerTag failed:", res.error);
+    console.log("containerTagsGet failed:", res.error);
   }
 }
 
@@ -167,7 +167,7 @@ Update settings for a container tag
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -200,7 +200,7 @@ import { containerTagsUpdate } from "supermemory/funcs/container-tags-update.js"
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -257,7 +257,7 @@ Delete a container tag and all its documents and memories. Only organization own
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -282,7 +282,7 @@ import { containerTagsDelete } from "supermemory/funcs/container-tags-delete.js"
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -332,7 +332,7 @@ Merge multiple container tags into a target tag. All documents from the source t
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -360,7 +360,7 @@ import { containerTagsMerge } from "supermemory/funcs/container-tags-merge.js";
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -402,7 +402,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getMergeStatus
+## mergeStatus
 
 Get queued container tag merge status
 
@@ -413,11 +413,11 @@ Get queued container tag merge status
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const result = await supermemory.containerTags.getMergeStatus({
+  const result = await supermemory.containerTags.mergeStatus({
     mergeId: "<id>",
   });
 
@@ -433,23 +433,23 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { containerTagsGetMergeStatus } from "supermemory/funcs/container-tags-get-merge-status.js";
+import { containerTagsMergeStatus } from "supermemory/funcs/container-tags-merge-status.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const res = await containerTagsGetMergeStatus(supermemory, {
+  const res = await containerTagsMergeStatus(supermemory, {
     mergeId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("containerTagsGetMergeStatus failed:", res.error);
+    console.log("containerTagsMergeStatus failed:", res.error);
   }
 }
 

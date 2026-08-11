@@ -2,20 +2,18 @@
 
 ## Overview
 
-External service integrations
-
 ### Available Operations
 
 * [list](#list) - List connections
-* [createWithProvider](#createwithprovider) - Create connection
+* [create](#create) - Create connection
 * [deleteByProvider](#deletebyprovider) - Delete connection
-* [getResources](#getresources) - Fetch resources
+* [resources](#resources) - Fetch resources
 * [configure](#configure) - Configure connection
-* [getById](#getbyid) - Get connection (by id)
-* [deleteById](#deletebyid) - Delete connection by ID
-* [getConnection](#getconnection) - Get connection (by provider)
+* [getByID](#getbyid) - Get connection (by id)
+* [deleteByID](#deletebyid) - Delete connection by ID
+* [getByTag](#getbytag) - Get connection (by provider)
 * [listDocuments](#listdocuments) - List documents
-* [syncByProvider](#syncbyprovider) - Sync connection
+* [import](#import) - Sync connection
 
 ## list
 
@@ -28,7 +26,7 @@ List all connections
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -56,7 +54,7 @@ import { connectionsList } from "supermemory/funcs/connections-list.js";
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -98,7 +96,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## createWithProvider
+## create
 
 Initialize connection and get authorization URL
 
@@ -109,11 +107,11 @@ Initialize connection and get authorization URL
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const result = await supermemory.connections.createWithProvider({
+  const result = await supermemory.connections.create({
     provider: "google-drive",
     body: {},
   });
@@ -130,16 +128,16 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsCreateWithProvider } from "supermemory/funcs/connections-create-with-provider.js";
+import { connectionsCreate } from "supermemory/funcs/connections-create.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const res = await connectionsCreateWithProvider(supermemory, {
+  const res = await connectionsCreate(supermemory, {
     provider: "google-drive",
     body: {},
   });
@@ -147,7 +145,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsCreateWithProvider failed:", res.error);
+    console.log("connectionsCreate failed:", res.error);
   }
 }
 
@@ -185,7 +183,7 @@ Delete connection for a specific provider and container tags
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -216,7 +214,7 @@ import { connectionsDeleteByProvider } from "supermemory/funcs/connections-delet
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -261,7 +259,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getResources
+## resources
 
 Fetch resources for a connection (supported providers: GitHub for now)
 
@@ -272,11 +270,11 @@ Fetch resources for a connection (supported providers: GitHub for now)
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const result = await supermemory.connections.getResources({
+  const result = await supermemory.connections.resources({
     connectionId: "<id>",
   });
 
@@ -292,23 +290,23 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsGetResources } from "supermemory/funcs/connections-get-resources.js";
+import { connectionsResources } from "supermemory/funcs/connections-resources.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const res = await connectionsGetResources(supermemory, {
+  const res = await connectionsResources(supermemory, {
     connectionId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsGetResources failed:", res.error);
+    console.log("connectionsResources failed:", res.error);
   }
 }
 
@@ -347,7 +345,7 @@ Configure resources for a connection (supported providers: GitHub for now)
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -379,7 +377,7 @@ import { connectionsConfigure } from "supermemory/funcs/connections-configure.js
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -425,7 +423,7 @@ run();
 | errors.ErrorResponse           | 501                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getById
+## getByID
 
 Get connection details with id
 
@@ -436,11 +434,11 @@ Get connection details with id
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const result = await supermemory.connections.getById({
+  const result = await supermemory.connections.getByID({
     connectionId: "<id>",
   });
 
@@ -456,23 +454,23 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsGetById } from "supermemory/funcs/connections-get-by-id.js";
+import { connectionsGetByID } from "supermemory/funcs/connections-get-by-id.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const res = await connectionsGetById(supermemory, {
+  const res = await connectionsGetByID(supermemory, {
     connectionId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsGetById failed:", res.error);
+    console.log("connectionsGetByID failed:", res.error);
   }
 }
 
@@ -500,7 +498,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## deleteById
+## deleteByID
 
 Delete a specific connection by ID
 
@@ -511,11 +509,11 @@ Delete a specific connection by ID
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const result = await supermemory.connections.deleteById({
+  const result = await supermemory.connections.deleteByID({
     connectionId: "<id>",
   });
 
@@ -531,23 +529,23 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsDeleteById } from "supermemory/funcs/connections-delete-by-id.js";
+import { connectionsDeleteByID } from "supermemory/funcs/connections-delete-by-id.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const res = await connectionsDeleteById(supermemory, {
+  const res = await connectionsDeleteByID(supermemory, {
     connectionId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsDeleteById failed:", res.error);
+    console.log("connectionsDeleteByID failed:", res.error);
   }
 }
 
@@ -575,7 +573,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## getConnection
+## getByTag
 
 Get connection details with provider and container tags
 
@@ -586,11 +584,11 @@ Get connection details with provider and container tags
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const result = await supermemory.connections.getConnection({
+  const result = await supermemory.connections.getByTag({
     provider: "web-crawler",
     body: {
       containerTags: [
@@ -612,16 +610,16 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsGetConnection } from "supermemory/funcs/connections-get-connection.js";
+import { connectionsGetByTag } from "supermemory/funcs/connections-get-by-tag.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const res = await connectionsGetConnection(supermemory, {
+  const res = await connectionsGetByTag(supermemory, {
     provider: "web-crawler",
     body: {
       containerTags: [
@@ -634,7 +632,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsGetConnection failed:", res.error);
+    console.log("connectionsGetByTag failed:", res.error);
   }
 }
 
@@ -673,7 +671,7 @@ List documents indexed for a provider and container tags
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -704,7 +702,7 @@ import { connectionsListDocuments } from "supermemory/funcs/connections-list-doc
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
@@ -749,7 +747,7 @@ run();
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
-## syncByProvider
+## import
 
 Initiate a manual sync of connections
 
@@ -760,11 +758,11 @@ Initiate a manual sync of connections
 import { Supermemory } from "supermemory";
 
 const supermemory = new Supermemory({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const result = await supermemory.connections.syncByProvider({
+  const result = await supermemory.connections.import({
     provider: "google-drive",
     body: {
       containerTags: [
@@ -786,16 +784,16 @@ The standalone function version of this method:
 
 ```typescript
 import { SupermemoryCore } from "supermemory/core.js";
-import { connectionsSyncByProvider } from "supermemory/funcs/connections-sync-by-provider.js";
+import { connectionsImport } from "supermemory/funcs/connections-import.js";
 
 // Use `SupermemoryCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const supermemory = new SupermemoryCore({
-  bearerAuth: process.env["SUPERMEMORY_BEARER_AUTH"] ?? "",
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
 });
 
 async function run() {
-  const res = await connectionsSyncByProvider(supermemory, {
+  const res = await connectionsImport(supermemory, {
     provider: "google-drive",
     body: {
       containerTags: [
@@ -808,7 +806,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("connectionsSyncByProvider failed:", res.error);
+    console.log("connectionsImport failed:", res.error);
   }
 }
 

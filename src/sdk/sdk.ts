@@ -3,25 +3,29 @@
  * @generated-id: 47805ae255dd
  */
 
-import { ClientSDK } from "../lib/sdks.js";
+import { add } from "../funcs/add.js";
+import { profile } from "../funcs/profile.js";
+import { ClientSDK, RequestOptions } from "../lib/sdks.js";
+import * as operations from "../models/operations/index.js";
+import { unwrapAsync } from "../types/fp.js";
 import { Connections } from "./connections.js";
 import { ContainerTags } from "./container-tags.js";
-import { ContentManagement } from "./content-management.js";
+import { Conversations } from "./conversations.js";
 import { Documents } from "./documents.js";
-import { Ingest } from "./ingest.js";
+import { Memories } from "./memories.js";
 import { Profiles } from "./profiles.js";
-import { RecallSearch } from "./recall-search.js";
+import { Search } from "./search.js";
 import { Settings } from "./settings.js";
 
 export class Supermemory extends ClientSDK {
-  private _ingest?: Ingest;
-  get ingest(): Ingest {
-    return (this._ingest ??= new Ingest(this._options));
-  }
-
   private _documents?: Documents;
   get documents(): Documents {
     return (this._documents ??= new Documents(this._options));
+  }
+
+  private _search?: Search;
+  get search(): Search {
+    return (this._search ??= new Search(this._options));
   }
 
   private _settings?: Settings;
@@ -34,9 +38,9 @@ export class Supermemory extends ClientSDK {
     return (this._containerTags ??= new ContainerTags(this._options));
   }
 
-  private _contentManagement?: ContentManagement;
-  get contentManagement(): ContentManagement {
-    return (this._contentManagement ??= new ContentManagement(this._options));
+  private _memories?: Memories;
+  get memories(): Memories {
+    return (this._memories ??= new Memories(this._options));
   }
 
   private _profiles?: Profiles;
@@ -44,13 +48,47 @@ export class Supermemory extends ClientSDK {
     return (this._profiles ??= new Profiles(this._options));
   }
 
-  private _recallSearch?: RecallSearch;
-  get recallSearch(): RecallSearch {
-    return (this._recallSearch ??= new RecallSearch(this._options));
+  private _conversations?: Conversations;
+  get conversations(): Conversations {
+    return (this._conversations ??= new Conversations(this._options));
   }
 
   private _connections?: Connections;
   get connections(): Connections {
     return (this._connections ??= new Connections(this._options));
+  }
+
+  /**
+   * Add document
+   *
+   * @remarks
+   * Add a document with any content type (text, url, file, etc.) and metadata
+   */
+  async add(
+    request: operations.PostV3DocumentsRequest,
+    options?: RequestOptions,
+  ): Promise<operations.PostV3DocumentsResponse> {
+    return unwrapAsync(add(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Get user profile
+   *
+   * @remarks
+   * Get user profile with optional search results
+   */
+  async profile(
+    request: operations.PostV4ProfileRequest,
+    options?: RequestOptions,
+  ): Promise<operations.PostV4ProfileResponse> {
+    return unwrapAsync(profile(
+      this,
+      request,
+      options,
+    ));
   }
 }
