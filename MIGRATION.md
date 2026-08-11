@@ -97,7 +97,7 @@ try {
 // v5
 import { SupermemoryError } from "supermemory/models/errors";
 try {
-  await client.search.execute({ q: "..." });
+  await client.search({ q: "..." });
 } catch (err) {
   if (err instanceof SupermemoryError) {
     err.statusCode;   // e.g. 429
