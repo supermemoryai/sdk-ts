@@ -60,7 +60,11 @@ jobs:
         if: steps.meta.outputs.publish == 'true'
         with:
           node-version: 22
-          registry-url: https://registry.npmjs.org
+
+      # npm >= 11.5.1 required for OIDC trusted publishing
+      - name: Update npm for trusted publishing
+        if: steps.meta.outputs.publish == 'true'
+        run: npm install -g npm@latest
 
       - uses: oven-sh/setup-bun@v2
         if: steps.meta.outputs.publish == 'true'
@@ -88,6 +92,6 @@ jobs:
 
       - name: Publish ${{ steps.meta.outputs.version }} (${{ steps.meta.outputs.tag }})
         if: steps.meta.outputs.publish == 'true'
-        run: npm publish --provenance --tag "${{ steps.meta.outputs.tag }}"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # Auth via npm Trusted Publisher (OIDC): the publisher config on npm
+        # pins this repo + this workflow filename (publish-npm.yml). No token.
+        run: npm publish --tag "${{ steps.meta.outputs.tag }}"
