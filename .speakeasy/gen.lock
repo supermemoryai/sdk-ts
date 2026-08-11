@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: 3f23d198-f06e-4822-83be-88cf668214c6
 management:
-  docChecksum: 54e796a251fd3f762e0a03101e1086d4
+  docChecksum: 95bdc395949e36ed1f58baacb5c06228
   docVersion: 3.0.0
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
-  releaseVersion: 5.0.0-rc.2
-  configChecksum: 7912d1d578445b01cfca3b0331116e90
+  releaseVersion: 5.0.0-rc.3
+  configChecksum: 8b6b805ef423df7b14c443b772fb018c
 persistentEdits:
-  generation_id: 76a6e13e-2533-4309-a480-9510cd95b2bc
-  pristine_commit_hash: 475f6dcd1c4e1a0a8821312773dd3795ae75aeb0
-  pristine_tree_hash: b7c2c49dc7ae26b0e3760296c6c024c2d6b57120
+  generation_id: 8565c11e-4cbe-4307-9871-c9e05f6a7b60
+  pristine_commit_hash: 7fe8d3a0692259c3a868a591efa3171d0b4f6e07
+  pristine_tree_hash: 1b9982bb1a8d92c89c7652191f0868abaed17daa
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -311,6 +311,18 @@ trackedFiles:
     id: 66139aa83dba
     last_write_checksum: sha1:6513b0888afab7856325e55c76508d69ae7aefb1
     pristine_git_object: 016acbb4975ad2b4255769f03571713abd863a73
+  docs/models/operations/get-v3-documents-by-id-memory-metadata.md:
+    id: 79a6d1acce5f
+    last_write_checksum: sha1:ec21cb4280ac02be727293d5246ac49902c3654d
+    pristine_git_object: 7e3f2533016240bb149470af24e85dc8a38610ca
+  docs/models/operations/get-v3-documents-by-id-memory.md:
+    id: 21b0078e123c
+    last_write_checksum: sha1:c4b573bbfdca4232b9b6ca66a2cd0310e1bd05c9
+    pristine_git_object: 00985283eea13859ea76e3dde0b98906a9da3b3d
+  docs/models/operations/get-v3-documents-by-id-metadata-memory.md:
+    id: 484fbf3af0ef
+    last_write_checksum: sha1:1bfc9349daba0ffcd217aeab6914ddacc7c591b5
+    pristine_git_object: fedd5e665a7a1f4af1e55ca1c58b34475045c554
   docs/models/operations/get-v3-documents-by-id-metadata1.md:
     id: 83a9426b4ef5
     last_write_checksum: sha1:c8e4b02a1d377f654cad3c27fc3de4c5d881eb09
@@ -325,8 +337,8 @@ trackedFiles:
     pristine_git_object: dbd8b88ded8f44accb88554798f2a2174eac4e7a
   docs/models/operations/get-v3-documents-by-id-response.md:
     id: 8f0dabfa42f3
-    last_write_checksum: sha1:ad782e6e26c04d3078ad72fb11c36f1d2a4eb101
-    pristine_git_object: c76090df8dd5c2d253c9dc8c23432d2cc403121e
+    last_write_checksum: sha1:e29517d9f79708c301e7da2c1f211fa322e84f90
+    pristine_git_object: 1ec08980ed16207ce45c720e4831c805e46f3871
   docs/models/operations/get-v3-documents-by-id-status.md:
     id: 5c68d466d2fa
     last_write_checksum: sha1:63978aa9b1579c6675a1ba177d868c7f8f0107f3
@@ -1009,12 +1021,12 @@ trackedFiles:
     pristine_git_object: d674a4dc4b7785eeff4fadb2f8f3312e8b1c9768
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:ab40dabe5bd3aca358516c9f74ce04ae7a098b7b
-    pristine_git_object: f998d2c067bd798ea7baa61665d8d1698b829d76
+    last_write_checksum: sha1:2f3a39419d74bce9c81ab6dd0ebfbeadd8653da9
+    pristine_git_object: 82299eee1e4f33bf1c9f5bcb16f5cae58a456422
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:037f773eeb883ab568017c0e3af2f5962d37c9fe
-    pristine_git_object: e6d268e8d28fe42b6a5387dfe9d366ebdd8eee7e
+    last_write_checksum: sha1:eef0d2910656aa29b3bc8d18feb1bdcac59779a6
+    pristine_git_object: 277239c0e16c387cc35af389c41669cfea15ce2d
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:e904bd3c7f54bc5d6a77f09563781eab7e7454a1
@@ -1205,8 +1217,8 @@ trackedFiles:
     pristine_git_object: d99272cb1977945363c9c0349420b6e4962453a1
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:3cfbda3cec7fb392192eb38a29d68b0d7bb3cca5
-    pristine_git_object: 66bdec5ade66185c98bb41accdd2a4105b1a91e3
+    last_write_checksum: sha1:3ae9282c2a90cd35f0b45738f8d278823e295e4d
+    pristine_git_object: 74037f7235432930ec08762494682dedfd5789bd
   src/lib/encodings.ts:
     id: 3bd8ead98afd
     last_write_checksum: sha1:128d64f3d8b82e67fc4ff33789ba75bfdd4276c6
@@ -1349,8 +1361,8 @@ trackedFiles:
     pristine_git_object: c0231c36388dddbeee73605318833682db312ece
   src/models/operations/get-v3-documents-by-id.ts:
     id: c02dfb4d4bdb
-    last_write_checksum: sha1:d9673539179467e63aec1741aa975d10e3adc2a5
-    pristine_git_object: 087ecd969eecae22e1fcdad04f975bf0fd12463b
+    last_write_checksum: sha1:eccb50a010f417b68d0306b147ef1b311dbe6a70
+    pristine_git_object: 5dcf283c3e50ab21fb3b774678fb7561e158d9ef
   src/models/operations/get-v3-documents-processing.ts:
     id: 1de0581f3aaa
     last_write_checksum: sha1:0629ba2db142dd089edd0783deb8b776a1109569
@@ -1643,7 +1655,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"connectionId": "conn_gdrive_8f2k", "content": "Our API rate limits are 100 req/min on free and 1000 on pro.", "createdAt": "2025-04-15T09:30:00.000Z", "customId": "doc-api-rate-limits", "id": "acxV5LHMEsG2hMSNb4umbn", "metadata": {"source": "upload", "language": "en"}, "ogImage": "<value>", "raw": "Our API rate limits are 100 req/min on free and 1000 on pro. Clients should use exponential backoff on 429s.", "source": "text", "taskType": "memory", "status": "done", "dreamingStatus": "dreaming", "summary": "API rate limit policy: 100 req/min free, 1000 req/min pro.", "title": "API Rate Limiting Policy", "type": "text", "updatedAt": "2025-04-15T09:31:00.000Z", "filepath": "/srv/circa_hm_funny.vss"}
+          application/json: {"connectionId": "conn_gdrive_8f2k", "content": "Our API rate limits are 100 req/min on free and 1000 on pro.", "createdAt": "2025-04-15T09:30:00.000Z", "customId": "doc-api-rate-limits", "id": "acxV5LHMEsG2hMSNb4umbn", "metadata": {"source": "upload", "language": "en"}, "ogImage": "<value>", "raw": "Our API rate limits are 100 req/min on free and 1000 on pro. Clients should use exponential backoff on 429s.", "source": "text", "taskType": "memory", "status": "done", "dreamingStatus": "dreaming", "summary": "API rate limit policy: 100 req/min free, 1000 req/min pro.", "title": "API Rate Limiting Policy", "type": "text", "updatedAt": "2025-04-15T09:31:00.000Z", "url": "https://docs.example.com/guides/rate-limits", "filepath": "/srv/circa_hm_funny.vss"}
         "401":
           application/json: {"error": "Invalid request parameters", "details": "Query must be at least 1 character long"}
         "500":
