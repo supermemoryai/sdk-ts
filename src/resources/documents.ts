@@ -670,6 +670,16 @@ export interface DocumentUpdateParams {
   customId?: string;
 
   /**
+   * When this document's content is from, as opposed to when it was uploaded.
+   * Accepts YYYY-MM-DD or a full ISO 8601 timestamp. Memory extraction resolves
+   * relative dates ('yesterday', 'last quarter') against this instead of the
+   * ingestion time, and documents in a batch are processed oldest-first so newer
+   * facts correctly supersede older ones. Set this whenever you backfill historical
+   * content.
+   */
+  documentDate?: string;
+
+  /**
    * Optional file path for the document (e.g., '/documents/reports/file.pdf'). Used
    * by supermemoryfs to map documents to filesystem paths.
    */
@@ -854,6 +864,15 @@ export interface DocumentAddParams {
   customId?: string;
 
   /**
+   * When this document's content is from, as opposed to when it was uploaded.
+   * Accepts YYYY-MM-DD or a full ISO 8601 timestamp. Memory extraction resolves
+   * relative dates against this instead of the ingestion time, and documents in a
+   * batch are processed oldest-first so newer facts correctly supersede older ones.
+   * Set this whenever you backfill historical content.
+   */
+  documentDate?: string;
+
+  /**
    * Processing mode. "dynamic" (default) groups related documents together so
    * memories form from coherent, logical units rather than one isolated entry at a
    * time. "instant" processes each document on its own right away, and bills one
@@ -909,6 +928,16 @@ export interface DocumentBatchAddParams {
   containerTags?: Array<string>;
 
   content?: null;
+
+  /**
+   * When this document's content is from, as opposed to when it was uploaded.
+   * Accepts YYYY-MM-DD or a full ISO 8601 timestamp. Memory extraction resolves
+   * relative dates ('yesterday', 'last quarter') against this instead of the
+   * ingestion time, and documents in a batch are processed oldest-first so newer
+   * facts correctly supersede older ones. Set this whenever you backfill historical
+   * content.
+   */
+  documentDate?: string;
 
   /**
    * Processing mode. "dynamic" (default) groups related documents together so
@@ -987,6 +1016,16 @@ export namespace DocumentBatchAddParams {
      * will uniquely identify this document.
      */
     customId?: string;
+
+    /**
+     * When this document's content is from, as opposed to when it was uploaded.
+     * Accepts YYYY-MM-DD or a full ISO 8601 timestamp. Memory extraction resolves
+     * relative dates ('yesterday', 'last quarter') against this instead of the
+     * ingestion time, and documents in a batch are processed oldest-first so newer
+     * facts correctly supersede older ones. Set this whenever you backfill historical
+     * content.
+     */
+    documentDate?: string;
 
     /**
      * Processing mode. "dynamic" (default) groups related documents together so

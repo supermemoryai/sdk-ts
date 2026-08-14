@@ -27,6 +27,7 @@ describe('top level methods', () => {
       containerTag: 'containerTag',
       containerTags: ['string'],
       customId: 'customId',
+      documentDate: 'documentDate',
       dreaming: 'instant',
       entityContext: 'entityContext',
       filepath: 'filepath',

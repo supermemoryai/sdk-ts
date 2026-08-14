@@ -305,6 +305,15 @@ export interface AddParams {
   customId?: string;
 
   /**
+   * When this document's content is from, as opposed to when it was uploaded.
+   * Accepts YYYY-MM-DD or a full ISO 8601 timestamp. Memory extraction resolves
+   * relative dates against this instead of the ingestion time, and documents in a
+   * batch are processed oldest-first so newer facts correctly supersede older ones.
+   * Set this whenever you backfill historical content.
+   */
+  documentDate?: string;
+
+  /**
    * Processing mode. "dynamic" (default) groups related documents together so
    * memories form from coherent, logical units rather than one isolated entry at a
    * time. "instant" processes each document on its own right away, and bills one
