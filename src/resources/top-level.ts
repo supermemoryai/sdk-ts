@@ -46,7 +46,7 @@ export namespace ProfileResponse {
     /**
      * Search results for the provided query
      */
-    results: Array<unknown>;
+    results: Array<SearchResults.Result>;
 
     /**
      * Search timing in milliseconds
@@ -57,6 +57,226 @@ export namespace ProfileResponse {
      * Total number of search results
      */
     total: number;
+  }
+
+  export namespace SearchResults {
+    export interface Result {
+      /**
+       * Memory entry ID or chunk ID
+       */
+      id: string;
+
+      /**
+       * Memory metadata
+       */
+      metadata: { [key: string]: unknown } | null;
+
+      /**
+       * Similarity score between the query and memory entry
+       */
+      similarity: number;
+
+      /**
+       * Memory last update date
+       */
+      updatedAt: string;
+
+      /**
+       * The chunk content (only present for chunk results from hybrid search)
+       */
+      chunk?: string;
+
+      /**
+       * Relevant chunks from associated documents (only included when chunks=true)
+       */
+      chunks?: Array<Result.Chunk>;
+
+      /**
+       * Object containing version history (parents/children via updates) and related
+       * memories (extends/derives)
+       */
+      context?: Result.Context;
+
+      /**
+       * Associated documents for this memory entry
+       */
+      documents?: Array<Result.Document>;
+
+      /**
+       * Filepath of the source document this memory or chunk came from
+       */
+      filepath?: string | null;
+
+      /**
+       * Indicates if this memory was created by aggregating multiple source memories
+       */
+      isAggregated?: boolean;
+
+      /**
+       * The memory content (only present for memory results)
+       */
+      memory?: string;
+
+      /**
+       * ID of the root (first version) memory entry this one descends from. Null for
+       * memories that have never been superseded. Only present on memory results, not on
+       * standalone chunk results.
+       */
+      rootMemoryId?: string | null;
+
+      /**
+       * Version number of this memory entry
+       */
+      version?: number | null;
+    }
+
+    export namespace Result {
+      export interface Chunk {
+        /**
+         * Content of the chunk
+         */
+        content: string;
+
+        /**
+         * ID of the document this chunk belongs to
+         */
+        documentId: string;
+
+        /**
+         * Position of chunk in the document (0-indexed)
+         */
+        position: number;
+      }
+
+      /**
+       * Object containing version history (parents/children via updates) and related
+       * memories (extends/derives)
+       */
+      export interface Context {
+        children?: Array<Context.Child>;
+
+        parents?: Array<Context.Parent>;
+
+        related?: Array<Context.Related>;
+      }
+
+      export namespace Context {
+        export interface Child {
+          /**
+           * The contextual memory content
+           */
+          memory: string;
+
+          /**
+           * Relation type between this memory and its parent/child
+           */
+          relation: 'updates' | 'extends' | 'derives';
+
+          /**
+           * Contextual memory last update date
+           */
+          updatedAt: string;
+
+          /**
+           * Contextual memory metadata
+           */
+          metadata?: { [key: string]: unknown } | null;
+
+          /**
+           * Relative version distance from the primary memory (+1 for direct child, +2 for
+           * grand-child, etc.)
+           */
+          version?: number | null;
+        }
+
+        export interface Parent {
+          /**
+           * The contextual memory content
+           */
+          memory: string;
+
+          /**
+           * Relation type between this memory and its parent/child
+           */
+          relation: 'updates' | 'extends' | 'derives';
+
+          /**
+           * Contextual memory last update date
+           */
+          updatedAt: string;
+
+          /**
+           * Contextual memory metadata
+           */
+          metadata?: { [key: string]: unknown } | null;
+
+          /**
+           * Relative version distance from the primary memory (-1 for direct parent, -2 for
+           * grand-parent, etc.)
+           */
+          version?: number | null;
+        }
+
+        export interface Related {
+          /**
+           * The related memory content
+           */
+          memory: string;
+
+          /**
+           * Relation type
+           */
+          relation: 'extends' | 'derives';
+
+          /**
+           * Related memory last update date
+           */
+          updatedAt: string;
+
+          /**
+           * Related memory metadata
+           */
+          metadata?: { [key: string]: unknown } | null;
+        }
+      }
+
+      export interface Document {
+        /**
+         * Document ID
+         */
+        id: string;
+
+        /**
+         * Document creation date
+         */
+        createdAt: string;
+
+        /**
+         * Document last update date
+         */
+        updatedAt: string;
+
+        /**
+         * Document metadata (only included when documents=true)
+         */
+        metadata?: { [key: string]: unknown } | null;
+
+        /**
+         * Document summary (only included when summaries=true)
+         */
+        summary?: string | null;
+
+        /**
+         * Document title (only included when documents=true)
+         */
+        title?: string;
+
+        /**
+         * Document type (only included when documents=true)
+         */
+        type?: string;
+      }
+    }
   }
 }
 

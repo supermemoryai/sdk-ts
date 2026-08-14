@@ -193,9 +193,9 @@ export class Connections extends APIResource {
 export interface ConnectionCreateResponse {
   id: string;
 
-  authLink: string;
+  authLink?: string;
 
-  expiresIn: string;
+  expiresIn?: string;
 
   redirectsTo?: string;
 }
@@ -255,16 +255,26 @@ export interface ConnectionConfigureResponse {
   webhooksRegistered?: number;
 }
 
-export interface ConnectionDeleteByIDResponse {
-  id: string;
+export type ConnectionDeleteByIDResponse =
+  Array<ConnectionDeleteByIDResponse.ConnectionDeleteByIDResponseItem>;
 
-  provider: string;
+export namespace ConnectionDeleteByIDResponse {
+  export interface ConnectionDeleteByIDResponseItem {
+    id: string;
+
+    provider: string;
+  }
 }
 
-export interface ConnectionDeleteByProviderResponse {
-  id: string;
+export type ConnectionDeleteByProviderResponse =
+  Array<ConnectionDeleteByProviderResponse.ConnectionDeleteByProviderResponseItem>;
 
-  provider: string;
+export namespace ConnectionDeleteByProviderResponse {
+  export interface ConnectionDeleteByProviderResponseItem {
+    id: string;
+
+    provider: string;
+  }
 }
 
 export interface ConnectionGetByIDResponse {
@@ -360,7 +370,7 @@ export type ConnectionListDocumentsResponse =
 
 export namespace ConnectionListDocumentsResponse {
   export interface ConnectionListDocumentsResponseItem {
-    id: string;
+    id: string | null;
 
     createdAt: string;
 

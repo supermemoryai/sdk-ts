@@ -326,6 +326,13 @@ export namespace DocumentBatchAddResponse {
      * Error message when status is 'error'
      */
     error?: string;
+
+    /**
+     * URL of the failed item, when it had one. Only present on failed items, where it
+     * may be the only way to tell which input the error belongs to (the id falls back
+     * to 'unknown' when the input had neither an id nor a customId).
+     */
+    url?: string;
   }
 }
 
@@ -544,6 +551,12 @@ export namespace DocumentListProcessingResponse {
     id: string;
 
     /**
+     * Optional ID of connection the document was created from. This is useful for
+     * identifying the source of the document.
+     */
+    connectionId: string | null;
+
+    /**
      * Creation timestamp
      */
     createdAt: string;
@@ -567,6 +580,11 @@ export namespace DocumentListProcessingResponse {
      * Status of the document
      */
     status: 'unknown' | 'queued' | 'extracting' | 'chunking' | 'embedding' | 'indexing' | 'done' | 'failed';
+
+    /**
+     * Summary of the document content
+     */
+    summary: string | null;
 
     /**
      * Title of the document

@@ -125,6 +125,13 @@ export namespace SearchDocumentsResponse {
       isRelevant: boolean;
 
       /**
+       * Position of this chunk within the source document (0-indexed). Use it to order
+       * chunks and to locate surrounding context chunks (isRelevant=false) relative to
+       * the matching ones.
+       */
+      position: number;
+
+      /**
        * Similarity score for this chunk
        */
       score: number;
@@ -207,6 +214,13 @@ export namespace SearchExecuteResponse {
        * Whether this chunk is relevant to the query
        */
       isRelevant: boolean;
+
+      /**
+       * Position of this chunk within the source document (0-indexed). Use it to order
+       * chunks and to locate surrounding context chunks (isRelevant=false) relative to
+       * the matching ones.
+       */
+      position: number;
 
       /**
        * Similarity score for this chunk
@@ -297,6 +311,13 @@ export namespace SearchMemoriesResponse {
     memory?: string;
 
     /**
+     * ID of the root (first version) memory entry this one descends from. Null for
+     * memories that have never been superseded. Only present on memory results, not on
+     * standalone chunk results.
+     */
+    rootMemoryId?: string | null;
+
+    /**
      * Version number of this memory entry
      */
     version?: number | null;
@@ -318,11 +339,6 @@ export namespace SearchMemoriesResponse {
        * Position of chunk in the document (0-indexed)
        */
       position: number;
-
-      /**
-       * Similarity score between the query and chunk
-       */
-      score: number;
     }
 
     /**
