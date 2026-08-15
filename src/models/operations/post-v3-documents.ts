@@ -89,6 +89,10 @@ export type PostV3DocumentsRequest = {
     | { [k: string]: string | number | boolean | Array<string> }
     | undefined;
   /**
+   * When this document's content is from, as opposed to when it was uploaded. Accepts YYYY-MM-DD or a full ISO 8601 timestamp. Memory extraction resolves relative dates against this instead of the ingestion time, and documents in a batch are processed oldest-first so newer facts correctly supersede older ones. Set this whenever you backfill historical content.
+   */
+  documentDate?: string | undefined;
+  /**
    * Processing mode. "dynamic" (default) groups related documents together so memories form from coherent, logical units rather than one isolated entry at a time. "instant" processes each document on its own right away, and bills one extra operation per document.
    */
   dreaming?: PostV3DocumentsDreaming | undefined;
@@ -177,6 +181,7 @@ export type PostV3DocumentsRequest$Outbound = {
   filterByMetadata?:
     | { [k: string]: string | number | boolean | Array<string> }
     | undefined;
+  documentDate?: string | undefined;
   dreaming?: string | undefined;
 };
 
@@ -204,6 +209,7 @@ export const PostV3DocumentsRequest$outboundSchema: z.ZodMiniType<
       smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]),
     ),
   ),
+  documentDate: z.optional(z.string()),
   dreaming: z.optional(PostV3DocumentsDreaming$outboundSchema),
 });
 

@@ -82,6 +82,8 @@ export type GetV3DocumentsProcessingDocument = {
    * Status of the document
    */
   status: GetV3DocumentsProcessingStatus;
+  summary: string | null;
+  connectionId: string | null;
   /**
    * Creation timestamp
    */
@@ -174,6 +176,8 @@ export const GetV3DocumentsProcessingDocument$inboundSchema: z.ZodMiniType<
   title: types.nullable(types.string()),
   type: GetV3DocumentsProcessingType$inboundSchema,
   status: GetV3DocumentsProcessingStatus$inboundSchema,
+  summary: types.nullable(types.string()),
+  connectionId: types.nullable(types.string()),
   createdAt: types.string(),
   updatedAt: types.string(),
   metadata: types.nullable(
