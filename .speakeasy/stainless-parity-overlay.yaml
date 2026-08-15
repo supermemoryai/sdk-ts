@@ -1,0 +1,133 @@
+# Maps the generated SDK surface onto the previous Stainless SDK (npm
+# `supermemory` v4) so migration is drop-in: same resource groups, same method
+# names, same `apiKey` constructor option reading SUPERMEMORY_API_KEY.
+# Endpoints newer than the Stainless SDK are grouped in the same style.
+# Two Stainless aliases (`client.add` = `documents.add`, `search.execute` =
+# `search.documents`) cannot be expressed in OpenAPI (one operation, two
+# methods); the secondary names live in custom code regions in the SDK source.
+overlay: 1.0.0
+info:
+  title: Stainless SDK surface parity
+  version: 1.0.0
+actions:
+  # ---- auth: new Supermemory({ apiKey }) / SUPERMEMORY_API_KEY ----
+  - target: $.components.securitySchemes.bearerAuth
+    update:
+      x-speakeasy-name-override: apiKey
+
+  # ---- root-level methods (Stainless $client methods) ----
+  - target: $.paths["/v3/documents"].post.tags
+    remove: true
+  - target: $.paths["/v3/documents"].post
+    update:
+      x-speakeasy-name-override: add
+  - target: $.paths["/v4/profile"].post.tags
+    remove: true
+  - target: $.paths["/v4/profile"].post
+    update:
+      x-speakeasy-name-override: profile
+
+  # ---- documents ----
+  - target: $.paths["/v3/documents/list"].post
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: list }
+  - target: $.paths["/v3/documents/{id}"].get
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: get }
+  - target: $.paths["/v3/documents/{id}"].patch
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: update }
+  - target: $.paths["/v3/documents/{id}"].delete
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: delete }
+  - target: $.paths["/v3/documents/bulk"].delete
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: deleteBulk }
+  - target: $.paths["/v3/documents/file"].post
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: uploadFile }
+  - target: $.paths["/v3/documents/batch"].post
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: batchAdd }
+  - target: $.paths["/v3/documents/processing"].get
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: listProcessing }
+  # newer endpoints, same grouping style
+  - target: $.paths["/v3/documents/{id}/chunks"].get
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: chunks }
+  - target: $.paths["/v3/documents/{id}/file-url"].get
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: fileUrl }
+
+  # ---- memories ----
+  - target: $.paths["/v4/memories"].delete
+    update: { x-speakeasy-group: memories, x-speakeasy-name-override: forget }
+  - target: $.paths["/v4/memories"].patch
+    update: { x-speakeasy-group: memories, x-speakeasy-name-override: updateMemory }
+  # newer endpoints
+  - target: $.paths["/v4/memories"].post
+    update: { x-speakeasy-group: memories, x-speakeasy-name-override: add }
+  - target: $.paths["/v4/memories/list"].post
+    update: { x-speakeasy-group: memories, x-speakeasy-name-override: list }
+  - target: $.paths["/v4/memories/forget-matching"].post
+    update: { x-speakeasy-group: memories, x-speakeasy-name-override: forgetMatching }
+
+  # ---- search ----
+  # v5 surface decision: no `search` namespace. `client.search()` is the
+  # flagship memories recall (/v4/search); document search (/v3/search)
+  # lives beside its resource as `documents.search()`.
+  - target: $.paths["/v4/search"].post.tags
+    remove: true
+  # the Studio modifications overlay groups this op under recallSearch;
+  # strip that too so the method lands on the SDK root
+  - target: $.paths["/v4/search"].post.x-speakeasy-group
+    remove: true
+  - target: $.paths["/v4/search"].post
+    update:
+      x-speakeasy-name-override: search
+  - target: $.paths["/v3/search"].post
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: search }
+
+  # ---- settings ----
+  - target: $.paths["/v3/settings"].get
+    update: { x-speakeasy-group: settings, x-speakeasy-name-override: get }
+  - target: $.paths["/v3/settings"].patch
+    update: { x-speakeasy-group: settings, x-speakeasy-name-override: update }
+  # newer endpoints
+  - target: $.paths["/v3/settings/reset"].post
+    update: { x-speakeasy-group: settings, x-speakeasy-name-override: reset }
+  - target: $.paths["/v3/settings/suggest-buckets"].post
+    update: { x-speakeasy-group: settings, x-speakeasy-name-override: suggestBuckets }
+
+  # ---- connections ----
+  - target: $.paths["/v3/connections/{provider}"].post
+    update: { x-speakeasy-group: connections, x-speakeasy-name-override: create }
+  - target: $.paths["/v3/connections/{connectionId}"].get
+    update: { x-speakeasy-group: connections, x-speakeasy-name-override: getByID }
+  - target: $.paths["/v3/connections/{provider}/connection"].post
+    update: { x-speakeasy-group: connections, x-speakeasy-name-override: getByTag }
+  - target: $.paths["/v3/connections/{connectionId}"].delete
+    update: { x-speakeasy-group: connections, x-speakeasy-name-override: deleteByID }
+  - target: $.paths["/v3/connections/{provider}"].delete
+    update: { x-speakeasy-group: connections, x-speakeasy-name-override: deleteByProvider }
+  - target: $.paths["/v3/connections/{provider}/import"].post
+    update: { x-speakeasy-group: connections, x-speakeasy-name-override: import }
+  - target: $.paths["/v3/connections/list"].post
+    update: { x-speakeasy-group: connections, x-speakeasy-name-override: list }
+  - target: $.paths["/v3/connections/{provider}/documents"].post
+    update: { x-speakeasy-group: connections, x-speakeasy-name-override: listDocuments }
+  - target: $.paths["/v3/connections/{connectionId}/configure"].post
+    update: { x-speakeasy-group: connections, x-speakeasy-name-override: configure }
+  - target: $.paths["/v3/connections/{connectionId}/resources"].get
+    update: { x-speakeasy-group: connections, x-speakeasy-name-override: resources }
+
+  # ---- containerTags (new since the Stainless SDK) ----
+  - target: $.paths["/v3/container-tags/list"].get
+    update: { x-speakeasy-group: containerTags, x-speakeasy-name-override: list }
+  - target: $.paths["/v3/container-tags/{containerTag}"].get
+    update: { x-speakeasy-group: containerTags, x-speakeasy-name-override: get }
+  - target: $.paths["/v3/container-tags/{containerTag}"].patch
+    update: { x-speakeasy-group: containerTags, x-speakeasy-name-override: update }
+  - target: $.paths["/v3/container-tags/{containerTag}"].delete
+    update: { x-speakeasy-group: containerTags, x-speakeasy-name-override: delete }
+  - target: $.paths["/v3/container-tags/merge"].post
+    update: { x-speakeasy-group: containerTags, x-speakeasy-name-override: merge }
+  - target: $.paths["/v3/container-tags/merge/{mergeId}"].get
+    update: { x-speakeasy-group: containerTags, x-speakeasy-name-override: mergeStatus }
+
+  # ---- conversations / profiles (new since the Stainless SDK) ----
+  - target: $.paths["/v4/conversations"].post
+    update: { x-speakeasy-group: conversations, x-speakeasy-name-override: add }
+  - target: $.paths["/v4/profile/buckets"].post
+    update: { x-speakeasy-group: profiles, x-speakeasy-name-override: buckets }

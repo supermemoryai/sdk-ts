@@ -1,0 +1,350 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Speakeasy Modifications
+  version: 0.0.1
+  x-speakeasy-metadata:
+    type: speakeasy-modifications
+    before: ""
+    after: ""
+actions:
+  - target: $["paths"]["/v4/memories"]["post"]
+    update:
+      x-speakeasy-group: contentManagement
+      x-speakeasy-name-override: createMemories
+    x-speakeasy-metadata:
+      after: sdk.contentManagement.createMemories()
+      before: sdk.Content Management.postV4Memories()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/connections/{provider}/import"]["post"]
+    update:
+      x-speakeasy-name-override: syncByProvider
+    x-speakeasy-metadata:
+      after: sdk.connections.syncByProvider()
+      before: sdk.Connections.postV3ConnectionsByProviderImport()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/connections/{provider}"]["delete"]
+    update:
+      x-speakeasy-name-override: deleteByProvider
+    x-speakeasy-metadata:
+      after: sdk.connections.deleteByProvider()
+      before: sdk.Connections.deleteV3ConnectionsByProvider()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/connections/{connectionId}"]["delete"]
+    update:
+      x-speakeasy-name-override: deleteById
+    x-speakeasy-metadata:
+      after: sdk.connections.deleteById()
+      before: sdk.Connections.deleteV3ConnectionsByConnectionId()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v4/memories/list"]["post"]
+    update:
+      x-speakeasy-group: contentManagement
+      x-speakeasy-name-override: listMemories
+    x-speakeasy-metadata:
+      after: sdk.contentManagement.listMemories()
+      before: sdk.Content Management.postV4MemoriesList()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents/processing"]["get"]
+    update:
+      x-speakeasy-name-override: getProcessing
+    x-speakeasy-metadata:
+      after: sdk.documents.getProcessing()
+      before: sdk.Documents.getV3DocumentsProcessing()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/settings/suggest-buckets"]["post"]
+    update:
+      x-speakeasy-name-override: suggestBuckets
+    x-speakeasy-metadata:
+      after: sdk.settings.suggestBuckets()
+      before: sdk.Settings.postV3SettingsSuggestBuckets()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/connections/{connectionId}"]["get"]
+    update:
+      x-speakeasy-name-override: getById
+    x-speakeasy-metadata:
+      after: sdk.connections.getById()
+      before: sdk.Connections.getV3ConnectionsByConnectionId()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v4/search"]["post"]
+    update:
+      x-speakeasy-group: recallSearch
+      x-speakeasy-name-override: search
+    x-speakeasy-metadata:
+      after: sdk.recallSearch.search()
+      before: sdk.Recall (Search).postV4Search()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/container-tags/merge"]["post"]
+    update:
+      x-speakeasy-group: containerTags
+      x-speakeasy-name-override: merge
+    x-speakeasy-metadata:
+      after: sdk.containerTags.merge()
+      before: sdk.Container Tags.postV3ContainerTagsMerge()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v4/memories"]["patch"]
+    update:
+      x-speakeasy-group: contentManagement
+      x-speakeasy-name-override: updateMemory
+    x-speakeasy-metadata:
+      after: sdk.contentManagement.updateMemory()
+      before: sdk.Content Management.patchV4Memories()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v4/memories"]["delete"]
+    update:
+      x-speakeasy-group: contentManagement
+      x-speakeasy-name-override: forgetMemory
+    x-speakeasy-metadata:
+      after: sdk.contentManagement.forgetMemory()
+      before: sdk.Content Management.deleteV4Memories()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents/{id}"]["patch"]
+    update:
+      x-speakeasy-name-override: updateDocument
+    x-speakeasy-metadata:
+      after: sdk.ingest.updateDocument()
+      before: sdk.Ingest.patchV3DocumentsById()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents/bulk"]["delete"]
+    update:
+      x-speakeasy-name-override: bulkDelete
+    x-speakeasy-metadata:
+      after: sdk.ingest.bulkDelete()
+      before: sdk.Ingest.deleteV3DocumentsBulk()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents/batch"]["post"]
+    update:
+      x-speakeasy-name-override: batchAdd
+    x-speakeasy-metadata:
+      after: sdk.ingest.batchAdd()
+      before: sdk.Ingest.postV3DocumentsBatch()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents/{id}/file-url"]["get"]
+    update:
+      x-speakeasy-name-override: getFileUrl
+    x-speakeasy-metadata:
+      after: sdk.documents.getFileUrl()
+      before: sdk.Documents.getV3DocumentsByIdFileUrl()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/container-tags/list"]["get"]
+    update:
+      x-speakeasy-group: containerTags
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.containerTags.list()
+      before: sdk.Container Tags.getV3ContainerTagsList()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/connections/{provider}"]["post"]
+    update:
+      x-speakeasy-name-override: createWithProvider
+    x-speakeasy-metadata:
+      after: sdk.connections.createWithProvider()
+      before: sdk.Connections.postV3ConnectionsByProvider()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/connections/{provider}/documents"]["post"]
+    update:
+      x-speakeasy-name-override: listDocuments
+    x-speakeasy-metadata:
+      after: sdk.connections.listDocuments()
+      before: sdk.Connections.postV3ConnectionsByProviderDocuments()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/connections/{connectionId}/resources"]["get"]
+    update:
+      x-speakeasy-name-override: getResources
+    x-speakeasy-metadata:
+      after: sdk.connections.getResources()
+      before: sdk.Connections.getV3ConnectionsByConnectionIdResources()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents/{id}/chunks"]["get"]
+    update:
+      x-speakeasy-name-override: getChunksById
+    x-speakeasy-metadata:
+      after: sdk.documents.getChunksById()
+      before: sdk.Documents.getV3DocumentsByIdChunks()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/connections/{provider}/connection"]["post"]
+    update:
+      x-speakeasy-name-override: getConnection
+    x-speakeasy-metadata:
+      after: sdk.connections.getConnection()
+      before: sdk.Connections.postV3ConnectionsByProviderConnection()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents/{id}"]["delete"]
+    update:
+      x-speakeasy-name-override: deleteDocumentById
+    x-speakeasy-metadata:
+      after: sdk.ingest.deleteDocumentById()
+      before: sdk.Ingest.deleteV3DocumentsById()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/settings/reset"]["post"]
+    update:
+      x-speakeasy-name-override: resetOrganizationData
+    x-speakeasy-metadata:
+      after: sdk.settings.resetOrganizationData()
+      before: sdk.Settings.postV3SettingsReset()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v4/memories/forget-matching"]["post"]
+    update:
+      x-speakeasy-group: contentManagement
+      x-speakeasy-name-override: forgetMatchingMemories
+    x-speakeasy-metadata:
+      after: sdk.contentManagement.forgetMatchingMemories()
+      before: sdk.Content Management.postV4MemoriesForgetMatching()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/container-tags/merge/{mergeId}"]["get"]
+    update:
+      x-speakeasy-group: containerTags
+      x-speakeasy-name-override: getMergeStatus
+    x-speakeasy-metadata:
+      after: sdk.containerTags.getMergeStatus()
+      before: sdk.Container Tags.getV3ContainerTagsMergeByMergeId()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/settings"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.settings.get()
+      before: sdk.Settings.getV3Settings()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/container-tags/{containerTag}"]["patch"]
+    update:
+      x-speakeasy-group: containerTags
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.containerTags.update()
+      before: sdk.Container Tags.patchV3ContainerTagsByContainerTag()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/settings"]["patch"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.settings.update()
+      before: sdk.Settings.patchV3Settings()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v4/profile"]["post"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.profiles.get()
+      before: sdk.Profiles.postV4Profile()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents/file"]["post"]
+    update:
+      x-speakeasy-name-override: uploadFile
+    x-speakeasy-metadata:
+      after: sdk.ingest.uploadFile()
+      before: sdk.Ingest.postV3DocumentsFile()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/search"]["post"]
+    update:
+      x-speakeasy-name-override: search
+    x-speakeasy-metadata:
+      after: sdk.documents.search()
+      before: sdk.Documents.postV3Search()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/container-tags/{containerTag}"]["get"]
+    update:
+      x-speakeasy-group: containerTags
+      x-speakeasy-name-override: getByContainerTag
+    x-speakeasy-metadata:
+      after: sdk.containerTags.getByContainerTag()
+      before: sdk.Container Tags.getV3ContainerTagsByContainerTag()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/connections/{connectionId}/configure"]["post"]
+    update:
+      x-speakeasy-name-override: configure
+    x-speakeasy-metadata:
+      after: sdk.connections.configure()
+      before: sdk.Connections.postV3ConnectionsByConnectionIdConfigure()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/connections/list"]["post"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.connections.list()
+      before: sdk.Connections.postV3ConnectionsList()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v4/conversations"]["post"]
+    update:
+      x-speakeasy-name-override: updateConversation
+    x-speakeasy-metadata:
+      after: sdk.ingest.updateConversation()
+      before: sdk.Ingest.postV4Conversations()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents"]["post"]
+    update:
+      x-speakeasy-name-override: addDocument
+    x-speakeasy-metadata:
+      after: sdk.ingest.addDocument()
+      before: sdk.Ingest.postV3Documents()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/container-tags/{containerTag}"]["delete"]
+    update:
+      x-speakeasy-group: containerTags
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.containerTags.delete()
+      before: sdk.Container Tags.deleteV3ContainerTagsByContainerTag()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v4/profile/buckets"]["post"]
+    update:
+      x-speakeasy-name-override: getBuckets
+    x-speakeasy-metadata:
+      after: sdk.profiles.getBuckets()
+      before: sdk.Profiles.postV4ProfileBuckets()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents/list"]["post"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.documents.list()
+      before: sdk.Documents.postV3DocumentsList()
+      created_at: 1786417951544
+      type: method-name
+  - target: $["paths"]["/v3/documents/{id}"]["get"]
+    update:
+      x-speakeasy-name-override: getById
+    x-speakeasy-metadata:
+      after: sdk.documents.getById()
+      before: sdk.Documents.getV3DocumentsById()
+      created_at: 1786417951544
+      type: method-name

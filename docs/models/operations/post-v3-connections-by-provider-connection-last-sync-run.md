@@ -1,0 +1,21 @@
+# PostV3ConnectionsByProviderConnectionLastSyncRun
+
+## Example Usage
+
+```typescript
+import { PostV3ConnectionsByProviderConnectionLastSyncRun } from "supermemory/models/operations";
+
+let value: PostV3ConnectionsByProviderConnectionLastSyncRun = {
+  status: "<value>",
+};
+```
+
+## Fields
+
+| Field                                                                                                                                         | Type                                                                                                                                          | Required                                                                                                                                      | Description                                                                                                                                   |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `status`                                                                                                                                      | *string*                                                                                                                                      | :heavy_check_mark:                                                                                                                            | N/A                                                                                                                                           |
+| `errorCode`                                                                                                                                   | [operations.PostV3ConnectionsByProviderConnectionErrorCode](../../models/operations/post-v3-connections-by-provider-connection-error-code.md) | :heavy_minus_sign:                                                                                                                            | N/A                                                                                                                                           |
+| `error`                                                                                                                                       | *string*                                                                                                                                      | :heavy_minus_sign:                                                                                                                            | N/A                                                                                                                                           |
+| `startedAt`                                                                                                                                   | *string*                                                                                                                                      | :heavy_minus_sign:                                                                                                                            | N/A                                                                                                                                           |
+| `completedAt`                                                                                                                                 | *string*                                                                                                                                      | :heavy_minus_sign:                                                                                                                            | N/A                                                                                                                                           |
