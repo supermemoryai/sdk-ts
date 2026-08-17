@@ -1,11 +1,11 @@
-# PostV4SearchResult
+# PostV4ProfileResult
 
 ## Example Usage
 
 ```typescript
-import { PostV4SearchResult } from "supermemory/models/operations";
+import { PostV4ProfileResult } from "supermemory/models/operations";
 
-let value: PostV4SearchResult = {
+let value: PostV4ProfileResult = {
   id: "mem_abc123",
   memory: "The user prefers detailed API responses over minimal ones.",
   chunk: "This is a chunk of content from a document...",
@@ -13,7 +13,7 @@ let value: PostV4SearchResult = {
     "source": "conversation",
     "confidence": 0.9,
   },
-  updatedAt: "2024-12-31T08:55:10.610Z",
+  updatedAt: "2024-12-31T08:22:23.708Z",
   similarity: 0.89,
   version: 3,
   rootMemoryId: "mem_abc123",
@@ -24,7 +24,7 @@ let value: PostV4SearchResult = {
         version: -1,
         memory:
           "Earlier version: API rate limit is 50 req/min on the free tier.",
-        updatedAt: "2024-12-31T18:00:24.934Z",
+        updatedAt: "2024-12-31T12:34:13.373Z",
       },
     ],
     children: [
@@ -33,7 +33,7 @@ let value: PostV4SearchResult = {
         version: 1,
         memory:
           "Later version: API rate limit increased to 100 req/min on the free tier.",
-        updatedAt: "2024-12-31T17:38:23.428Z",
+        updatedAt: "2024-12-31T03:30:47.916Z",
       },
     ],
   },
@@ -47,8 +47,8 @@ let value: PostV4SearchResult = {
         "language": "en",
       },
       summary: "API rate limit policy: 100 req/min free, 1000 req/min pro.",
-      createdAt: "2024-12-31T23:53:16.419Z",
-      updatedAt: "2024-12-31T22:17:12.566Z",
+      createdAt: "2024-12-31T04:51:58.484Z",
+      updatedAt: "2024-12-31T02:56:20.180Z",
     },
   ],
   chunks: [
@@ -75,7 +75,7 @@ let value: PostV4SearchResult = {
 | `filepath`                                                                                                                                                                              | *string*                                                                                                                                                                                | :heavy_minus_sign:                                                                                                                                                                      | Filepath of the source document this memory or chunk came from                                                                                                                          |                                                                                                                                                                                         |
 | `version`                                                                                                                                                                               | *number*                                                                                                                                                                                | :heavy_minus_sign:                                                                                                                                                                      | Version number of this memory entry                                                                                                                                                     | 3                                                                                                                                                                                       |
 | `rootMemoryId`                                                                                                                                                                          | *string*                                                                                                                                                                                | :heavy_minus_sign:                                                                                                                                                                      | ID of the root (first version) memory entry this one descends from. Null for memories that have never been superseded. Only present on memory results, not on standalone chunk results. | mem_abc123                                                                                                                                                                              |
-| `context`                                                                                                                                                                               | [operations.PostV4SearchContext](../../models/operations/post-v4-search-context.md)                                                                                                     | :heavy_minus_sign:                                                                                                                                                                      | Object containing version history (parents/children via updates) and related memories (extends/derives)                                                                                 |                                                                                                                                                                                         |
-| `documents`                                                                                                                                                                             | [operations.PostV4SearchDocument](../../models/operations/post-v4-search-document.md)[]                                                                                                 | :heavy_minus_sign:                                                                                                                                                                      | Associated documents for this memory entry                                                                                                                                              |                                                                                                                                                                                         |
-| `chunks`                                                                                                                                                                                | [operations.PostV4SearchChunk](../../models/operations/post-v4-search-chunk.md)[]                                                                                                       | :heavy_minus_sign:                                                                                                                                                                      | Relevant chunks from associated documents (only included when chunks=true)                                                                                                              |                                                                                                                                                                                         |
+| `context`                                                                                                                                                                               | [operations.PostV4ProfileContext](../../models/operations/post-v4-profile-context.md)                                                                                                   | :heavy_minus_sign:                                                                                                                                                                      | Object containing version history (parents/children via updates) and related memories (extends/derives)                                                                                 |                                                                                                                                                                                         |
+| `documents`                                                                                                                                                                             | [operations.PostV4ProfileDocument](../../models/operations/post-v4-profile-document.md)[]                                                                                               | :heavy_minus_sign:                                                                                                                                                                      | Associated documents for this memory entry                                                                                                                                              |                                                                                                                                                                                         |
+| `chunks`                                                                                                                                                                                | [operations.PostV4ProfileChunk](../../models/operations/post-v4-profile-chunk.md)[]                                                                                                     | :heavy_minus_sign:                                                                                                                                                                      | Relevant chunks from associated documents (only included when chunks=true)                                                                                                              |                                                                                                                                                                                         |
 | `isAggregated`                                                                                                                                                                          | *boolean*                                                                                                                                                                               | :heavy_minus_sign:                                                                                                                                                                      | Indicates if this memory was created by aggregating multiple source memories                                                                                                            | false                                                                                                                                                                                   |
