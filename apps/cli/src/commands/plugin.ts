@@ -178,6 +178,7 @@ function withRawKeypress<T>(
     const cleanup = (result: T) => {
       input.off('keypress', handler);
       if (input.setRawMode && !hadRawMode) input.setRawMode(false);
+      input.pause();
       process.stderr.write('\u001B[?25h');
       resolve(result);
     };
