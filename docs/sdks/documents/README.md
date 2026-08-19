@@ -43,6 +43,7 @@ async function run() {
       "department": "engineering",
       "region": "us",
     },
+    documentDate: "2025-03-14",
     entityContext: "User's name is {XYZ}",
     dreaming: "instant",
     documents: [
@@ -83,6 +84,7 @@ async function run() {
       "department": "engineering",
       "region": "us",
     },
+    documentDate: "2025-03-14",
     entityContext: "User's name is {XYZ}",
     dreaming: "instant",
     documents: [
@@ -152,6 +154,7 @@ async function run() {
         "department": "engineering",
         "region": "us",
       },
+      documentDate: "2025-03-14",
     },
   });
 
@@ -192,6 +195,7 @@ async function run() {
         "department": "engineering",
         "region": "us",
       },
+      documentDate: "2025-03-14",
     },
   });
   if (res.ok) {
