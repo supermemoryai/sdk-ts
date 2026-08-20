@@ -47,8 +47,8 @@ export type PostV3ConnectionsByProviderRequest = {
  * Authorization URL
  */
 export type PostV3ConnectionsByProviderResponse = {
-  authLink: string;
-  expiresIn: string;
+  authLink?: string | undefined;
+  expiresIn?: string | undefined;
   id: string;
   redirectsTo?: string | undefined;
 };
@@ -147,8 +147,8 @@ export const PostV3ConnectionsByProviderResponse$inboundSchema: z.ZodMiniType<
   PostV3ConnectionsByProviderResponse,
   unknown
 > = z.object({
-  authLink: types.string(),
-  expiresIn: types.string(),
+  authLink: types.optional(types.string()),
+  expiresIn: types.optional(types.string()),
   id: types.string(),
   redirectsTo: types.optional(types.string()),
 });
