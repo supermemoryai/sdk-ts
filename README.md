@@ -50,25 +50,25 @@ The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https
 ### NPM
 
 ```bash
-npm add <UNSET>
+npm add https://github.com/supermemoryai/sdk-ts
 ```
 
 ### PNPM
 
 ```bash
-pnpm add <UNSET>
+pnpm add https://github.com/supermemoryai/sdk-ts
 ```
 
 ### Bun
 
 ```bash
-bun add <UNSET>
+bun add https://github.com/supermemoryai/sdk-ts
 ```
 
 ### Yarn
 
 ```bash
-yarn add <UNSET>
+yarn add https://github.com/supermemoryai/sdk-ts
 ```
 
 > [!NOTE]
@@ -430,7 +430,7 @@ run();
 ### Error Classes
 **Primary errors:**
 * [`SupermemoryError`](./src/models/errors/supermemory-error.ts): The base class for HTTP error responses.
-  * [`ErrorResponse`](./src/models/errors/error-response.ts): *
+  * [`ErrorResponse`](./src/models/errors/error-response.ts): Generic error.
 
 <details><summary>Less common errors (6)</summary>
 
@@ -448,8 +448,6 @@ run();
 * [`ResponseValidationError`](./src/models/errors/response-validation-error.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>
-
-\* Check [the method documentation](#available-resources-and-operations) to see if the error is applicable.
 <!-- End Error Handling [errors] -->
 
 <!-- Start Server Selection [server] -->

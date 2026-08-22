@@ -90,6 +90,10 @@ export type PostV3SearchChunk = {
    */
   isRelevant: boolean;
   /**
+   * Position of this chunk within the source document (0-indexed). Use it to order chunks and to locate surrounding context chunks (isRelevant=false) relative to the matching ones.
+   */
+  position: number;
+  /**
    * Similarity score for this chunk
    */
   score: number;
@@ -203,6 +207,7 @@ export const PostV3SearchChunk$inboundSchema: z.ZodMiniType<
 > = z.object({
   content: types.string(),
   isRelevant: types.boolean(),
+  position: types.number(),
   score: types.number(),
 });
 
