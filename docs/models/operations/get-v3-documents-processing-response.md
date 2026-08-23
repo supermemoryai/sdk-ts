@@ -15,6 +15,8 @@ let value: GetV3DocumentsProcessingResponse = {
       title: "My Document",
       type: "text",
       status: "extracting",
+      summary: "API rate limit policy: 100 req/min free, 1000 req/min pro.",
+      connectionId: "conn_gdrive_8f2k",
       createdAt: "2024-12-27T12:00:00Z",
       updatedAt: "2024-12-27T12:01:00Z",
       metadata: {
