@@ -1,11 +1,11 @@
-# PostV4SearchChunk
+# PostV4ProfileChunk
 
 ## Example Usage
 
 ```typescript
-import { PostV4SearchChunk } from "supermemory/models/operations";
+import { PostV4ProfileChunk } from "supermemory/models/operations";
 
-let value: PostV4SearchChunk = {
+let value: PostV4ProfileChunk = {
   content: "This is a chunk of content from the document...",
   position: 0,
   documentId: "doc_xyz789",
