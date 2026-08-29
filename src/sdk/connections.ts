@@ -61,7 +61,7 @@ export class Connections extends ClientSDK {
   async deleteByProvider(
     request: operations.DeleteV3ConnectionsByProviderRequest,
     options?: RequestOptions,
-  ): Promise<operations.DeleteV3ConnectionsByProviderResponse> {
+  ): Promise<Array<operations.DeleteV3ConnectionsByProviderResponse>> {
     return unwrapAsync(connectionsDeleteByProvider(
       this,
       request,
@@ -129,7 +129,7 @@ export class Connections extends ClientSDK {
   async deleteByID(
     request: operations.DeleteV3ConnectionsByConnectionIdRequest,
     options?: RequestOptions,
-  ): Promise<operations.DeleteV3ConnectionsByConnectionIdResponse> {
+  ): Promise<Array<operations.DeleteV3ConnectionsByConnectionIdResponse>> {
     return unwrapAsync(connectionsDeleteByID(
       this,
       request,
