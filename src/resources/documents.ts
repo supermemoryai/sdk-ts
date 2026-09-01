@@ -114,15 +114,19 @@ export class Documents extends APIResource {
   }
 
   /**
-   * Get documents that are currently being processed
+   * Get documents that are currently being processed. Default `view=active` is the
+   * live in-flight queue. `view=all` also includes failed and stuck documents.
    *
    * @example
    * ```ts
    * const response = await client.documents.listProcessing();
    * ```
    */
-  listProcessing(options?: RequestOptions): APIPromise<DocumentListProcessingResponse> {
-    return this._client.get('/v3/documents/processing', options);
+  listProcessing(
+    query: DocumentListProcessingParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<DocumentListProcessingResponse> {
+    return this._client.get('/v3/documents/processing', { query, ...options });
   }
 
   /**
@@ -541,6 +545,11 @@ export interface DocumentListProcessingResponse {
    * Total number of processing documents
    */
   totalCount: number;
+
+  /**
+   * Present when `view=all`
+   */
+  pagination?: DocumentListProcessingResponse.Pagination;
 }
 
 export namespace DocumentListProcessingResponse {
@@ -621,6 +630,34 @@ export namespace DocumentListProcessingResponse {
      * group documents.
      */
     containerTags?: Array<string>;
+
+    /**
+     * Stable error code when processing failed, if available
+     */
+    errorCode?: string | null;
+
+    /**
+     * Human-readable processing error, if available
+     */
+    errorMessage?: string | null;
+
+    /**
+     * True when the document is not done/failed and has not been updated for 4 hours
+     */
+    stuck?: boolean;
+  }
+
+  /**
+   * Present when `view=all`
+   */
+  export interface Pagination {
+    currentPage: number;
+
+    totalItems: number;
+
+    totalPages: number;
+
+    limit?: number;
   }
 }
 
@@ -1091,6 +1128,29 @@ export interface DocumentDeleteBulkParams {
   ids?: Array<string>;
 }
 
+export interface DocumentListProcessingParams {
+  /**
+   * Comma-separated container tags to filter by
+   */
+  containerTags?: string;
+
+  /**
+   * Number of items per page. Used with `view=all`.
+   */
+  limit?: string | number;
+
+  /**
+   * Page number to fetch. Used with `view=all`.
+   */
+  page?: string | number;
+
+  /**
+   * `active` returns in-flight documents updated in the last 4 hours. `all` also
+   * includes failed and stuck documents.
+   */
+  view?: 'active' | 'all';
+}
+
 export interface DocumentUploadFileParams {
   /**
    * File to upload and process
@@ -1191,6 +1251,7 @@ export declare namespace Documents {
     type DocumentAddParams as DocumentAddParams,
     type DocumentBatchAddParams as DocumentBatchAddParams,
     type DocumentDeleteBulkParams as DocumentDeleteBulkParams,
+    type DocumentListProcessingParams as DocumentListProcessingParams,
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };
 }

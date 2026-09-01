@@ -37,6 +37,7 @@ export {
   type DocumentAddParams,
   type DocumentBatchAddParams,
   type DocumentDeleteBulkParams,
+  type DocumentListProcessingParams,
   type DocumentUploadFileParams,
 } from './documents';
 export {

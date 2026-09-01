@@ -161,6 +161,22 @@ describe('resource documents', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('listProcessing: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.documents.listProcessing(
+        {
+          containerTags: 'user_123,sm_project_default',
+          limit: '50',
+          page: '1',
+          view: 'all',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Supermemory.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('uploadFile: only required params', async () => {
     const responsePromise = client.documents.uploadFile({
       file: await toFile(Buffer.from('Example data'), 'README.md'),

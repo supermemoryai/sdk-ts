@@ -44,7 +44,7 @@ Methods:
 - <code title="post /v3/documents/batch">client.documents.<a href="./src/resources/documents.ts">batchAdd</a>({ ...params }) -> DocumentBatchAddResponse</code>
 - <code title="delete /v3/documents/bulk">client.documents.<a href="./src/resources/documents.ts">deleteBulk</a>({ ...params }) -> DocumentDeleteBulkResponse</code>
 - <code title="get /v3/documents/{id}">client.documents.<a href="./src/resources/documents.ts">get</a>(id) -> DocumentGetResponse</code>
-- <code title="get /v3/documents/processing">client.documents.<a href="./src/resources/documents.ts">listProcessing</a>() -> DocumentListProcessingResponse</code>
+- <code title="get /v3/documents/processing">client.documents.<a href="./src/resources/documents.ts">listProcessing</a>({ ...params }) -> DocumentListProcessingResponse</code>
 - <code title="post /v3/documents/file">client.documents.<a href="./src/resources/documents.ts">uploadFile</a>({ ...params }) -> DocumentUploadFileResponse</code>
 
 # Search

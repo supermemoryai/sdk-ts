@@ -50,6 +50,7 @@ import {
   DocumentDeleteBulkResponse,
   DocumentGetResponse,
   DocumentListParams,
+  DocumentListProcessingParams,
   DocumentListProcessingResponse,
   DocumentListResponse,
   DocumentUpdateParams,
@@ -872,6 +873,7 @@ export declare namespace Supermemory {
     type DocumentAddParams as DocumentAddParams,
     type DocumentBatchAddParams as DocumentBatchAddParams,
     type DocumentDeleteBulkParams as DocumentDeleteBulkParams,
+    type DocumentListProcessingParams as DocumentListProcessingParams,
     type DocumentUploadFileParams as DocumentUploadFileParams,
   };
 
