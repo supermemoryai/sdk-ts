@@ -40,7 +40,7 @@ export function connectionsDeleteByProvider(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.DeleteV3ConnectionsByProviderResponse,
+    Array<operations.DeleteV3ConnectionsByProviderResponse>,
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -66,7 +66,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      operations.DeleteV3ConnectionsByProviderResponse,
+      Array<operations.DeleteV3ConnectionsByProviderResponse>,
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -159,7 +159,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.DeleteV3ConnectionsByProviderResponse,
+    Array<operations.DeleteV3ConnectionsByProviderResponse>,
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -170,7 +170,10 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.DeleteV3ConnectionsByProviderResponse$inboundSchema),
+    M.json(
+      200,
+      z.array(operations.DeleteV3ConnectionsByProviderResponse$inboundSchema),
+    ),
     M.jsonErr([401, 404], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
