@@ -125,13 +125,15 @@ export class Documents extends ClientSDK {
    * Get processing documents
    *
    * @remarks
-   * Get documents that are currently being processed
+   * Get documents that are currently being processed. Default `view=active` is the live in-flight queue. `view=all` also includes failed and stuck documents.
    */
   async listProcessing(
+    request?: operations.GetV3DocumentsProcessingRequest | undefined,
     options?: RequestOptions,
   ): Promise<operations.GetV3DocumentsProcessingResponse> {
     return unwrapAsync(documentsListProcessing(
       this,
+      request,
       options,
     ));
   }
