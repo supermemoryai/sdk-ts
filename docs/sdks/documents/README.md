@@ -43,6 +43,7 @@ async function run() {
       "department": "engineering",
       "region": "us",
     },
+    documentDate: "2025-03-14",
     entityContext: "User's name is {XYZ}",
     dreaming: "instant",
     documents: [
@@ -83,6 +84,7 @@ async function run() {
       "department": "engineering",
       "region": "us",
     },
+    documentDate: "2025-03-14",
     entityContext: "User's name is {XYZ}",
     dreaming: "instant",
     documents: [
@@ -152,6 +154,7 @@ async function run() {
         "department": "engineering",
         "region": "us",
       },
+      documentDate: "2025-03-14",
     },
   });
 
@@ -192,6 +195,7 @@ async function run() {
         "department": "engineering",
         "region": "us",
       },
+      documentDate: "2025-03-14",
     },
   });
   if (res.ok) {
@@ -570,7 +574,7 @@ run();
 
 ## listProcessing
 
-Get documents that are currently being processed
+Get documents that are currently being processed. Default `view=active` is the live in-flight queue. `view=all` also includes failed and stuck documents.
 
 ### Example Usage
 
@@ -583,7 +587,12 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  const result = await supermemory.documents.listProcessing();
+  const result = await supermemory.documents.listProcessing({
+    view: "all",
+    containerTags: "user_123,sm_project_default",
+    page: "1",
+    limit: "50",
+  });
 
   console.log(result);
 }
@@ -606,7 +615,12 @@ const supermemory = new SupermemoryCore({
 });
 
 async function run() {
-  const res = await documentsListProcessing(supermemory);
+  const res = await documentsListProcessing(supermemory, {
+    view: "all",
+    containerTags: "user_123,sm_project_default",
+    page: "1",
+    limit: "50",
+  });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
@@ -622,6 +636,7 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.GetV3DocumentsProcessingRequest](../../models/operations/get-v3-documents-processing-request.md)                                                                   | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 | `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
@@ -634,7 +649,7 @@ run();
 
 | Error Type                     | Status Code                    | Content Type                   |
 | ------------------------------ | ------------------------------ | ------------------------------ |
-| errors.ErrorResponse           | 401                            | application/json               |
+| errors.ErrorResponse           | 400, 401                       | application/json               |
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
