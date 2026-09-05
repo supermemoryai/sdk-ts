@@ -115,7 +115,8 @@ export class Documents extends APIResource {
 
   /**
    * Get documents that are currently being processed. Default `view=active` is the
-   * live in-flight queue. `view=all` also includes failed and stuck documents.
+   * live in-flight queue. `view=pending` is every unfinished document with no time
+   * cutoff. `view=all` also includes failed documents, paginated.
    *
    * @example
    * ```ts
@@ -1145,10 +1146,11 @@ export interface DocumentListProcessingParams {
   page?: string | number;
 
   /**
-   * `active` returns in-flight documents updated in the last 4 hours. `all` also
-   * includes failed and stuck documents.
+   * `active` returns in-flight documents updated in the last 4 hours. `pending`
+   * returns every document that is not done or failed, with no time cutoff. `all`
+   * also includes failed documents, paginated.
    */
-  view?: 'active' | 'all';
+  view?: 'active' | 'pending' | 'all';
 }
 
 export interface DocumentUploadFileParams {
