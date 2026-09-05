@@ -43,14 +43,14 @@ export class Supermemory extends ClientSDK {
     return (this._profiles ??= new Profiles(this._options));
   }
 
-  private _conversations?: Conversations;
-  get conversations(): Conversations {
-    return (this._conversations ??= new Conversations(this._options));
-  }
-
   private _connections?: Connections;
   get connections(): Connections {
     return (this._connections ??= new Connections(this._options));
+  }
+
+  private _conversations?: Conversations;
+  get conversations(): Conversations {
+    return (this._conversations ??= new Conversations(this._options));
   }
 
   /**
