@@ -1,0 +1,23 @@
+# GetV3DocumentsProcessingRequest
+
+## Example Usage
+
+```typescript
+import { GetV3DocumentsProcessingRequest } from "supermemory/models/operations";
+
+let value: GetV3DocumentsProcessingRequest = {
+  view: "all",
+  containerTags: "user_123,sm_project_default",
+  page: "1",
+  limit: "50",
+};
+```
+
+## Fields
+
+| Field                                                                                                             | Type                                                                                                              | Required                                                                                                          | Description                                                                                                       | Example                                                                                                           |
+| ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `view`                                                                                                            | [operations.View](../../models/operations/view.md)                                                                | :heavy_minus_sign:                                                                                                | `active` returns in-flight documents updated in the last 4 hours. `all` also includes failed and stuck documents. | all                                                                                                               |
+| `containerTags`                                                                                                   | *string*                                                                                                          | :heavy_minus_sign:                                                                                                | Comma-separated container tags to filter by                                                                       | user_123,sm_project_default                                                                                       |
+| `page`                                                                                                            | *operations.GetV3DocumentsProcessingPage*                                                                         | :heavy_minus_sign:                                                                                                | Page number to fetch. Used with `view=all`.                                                                       | 1                                                                                                                 |
+| `limit`                                                                                                           | *operations.GetV3DocumentsProcessingLimit*                                                                        | :heavy_minus_sign:                                                                                                | Number of items per page. Used with `view=all`.                                                                   | 50                                                                                                                |
