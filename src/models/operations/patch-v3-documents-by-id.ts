@@ -84,6 +84,10 @@ export type PatchV3DocumentsByIdRequestBody = {
   filterByMetadata?:
     | { [k: string]: string | number | boolean | Array<string> }
     | undefined;
+  /**
+   * When this document's content is from, as opposed to when it was uploaded. Accepts YYYY-MM-DD or a full ISO 8601 timestamp. Memory extraction resolves relative dates ('yesterday', 'last quarter') against this instead of the ingestion time, and documents in a batch are processed oldest-first so newer facts correctly supersede older ones. Set this whenever you backfill historical content.
+   */
+  documentDate?: string | undefined;
 };
 
 export type PatchV3DocumentsByIdRequest = {
@@ -170,6 +174,7 @@ export type PatchV3DocumentsByIdRequestBody$Outbound = {
   filterByMetadata?:
     | { [k: string]: string | number | boolean | Array<string> }
     | undefined;
+  documentDate?: string | undefined;
 };
 
 /** @internal */
@@ -195,6 +200,7 @@ export const PatchV3DocumentsByIdRequestBody$outboundSchema: z.ZodMiniType<
       smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]),
     ),
   ),
+  documentDate: z.optional(z.string()),
 });
 
 export function patchV3DocumentsByIdRequestBodyToJSON(

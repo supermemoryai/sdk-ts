@@ -17,9 +17,6 @@ export type DeleteV3ConnectionsByConnectionIdRequest = {
   deleteDocuments?: string | undefined;
 };
 
-/**
- * Connection deleted successfully
- */
 export type DeleteV3ConnectionsByConnectionIdResponse = {
   id: string;
   provider: string;
