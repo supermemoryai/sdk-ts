@@ -139,6 +139,10 @@ export type Documents = {
     | { [k: string]: string | number | boolean | Array<string> }
     | undefined;
   /**
+   * When this document's content is from, as opposed to when it was uploaded. Accepts YYYY-MM-DD or a full ISO 8601 timestamp. Memory extraction resolves relative dates ('yesterday', 'last quarter') against this instead of the ingestion time, and documents in a batch are processed oldest-first so newer facts correctly supersede older ones. Set this whenever you backfill historical content.
+   */
+  documentDate?: string | undefined;
+  /**
    * Optional entity context for this container tag. Max 1500 characters. Used during document processing to guide memory extraction.
    */
   entityContext?: string | undefined;
@@ -182,6 +186,10 @@ export type PostV3DocumentsBatchRequest = {
     | { [k: string]: string | number | boolean | Array<string> }
     | undefined;
   /**
+   * When this document's content is from, as opposed to when it was uploaded. Accepts YYYY-MM-DD or a full ISO 8601 timestamp. Memory extraction resolves relative dates ('yesterday', 'last quarter') against this instead of the ingestion time, and documents in a batch are processed oldest-first so newer facts correctly supersede older ones. Set this whenever you backfill historical content.
+   */
+  documentDate?: string | undefined;
+  /**
    * Optional entity context for this container tag. Max 1500 characters. Used during document processing to guide memory extraction.
    */
   entityContext?: string | undefined;
@@ -210,6 +218,10 @@ export type PostV3DocumentsBatchResult = {
    * Additional error details when status is 'error'
    */
   details?: string | undefined;
+  /**
+   * URL of the failed item, when it had one. Only present on failed items, where it may be the only way to tell which input the error belongs to (the id falls back to 'unknown' when the input had neither an id nor a customId).
+   */
+  url?: string | undefined;
 };
 
 /**
@@ -358,6 +370,7 @@ export type Documents$Outbound = {
   filterByMetadata?:
     | { [k: string]: string | number | boolean | Array<string> }
     | undefined;
+  documentDate?: string | undefined;
   entityContext?: string | undefined;
   dreaming?: string | undefined;
 };
@@ -385,6 +398,7 @@ export const Documents$outboundSchema: z.ZodMiniType<
       smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]),
     ),
   ),
+  documentDate: z.optional(z.string()),
   entityContext: z.optional(z.string()),
   dreaming: z.optional(PostV3DocumentsBatchDreaming2$outboundSchema),
 });
@@ -421,6 +435,7 @@ export type PostV3DocumentsBatchRequest$Outbound = {
   filterByMetadata?:
     | { [k: string]: string | number | boolean | Array<string> }
     | undefined;
+  documentDate?: string | undefined;
   entityContext?: string | undefined;
   dreaming?: string | undefined;
   documents: Array<Documents$Outbound> | Array<string>;
@@ -448,6 +463,7 @@ export const PostV3DocumentsBatchRequest$outboundSchema: z.ZodMiniType<
       smartUnion([z.string(), z.number(), z.boolean(), z.array(z.string())]),
     ),
   ),
+  documentDate: z.optional(z.string()),
   entityContext: z.optional(z.string()),
   dreaming: z.optional(PostV3DocumentsBatchDreaming1$outboundSchema),
   documents: smartUnion([
@@ -476,6 +492,7 @@ export const PostV3DocumentsBatchResult$inboundSchema: z.ZodMiniType<
   status: types.string(),
   error: types.optional(types.string()),
   details: types.optional(types.string()),
+  url: types.optional(types.string()),
 });
 
 export function postV3DocumentsBatchResultFromJSON(

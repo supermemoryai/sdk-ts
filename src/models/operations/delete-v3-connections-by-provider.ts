@@ -36,9 +36,6 @@ export type DeleteV3ConnectionsByProviderRequest = {
   body: DeleteV3ConnectionsByProviderRequestBody;
 };
 
-/**
- * Connection deleted successfully
- */
 export type DeleteV3ConnectionsByProviderResponse = {
   id: string;
   provider: string;
