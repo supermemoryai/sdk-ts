@@ -3,10 +3,13 @@
  * @generated-id: b9846379dcd1
  */
 
+import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
+import { encodeFormQuery } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
+import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
@@ -29,10 +32,11 @@ import { Result } from "../types/fp.js";
  * Get processing documents
  *
  * @remarks
- * Get documents that are currently being processed
+ * Get documents that are currently being processed. Default `view=active` is the live in-flight queue. `view=pending` is every unfinished document with no time cutoff. `view=all` also includes failed documents, paginated.
  */
 export function documentsListProcessing(
   client: SupermemoryCore,
+  request?: operations.GetV3DocumentsProcessingRequest | undefined,
   options?: RequestOptions,
 ): APIPromise<
   Result<
@@ -50,12 +54,14 @@ export function documentsListProcessing(
 > {
   return new APIPromise($do(
     client,
+    request,
     options,
   ));
 }
 
 async function $do(
   client: SupermemoryCore,
+  request?: operations.GetV3DocumentsProcessingRequest | undefined,
   options?: RequestOptions,
 ): Promise<
   [
@@ -74,7 +80,29 @@ async function $do(
     APICall,
   ]
 > {
+  const parsed = safeParse(
+    request,
+    (value) =>
+      z.parse(
+        z.optional(operations.GetV3DocumentsProcessingRequest$outboundSchema),
+        value,
+      ),
+    "Input validation failed",
+  );
+  if (!parsed.ok) {
+    return [parsed, { status: "invalid" }];
+  }
+  const payload = parsed.value;
+  const body = null;
+
   const path = pathToFunc("/v3/documents/processing")();
+
+  const query = encodeFormQuery({
+    "containerTags": payload?.containerTags,
+    "limit": payload?.limit,
+    "page": payload?.page,
+    "view": payload?.view,
+  });
 
   const headers = new Headers(compactMap({
     Accept: "application/json",
@@ -105,6 +133,8 @@ async function $do(
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
+    query: query,
+    body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
   }, options);
@@ -142,7 +172,7 @@ async function $do(
     | SDKValidationError
   >(
     M.json(200, operations.GetV3DocumentsProcessingResponse$inboundSchema),
-    M.jsonErr(401, errors.ErrorResponse$inboundSchema),
+    M.jsonErr([400, 401], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),
