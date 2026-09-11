@@ -71,8 +71,6 @@ export namespace SettingUpdateResponse {
     profileBuckets?: Array<Updated.ProfileBucket>;
 
     shouldLLMFilter?: boolean | null;
-
-    workspacePrompt?: string | null;
   }
 
   export namespace Updated {
@@ -132,8 +130,6 @@ export interface SettingGetResponse {
   profileBuckets?: Array<SettingGetResponse.ProfileBucket>;
 
   shouldLLMFilter?: boolean | null;
-
-  workspacePrompt?: string | null;
 }
 
 export namespace SettingGetResponse {
@@ -153,69 +149,61 @@ export namespace SettingGetResponse {
   }
 }
 
-export type SettingUpdateParams = SettingUpdateParams.Variant0 | SettingUpdateParams.Variant1;
+export interface SettingUpdateParams {
+  chunkSize?: number | null;
 
-export declare namespace SettingUpdateParams {
-  export interface Variant0 {
-    workspacePrompt: string | null;
-  }
+  excludeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
-  export interface Variant1 {
-    chunkSize?: number | null;
+  filterPrompt?: string | null;
 
-    excludeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
+  githubClientId?: string | null;
 
-    filterPrompt?: string | null;
+  githubClientSecret?: string | null;
 
-    githubClientId?: string | null;
+  githubCustomKeyEnabled?: boolean | null;
 
-    githubClientSecret?: string | null;
+  googleDriveClientId?: string | null;
 
-    githubCustomKeyEnabled?: boolean | null;
+  googleDriveClientSecret?: string | null;
 
-    googleDriveClientId?: string | null;
+  googleDriveCustomKeyEnabled?: boolean | null;
 
-    googleDriveClientSecret?: string | null;
+  includeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
-    googleDriveCustomKeyEnabled?: boolean | null;
+  notionClientId?: string | null;
 
-    includeItems?: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
+  notionClientSecret?: string | null;
 
-    notionClientId?: string | null;
+  notionCustomKeyEnabled?: boolean | null;
 
-    notionClientSecret?: string | null;
+  onedriveClientId?: string | null;
 
-    notionCustomKeyEnabled?: boolean | null;
+  onedriveClientSecret?: string | null;
 
-    onedriveClientId?: string | null;
+  onedriveCustomKeyEnabled?: boolean | null;
 
-    onedriveClientSecret?: string | null;
+  /**
+   * Profile bucket definitions
+   */
+  profileBuckets?: Array<SettingUpdateParams.ProfileBucket>;
 
-    onedriveCustomKeyEnabled?: boolean | null;
+  shouldLLMFilter?: boolean | null;
+}
+
+export namespace SettingUpdateParams {
+  /**
+   * Definition of a single profile bucket
+   */
+  export interface ProfileBucket {
+    /**
+     * Stable slug for the bucket, stored on each memory
+     */
+    key: string;
 
     /**
-     * Profile bucket definitions
+     * What belongs in this bucket — used to guide the ingestion classifier.
      */
-    profileBuckets?: Array<Variant1.ProfileBucket>;
-
-    shouldLLMFilter?: boolean | null;
-  }
-
-  export namespace Variant1 {
-    /**
-     * Definition of a single profile bucket
-     */
-    export interface ProfileBucket {
-      /**
-       * Stable slug for the bucket, stored on each memory
-       */
-      key: string;
-
-      /**
-       * What belongs in this bucket — used to guide the ingestion classifier.
-       */
-      description?: string;
-    }
+    description?: string;
   }
 }
 

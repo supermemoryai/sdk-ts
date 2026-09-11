@@ -382,6 +382,8 @@ export interface DocumentGetResponse {
    */
   id: string;
 
+  activeContentUpdateId: string | null;
+
   /**
    * Optional ID of connection the document was created from. This is useful for
    * identifying the source of the document.
@@ -414,6 +416,8 @@ export interface DocumentGetResponse {
   dreamingStatus: 'dreaming' | 'done';
 
   filepath: string | null;
+
+  latestRevision: number;
 
   /**
    * Optional metadata for the document. This is used to store additional information
@@ -456,6 +460,8 @@ export interface DocumentGetResponse {
    * Title of the document
    */
   title: string | null;
+
+  tombstonedAt: string | null;
 
   /**
    * Type of the document
