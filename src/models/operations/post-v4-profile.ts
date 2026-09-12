@@ -5,7 +5,8 @@
 
 import * as z from "zod/v4-mini";
 import { safeParse } from "../../lib/schemas.js";
-import { ClosedEnum } from "../../types/enums.js";
+import * as openEnums from "../../types/enums.js";
+import { ClosedEnum, OpenEnum } from "../../types/enums.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
@@ -61,13 +62,232 @@ export type Profile = {
 };
 
 /**
+ * Relation type between this memory and its parent/child
+ */
+export const PostV4ProfileParentRelation = {
+  Updates: "updates",
+  Extends: "extends",
+  Derives: "derives",
+} as const;
+/**
+ * Relation type between this memory and its parent/child
+ */
+export type PostV4ProfileParentRelation = OpenEnum<
+  typeof PostV4ProfileParentRelation
+>;
+
+export type PostV4ProfileParent = {
+  /**
+   * Relation type between this memory and its parent/child
+   */
+  relation: PostV4ProfileParentRelation;
+  /**
+   * Relative version distance from the primary memory (-1 for direct parent, -2 for grand-parent, etc.)
+   */
+  version?: number | null | undefined;
+  /**
+   * The contextual memory content
+   */
+  memory: string;
+  /**
+   * Contextual memory metadata
+   */
+  metadata?: { [k: string]: any } | null | undefined;
+  /**
+   * Contextual memory last update date
+   */
+  updatedAt: string;
+};
+
+/**
+ * Relation type between this memory and its parent/child
+ */
+export const PostV4ProfileChildRelation = {
+  Updates: "updates",
+  Extends: "extends",
+  Derives: "derives",
+} as const;
+/**
+ * Relation type between this memory and its parent/child
+ */
+export type PostV4ProfileChildRelation = OpenEnum<
+  typeof PostV4ProfileChildRelation
+>;
+
+export type PostV4ProfileChild = {
+  /**
+   * Relation type between this memory and its parent/child
+   */
+  relation: PostV4ProfileChildRelation;
+  /**
+   * Relative version distance from the primary memory (+1 for direct child, +2 for grand-child, etc.)
+   */
+  version?: number | null | undefined;
+  /**
+   * The contextual memory content
+   */
+  memory: string;
+  /**
+   * Contextual memory metadata
+   */
+  metadata?: { [k: string]: any } | null | undefined;
+  /**
+   * Contextual memory last update date
+   */
+  updatedAt: string;
+};
+
+/**
+ * Relation type
+ */
+export const PostV4ProfileRelatedRelation = {
+  Extends: "extends",
+  Derives: "derives",
+} as const;
+/**
+ * Relation type
+ */
+export type PostV4ProfileRelatedRelation = OpenEnum<
+  typeof PostV4ProfileRelatedRelation
+>;
+
+export type PostV4ProfileRelated = {
+  /**
+   * Relation type
+   */
+  relation: PostV4ProfileRelatedRelation;
+  /**
+   * The related memory content
+   */
+  memory: string;
+  /**
+   * Related memory metadata
+   */
+  metadata?: { [k: string]: any } | null | undefined;
+  /**
+   * Related memory last update date
+   */
+  updatedAt: string;
+};
+
+/**
+ * Object containing version history (parents/children via updates) and related memories (extends/derives)
+ */
+export type PostV4ProfileContext = {
+  parents?: Array<PostV4ProfileParent> | undefined;
+  children?: Array<PostV4ProfileChild> | undefined;
+  related?: Array<PostV4ProfileRelated> | undefined;
+};
+
+export type PostV4ProfileDocument = {
+  /**
+   * Document ID
+   */
+  id: string;
+  /**
+   * Document title (only included when documents=true)
+   */
+  title?: string | undefined;
+  /**
+   * Document type (only included when documents=true)
+   */
+  type?: string | undefined;
+  /**
+   * Document metadata (only included when documents=true)
+   */
+  metadata?: { [k: string]: any } | null | undefined;
+  /**
+   * Document summary (only included when summaries=true)
+   */
+  summary?: string | null | undefined;
+  /**
+   * Document creation date
+   */
+  createdAt: string;
+  /**
+   * Document last update date
+   */
+  updatedAt: string;
+};
+
+export type PostV4ProfileChunk = {
+  /**
+   * Content of the chunk
+   */
+  content: string;
+  /**
+   * Position of chunk in the document (0-indexed)
+   */
+  position: number;
+  /**
+   * ID of the document this chunk belongs to
+   */
+  documentId: string;
+};
+
+export type PostV4ProfileResult = {
+  /**
+   * Memory entry ID or chunk ID
+   */
+  id: string;
+  /**
+   * The memory content (only present for memory results)
+   */
+  memory?: string | undefined;
+  /**
+   * The chunk content (only present for chunk results from hybrid search)
+   */
+  chunk?: string | undefined;
+  /**
+   * Memory metadata
+   */
+  metadata: { [k: string]: any } | null;
+  /**
+   * Memory last update date
+   */
+  updatedAt: string;
+  /**
+   * Similarity score between the query and memory entry
+   */
+  similarity: number;
+  /**
+   * Filepath of the source document this memory or chunk came from
+   */
+  filepath?: string | null | undefined;
+  /**
+   * Version number of this memory entry
+   */
+  version?: number | null | undefined;
+  /**
+   * ID of the root (first version) memory entry this one descends from. Null for memories that have never been superseded. Only present on memory results, not on standalone chunk results.
+   */
+  rootMemoryId?: string | null | undefined;
+  /**
+   * Object containing version history (parents/children via updates) and related memories (extends/derives)
+   */
+  context?: PostV4ProfileContext | undefined;
+  /**
+   * Associated documents for this memory entry
+   */
+  documents?: Array<PostV4ProfileDocument> | undefined;
+  /**
+   * Relevant chunks from associated documents (only included when chunks=true)
+   */
+  chunks?: Array<PostV4ProfileChunk> | undefined;
+  /**
+   * Indicates if this memory was created by aggregating multiple source memories
+   */
+  isAggregated?: boolean | undefined;
+};
+
+/**
  * Search results if a search query was provided
  */
 export type SearchResults = {
   /**
    * Search results for the provided query
    */
-  results: Array<any>;
+  results: Array<PostV4ProfileResult>;
   /**
    * Total number of search results
    */
@@ -143,11 +363,198 @@ export function profileFromJSON(
 }
 
 /** @internal */
+export const PostV4ProfileParentRelation$inboundSchema: z.ZodMiniType<
+  PostV4ProfileParentRelation,
+  unknown
+> = openEnums.inboundSchema(PostV4ProfileParentRelation);
+
+/** @internal */
+export const PostV4ProfileParent$inboundSchema: z.ZodMiniType<
+  PostV4ProfileParent,
+  unknown
+> = z.object({
+  relation: PostV4ProfileParentRelation$inboundSchema,
+  version: z.optional(z.nullable(types.number())),
+  memory: types.string(),
+  metadata: z.optional(z.nullable(z.record(z.string(), z.any()))),
+  updatedAt: types.string(),
+});
+
+export function postV4ProfileParentFromJSON(
+  jsonString: string,
+): SafeParseResult<PostV4ProfileParent, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PostV4ProfileParent$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4ProfileParent' from JSON`,
+  );
+}
+
+/** @internal */
+export const PostV4ProfileChildRelation$inboundSchema: z.ZodMiniType<
+  PostV4ProfileChildRelation,
+  unknown
+> = openEnums.inboundSchema(PostV4ProfileChildRelation);
+
+/** @internal */
+export const PostV4ProfileChild$inboundSchema: z.ZodMiniType<
+  PostV4ProfileChild,
+  unknown
+> = z.object({
+  relation: PostV4ProfileChildRelation$inboundSchema,
+  version: z.optional(z.nullable(types.number())),
+  memory: types.string(),
+  metadata: z.optional(z.nullable(z.record(z.string(), z.any()))),
+  updatedAt: types.string(),
+});
+
+export function postV4ProfileChildFromJSON(
+  jsonString: string,
+): SafeParseResult<PostV4ProfileChild, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PostV4ProfileChild$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4ProfileChild' from JSON`,
+  );
+}
+
+/** @internal */
+export const PostV4ProfileRelatedRelation$inboundSchema: z.ZodMiniType<
+  PostV4ProfileRelatedRelation,
+  unknown
+> = openEnums.inboundSchema(PostV4ProfileRelatedRelation);
+
+/** @internal */
+export const PostV4ProfileRelated$inboundSchema: z.ZodMiniType<
+  PostV4ProfileRelated,
+  unknown
+> = z.object({
+  relation: PostV4ProfileRelatedRelation$inboundSchema,
+  memory: types.string(),
+  metadata: z.optional(z.nullable(z.record(z.string(), z.any()))),
+  updatedAt: types.string(),
+});
+
+export function postV4ProfileRelatedFromJSON(
+  jsonString: string,
+): SafeParseResult<PostV4ProfileRelated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PostV4ProfileRelated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4ProfileRelated' from JSON`,
+  );
+}
+
+/** @internal */
+export const PostV4ProfileContext$inboundSchema: z.ZodMiniType<
+  PostV4ProfileContext,
+  unknown
+> = z.object({
+  parents: types.optional(
+    z.array(z.lazy(() => PostV4ProfileParent$inboundSchema)),
+  ),
+  children: types.optional(
+    z.array(z.lazy(() => PostV4ProfileChild$inboundSchema)),
+  ),
+  related: types.optional(
+    z.array(z.lazy(() => PostV4ProfileRelated$inboundSchema)),
+  ),
+});
+
+export function postV4ProfileContextFromJSON(
+  jsonString: string,
+): SafeParseResult<PostV4ProfileContext, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PostV4ProfileContext$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4ProfileContext' from JSON`,
+  );
+}
+
+/** @internal */
+export const PostV4ProfileDocument$inboundSchema: z.ZodMiniType<
+  PostV4ProfileDocument,
+  unknown
+> = z.object({
+  id: types.string(),
+  title: types.optional(types.string()),
+  type: types.optional(types.string()),
+  metadata: z.optional(z.nullable(z.record(z.string(), z.any()))),
+  summary: z.optional(z.nullable(types.string())),
+  createdAt: types.string(),
+  updatedAt: types.string(),
+});
+
+export function postV4ProfileDocumentFromJSON(
+  jsonString: string,
+): SafeParseResult<PostV4ProfileDocument, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PostV4ProfileDocument$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4ProfileDocument' from JSON`,
+  );
+}
+
+/** @internal */
+export const PostV4ProfileChunk$inboundSchema: z.ZodMiniType<
+  PostV4ProfileChunk,
+  unknown
+> = z.object({
+  content: types.string(),
+  position: types.number(),
+  documentId: types.string(),
+});
+
+export function postV4ProfileChunkFromJSON(
+  jsonString: string,
+): SafeParseResult<PostV4ProfileChunk, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PostV4ProfileChunk$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4ProfileChunk' from JSON`,
+  );
+}
+
+/** @internal */
+export const PostV4ProfileResult$inboundSchema: z.ZodMiniType<
+  PostV4ProfileResult,
+  unknown
+> = z.object({
+  id: types.string(),
+  memory: types.optional(types.string()),
+  chunk: types.optional(types.string()),
+  metadata: types.nullable(z.record(z.string(), z.any())),
+  updatedAt: types.string(),
+  similarity: types.number(),
+  filepath: z.optional(z.nullable(types.string())),
+  version: z.optional(z.nullable(types.number())),
+  rootMemoryId: z.optional(z.nullable(types.string())),
+  context: types.optional(z.lazy(() => PostV4ProfileContext$inboundSchema)),
+  documents: types.optional(
+    z.array(z.lazy(() => PostV4ProfileDocument$inboundSchema)),
+  ),
+  chunks: types.optional(
+    z.array(z.lazy(() => PostV4ProfileChunk$inboundSchema)),
+  ),
+  isAggregated: types.optional(types.boolean()),
+});
+
+export function postV4ProfileResultFromJSON(
+  jsonString: string,
+): SafeParseResult<PostV4ProfileResult, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PostV4ProfileResult$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4ProfileResult' from JSON`,
+  );
+}
+
+/** @internal */
 export const SearchResults$inboundSchema: z.ZodMiniType<
   SearchResults,
   unknown
 > = z.object({
-  results: z.array(z.any()),
+  results: z.array(z.lazy(() => PostV4ProfileResult$inboundSchema)),
   total: types.number(),
   timing: types.number(),
 });

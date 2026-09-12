@@ -36,7 +36,7 @@ export type PatchV3SettingsProfileBucketRequest = {
   description?: string | undefined;
 };
 
-export type RequestBody2 = {
+export type PatchV3SettingsRequest = {
   excludeItems?:
     | string
     | number
@@ -73,12 +73,6 @@ export type RequestBody2 = {
    */
   profileBuckets?: Array<PatchV3SettingsProfileBucketRequest> | undefined;
 };
-
-export type RequestBody1 = {
-  workspacePrompt: string | null;
-};
-
-export type PatchV3SettingsRequest = RequestBody1 | RequestBody2;
 
 export type ExcludeItemsUpdated = string | number | boolean;
 
@@ -142,7 +136,6 @@ export type Updated = {
    * Profile bucket definitions
    */
   profileBuckets?: Array<UpdatedProfileBucket> | undefined;
-  workspacePrompt?: string | null | undefined;
 };
 
 /**
@@ -260,7 +253,7 @@ export function patchV3SettingsProfileBucketRequestToJSON(
 }
 
 /** @internal */
-export type RequestBody2$Outbound = {
+export type PatchV3SettingsRequest$Outbound = {
   excludeItems?:
     | string
     | number
@@ -298,9 +291,9 @@ export type RequestBody2$Outbound = {
 };
 
 /** @internal */
-export const RequestBody2$outboundSchema: z.ZodMiniType<
-  RequestBody2$Outbound,
-  RequestBody2
+export const PatchV3SettingsRequest$outboundSchema: z.ZodMiniType<
+  PatchV3SettingsRequest$Outbound,
+  PatchV3SettingsRequest
 > = z.object({
   excludeItems: z.optional(
     z.nullable(
@@ -339,41 +332,6 @@ export const RequestBody2$outboundSchema: z.ZodMiniType<
     z.array(z.lazy(() => PatchV3SettingsProfileBucketRequest$outboundSchema)),
   ),
 });
-
-export function requestBody2ToJSON(requestBody2: RequestBody2): string {
-  return JSON.stringify(RequestBody2$outboundSchema.parse(requestBody2));
-}
-
-/** @internal */
-export type RequestBody1$Outbound = {
-  workspacePrompt: string | null;
-};
-
-/** @internal */
-export const RequestBody1$outboundSchema: z.ZodMiniType<
-  RequestBody1$Outbound,
-  RequestBody1
-> = z.object({
-  workspacePrompt: z.nullable(z.string()),
-});
-
-export function requestBody1ToJSON(requestBody1: RequestBody1): string {
-  return JSON.stringify(RequestBody1$outboundSchema.parse(requestBody1));
-}
-
-/** @internal */
-export type PatchV3SettingsRequest$Outbound =
-  | RequestBody1$Outbound
-  | RequestBody2$Outbound;
-
-/** @internal */
-export const PatchV3SettingsRequest$outboundSchema: z.ZodMiniType<
-  PatchV3SettingsRequest$Outbound,
-  PatchV3SettingsRequest
-> = smartUnion([
-  z.lazy(() => RequestBody1$outboundSchema),
-  z.lazy(() => RequestBody2$outboundSchema),
-]);
 
 export function patchV3SettingsRequestToJSON(
   patchV3SettingsRequest: PatchV3SettingsRequest,
@@ -512,7 +470,6 @@ export const Updated$inboundSchema: z.ZodMiniType<Updated, unknown> = z.object({
   profileBuckets: types.optional(
     z.array(z.lazy(() => UpdatedProfileBucket$inboundSchema)),
   ),
-  workspacePrompt: z.optional(z.nullable(types.string())),
 });
 
 export function updatedFromJSON(
