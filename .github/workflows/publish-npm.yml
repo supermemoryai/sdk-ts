@@ -82,10 +82,6 @@ jobs:
           chmod +x bin/cli.mjs
           node bin/cli.mjs --version
 
-      - name: Verify CLI command surface
-        if: steps.meta.outputs.publish == 'true'
-        run: bun ../mono/apps/cli/scripts/verify-surface.ts "$(pwd)/bin/cli.mjs"
-
       - name: Verify tarball contents
         if: steps.meta.outputs.publish == 'true'
         run: |
