@@ -158,6 +158,9 @@ export type GetV3DocumentsByIdResponse = {
    * Task type: "memory" (default) for full context layer with SuperRAG built in, "superrag" for managed RAG as a service.
    */
   taskType: GetV3DocumentsByIdTaskType;
+  latestRevision: number;
+  activeContentUpdateId: string | null;
+  tombstonedAt: Date | null;
   /**
    * Status of the document
    */
@@ -356,6 +359,9 @@ export const GetV3DocumentsByIdResponse$inboundSchema: z.ZodMiniType<
   raw: types.nullable(z.any()),
   source: types.nullable(types.string()),
   taskType: GetV3DocumentsByIdTaskType$inboundSchema,
+  latestRevision: types.number(),
+  activeContentUpdateId: types.nullable(types.string()),
+  tombstonedAt: types.nullable(types.date()),
   status: GetV3DocumentsByIdStatus$inboundSchema,
   dreamingStatus: DreamingStatus$inboundSchema,
   summary: types.nullable(types.string()),

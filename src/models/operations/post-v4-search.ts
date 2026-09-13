@@ -92,7 +92,7 @@ export type PostV4SearchRequest = {
 /**
  * Relation type between this memory and its parent/child
  */
-export const ParentRelation = {
+export const PostV4SearchParentRelation = {
   Updates: "updates",
   Extends: "extends",
   Derives: "derives",
@@ -100,13 +100,15 @@ export const ParentRelation = {
 /**
  * Relation type between this memory and its parent/child
  */
-export type ParentRelation = OpenEnum<typeof ParentRelation>;
+export type PostV4SearchParentRelation = OpenEnum<
+  typeof PostV4SearchParentRelation
+>;
 
-export type Parent = {
+export type PostV4SearchParent = {
   /**
    * Relation type between this memory and its parent/child
    */
-  relation: ParentRelation;
+  relation: PostV4SearchParentRelation;
   /**
    * Relative version distance from the primary memory (-1 for direct parent, -2 for grand-parent, etc.)
    */
@@ -128,7 +130,7 @@ export type Parent = {
 /**
  * Relation type between this memory and its parent/child
  */
-export const ChildRelation = {
+export const PostV4SearchChildRelation = {
   Updates: "updates",
   Extends: "extends",
   Derives: "derives",
@@ -136,13 +138,15 @@ export const ChildRelation = {
 /**
  * Relation type between this memory and its parent/child
  */
-export type ChildRelation = OpenEnum<typeof ChildRelation>;
+export type PostV4SearchChildRelation = OpenEnum<
+  typeof PostV4SearchChildRelation
+>;
 
-export type Child = {
+export type PostV4SearchChild = {
   /**
    * Relation type between this memory and its parent/child
    */
-  relation: ChildRelation;
+  relation: PostV4SearchChildRelation;
   /**
    * Relative version distance from the primary memory (+1 for direct child, +2 for grand-child, etc.)
    */
@@ -164,20 +168,22 @@ export type Child = {
 /**
  * Relation type
  */
-export const RelatedRelation = {
+export const PostV4SearchRelatedRelation = {
   Extends: "extends",
   Derives: "derives",
 } as const;
 /**
  * Relation type
  */
-export type RelatedRelation = OpenEnum<typeof RelatedRelation>;
+export type PostV4SearchRelatedRelation = OpenEnum<
+  typeof PostV4SearchRelatedRelation
+>;
 
-export type Related = {
+export type PostV4SearchRelated = {
   /**
    * Relation type
    */
-  relation: RelatedRelation;
+  relation: PostV4SearchRelatedRelation;
   /**
    * The related memory content
    */
@@ -195,10 +201,10 @@ export type Related = {
 /**
  * Object containing version history (parents/children via updates) and related memories (extends/derives)
  */
-export type Context = {
-  parents?: Array<Parent> | undefined;
-  children?: Array<Child> | undefined;
-  related?: Array<Related> | undefined;
+export type PostV4SearchContext = {
+  parents?: Array<PostV4SearchParent> | undefined;
+  children?: Array<PostV4SearchChild> | undefined;
+  related?: Array<PostV4SearchRelated> | undefined;
 };
 
 export type PostV4SearchDocument = {
@@ -237,10 +243,6 @@ export type PostV4SearchChunk = {
    * Content of the chunk
    */
   content: string;
-  /**
-   * Similarity score between the query and chunk
-   */
-  score: number;
   /**
    * Position of chunk in the document (0-indexed)
    */
@@ -285,9 +287,13 @@ export type PostV4SearchResult = {
    */
   version?: number | null | undefined;
   /**
+   * ID of the root (first version) memory entry this one descends from. Null for memories that have never been superseded. Only present on memory results, not on standalone chunk results.
+   */
+  rootMemoryId?: string | null | undefined;
+  /**
    * Object containing version history (parents/children via updates) and related memories (extends/derives)
    */
-  context?: Context | undefined;
+  context?: PostV4SearchContext | undefined;
   /**
    * Associated documents for this memory entry
    */
@@ -397,93 +403,111 @@ export function postV4SearchRequestToJSON(
 }
 
 /** @internal */
-export const ParentRelation$inboundSchema: z.ZodMiniType<
-  ParentRelation,
+export const PostV4SearchParentRelation$inboundSchema: z.ZodMiniType<
+  PostV4SearchParentRelation,
   unknown
-> = openEnums.inboundSchema(ParentRelation);
+> = openEnums.inboundSchema(PostV4SearchParentRelation);
 
 /** @internal */
-export const Parent$inboundSchema: z.ZodMiniType<Parent, unknown> = z.object({
-  relation: ParentRelation$inboundSchema,
+export const PostV4SearchParent$inboundSchema: z.ZodMiniType<
+  PostV4SearchParent,
+  unknown
+> = z.object({
+  relation: PostV4SearchParentRelation$inboundSchema,
   version: z.optional(z.nullable(types.number())),
   memory: types.string(),
   metadata: z.optional(z.nullable(z.record(z.string(), z.any()))),
   updatedAt: types.string(),
 });
 
-export function parentFromJSON(
+export function postV4SearchParentFromJSON(
   jsonString: string,
-): SafeParseResult<Parent, SDKValidationError> {
+): SafeParseResult<PostV4SearchParent, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Parent$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Parent' from JSON`,
+    (x) => PostV4SearchParent$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4SearchParent' from JSON`,
   );
 }
 
 /** @internal */
-export const ChildRelation$inboundSchema: z.ZodMiniType<
-  ChildRelation,
+export const PostV4SearchChildRelation$inboundSchema: z.ZodMiniType<
+  PostV4SearchChildRelation,
   unknown
-> = openEnums.inboundSchema(ChildRelation);
+> = openEnums.inboundSchema(PostV4SearchChildRelation);
 
 /** @internal */
-export const Child$inboundSchema: z.ZodMiniType<Child, unknown> = z.object({
-  relation: ChildRelation$inboundSchema,
+export const PostV4SearchChild$inboundSchema: z.ZodMiniType<
+  PostV4SearchChild,
+  unknown
+> = z.object({
+  relation: PostV4SearchChildRelation$inboundSchema,
   version: z.optional(z.nullable(types.number())),
   memory: types.string(),
   metadata: z.optional(z.nullable(z.record(z.string(), z.any()))),
   updatedAt: types.string(),
 });
 
-export function childFromJSON(
+export function postV4SearchChildFromJSON(
   jsonString: string,
-): SafeParseResult<Child, SDKValidationError> {
+): SafeParseResult<PostV4SearchChild, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Child$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Child' from JSON`,
+    (x) => PostV4SearchChild$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4SearchChild' from JSON`,
   );
 }
 
 /** @internal */
-export const RelatedRelation$inboundSchema: z.ZodMiniType<
-  RelatedRelation,
+export const PostV4SearchRelatedRelation$inboundSchema: z.ZodMiniType<
+  PostV4SearchRelatedRelation,
   unknown
-> = openEnums.inboundSchema(RelatedRelation);
+> = openEnums.inboundSchema(PostV4SearchRelatedRelation);
 
 /** @internal */
-export const Related$inboundSchema: z.ZodMiniType<Related, unknown> = z.object({
-  relation: RelatedRelation$inboundSchema,
+export const PostV4SearchRelated$inboundSchema: z.ZodMiniType<
+  PostV4SearchRelated,
+  unknown
+> = z.object({
+  relation: PostV4SearchRelatedRelation$inboundSchema,
   memory: types.string(),
   metadata: z.optional(z.nullable(z.record(z.string(), z.any()))),
   updatedAt: types.string(),
 });
 
-export function relatedFromJSON(
+export function postV4SearchRelatedFromJSON(
   jsonString: string,
-): SafeParseResult<Related, SDKValidationError> {
+): SafeParseResult<PostV4SearchRelated, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Related$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Related' from JSON`,
+    (x) => PostV4SearchRelated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4SearchRelated' from JSON`,
   );
 }
 
 /** @internal */
-export const Context$inboundSchema: z.ZodMiniType<Context, unknown> = z.object({
-  parents: types.optional(z.array(z.lazy(() => Parent$inboundSchema))),
-  children: types.optional(z.array(z.lazy(() => Child$inboundSchema))),
-  related: types.optional(z.array(z.lazy(() => Related$inboundSchema))),
+export const PostV4SearchContext$inboundSchema: z.ZodMiniType<
+  PostV4SearchContext,
+  unknown
+> = z.object({
+  parents: types.optional(
+    z.array(z.lazy(() => PostV4SearchParent$inboundSchema)),
+  ),
+  children: types.optional(
+    z.array(z.lazy(() => PostV4SearchChild$inboundSchema)),
+  ),
+  related: types.optional(
+    z.array(z.lazy(() => PostV4SearchRelated$inboundSchema)),
+  ),
 });
 
-export function contextFromJSON(
+export function postV4SearchContextFromJSON(
   jsonString: string,
-): SafeParseResult<Context, SDKValidationError> {
+): SafeParseResult<PostV4SearchContext, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Context$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Context' from JSON`,
+    (x) => PostV4SearchContext$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4SearchContext' from JSON`,
   );
 }
 
@@ -517,7 +541,6 @@ export const PostV4SearchChunk$inboundSchema: z.ZodMiniType<
   unknown
 > = z.object({
   content: types.string(),
-  score: types.number(),
   position: types.number(),
   documentId: types.string(),
 });
@@ -545,7 +568,8 @@ export const PostV4SearchResult$inboundSchema: z.ZodMiniType<
   similarity: types.number(),
   filepath: z.optional(z.nullable(types.string())),
   version: z.optional(z.nullable(types.number())),
-  context: types.optional(z.lazy(() => Context$inboundSchema)),
+  rootMemoryId: z.optional(z.nullable(types.string())),
+  context: types.optional(z.lazy(() => PostV4SearchContext$inboundSchema)),
   documents: types.optional(
     z.array(z.lazy(() => PostV4SearchDocument$inboundSchema)),
   ),
