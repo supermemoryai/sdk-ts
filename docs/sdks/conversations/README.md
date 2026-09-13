@@ -21,12 +21,12 @@ const supermemory = new Supermemory({
 });
 
 async function run() {
-  await supermemory.conversations.add({
+  const result = await supermemory.conversations.add({
     conversationId: "<id>",
     messages: [],
   });
 
-
+  console.log(result);
 }
 
 run();
@@ -53,7 +53,7 @@ async function run() {
   });
   if (res.ok) {
     const { value: result } = res;
-    
+    console.log(result);
   } else {
     console.log("conversationsAdd failed:", res.error);
   }
@@ -73,10 +73,12 @@ run();
 
 ### Response
 
-**Promise\<void\>**
+**Promise\<[operations.PostV4ConversationsResponse](../../models/operations/post-v4-conversations-response.md)\>**
 
 ### Errors
 
 | Error Type                     | Status Code                    | Content Type                   |
 | ------------------------------ | ------------------------------ | ------------------------------ |
+| errors.ErrorResponse           | 400, 401, 402, 409             | application/json               |
+| errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |

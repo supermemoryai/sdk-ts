@@ -5,8 +5,12 @@
 
 import * as z from "zod/v4-mini";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import * as types from "../../types/primitives.js";
 import { smartUnion } from "../../types/smart-union.js";
+import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
 export const Role = {
   User: "user",
@@ -49,6 +53,24 @@ export type PostV4ConversationsRequest = {
   messages: Array<Message>;
   containerTags?: Array<string> | undefined;
   metadata?: { [k: string]: string | number | boolean } | undefined;
+};
+
+/**
+ * Conversation ingested/updated successfully
+ */
+export type PostV4ConversationsResponse = {
+  /**
+   * ID of the document backing this conversation
+   */
+  id: string;
+  /**
+   * The conversation ID supplied in the request
+   */
+  conversationId: string;
+  /**
+   * Processing status of the document
+   */
+  status: string;
 };
 
 /** @internal */
@@ -232,5 +254,25 @@ export function postV4ConversationsRequestToJSON(
 ): string {
   return JSON.stringify(
     PostV4ConversationsRequest$outboundSchema.parse(postV4ConversationsRequest),
+  );
+}
+
+/** @internal */
+export const PostV4ConversationsResponse$inboundSchema: z.ZodMiniType<
+  PostV4ConversationsResponse,
+  unknown
+> = z.object({
+  id: types.string(),
+  conversationId: types.string(),
+  status: types.string(),
+});
+
+export function postV4ConversationsResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<PostV4ConversationsResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PostV4ConversationsResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostV4ConversationsResponse' from JSON`,
   );
 }
