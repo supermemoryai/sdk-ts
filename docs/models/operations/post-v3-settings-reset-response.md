@@ -15,8 +15,7 @@ let value: PostV3SettingsResetResponse = {
   deletedMemoryRows: 8155.89,
   deletedExtraSpaces: 6659.84,
   clearedDefaultSpaceContext: false,
-  clearedBrainMemoryRegistry: true,
-  settingsReset: false,
+  settingsReset: true,
 };
 ```
 
@@ -31,5 +30,4 @@ let value: PostV3SettingsResetResponse = {
 | `deletedMemoryRows`          | *number*                     | :heavy_check_mark:           | N/A                          |
 | `deletedExtraSpaces`         | *number*                     | :heavy_check_mark:           | N/A                          |
 | `clearedDefaultSpaceContext` | *boolean*                    | :heavy_check_mark:           | N/A                          |
-| `clearedBrainMemoryRegistry` | *boolean*                    | :heavy_check_mark:           | N/A                          |
 | `settingsReset`              | *boolean*                    | :heavy_check_mark:           | N/A                          |

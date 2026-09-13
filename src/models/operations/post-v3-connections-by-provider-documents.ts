@@ -38,7 +38,7 @@ export type PostV3ConnectionsByProviderDocumentsRequest = {
 
 export type PostV3ConnectionsByProviderDocumentsResponse = {
   createdAt: string;
-  id: string;
+  id: string | null;
   status: string;
   summary: string | null;
   title: string | null;
@@ -111,7 +111,7 @@ export const PostV3ConnectionsByProviderDocumentsResponse$inboundSchema:
   z.ZodMiniType<PostV3ConnectionsByProviderDocumentsResponse, unknown> = z
     .object({
       createdAt: types.string(),
-      id: types.string(),
+      id: types.nullable(types.string()),
       status: types.string(),
       summary: types.nullable(types.string()),
       title: types.nullable(types.string()),

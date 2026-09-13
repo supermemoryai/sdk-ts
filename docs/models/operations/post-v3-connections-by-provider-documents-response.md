@@ -8,7 +8,7 @@ import { PostV3ConnectionsByProviderDocumentsResponse } from "supermemory/models
 let value: PostV3ConnectionsByProviderDocumentsResponse = {
   createdAt: "2024-12-31T14:30:51.276Z",
   id: "<id>",
-  status: "2024-12-31T19:28:54.134Z",
+  status: "<value>",
   summary: "<value>",
   title: "<value>",
   type: "<value>",
