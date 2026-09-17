@@ -1,13 +1,13 @@
-# RelatedRelation
+# PostV4SearchRelatedRelation
 
 Relation type
 
 ## Example Usage
 
 ```typescript
-import { RelatedRelation } from "supermemory/models/operations";
+import { PostV4SearchRelatedRelation } from "supermemory/models/operations";
 
-let value: RelatedRelation = "extends";
+let value: PostV4SearchRelatedRelation = "extends";
 
 // Open enum: unrecognized values are captured as Unrecognized<string>
 ```
