@@ -249,7 +249,7 @@ run();
 
 ### Response
 
-**Promise\<[operations.DeleteV3ConnectionsByProviderResponse](../../models/operations/delete-v3-connections-by-provider-response.md)\>**
+**Promise\<[operations.DeleteV3ConnectionsByProviderResponse[]](../../models/.md)\>**
 
 ### Errors
 
@@ -563,7 +563,7 @@ run();
 
 ### Response
 
-**Promise\<[operations.DeleteV3ConnectionsByConnectionIdResponse](../../models/operations/delete-v3-connections-by-connection-id-response.md)\>**
+**Promise\<[operations.DeleteV3ConnectionsByConnectionIdResponse[]](../../models/.md)\>**
 
 ### Errors
 

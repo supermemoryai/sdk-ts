@@ -22,6 +22,7 @@ let value: PatchV3DocumentsByIdRequest = {
       "department": "engineering",
       "region": "us",
     },
+    documentDate: "2025-03-14",
   },
 };
 ```

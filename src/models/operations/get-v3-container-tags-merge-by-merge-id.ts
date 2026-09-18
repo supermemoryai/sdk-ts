@@ -5,6 +5,8 @@
 
 import * as z from "zod/v4-mini";
 import { safeParse } from "../../lib/schemas.js";
+import * as openEnums from "../../types/enums.js";
+import { OpenEnum } from "../../types/enums.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
@@ -13,11 +15,63 @@ export type GetV3ContainerTagsMergeByMergeIdRequest = {
   mergeId: string;
 };
 
+export const GetV3ContainerTagsMergeByMergeIdStatus = {
+  Queued: "queued",
+  WaitingForIngest: "waiting_for_ingest",
+  CopyingVectors: "copying_vectors",
+  DbCommitting: "db_committing",
+  CleanupPending: "cleanup_pending",
+  Completed: "completed",
+  Failed: "failed",
+} as const;
+export type GetV3ContainerTagsMergeByMergeIdStatus = OpenEnum<
+  typeof GetV3ContainerTagsMergeByMergeIdStatus
+>;
+
+export const Phase = {
+  Queued: "queued",
+  WaitingForIngest: "waiting_for_ingest",
+  CopyingVectors: "copying_vectors",
+  DbCommitting: "db_committing",
+  CleanupPending: "cleanup_pending",
+  Completed: "completed",
+  Failed: "failed",
+} as const;
+export type Phase = OpenEnum<typeof Phase>;
+
+export const CurrentKind = {
+  Chunk: "chunk",
+  Memory: "memory",
+} as const;
+export type CurrentKind = OpenEnum<typeof CurrentKind>;
+
+export type RenamedCustomId = {
+  documentId: string;
+  from: string;
+  to: string;
+};
+
+export type Progress = {
+  phase?: Phase | undefined;
+  currentSourceTag?: string | undefined;
+  currentKind?: CurrentKind | undefined;
+  copiedRows?: number | undefined;
+  completedSourceTags?: Array<string> | undefined;
+  inFlightItems?: number | undefined;
+  attempt?: number | undefined;
+  renamedCustomIds?: Array<RenamedCustomId> | undefined;
+};
+
 /**
  * Merge job status
  */
 export type GetV3ContainerTagsMergeByMergeIdResponse = {
   id: string;
+  status: GetV3ContainerTagsMergeByMergeIdStatus;
+  sourceTags: Array<string>;
+  targetTag: string;
+  progress: Progress | null;
+  lastError: string | null;
 };
 
 /** @internal */
@@ -46,9 +100,72 @@ export function getV3ContainerTagsMergeByMergeIdRequestToJSON(
 }
 
 /** @internal */
+export const GetV3ContainerTagsMergeByMergeIdStatus$inboundSchema:
+  z.ZodMiniType<GetV3ContainerTagsMergeByMergeIdStatus, unknown> = openEnums
+    .inboundSchema(GetV3ContainerTagsMergeByMergeIdStatus);
+
+/** @internal */
+export const Phase$inboundSchema: z.ZodMiniType<Phase, unknown> = openEnums
+  .inboundSchema(Phase);
+
+/** @internal */
+export const CurrentKind$inboundSchema: z.ZodMiniType<CurrentKind, unknown> =
+  openEnums.inboundSchema(CurrentKind);
+
+/** @internal */
+export const RenamedCustomId$inboundSchema: z.ZodMiniType<
+  RenamedCustomId,
+  unknown
+> = z.object({
+  documentId: types.string(),
+  from: types.string(),
+  to: types.string(),
+});
+
+export function renamedCustomIdFromJSON(
+  jsonString: string,
+): SafeParseResult<RenamedCustomId, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => RenamedCustomId$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RenamedCustomId' from JSON`,
+  );
+}
+
+/** @internal */
+export const Progress$inboundSchema: z.ZodMiniType<Progress, unknown> = z
+  .object({
+    phase: types.optional(Phase$inboundSchema),
+    currentSourceTag: types.optional(types.string()),
+    currentKind: types.optional(CurrentKind$inboundSchema),
+    copiedRows: types.optional(types.number()),
+    completedSourceTags: types.optional(z.array(types.string())),
+    inFlightItems: types.optional(types.number()),
+    attempt: types.optional(types.number()),
+    renamedCustomIds: types.optional(
+      z.array(z.lazy(() => RenamedCustomId$inboundSchema)),
+    ),
+  });
+
+export function progressFromJSON(
+  jsonString: string,
+): SafeParseResult<Progress, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Progress$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Progress' from JSON`,
+  );
+}
+
+/** @internal */
 export const GetV3ContainerTagsMergeByMergeIdResponse$inboundSchema:
   z.ZodMiniType<GetV3ContainerTagsMergeByMergeIdResponse, unknown> = z.object({
     id: types.string(),
+    status: GetV3ContainerTagsMergeByMergeIdStatus$inboundSchema,
+    sourceTags: z.array(types.string()),
+    targetTag: types.string(),
+    progress: types.nullable(z.lazy(() => Progress$inboundSchema)),
+    lastError: types.nullable(types.string()),
   });
 
 export function getV3ContainerTagsMergeByMergeIdResponseFromJSON(
