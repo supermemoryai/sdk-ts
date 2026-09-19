@@ -40,7 +40,7 @@ export function connectionsDeleteByID(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.DeleteV3ConnectionsByConnectionIdResponse,
+    Array<operations.DeleteV3ConnectionsByConnectionIdResponse>,
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -66,7 +66,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      operations.DeleteV3ConnectionsByConnectionIdResponse,
+      Array<operations.DeleteV3ConnectionsByConnectionIdResponse>,
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -163,7 +163,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.DeleteV3ConnectionsByConnectionIdResponse,
+    Array<operations.DeleteV3ConnectionsByConnectionIdResponse>,
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -176,7 +176,9 @@ async function $do(
   >(
     M.json(
       200,
-      operations.DeleteV3ConnectionsByConnectionIdResponse$inboundSchema,
+      z.array(
+        operations.DeleteV3ConnectionsByConnectionIdResponse$inboundSchema,
+      ),
     ),
     M.jsonErr([401, 404], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
