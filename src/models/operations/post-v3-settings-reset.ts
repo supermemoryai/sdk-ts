@@ -24,7 +24,6 @@ export type PostV3SettingsResetResponse = {
   deletedMemoryRows: number;
   deletedExtraSpaces: number;
   clearedDefaultSpaceContext: boolean;
-  clearedBrainMemoryRegistry: boolean;
   settingsReset: boolean;
 };
 
@@ -61,7 +60,6 @@ export const PostV3SettingsResetResponse$inboundSchema: z.ZodMiniType<
   deletedMemoryRows: types.number(),
   deletedExtraSpaces: types.number(),
   clearedDefaultSpaceContext: types.boolean(),
-  clearedBrainMemoryRegistry: types.boolean(),
   settingsReset: types.boolean(),
 });
 

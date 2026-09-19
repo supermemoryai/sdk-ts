@@ -6,11 +6,53 @@
 import * as z from "zod/v4-mini";
 import { safeParse } from "../../lib/schemas.js";
 import * as openEnums from "../../types/enums.js";
-import { OpenEnum } from "../../types/enums.js";
+import { ClosedEnum, OpenEnum } from "../../types/enums.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
 import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+/**
+ * `active` returns in-flight documents updated in the last 4 hours. `pending` returns every document that is not done or failed, with no time cutoff. `all` also includes failed documents, paginated.
+ */
+export const View = {
+  Active: "active",
+  Pending: "pending",
+  All: "all",
+} as const;
+/**
+ * `active` returns in-flight documents updated in the last 4 hours. `pending` returns every document that is not done or failed, with no time cutoff. `all` also includes failed documents, paginated.
+ */
+export type View = ClosedEnum<typeof View>;
+
+/**
+ * Page number to fetch. Used with `view=all`.
+ */
+export type GetV3DocumentsProcessingPage = string | number;
+
+/**
+ * Number of items per page. Used with `view=all`.
+ */
+export type GetV3DocumentsProcessingLimit = string | number;
+
+export type GetV3DocumentsProcessingRequest = {
+  /**
+   * `active` returns in-flight documents updated in the last 4 hours. `pending` returns every document that is not done or failed, with no time cutoff. `all` also includes failed documents, paginated.
+   */
+  view?: View | undefined;
+  /**
+   * Comma-separated container tags to filter by
+   */
+  containerTags?: string | undefined;
+  /**
+   * Page number to fetch. Used with `view=all`.
+   */
+  page?: string | number | undefined;
+  /**
+   * Number of items per page. Used with `view=all`.
+   */
+  limit?: string | number | undefined;
+};
 
 /**
  * Type of the document
@@ -82,6 +124,8 @@ export type GetV3DocumentsProcessingDocument = {
    * Status of the document
    */
   status: GetV3DocumentsProcessingStatus;
+  summary: string | null;
+  connectionId: string | null;
   /**
    * Creation timestamp
    */
@@ -103,6 +147,28 @@ export type GetV3DocumentsProcessingDocument = {
    * @deprecated field: This will be removed in a future release, please migrate away from it as soon as possible.
    */
   containerTags?: Array<string> | undefined;
+  /**
+   * True when the document is not done/failed and has not been updated for 4 hours
+   */
+  stuck?: boolean | undefined;
+  /**
+   * Stable error code when processing failed, if available
+   */
+  errorCode?: string | null | undefined;
+  /**
+   * Human-readable processing error, if available
+   */
+  errorMessage?: string | null | undefined;
+};
+
+/**
+ * Present when `view=all`
+ */
+export type GetV3DocumentsProcessingPagination = {
+  currentPage: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
 };
 
 /**
@@ -114,7 +180,81 @@ export type GetV3DocumentsProcessingResponse = {
    * Total number of processing documents
    */
   totalCount: number;
+  /**
+   * Present when `view=all`
+   */
+  pagination?: GetV3DocumentsProcessingPagination | undefined;
 };
+
+/** @internal */
+export const View$outboundSchema: z.ZodMiniEnum<typeof View> = z.enum(View);
+
+/** @internal */
+export type GetV3DocumentsProcessingPage$Outbound = string | number;
+
+/** @internal */
+export const GetV3DocumentsProcessingPage$outboundSchema: z.ZodMiniType<
+  GetV3DocumentsProcessingPage$Outbound,
+  GetV3DocumentsProcessingPage
+> = smartUnion([z.string(), z.number()]);
+
+export function getV3DocumentsProcessingPageToJSON(
+  getV3DocumentsProcessingPage: GetV3DocumentsProcessingPage,
+): string {
+  return JSON.stringify(
+    GetV3DocumentsProcessingPage$outboundSchema.parse(
+      getV3DocumentsProcessingPage,
+    ),
+  );
+}
+
+/** @internal */
+export type GetV3DocumentsProcessingLimit$Outbound = string | number;
+
+/** @internal */
+export const GetV3DocumentsProcessingLimit$outboundSchema: z.ZodMiniType<
+  GetV3DocumentsProcessingLimit$Outbound,
+  GetV3DocumentsProcessingLimit
+> = smartUnion([z.string(), z.number()]);
+
+export function getV3DocumentsProcessingLimitToJSON(
+  getV3DocumentsProcessingLimit: GetV3DocumentsProcessingLimit,
+): string {
+  return JSON.stringify(
+    GetV3DocumentsProcessingLimit$outboundSchema.parse(
+      getV3DocumentsProcessingLimit,
+    ),
+  );
+}
+
+/** @internal */
+export type GetV3DocumentsProcessingRequest$Outbound = {
+  view: string;
+  containerTags?: string | undefined;
+  page?: string | number | undefined;
+  limit?: string | number | undefined;
+};
+
+/** @internal */
+export const GetV3DocumentsProcessingRequest$outboundSchema: z.ZodMiniType<
+  GetV3DocumentsProcessingRequest$Outbound,
+  GetV3DocumentsProcessingRequest
+> = z.object({
+  view: z._default(View$outboundSchema, "active"),
+  containerTags: z.optional(z.string()),
+  page: z.optional(smartUnion([z.string(), z.number()])),
+  limit: z.optional(smartUnion([z.string(), z.number()])),
+});
+
+export function getV3DocumentsProcessingRequestToJSON(
+  getV3DocumentsProcessingRequest: GetV3DocumentsProcessingRequest,
+): string {
+  return JSON.stringify(
+    GetV3DocumentsProcessingRequest$outboundSchema.parse(
+      getV3DocumentsProcessingRequest,
+    ),
+  );
+}
 
 /** @internal */
 export const GetV3DocumentsProcessingType$inboundSchema: z.ZodMiniType<
@@ -174,6 +314,8 @@ export const GetV3DocumentsProcessingDocument$inboundSchema: z.ZodMiniType<
   title: types.nullable(types.string()),
   type: GetV3DocumentsProcessingType$inboundSchema,
   status: GetV3DocumentsProcessingStatus$inboundSchema,
+  summary: types.nullable(types.string()),
+  connectionId: types.nullable(types.string()),
   createdAt: types.string(),
   updatedAt: types.string(),
   metadata: types.nullable(
@@ -184,6 +326,9 @@ export const GetV3DocumentsProcessingDocument$inboundSchema: z.ZodMiniType<
     ]),
   ),
   containerTags: types.optional(z.array(types.string())),
+  stuck: types.optional(types.boolean()),
+  errorCode: z.optional(z.nullable(types.string())),
+  errorMessage: z.optional(z.nullable(types.string())),
 });
 
 export function getV3DocumentsProcessingDocumentFromJSON(
@@ -197,6 +342,28 @@ export function getV3DocumentsProcessingDocumentFromJSON(
 }
 
 /** @internal */
+export const GetV3DocumentsProcessingPagination$inboundSchema: z.ZodMiniType<
+  GetV3DocumentsProcessingPagination,
+  unknown
+> = z.object({
+  currentPage: types.number(),
+  limit: z._default(types.number(), 10),
+  totalItems: types.number(),
+  totalPages: types.number(),
+});
+
+export function getV3DocumentsProcessingPaginationFromJSON(
+  jsonString: string,
+): SafeParseResult<GetV3DocumentsProcessingPagination, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      GetV3DocumentsProcessingPagination$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'GetV3DocumentsProcessingPagination' from JSON`,
+  );
+}
+
+/** @internal */
 export const GetV3DocumentsProcessingResponse$inboundSchema: z.ZodMiniType<
   GetV3DocumentsProcessingResponse,
   unknown
@@ -205,6 +372,9 @@ export const GetV3DocumentsProcessingResponse$inboundSchema: z.ZodMiniType<
     z.lazy(() => GetV3DocumentsProcessingDocument$inboundSchema),
   ),
   totalCount: types.number(),
+  pagination: types.optional(
+    z.lazy(() => GetV3DocumentsProcessingPagination$inboundSchema),
+  ),
 });
 
 export function getV3DocumentsProcessingResponseFromJSON(
