@@ -75,7 +75,6 @@ export type GetV3SettingsResponse = {
    * Profile bucket definitions
    */
   profileBuckets?: Array<GetV3SettingsProfileBucket> | undefined;
-  workspacePrompt?: string | null | undefined;
 };
 
 /** @internal */
@@ -210,7 +209,6 @@ export const GetV3SettingsResponse$inboundSchema: z.ZodMiniType<
   profileBuckets: types.optional(
     z.array(z.lazy(() => GetV3SettingsProfileBucket$inboundSchema)),
   ),
-  workspacePrompt: z.optional(z.nullable(types.string())),
 });
 
 export function getV3SettingsResponseFromJSON(
