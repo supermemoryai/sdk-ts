@@ -18,7 +18,7 @@ export class Conversations extends ClientSDK {
   async add(
     request: operations.PostV4ConversationsRequest,
     options?: RequestOptions,
-  ): Promise<void> {
+  ): Promise<operations.PostV4ConversationsResponse> {
     return unwrapAsync(conversationsAdd(
       this,
       request,

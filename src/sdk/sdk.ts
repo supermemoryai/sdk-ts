@@ -4,6 +4,7 @@
  */
 
 import { add } from "../funcs/add.js";
+import { patchV3SettingsSecurity } from "../funcs/patch-v3-settings-security.js";
 import { profile } from "../funcs/profile.js";
 import { search } from "../funcs/search.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
@@ -43,14 +44,14 @@ export class Supermemory extends ClientSDK {
     return (this._profiles ??= new Profiles(this._options));
   }
 
-  private _conversations?: Conversations;
-  get conversations(): Conversations {
-    return (this._conversations ??= new Conversations(this._options));
-  }
-
   private _connections?: Connections;
   get connections(): Connections {
     return (this._connections ??= new Connections(this._options));
+  }
+
+  private _conversations?: Conversations;
+  get conversations(): Conversations {
+    return (this._conversations ??= new Conversations(this._options));
   }
 
   /**
@@ -64,6 +65,17 @@ export class Supermemory extends ClientSDK {
     options?: RequestOptions,
   ): Promise<operations.PostV3DocumentsResponse> {
     return unwrapAsync(add(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  async patchV3SettingsSecurity(
+    request: operations.PatchV3SettingsSecurityRequest,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return unwrapAsync(patchV3SettingsSecurity(
       this,
       request,
       options,

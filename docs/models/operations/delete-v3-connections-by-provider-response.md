@@ -1,7 +1,5 @@
 # DeleteV3ConnectionsByProviderResponse
 
-Connection deleted successfully
-
 ## Example Usage
 
 ```typescript

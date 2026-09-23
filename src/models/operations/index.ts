@@ -21,6 +21,7 @@ export * from "./get-v3-documents-processing.js";
 export * from "./get-v3-settings.js";
 export * from "./patch-v3-container-tags-by-container-tag.js";
 export * from "./patch-v3-documents-by-id.js";
+export * from "./patch-v3-settings-security.js";
 export * from "./patch-v3-settings.js";
 export * from "./patch-v4-memories.js";
 export * from "./post-v3-connections-by-connection-id-configure.js";

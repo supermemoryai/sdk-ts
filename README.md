@@ -50,25 +50,25 @@ The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https
 ### NPM
 
 ```bash
-npm add <UNSET>
+npm add https://github.com/supermemoryai/sdk-ts
 ```
 
 ### PNPM
 
 ```bash
-pnpm add <UNSET>
+pnpm add https://github.com/supermemoryai/sdk-ts
 ```
 
 ### Bun
 
 ```bash
-bun add <UNSET>
+bun add https://github.com/supermemoryai/sdk-ts
 ```
 
 ### Yarn
 
 ```bash
-yarn add <UNSET>
+yarn add https://github.com/supermemoryai/sdk-ts
 ```
 
 > [!NOTE]
@@ -148,6 +148,7 @@ run();
 ### [Supermemory SDK](docs/sdks/supermemory/README.md)
 
 * [add](docs/sdks/supermemory/README.md#add) - Add document
+* [patchV3SettingsSecurity](docs/sdks/supermemory/README.md#patchv3settingssecurity)
 * [profile](docs/sdks/supermemory/README.md#profile) - Get user profile
 * [search](docs/sdks/supermemory/README.md#search) - Search memory entries
 
@@ -262,6 +263,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`memoriesForgetMatching`](docs/sdks/memories/README.md#forgetmatching) - Forget memories matching a prompt/query
 - [`memoriesList`](docs/sdks/memories/README.md#list) - List memory entries with history
 - [`memoriesUpdateMemory`](docs/sdks/memories/README.md#updatememory) - Update a memory (creates new version)
+- [`patchV3SettingsSecurity`](docs/sdks/supermemory/README.md#patchv3settingssecurity)
 - [`profile`](docs/sdks/supermemory/README.md#profile) - Get user profile
 - [`profilesBuckets`](docs/sdks/profiles/README.md#buckets) - Get profile buckets
 - [`search`](docs/sdks/supermemory/README.md#search) - Search memory entries
