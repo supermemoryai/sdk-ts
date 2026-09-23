@@ -20,6 +20,7 @@ let value: PostV4SearchResponse = {
       updatedAt: "2024-12-31T19:50:29.412Z",
       similarity: 0.89,
       version: 3,
+      rootMemoryId: "mem_abc123",
       context: {
         parents: [
           {
@@ -27,7 +28,7 @@ let value: PostV4SearchResponse = {
             version: -1,
             memory:
               "Earlier version: API rate limit is 50 req/min on the free tier.",
-            updatedAt: "2024-12-31T13:50:00.600Z",
+            updatedAt: "2024-12-31T18:00:24.934Z",
           },
         ],
         children: [
@@ -36,7 +37,7 @@ let value: PostV4SearchResponse = {
             version: 1,
             memory:
               "Later version: API rate limit increased to 100 req/min on the free tier.",
-            updatedAt: "2024-12-31T14:40:59.603Z",
+            updatedAt: "2024-12-31T17:38:23.428Z",
           },
         ],
       },
@@ -57,7 +58,6 @@ let value: PostV4SearchResponse = {
       chunks: [
         {
           content: "This is a chunk of content from the document...",
-          score: 0.85,
           position: 0,
           documentId: "doc_xyz789",
         },

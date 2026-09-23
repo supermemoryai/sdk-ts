@@ -1,13 +1,13 @@
-# ParentRelation
+# PostV4SearchChildRelation
 
 Relation type between this memory and its parent/child
 
 ## Example Usage
 
 ```typescript
-import { ParentRelation } from "supermemory/models/operations";
+import { PostV4SearchChildRelation } from "supermemory/models/operations";
 
-let value: ParentRelation = "updates";
+let value: PostV4SearchChildRelation = "extends";
 
 // Open enum: unrecognized values are captured as Unrecognized<string>
 ```
