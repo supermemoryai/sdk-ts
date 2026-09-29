@@ -6,14 +6,14 @@
 import { Bucket } from "supermemory/models/operations";
 
 let value: Bucket = {
-  key: "<key>",
-  description: "an in soon wherever ick bah playfully classic language",
+  id: "<id>",
+  memory: "<value>",
 };
 ```
 
 ## Fields
 
-| Field              | Type               | Required           | Description        |
-| ------------------ | ------------------ | ------------------ | ------------------ |
-| `key`              | *string*           | :heavy_check_mark: | N/A                |
-| `description`      | *string*           | :heavy_check_mark: | N/A                |
+| Field                                                                                    | Type                                                                                     | Required                                                                                 | Description                                                                              |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `id`                                                                                     | *string*                                                                                 | :heavy_check_mark:                                                                       | Memory ID, or an aggregated_-prefixed ID for a summary synthesized from several memories |
+| `memory`                                                                                 | *string*                                                                                 | :heavy_check_mark:                                                                       | Memory text                                                                              |

@@ -5,7 +5,7 @@
 
 import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
-import { encodeSimple } from "../lib/encodings.js";
+import { encodeJSON, encodeSimple } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
@@ -29,18 +29,19 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Delete document by ID or customId
+ * Delete documents
  *
  * @remarks
- * Delete a document by ID or customId
+ * Permanently remove documents and their derived knowledge by document ID or caller-defined ID. Each requested ID is handled independently so successful deletions are preserved when another ID fails.
  */
 export function documentsDelete(
   client: SupermemoryCore,
-  request: operations.DeleteV3DocumentsByIdRequest,
+  request: operations.DeleteNsByNamespaceDocumentRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    void,
+    operations.DeleteNsByNamespaceDocumentResponse,
+    | errors.DeleteNsByNamespaceDocumentBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -61,12 +62,13 @@ export function documentsDelete(
 
 async function $do(
   client: SupermemoryCore,
-  request: operations.DeleteV3DocumentsByIdRequest,
+  request: operations.DeleteNsByNamespaceDocumentRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      void,
+      operations.DeleteNsByNamespaceDocumentResponse,
+      | errors.DeleteNsByNamespaceDocumentBadRequest
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -83,24 +85,28 @@ async function $do(
   const parsed = safeParse(
     request,
     (value) =>
-      z.parse(operations.DeleteV3DocumentsByIdRequest$outboundSchema, value),
+      z.parse(
+        operations.DeleteNsByNamespaceDocumentRequest$outboundSchema,
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = null;
+  const body = encodeJSON("body", payload.body, { explode: true });
 
   const pathParams = {
-    id: encodeSimple("id", payload.id, {
+    namespace: encodeSimple("namespace", payload.namespace, {
       explode: false,
       charEncoding: "percent",
     }),
   };
-  const path = pathToFunc("/v3/documents/{id}")(pathParams);
+  const path = pathToFunc("/ns/{namespace}/document")(pathParams);
 
   const headers = new Headers(compactMap({
+    "Content-Type": "application/json",
     Accept: "application/json",
   }));
 
@@ -111,7 +117,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "deleteV3DocumentsById",
+    operationID: "deleteNsByNamespaceDocument",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -155,7 +161,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    void,
+    operations.DeleteNsByNamespaceDocumentResponse,
+    | errors.DeleteNsByNamespaceDocumentBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -166,8 +173,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.nil(204, z.void()),
-    M.jsonErr([401, 404], errors.ErrorResponse$inboundSchema),
+    M.json(200, operations.DeleteNsByNamespaceDocumentResponse$inboundSchema),
+    M.jsonErr(400, errors.DeleteNsByNamespaceDocumentBadRequest$inboundSchema),
+    M.jsonErr([401, 403], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

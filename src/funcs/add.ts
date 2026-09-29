@@ -5,7 +5,7 @@
 
 import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
+import { encodeFormQuery, encodeJSON, encodeSimple } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
@@ -32,15 +32,16 @@ import { Result } from "../types/fp.js";
  * Add document
  *
  * @remarks
- * Add a document with any content type (text, url, file, etc.) and metadata
+ * Turn text or a supported URL into searchable, evolving memory. Supply a new ID to create a document, or reuse an existing ID to append new information while preserving its history.
  */
 export function add(
   client: SupermemoryCore,
-  request: operations.PostV3DocumentsRequest,
+  request: operations.PostNsByNamespaceDocumentRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.PostV3DocumentsResponse,
+    operations.PostNsByNamespaceDocumentResponse,
+    | errors.PostNsByNamespaceDocumentBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -61,12 +62,13 @@ export function add(
 
 async function $do(
   client: SupermemoryCore,
-  request: operations.PostV3DocumentsRequest,
+  request: operations.PostNsByNamespaceDocumentRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.PostV3DocumentsResponse,
+      operations.PostNsByNamespaceDocumentResponse,
+      | errors.PostNsByNamespaceDocumentBadRequest
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -82,16 +84,31 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => z.parse(operations.PostV3DocumentsRequest$outboundSchema, value),
+    (value) =>
+      z.parse(
+        operations.PostNsByNamespaceDocumentRequest$outboundSchema,
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
+  const body = encodeJSON("body", payload.body, { explode: true });
 
-  const path = pathToFunc("/v3/documents")();
+  const pathParams = {
+    namespace: encodeSimple("namespace", payload.namespace, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+  const path = pathToFunc("/ns/{namespace}/document")(pathParams);
+
+  const query = encodeFormQuery({
+    "dreaming": payload.dreaming,
+    "taskType": payload.taskType,
+  });
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
@@ -105,7 +122,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "postV3Documents",
+    operationID: "postNsByNamespaceDocument",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -123,6 +140,7 @@ async function $do(
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
+    query: query,
     body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
@@ -149,7 +167,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.PostV3DocumentsResponse,
+    operations.PostNsByNamespaceDocumentResponse,
+    | errors.PostNsByNamespaceDocumentBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -160,8 +179,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.PostV3DocumentsResponse$inboundSchema),
-    M.jsonErr(401, errors.ErrorResponse$inboundSchema),
+    M.json(200, operations.PostNsByNamespaceDocumentResponse$inboundSchema),
+    M.jsonErr(400, errors.PostNsByNamespaceDocumentBadRequest$inboundSchema),
+    M.jsonErr([401, 402, 403, 409], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

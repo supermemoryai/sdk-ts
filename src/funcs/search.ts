@@ -5,7 +5,7 @@
 
 import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
+import { encodeFormQuery, encodeJSON, encodeSimple } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
@@ -29,18 +29,19 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Search memory entries
+ * Search memories
  *
  * @remarks
- * Search memory entries - Low latency for conversational
+ * Recall the most relevant learned context and source passages from a namespace. Hybrid search combines memories with document chunks by default, with optional query rewriting, reranking, and supporting context attachments.
  */
 export function search(
   client: SupermemoryCore,
-  request: operations.PostV4SearchRequest,
+  request: operations.PostNsByNamespaceSearchRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.PostV4SearchResponse,
+    operations.PostNsByNamespaceSearchResponse,
+    | errors.PostNsByNamespaceSearchBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -61,12 +62,13 @@ export function search(
 
 async function $do(
   client: SupermemoryCore,
-  request: operations.PostV4SearchRequest,
+  request: operations.PostNsByNamespaceSearchRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.PostV4SearchResponse,
+      operations.PostNsByNamespaceSearchResponse,
+      | errors.PostNsByNamespaceSearchBadRequest
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -82,16 +84,28 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => z.parse(operations.PostV4SearchRequest$outboundSchema, value),
+    (value) =>
+      z.parse(operations.PostNsByNamespaceSearchRequest$outboundSchema, value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
+  const body = encodeJSON("body", payload.body, { explode: true });
 
-  const path = pathToFunc("/v4/search")();
+  const pathParams = {
+    namespace: encodeSimple("namespace", payload.namespace, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+  const path = pathToFunc("/ns/{namespace}/search")(pathParams);
+
+  const query = encodeFormQuery({
+    "limit": payload.limit,
+    "searchMode": payload.searchMode,
+  });
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
@@ -105,7 +119,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "postV4Search",
+    operationID: "postNsByNamespaceSearch",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -123,6 +137,7 @@ async function $do(
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
+    query: query,
     body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
@@ -149,7 +164,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.PostV4SearchResponse,
+    operations.PostNsByNamespaceSearchResponse,
+    | errors.PostNsByNamespaceSearchBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -160,8 +176,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.PostV4SearchResponse$inboundSchema),
-    M.jsonErr([400, 401, 402], errors.ErrorResponse$inboundSchema),
+    M.json(200, operations.PostNsByNamespaceSearchResponse$inboundSchema),
+    M.jsonErr(400, errors.PostNsByNamespaceSearchBadRequest$inboundSchema),
+    M.jsonErr([401, 402, 403], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

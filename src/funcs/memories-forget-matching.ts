@@ -5,7 +5,7 @@
 
 import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
+import { encodeJSON, encodeSimple } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
@@ -29,18 +29,19 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Forget memories matching a prompt/query
+ * Forget memories semantically
  *
  * @remarks
- * Agentic mass-forget. Given a prompt or query, a tool-calling agent searches the container's memories and soft-deletes everything matching the target. Use dryRun to preview first.
+ * Describe what should be forgotten in natural language, then preview or apply the matching set. Use dry-run results with the exact-ID endpoint when you need a reviewable, drift-free workflow.
  */
 export function memoriesForgetMatching(
   client: SupermemoryCore,
-  request: operations.PostV4MemoriesForgetMatchingRequest,
+  request: operations.DeleteNsByNamespaceMemoriesSemanticRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.PostV4MemoriesForgetMatchingResponse,
+    operations.DeleteNsByNamespaceMemoriesSemanticResponse,
+    | errors.DeleteNsByNamespaceMemoriesSemanticBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -61,12 +62,13 @@ export function memoriesForgetMatching(
 
 async function $do(
   client: SupermemoryCore,
-  request: operations.PostV4MemoriesForgetMatchingRequest,
+  request: operations.DeleteNsByNamespaceMemoriesSemanticRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.PostV4MemoriesForgetMatchingResponse,
+      operations.DeleteNsByNamespaceMemoriesSemanticResponse,
+      | errors.DeleteNsByNamespaceMemoriesSemanticBadRequest
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -84,7 +86,7 @@ async function $do(
     request,
     (value) =>
       z.parse(
-        operations.PostV4MemoriesForgetMatchingRequest$outboundSchema,
+        operations.DeleteNsByNamespaceMemoriesSemanticRequest$outboundSchema,
         value,
       ),
     "Input validation failed",
@@ -93,9 +95,15 @@ async function $do(
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
+  const body = encodeJSON("body", payload.body, { explode: true });
 
-  const path = pathToFunc("/v4/memories/forget-matching")();
+  const pathParams = {
+    namespace: encodeSimple("namespace", payload.namespace, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+  const path = pathToFunc("/ns/{namespace}/memories/semantic")(pathParams);
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
@@ -109,7 +117,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "postV4MemoriesForgetMatching",
+    operationID: "deleteNsByNamespaceMemoriesSemantic",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -123,7 +131,7 @@ async function $do(
 
   const requestRes = client._createRequest(context, {
     security: requestSecurity,
-    method: "POST",
+    method: "DELETE",
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
@@ -153,7 +161,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.PostV4MemoriesForgetMatchingResponse,
+    operations.DeleteNsByNamespaceMemoriesSemanticResponse,
+    | errors.DeleteNsByNamespaceMemoriesSemanticBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -164,8 +173,15 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.PostV4MemoriesForgetMatchingResponse$inboundSchema),
-    M.jsonErr([400, 401], errors.ErrorResponse$inboundSchema),
+    M.json(
+      200,
+      operations.DeleteNsByNamespaceMemoriesSemanticResponse$inboundSchema,
+    ),
+    M.jsonErr(
+      400,
+      errors.DeleteNsByNamespaceMemoriesSemanticBadRequest$inboundSchema,
+    ),
+    M.jsonErr([401, 403], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

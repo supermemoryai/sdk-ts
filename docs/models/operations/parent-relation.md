@@ -1,13 +1,13 @@
 # ParentRelation
 
-Relation type between this memory and its parent/child
+How this memory is connected to the matched memory
 
 ## Example Usage
 
 ```typescript
 import { ParentRelation } from "supermemory/models/operations";
 
-let value: ParentRelation = "updates";
+let value: ParentRelation = "extends";
 
 // Open enum: unrecognized values are captured as Unrecognized<string>
 ```

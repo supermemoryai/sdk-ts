@@ -5,7 +5,12 @@
 
 import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
-import { appendForm, normalizeBlob } from "../lib/encodings.js";
+import {
+  appendForm,
+  encodeFormQuery,
+  encodeSimple,
+  normalizeBlob,
+} from "../lib/encodings.js";
 import {
   bytesToBlob,
   getContentTypeFromFileName,
@@ -36,18 +41,19 @@ import { Result } from "../types/fp.js";
 import { isReadableStream } from "../types/streams.js";
 
 /**
- * Upload a file
+ * Upload file
  *
  * @remarks
- * Upload a file to be processed
+ * Transform an uploaded file into searchable knowledge and learned memory. The response returns as soon as ingestion is safely queued while extraction and memory formation continue asynchronously.
  */
 export function documentsUploadFile(
   client: SupermemoryCore,
-  request: operations.PostV3DocumentsFileRequest,
+  request: operations.PostNsByNamespaceDocumentFileRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.PostV3DocumentsFileResponse,
+    operations.PostNsByNamespaceDocumentFileResponse,
+    | errors.PostNsByNamespaceDocumentFileBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -68,12 +74,13 @@ export function documentsUploadFile(
 
 async function $do(
   client: SupermemoryCore,
-  request: operations.PostV3DocumentsFileRequest,
+  request: operations.PostNsByNamespaceDocumentFileRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.PostV3DocumentsFileResponse,
+      operations.PostNsByNamespaceDocumentFileResponse,
+      | errors.PostNsByNamespaceDocumentFileBadRequest
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -90,7 +97,10 @@ async function $do(
   const parsed = safeParse(
     request,
     (value) =>
-      z.parse(operations.PostV3DocumentsFileRequest$outboundSchema, value),
+      z.parse(
+        operations.PostNsByNamespaceDocumentFileRequest$outboundSchema,
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -99,69 +109,58 @@ async function $do(
   const payload = parsed.value;
   const body = new FormData();
 
-  if (isBlobLike(payload.file)) {
-    const file = payload.file;
+  if (isBlobLike(payload.body.file)) {
+    const file = payload.body.file;
     const blob = await normalizeBlob(file);
     const name = "name" in file ? (file.name as string) : undefined;
     appendForm(body, "file", blob, name);
-  } else if (isReadableStream(payload.file.content)) {
-    const buffer = await readableStreamToArrayBuffer(payload.file.content);
-    const contentType = getContentTypeFromFileName(payload.file.fileName)
+  } else if (isReadableStream(payload.body.file.content)) {
+    const buffer = await readableStreamToArrayBuffer(payload.body.file.content);
+    const contentType = getContentTypeFromFileName(payload.body.file.fileName)
       || "application/octet-stream";
     appendForm(
       body,
       "file",
       bytesToBlob(buffer, contentType),
-      payload.file.fileName,
+      payload.body.file.fileName,
     );
   } else {
-    const contentType = getContentTypeFromFileName(payload.file.fileName)
+    const contentType = getContentTypeFromFileName(payload.body.file.fileName)
       || "application/octet-stream";
     appendForm(
       body,
       "file",
-      bytesToBlob(payload.file.content, contentType),
-      payload.file.fileName,
+      bytesToBlob(payload.body.file.content, contentType),
+      payload.body.file.fileName,
     );
   }
-  if (payload.containerTag !== undefined) {
-    appendForm(body, "containerTag", payload.containerTag);
+  if (payload.body.date !== undefined) {
+    appendForm(body, "date", payload.body.date);
   }
-  if (payload.containerTags !== undefined) {
-    appendForm(body, "containerTags", payload.containerTags);
+  if (payload.body.group !== undefined) {
+    appendForm(body, "group", payload.body.group);
   }
-  if (payload.customId !== undefined) {
-    appendForm(body, "customId", payload.customId);
+  if (payload.body.metadata !== undefined) {
+    appendForm(body, "metadata", payload.body.metadata);
   }
-  if (payload.dreaming !== undefined) {
-    appendForm(body, "dreaming", payload.dreaming);
-  }
-  if (payload.entityContext !== undefined) {
-    appendForm(body, "entityContext", payload.entityContext);
-  }
-  if (payload.filepath !== undefined) {
-    appendForm(body, "filepath", payload.filepath);
-  }
-  if (payload.fileType !== undefined) {
-    appendForm(body, "fileType", payload.fileType);
-  }
-  if (payload.filterByMetadata !== undefined) {
-    appendForm(body, "filterByMetadata", payload.filterByMetadata);
-  }
-  if (payload.metadata !== undefined) {
-    appendForm(body, "metadata", payload.metadata);
-  }
-  if (payload.mimeType !== undefined) {
-    appendForm(body, "mimeType", payload.mimeType);
-  }
-  if (payload.taskType !== undefined) {
-    appendForm(body, "taskType", payload.taskType);
-  }
-  if (payload.useAdvancedProcessing !== undefined) {
-    appendForm(body, "useAdvancedProcessing", payload.useAdvancedProcessing);
+  if (payload.body.supportingContext !== undefined) {
+    appendForm(body, "supportingContext", payload.body.supportingContext);
   }
 
-  const path = pathToFunc("/v3/documents/file")();
+  const pathParams = {
+    namespace: encodeSimple("namespace", payload.namespace, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+  const path = pathToFunc("/ns/{namespace}/document/file")(pathParams);
+
+  const query = encodeFormQuery({
+    "dreaming": payload.dreaming,
+    "fileType": payload.fileType,
+    "mimeType": payload.mimeType,
+    "taskType": payload.taskType,
+  });
 
   const headers = new Headers(compactMap({
     Accept: "application/json",
@@ -174,7 +173,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "postV3DocumentsFile",
+    operationID: "postNsByNamespaceDocumentFile",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -192,6 +191,7 @@ async function $do(
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
+    query: query,
     body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
@@ -218,7 +218,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.PostV3DocumentsFileResponse,
+    operations.PostNsByNamespaceDocumentFileResponse,
+    | errors.PostNsByNamespaceDocumentFileBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -229,8 +230,12 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.PostV3DocumentsFileResponse$inboundSchema),
-    M.jsonErr(401, errors.ErrorResponse$inboundSchema),
+    M.json(200, operations.PostNsByNamespaceDocumentFileResponse$inboundSchema),
+    M.jsonErr(
+      400,
+      errors.PostNsByNamespaceDocumentFileBadRequest$inboundSchema,
+    ),
+    M.jsonErr([401, 402, 403, 409], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

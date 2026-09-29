@@ -1,17 +1,17 @@
 # SearchMode
 
-Search mode. 'memories' searches only memory entries (default). 'hybrid' searches both memories and document chunks. 'documents' searches only document chunks.
+Search surface. "hybrid" combines learned memories with source chunks, "memories" returns learned context, and "chunks" returns source passages.
 
 ## Example Usage
 
 ```typescript
 import { SearchMode } from "supermemory/models/operations";
 
-let value: SearchMode = "memories";
+let value: SearchMode = "hybrid";
 ```
 
 ## Values
 
 ```typescript
-"memories" | "hybrid" | "documents"
+"hybrid" | "memories" | "chunks"
 ```

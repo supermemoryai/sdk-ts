@@ -5,7 +5,7 @@
 
 import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
-import { encodeSimple } from "../lib/encodings.js";
+import { encodeFormQuery, encodeSimple } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
@@ -32,15 +32,16 @@ import { Result } from "../types/fp.js";
  * Get document
  *
  * @remarks
- * Get a document by ID
+ * Retrieve a document's canonical content, metadata, and processing state by document ID or caller-defined ID. Optionally attach its source chunks, derived memories, or both in the same response.
  */
 export function documentsGet(
   client: SupermemoryCore,
-  request: operations.GetV3DocumentsByIdRequest,
+  request: operations.GetNsByNamespaceDocumentByIdRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.GetV3DocumentsByIdResponse,
+    operations.GetNsByNamespaceDocumentByIdResponse,
+    | errors.GetNsByNamespaceDocumentByIdBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -61,12 +62,13 @@ export function documentsGet(
 
 async function $do(
   client: SupermemoryCore,
-  request: operations.GetV3DocumentsByIdRequest,
+  request: operations.GetNsByNamespaceDocumentByIdRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.GetV3DocumentsByIdResponse,
+      operations.GetNsByNamespaceDocumentByIdResponse,
+      | errors.GetNsByNamespaceDocumentByIdBadRequest
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -83,7 +85,10 @@ async function $do(
   const parsed = safeParse(
     request,
     (value) =>
-      z.parse(operations.GetV3DocumentsByIdRequest$outboundSchema, value),
+      z.parse(
+        operations.GetNsByNamespaceDocumentByIdRequest$outboundSchema,
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -97,8 +102,16 @@ async function $do(
       explode: false,
       charEncoding: "percent",
     }),
+    namespace: encodeSimple("namespace", payload.namespace, {
+      explode: false,
+      charEncoding: "percent",
+    }),
   };
-  const path = pathToFunc("/v3/documents/{id}")(pathParams);
+  const path = pathToFunc("/ns/{namespace}/document/{id}")(pathParams);
+
+  const query = encodeFormQuery({
+    "attach": payload.attach,
+  });
 
   const headers = new Headers(compactMap({
     Accept: "application/json",
@@ -111,7 +124,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "getV3DocumentsById",
+    operationID: "getNsByNamespaceDocumentById",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -129,6 +142,7 @@ async function $do(
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
+    query: query,
     body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
@@ -155,7 +169,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.GetV3DocumentsByIdResponse,
+    operations.GetNsByNamespaceDocumentByIdResponse,
+    | errors.GetNsByNamespaceDocumentByIdBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -166,8 +181,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.GetV3DocumentsByIdResponse$inboundSchema),
-    M.jsonErr([401, 404], errors.ErrorResponse$inboundSchema),
+    M.json(200, operations.GetNsByNamespaceDocumentByIdResponse$inboundSchema),
+    M.jsonErr(400, errors.GetNsByNamespaceDocumentByIdBadRequest$inboundSchema),
+    M.jsonErr([401, 403, 404], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),
