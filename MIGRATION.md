@@ -1,13 +1,13 @@
 # Migrating from `supermemory` v4 to v5
 
 Starting with **v5.0.0**, the `supermemory` TypeScript SDK is generated with
-[Speakeasy](https://www.speakeasy.com) directly from the Supermemory OpenAPI
-spec (v4 was generated with Stainless). The package name, install command, CLI,
-resource groups, and method names are unchanged — most code migrates by
-changing one import line.
+[Speakeasy](https://www.speakeasy.com) from the Supermemory **v5 API**
+(`/v5/openapi`). v5 is namespace-first: every content operation is scoped to a
+namespace (the replacement for container tags) passed as `namespace`, with the
+request payload under `body`.
 
 ```bash
-bun i supermemory   # or npm/pnpm/yarn — same package as before
+bun i supermemory@rc   # or npm/pnpm/yarn — same package as before
 ```
 
 ## TL;DR
@@ -16,7 +16,10 @@ bun i supermemory   # or npm/pnpm/yarn — same package as before
 |---|---|---|
 | Import | `import Supermemory from "supermemory"` | unchanged (named export also available) |
 | Auth | `new Supermemory({ apiKey })` / `SUPERMEMORY_API_KEY` | unchanged |
-| Method names | `client.add`, `documents.list`, … | unchanged except search: `client.search()` replaces the `search.*` namespace |
+| Scoping | `containerTag` / `containerTags` in the body | `namespace` argument (one per call) |
+| Call shape | `client.add({ content, containerTag })` | `client.add({ namespace, body: { content } })` |
+| Search | `client.search.memories({ q })` | `client.search({ namespace, body: { query } })` |
+| Profile | profile + optional search in one call (`q`) | profile only — run `client.search` alongside it |
 | Retries | on by default (2 retries) | **opt-in** via `retryConfig` |
 | Timeout option | `timeout` (ms) | `timeoutMs` |
 | Error classes | `BadRequestError`, `RateLimitError`, … per status | one `SupermemoryError` with `.statusCode` |
@@ -40,44 +43,96 @@ const client = new Supermemory({
 });
 ```
 
-## 2. Method surface — unchanged, with two removed aliases
+## 2. Method surface
 
-Every v4 resource and method keeps its exact name, including casing:
+```ts
+await client.add({
+  namespace: "user_alex",
+  body: { content: "Alex prefers morning meetings.", id: "pref-1" },
+});
 
-- `client.add(...)`, `client.profile(...)`
-- `client.documents.{add→see below, list, get, update, delete, deleteBulk, uploadFile, batchAdd, listProcessing}`
-- `client.memories.{forget, updateMemory}`
-- `client.settings.{get, update}`
-- `client.connections.{create, getByID, getByTag, deleteByID, deleteByProvider, import, list, listDocuments, configure, resources}`
+const { results } = await client.search({
+  namespace: "user_alex",
+  limit: 5,
+  body: { query: "when does alex like to meet?" },
+});
+```
 
-**Search is restructured** — the `search` namespace is gone in favor of a
-top-level method for the flagship memories recall:
-
-| v4 call | Endpoint | v5 call |
+| v4 call | v5 call | v5 endpoint |
 |---|---|---|
-| `client.search.memories(...)` | `POST /v4/search` | `client.search(...)` |
-| `client.search.execute(...)` | `POST /v3/search` | `client.documents.search(...)` |
-| `client.search.documents(...)` | `POST /v3/search` | `client.documents.search(...)` |
+| `client.add(...)` / `client.documents.add(...)` | `client.add(...)` | `POST /ns/{namespace}/document` |
+| `client.search.memories(...)` | `client.search(...)` | `POST /ns/{namespace}/search` |
+| `client.profile(...)` | `client.profile(...)` (no search — see below) | `POST /ns/{namespace}/profile` |
+| `client.documents.list(...)`, `client.memories.list(...)` | `client.list({ namespace, type: "documents" \| "chunks" \| "memories" })` | `POST /ns/{namespace}/list/{type}` |
+| `client.documents.get(...)` | `client.documents.get(...)` | `GET /ns/{namespace}/document/{id}` |
+| `client.documents.update(...)` | `client.documents.update(...)` | `PATCH /ns/{namespace}/document/{id}` |
+| `client.documents.delete(...)`, `deleteBulk(...)` | `client.documents.delete({ namespace, body: { ids } })` | `DELETE /ns/{namespace}/document` |
+| `client.documents.batchAdd(...)` | `client.documents.batchAdd(...)` | `POST /ns/{namespace}/document/batch` |
+| `client.documents.uploadFile(...)` | `client.documents.uploadFile(...)` | `POST /ns/{namespace}/document/file` |
+| — | `client.documents.replaceWithFile(...)`, `updateFile(...)` | `POST` / `PATCH /ns/{namespace}/document/file/{id}` |
+| `client.memories.forget(...)` | `client.memories.forget({ namespace, body: { ids } })` | `DELETE /ns/{namespace}/memories` |
+| `client.memories.forgetMatching(...)` | `client.memories.forgetMatching(...)` | `DELETE /ns/{namespace}/memories/semantic` |
+| `client.profiles.buckets(...)` | `client.profiles.{getBuckets, setBuckets, deleteBuckets}` | `/ns/{namespace}/profile/buckets` |
+| `client.containerTags.*` | `client.namespaces.{list, get, update, delete}` | `/ns`, `/ns/{namespace}` |
+| `client.settings.{get, update}` | `client.organization.{get, update}` (organizational context) | `/organization` |
 
-One other v4 alias collapsed into a single method:
+### Renamed request fields
 
-| v4 call | v5 replacement |
+| v4 | v5 |
 |---|---|
-| `client.documents.add(...)` | `client.add(...)` |
+| `containerTag` / `containerTags` | `namespace` (path) |
+| `customId` | `id` |
+| `documentDate` | `date` |
+| `entityContext` | `supportingContext` |
+| `q` | `query` |
+| `filters` | `filter` (typed filter expression) |
+| `include` | `attach` |
+| search response `timing` / `total` | `searchTime` |
 
-## 3. New in v5
+### Profile no longer searches
 
-New endpoints, grouped in the same style:
+v4's `client.profile({ containerTag, q })` returned the profile plus
+`searchResults` in one call. In v5 the profile endpoint returns only the
+profile. Call `client.search` next to it — in parallel, so it costs no extra
+latency:
 
-- `client.memories.{add, list, forgetMatching}`
-- `client.settings.{reset, suggestBuckets}`
-- `client.documents.{chunks, fileUrl}`
-- `client.containerTags.{list, get, update, delete, merge, mergeStatus}`
+```ts
+const [{ profile }, { results }] = await Promise.all([
+  client.profile({ namespace: "user_alex" }),
+  client.search({ namespace: "user_alex", body: { query: "upcoming meetings" } }),
+]);
+```
+
+### Removed
+
+These v4 methods have no v5 endpoint yet and are not in this SDK:
+
+- `client.connections.*` (Google Drive, Notion, OneDrive, GitHub connectors)
+- `client.settings.{reset, suggestBuckets}` and connector/chunking settings
 - `client.conversations.add`
-- `client.profiles.buckets`
+- `client.documents.{listProcessing, chunks, fileUrl, search}` (use `client.search` / `client.list`)
+- `client.containerTags.{merge, mergeStatus}`
+- `client.memories.{add, updateMemory}`
 
-Plus tree-shakeable standalone functions for every method (see
+Stay on `supermemory@4` if you depend on these.
+
+Every method is also exported as a tree-shakeable standalone function (see
 [FUNCTIONS.md](./FUNCTIONS.md)) — useful for browser and edge bundles.
+
+## 3. Multiple container tags
+
+v4 search and add accepted several `containerTags` at once. v5 operations take
+exactly one namespace. To search across several, fan out and merge:
+
+```ts
+const namespaces = ["user_alex", "team_design"];
+const responses = await Promise.all(
+  namespaces.map((namespace) =>
+    client.search({ namespace, body: { query: "roadmap" } }),
+  ),
+);
+const results = responses.flatMap((r) => r.results);
+```
 
 ## 4. Error handling
 
@@ -89,7 +144,7 @@ subclasses for API error bodies) — branch on `statusCode` instead:
 // v4
 import Supermemory from "supermemory";
 try {
-  await client.search.execute({ q: "..." });
+  await client.search.memories({ q: "..." });
 } catch (err) {
   if (err instanceof Supermemory.RateLimitError) { /* back off */ }
 }
@@ -97,7 +152,7 @@ try {
 // v5
 import { SupermemoryError } from "supermemory/models/errors";
 try {
-  await client.search({ q: "..." });
+  await client.search({ namespace: "user_alex", body: { query: "..." } });
 } catch (err) {
   if (err instanceof SupermemoryError) {
     err.statusCode;   // e.g. 429
@@ -131,7 +186,7 @@ const client = new Supermemory({
 });
 ```
 
-…or per call via the second argument: `client.add(body, { retries: {...} })`.
+…or per call via the second argument: `client.add(request, { retries: {...} })`.
 
 ## 6. Timeouts
 
@@ -140,7 +195,7 @@ both places:
 
 ```ts
 const client = new Supermemory({ apiKey, timeoutMs: 30_000 });
-await client.add(body, { timeoutMs: 5_000 });
+await client.add(request, { timeoutMs: 5_000 });
 ```
 
 Note: v4 counted retried attempts against the timeout differently; in v5 the

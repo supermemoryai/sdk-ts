@@ -41,39 +41,35 @@ supermemory API: The Memory API for the AI era. OpenAPI operations include x-cod
 <!-- Start SDK Installation [installation] -->
 ## SDK Installation
 
-> [!TIP]
-> To finish publishing your SDK to npm and others you must [run your first generation action](https://www.speakeasy.com/docs/github-setup#step-by-step-guide).
-
-
 The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/), [bun](https://bun.sh/) or [yarn](https://classic.yarnpkg.com/en/) package managers.
 
 ### NPM
 
 ```bash
-npm add <UNSET>
+npm add supermemory
 ```
 
 ### PNPM
 
 ```bash
-pnpm add <UNSET>
+pnpm add supermemory
 ```
 
 ### Bun
 
 ```bash
-bun add <UNSET>
+bun add supermemory
 ```
 
 ### Yarn
 
 ```bash
-yarn add <UNSET>
+yarn add supermemory
 ```
 
 > [!NOTE]
 > This package is published as an ES Module (ESM) only. For applications using
-> CommonJS, use `await import()` to import and use this package.
+> CommonJS, use `await import("supermemory")` to import and use this package.
 <!-- End SDK Installation [installation] -->
 
 <!-- Start Requirements [requirements] -->
@@ -96,7 +92,16 @@ const supermemory = new Supermemory({
 
 async function run() {
   const result = await supermemory.add({
-    content: "<value>",
+    namespace: "user_alex",
+    body: {
+      content: "Supermemory turns unstructured content into evolving memory.",
+      id: "my-doc-123",
+      supportingContext: "Focus on product decisions, dates, and owners.",
+      metadata: {
+        "source": "api-docs",
+      },
+      date: "2026-01-15",
+    },
   });
 
   console.log(result);
@@ -128,7 +133,16 @@ const supermemory = new Supermemory({
 
 async function run() {
   const result = await supermemory.add({
-    content: "<value>",
+    namespace: "user_alex",
+    body: {
+      content: "Supermemory turns unstructured content into evolving memory.",
+      id: "my-doc-123",
+      supportingContext: "Focus on product decisions, dates, and owners.",
+      metadata: {
+        "source": "api-docs",
+      },
+      date: "2026-01-15",
+    },
   });
 
   console.log(result);
@@ -148,67 +162,42 @@ run();
 ### [Supermemory SDK](docs/sdks/supermemory/README.md)
 
 * [add](docs/sdks/supermemory/README.md#add) - Add document
-* [profile](docs/sdks/supermemory/README.md#profile) - Get user profile
-* [search](docs/sdks/supermemory/README.md#search) - Search memory entries
-
-### [Connections](docs/sdks/connections/README.md)
-
-* [list](docs/sdks/connections/README.md#list) - List connections
-* [create](docs/sdks/connections/README.md#create) - Create connection
-* [deleteByProvider](docs/sdks/connections/README.md#deletebyprovider) - Delete connection
-* [resources](docs/sdks/connections/README.md#resources) - Fetch resources
-* [configure](docs/sdks/connections/README.md#configure) - Configure connection
-* [getByID](docs/sdks/connections/README.md#getbyid) - Get connection (by id)
-* [deleteByID](docs/sdks/connections/README.md#deletebyid) - Delete connection by ID
-* [getByTag](docs/sdks/connections/README.md#getbytag) - Get connection (by provider)
-* [listDocuments](docs/sdks/connections/README.md#listdocuments) - List documents
-* [import](docs/sdks/connections/README.md#import) - Sync connection
-
-### [ContainerTags](docs/sdks/containertags/README.md)
-
-* [list](docs/sdks/containertags/README.md#list) - List all container tags
-* [get](docs/sdks/containertags/README.md#get) - Get container tag settings
-* [update](docs/sdks/containertags/README.md#update) - Update container tag settings
-* [delete](docs/sdks/containertags/README.md#delete) - Delete container tag
-* [merge](docs/sdks/containertags/README.md#merge) - Merge container tags
-* [mergeStatus](docs/sdks/containertags/README.md#mergestatus) - Get container tag merge status
-
-### [Conversations](docs/sdks/conversations/README.md)
-
-* [add](docs/sdks/conversations/README.md#add) - Ingest or update conversation
+* [search](docs/sdks/supermemory/README.md#search) - Search memories
+* [profile](docs/sdks/supermemory/README.md#profile) - Get profile
+* [list](docs/sdks/supermemory/README.md#list) - List resources
 
 ### [Documents](docs/sdks/documents/README.md)
 
+* [delete](docs/sdks/documents/README.md#delete) - Delete documents
 * [batchAdd](docs/sdks/documents/README.md#batchadd) - Batch add documents
-* [update](docs/sdks/documents/README.md#update) - Update document
 * [get](docs/sdks/documents/README.md#get) - Get document
-* [delete](docs/sdks/documents/README.md#delete) - Delete document by ID or customId
-* [uploadFile](docs/sdks/documents/README.md#uploadfile) - Upload a file
-* [list](docs/sdks/documents/README.md#list) - List documents
-* [listProcessing](docs/sdks/documents/README.md#listprocessing) - Get processing documents
-* [chunks](docs/sdks/documents/README.md#chunks) - Get document chunks
-* [fileUrl](docs/sdks/documents/README.md#fileurl) - Get presigned file URL
-* [deleteBulk](docs/sdks/documents/README.md#deletebulk) - Bulk delete documents
-* [search](docs/sdks/documents/README.md#search) - Search documents
+* [update](docs/sdks/documents/README.md#update) - Update document
+* [uploadFile](docs/sdks/documents/README.md#uploadfile) - Upload file
+* [replaceWithFile](docs/sdks/documents/README.md#replacewithfile) - Replace document with file
+* [updateFile](docs/sdks/documents/README.md#updatefile) - Partially update document file
 
 ### [Memories](docs/sdks/memories/README.md)
 
-* [add](docs/sdks/memories/README.md#add) - Create memories directly
-* [forget](docs/sdks/memories/README.md#forget) - Forget a memory
-* [updateMemory](docs/sdks/memories/README.md#updatememory) - Update a memory (creates new version)
-* [forgetMatching](docs/sdks/memories/README.md#forgetmatching) - Forget memories matching a prompt/query
-* [list](docs/sdks/memories/README.md#list) - List memory entries with history
+* [forget](docs/sdks/memories/README.md#forget) - Forget memories by ID
+* [forgetMatching](docs/sdks/memories/README.md#forgetmatching) - Forget memories semantically
+
+### [Namespaces](docs/sdks/namespaces/README.md)
+
+* [list](docs/sdks/namespaces/README.md#list) - List namespaces
+* [get](docs/sdks/namespaces/README.md#get) - Get namespace settings
+* [update](docs/sdks/namespaces/README.md#update) - Update namespace settings
+* [delete](docs/sdks/namespaces/README.md#delete) - Delete namespace
+
+### [Organization](docs/sdks/organization/README.md)
+
+* [get](docs/sdks/organization/README.md#get) - Get organization settings
+* [update](docs/sdks/organization/README.md#update) - Update organization settings
 
 ### [Profiles](docs/sdks/profiles/README.md)
 
-* [buckets](docs/sdks/profiles/README.md#buckets) - Get profile buckets
-
-### [Settings](docs/sdks/settings/README.md)
-
-* [get](docs/sdks/settings/README.md#get) - Get settings
-* [update](docs/sdks/settings/README.md#update) - Update settings
-* [reset](docs/sdks/settings/README.md#reset) - Reset organization data
-* [suggestBuckets](docs/sdks/settings/README.md#suggestbuckets) - Suggest profile buckets
+* [getBuckets](docs/sdks/profiles/README.md#getbuckets) - Get profile buckets
+* [setBuckets](docs/sdks/profiles/README.md#setbuckets) - Add or update profile buckets
+* [deleteBuckets](docs/sdks/profiles/README.md#deletebuckets) - Delete profile buckets
 
 </details>
 <!-- End Available Resources and Operations [operations] -->
@@ -229,46 +218,27 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 <summary>Available standalone functions</summary>
 
 - [`add`](docs/sdks/supermemory/README.md#add) - Add document
-- [`connectionsConfigure`](docs/sdks/connections/README.md#configure) - Configure connection
-- [`connectionsCreate`](docs/sdks/connections/README.md#create) - Create connection
-- [`connectionsDeleteByID`](docs/sdks/connections/README.md#deletebyid) - Delete connection by ID
-- [`connectionsDeleteByProvider`](docs/sdks/connections/README.md#deletebyprovider) - Delete connection
-- [`connectionsGetByID`](docs/sdks/connections/README.md#getbyid) - Get connection (by id)
-- [`connectionsGetByTag`](docs/sdks/connections/README.md#getbytag) - Get connection (by provider)
-- [`connectionsImport`](docs/sdks/connections/README.md#import) - Sync connection
-- [`connectionsList`](docs/sdks/connections/README.md#list) - List connections
-- [`connectionsListDocuments`](docs/sdks/connections/README.md#listdocuments) - List documents
-- [`connectionsResources`](docs/sdks/connections/README.md#resources) - Fetch resources
-- [`containerTagsDelete`](docs/sdks/containertags/README.md#delete) - Delete container tag
-- [`containerTagsGet`](docs/sdks/containertags/README.md#get) - Get container tag settings
-- [`containerTagsList`](docs/sdks/containertags/README.md#list) - List all container tags
-- [`containerTagsMerge`](docs/sdks/containertags/README.md#merge) - Merge container tags
-- [`containerTagsMergeStatus`](docs/sdks/containertags/README.md#mergestatus) - Get container tag merge status
-- [`containerTagsUpdate`](docs/sdks/containertags/README.md#update) - Update container tag settings
-- [`conversationsAdd`](docs/sdks/conversations/README.md#add) - Ingest or update conversation
 - [`documentsBatchAdd`](docs/sdks/documents/README.md#batchadd) - Batch add documents
-- [`documentsChunks`](docs/sdks/documents/README.md#chunks) - Get document chunks
-- [`documentsDelete`](docs/sdks/documents/README.md#delete) - Delete document by ID or customId
-- [`documentsDeleteBulk`](docs/sdks/documents/README.md#deletebulk) - Bulk delete documents
-- [`documentsFileUrl`](docs/sdks/documents/README.md#fileurl) - Get presigned file URL
+- [`documentsDelete`](docs/sdks/documents/README.md#delete) - Delete documents
 - [`documentsGet`](docs/sdks/documents/README.md#get) - Get document
-- [`documentsList`](docs/sdks/documents/README.md#list) - List documents
-- [`documentsListProcessing`](docs/sdks/documents/README.md#listprocessing) - Get processing documents
-- [`documentsSearch`](docs/sdks/documents/README.md#search) - Search documents
+- [`documentsReplaceWithFile`](docs/sdks/documents/README.md#replacewithfile) - Replace document with file
 - [`documentsUpdate`](docs/sdks/documents/README.md#update) - Update document
-- [`documentsUploadFile`](docs/sdks/documents/README.md#uploadfile) - Upload a file
-- [`memoriesAdd`](docs/sdks/memories/README.md#add) - Create memories directly
-- [`memoriesForget`](docs/sdks/memories/README.md#forget) - Forget a memory
-- [`memoriesForgetMatching`](docs/sdks/memories/README.md#forgetmatching) - Forget memories matching a prompt/query
-- [`memoriesList`](docs/sdks/memories/README.md#list) - List memory entries with history
-- [`memoriesUpdateMemory`](docs/sdks/memories/README.md#updatememory) - Update a memory (creates new version)
-- [`profile`](docs/sdks/supermemory/README.md#profile) - Get user profile
-- [`profilesBuckets`](docs/sdks/profiles/README.md#buckets) - Get profile buckets
-- [`search`](docs/sdks/supermemory/README.md#search) - Search memory entries
-- [`settingsGet`](docs/sdks/settings/README.md#get) - Get settings
-- [`settingsReset`](docs/sdks/settings/README.md#reset) - Reset organization data
-- [`settingsSuggestBuckets`](docs/sdks/settings/README.md#suggestbuckets) - Suggest profile buckets
-- [`settingsUpdate`](docs/sdks/settings/README.md#update) - Update settings
+- [`documentsUpdateFile`](docs/sdks/documents/README.md#updatefile) - Partially update document file
+- [`documentsUploadFile`](docs/sdks/documents/README.md#uploadfile) - Upload file
+- [`list`](docs/sdks/supermemory/README.md#list) - List resources
+- [`memoriesForget`](docs/sdks/memories/README.md#forget) - Forget memories by ID
+- [`memoriesForgetMatching`](docs/sdks/memories/README.md#forgetmatching) - Forget memories semantically
+- [`namespacesDelete`](docs/sdks/namespaces/README.md#delete) - Delete namespace
+- [`namespacesGet`](docs/sdks/namespaces/README.md#get) - Get namespace settings
+- [`namespacesList`](docs/sdks/namespaces/README.md#list) - List namespaces
+- [`namespacesUpdate`](docs/sdks/namespaces/README.md#update) - Update namespace settings
+- [`organizationGet`](docs/sdks/organization/README.md#get) - Get organization settings
+- [`organizationUpdate`](docs/sdks/organization/README.md#update) - Update organization settings
+- [`profile`](docs/sdks/supermemory/README.md#profile) - Get profile
+- [`profilesDeleteBuckets`](docs/sdks/profiles/README.md#deletebuckets) - Delete profile buckets
+- [`profilesGetBuckets`](docs/sdks/profiles/README.md#getbuckets) - Get profile buckets
+- [`profilesSetBuckets`](docs/sdks/profiles/README.md#setbuckets) - Add or update profile buckets
+- [`search`](docs/sdks/supermemory/README.md#search) - Search memories
 
 </details>
 <!-- End Standalone functions [standalone-funcs] -->
@@ -297,8 +267,12 @@ const supermemory = new Supermemory({
 
 async function run() {
   const result = await supermemory.documents.uploadFile({
-    file: await openAsBlob("example.file"),
-    containerTag: "user",
+    namespace: "user_alex",
+    body: {
+      file: await openAsBlob("example.file"),
+      supportingContext: "Focus on product decisions, dates, and owners.",
+      date: "2026-01-15",
+    },
   });
 
   console.log(result);
@@ -324,7 +298,16 @@ const supermemory = new Supermemory({
 
 async function run() {
   const result = await supermemory.add({
-    content: "<value>",
+    namespace: "user_alex",
+    body: {
+      content: "Supermemory turns unstructured content into evolving memory.",
+      id: "my-doc-123",
+      supportingContext: "Focus on product decisions, dates, and owners.",
+      metadata: {
+        "source": "api-docs",
+      },
+      date: "2026-01-15",
+    },
   }, {
     retries: {
       strategy: "backoff",
@@ -365,7 +348,16 @@ const supermemory = new Supermemory({
 
 async function run() {
   const result = await supermemory.add({
-    content: "<value>",
+    namespace: "user_alex",
+    body: {
+      content: "Supermemory turns unstructured content into evolving memory.",
+      id: "my-doc-123",
+      supportingContext: "Focus on product decisions, dates, and owners.",
+      metadata: {
+        "source": "api-docs",
+      },
+      date: "2026-01-15",
+    },
   });
 
   console.log(result);
@@ -402,7 +394,16 @@ const supermemory = new Supermemory({
 async function run() {
   try {
     const result = await supermemory.add({
-      content: "<value>",
+      namespace: "user_alex",
+      body: {
+        content: "Supermemory turns unstructured content into evolving memory.",
+        id: "my-doc-123",
+        supportingContext: "Focus on product decisions, dates, and owners.",
+        metadata: {
+          "source": "api-docs",
+        },
+        date: "2026-01-15",
+      },
     });
 
     console.log(result);
@@ -430,7 +431,8 @@ run();
 ### Error Classes
 **Primary errors:**
 * [`SupermemoryError`](./src/models/errors/supermemory-error.ts): The base class for HTTP error responses.
-  * [`ErrorResponse`](./src/models/errors/error-response.ts): *
+  * [`ErrorResponse`](./src/models/errors/error-response.ts): Generic error.
+  * [`ValidationErrorResponse`](./src/models/errors/validation-error-response.ts): Body returned when request input fails schema validation. Status code `400`. *
 
 <details><summary>Less common errors (6)</summary>
 
@@ -468,7 +470,16 @@ const supermemory = new Supermemory({
 
 async function run() {
   const result = await supermemory.add({
-    content: "<value>",
+    namespace: "user_alex",
+    body: {
+      content: "Supermemory turns unstructured content into evolving memory.",
+      id: "my-doc-123",
+      supportingContext: "Focus on product decisions, dates, and owners.",
+      metadata: {
+        "source": "api-docs",
+      },
+      date: "2026-01-15",
+    },
   });
 
   console.log(result);

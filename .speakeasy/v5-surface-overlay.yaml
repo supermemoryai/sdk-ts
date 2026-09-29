@@ -1,0 +1,84 @@
+# Maps the v5 OpenAPI document (/v5/openapi) onto the SDK surface.
+# Namespace-scoped operations keep the Stainless-era names where one exists
+# (client.add, client.search, client.profile, documents.*, memories.*).
+overlay: 1.0.0
+info:
+  title: Supermemory v5 SDK surface
+  version: 1.0.0
+actions:
+  # ---- auth: new Supermemory({ apiKey }) / SUPERMEMORY_API_KEY ----
+  - target: $.components.securitySchemes.bearerAuth
+    update:
+      x-speakeasy-name-override: apiKey
+
+  # /namespaces is an alias of /ns with an identical response.
+  - target: $.paths["/namespaces"]
+    remove: true
+
+  # ---- root-level methods ----
+  - target: $.paths["/ns/{namespace}/document"].post.tags
+    remove: true
+  - target: $.paths["/ns/{namespace}/document"].post
+    update:
+      x-speakeasy-name-override: add
+  - target: $.paths["/ns/{namespace}/search"].post.tags
+    remove: true
+  - target: $.paths["/ns/{namespace}/search"].post
+    update:
+      x-speakeasy-name-override: search
+  - target: $.paths["/ns/{namespace}/profile"].post.tags
+    remove: true
+  - target: $.paths["/ns/{namespace}/profile"].post
+    update:
+      x-speakeasy-name-override: profile
+  - target: $.paths["/ns/{namespace}/list/{type}"].post.tags
+    remove: true
+  - target: $.paths["/ns/{namespace}/list/{type}"].post
+    update:
+      x-speakeasy-name-override: list
+
+  # ---- documents ----
+  - target: $.paths["/ns/{namespace}/document/batch"].post
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: batchAdd }
+  - target: $.paths["/ns/{namespace}/document/{id}"].get
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: get }
+  - target: $.paths["/ns/{namespace}/document/{id}"].patch
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: update }
+  - target: $.paths["/ns/{namespace}/document"].delete
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: delete }
+  - target: $.paths["/ns/{namespace}/document/file"].post
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: uploadFile }
+  - target: $.paths["/ns/{namespace}/document/file/{id}"].post
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: replaceWithFile }
+  - target: $.paths["/ns/{namespace}/document/file/{id}"].patch
+    update: { x-speakeasy-group: documents, x-speakeasy-name-override: updateFile }
+
+  # ---- memories ----
+  - target: $.paths["/ns/{namespace}/memories"].delete
+    update: { x-speakeasy-group: memories, x-speakeasy-name-override: forget }
+  - target: $.paths["/ns/{namespace}/memories/semantic"].delete
+    update: { x-speakeasy-group: memories, x-speakeasy-name-override: forgetMatching }
+
+  # ---- profiles ----
+  - target: $.paths["/ns/{namespace}/profile/buckets"].get
+    update: { x-speakeasy-group: profiles, x-speakeasy-name-override: getBuckets }
+  - target: $.paths["/ns/{namespace}/profile/buckets"].put
+    update: { x-speakeasy-group: profiles, x-speakeasy-name-override: setBuckets }
+  - target: $.paths["/ns/{namespace}/profile/buckets"].delete
+    update: { x-speakeasy-group: profiles, x-speakeasy-name-override: deleteBuckets }
+
+  # ---- namespaces ----
+  - target: $.paths["/ns"].get
+    update: { x-speakeasy-group: namespaces, x-speakeasy-name-override: list }
+  - target: $.paths["/ns/{namespace}"].get
+    update: { x-speakeasy-group: namespaces, x-speakeasy-name-override: get }
+  - target: $.paths["/ns/{namespace}"].patch
+    update: { x-speakeasy-group: namespaces, x-speakeasy-name-override: update }
+  - target: $.paths["/ns/{namespace}"].delete
+    update: { x-speakeasy-group: namespaces, x-speakeasy-name-override: delete }
+
+  # ---- organization ----
+  - target: $.paths["/organization"].get
+    update: { x-speakeasy-group: organization, x-speakeasy-name-override: get }
+  - target: $.paths["/organization"].patch
+    update: { x-speakeasy-group: organization, x-speakeasy-name-override: update }

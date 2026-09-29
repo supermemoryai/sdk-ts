@@ -5,7 +5,7 @@
 
 import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
+import { encodeJSON, encodeSimple } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
@@ -29,18 +29,19 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Forget a memory
+ * Forget memories by ID
  *
  * @remarks
- * Forget (soft delete) a memory entry. The memory is marked as forgotten but not permanently deleted.
+ * Remove exact memories from normal recall while preserving their audit history. Each ID is handled independently and any missing or ineligible memory is reported without rolling back successful changes.
  */
 export function memoriesForget(
   client: SupermemoryCore,
-  request: operations.DeleteV4MemoriesRequest,
+  request: operations.DeleteNsByNamespaceMemoriesRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.DeleteV4MemoriesResponse,
+    operations.DeleteNsByNamespaceMemoriesResponse,
+    | errors.DeleteNsByNamespaceMemoriesBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -61,12 +62,13 @@ export function memoriesForget(
 
 async function $do(
   client: SupermemoryCore,
-  request: operations.DeleteV4MemoriesRequest,
+  request: operations.DeleteNsByNamespaceMemoriesRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.DeleteV4MemoriesResponse,
+      operations.DeleteNsByNamespaceMemoriesResponse,
+      | errors.DeleteNsByNamespaceMemoriesBadRequest
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -83,16 +85,25 @@ async function $do(
   const parsed = safeParse(
     request,
     (value) =>
-      z.parse(operations.DeleteV4MemoriesRequest$outboundSchema, value),
+      z.parse(
+        operations.DeleteNsByNamespaceMemoriesRequest$outboundSchema,
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
+  const body = encodeJSON("body", payload.body, { explode: true });
 
-  const path = pathToFunc("/v4/memories")();
+  const pathParams = {
+    namespace: encodeSimple("namespace", payload.namespace, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+  const path = pathToFunc("/ns/{namespace}/memories")(pathParams);
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
@@ -106,7 +117,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "deleteV4Memories",
+    operationID: "deleteNsByNamespaceMemories",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -150,7 +161,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.DeleteV4MemoriesResponse,
+    operations.DeleteNsByNamespaceMemoriesResponse,
+    | errors.DeleteNsByNamespaceMemoriesBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -161,8 +173,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.DeleteV4MemoriesResponse$inboundSchema),
-    M.jsonErr([400, 401, 404, 409], errors.ErrorResponse$inboundSchema),
+    M.json(200, operations.DeleteNsByNamespaceMemoriesResponse$inboundSchema),
+    M.jsonErr(400, errors.DeleteNsByNamespaceMemoriesBadRequest$inboundSchema),
+    M.jsonErr([401, 403], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

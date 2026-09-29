@@ -3,43 +3,23 @@
  * @generated-id: 63b56673d95c
  */
 
-import { memoriesAdd } from "../funcs/memories-add.js";
 import { memoriesForgetMatching } from "../funcs/memories-forget-matching.js";
 import { memoriesForget } from "../funcs/memories-forget.js";
-import { memoriesList } from "../funcs/memories-list.js";
-import { memoriesUpdateMemory } from "../funcs/memories-update-memory.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
 
 export class Memories extends ClientSDK {
   /**
-   * Create memories directly
+   * Forget memories by ID
    *
    * @remarks
-   * Create memories directly, bypassing the document ingestion workflow. Generates embeddings and makes them immediately searchable.
-   */
-  async add(
-    request: operations.PostV4MemoriesRequest,
-    options?: RequestOptions,
-  ): Promise<operations.PostV4MemoriesResponse> {
-    return unwrapAsync(memoriesAdd(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
-   * Forget a memory
-   *
-   * @remarks
-   * Forget (soft delete) a memory entry. The memory is marked as forgotten but not permanently deleted.
+   * Remove exact memories from normal recall while preserving their audit history. Each ID is handled independently and any missing or ineligible memory is reported without rolling back successful changes.
    */
   async forget(
-    request: operations.DeleteV4MemoriesRequest,
+    request: operations.DeleteNsByNamespaceMemoriesRequest,
     options?: RequestOptions,
-  ): Promise<operations.DeleteV4MemoriesResponse> {
+  ): Promise<operations.DeleteNsByNamespaceMemoriesResponse> {
     return unwrapAsync(memoriesForget(
       this,
       request,
@@ -48,50 +28,16 @@ export class Memories extends ClientSDK {
   }
 
   /**
-   * Update a memory (creates new version)
+   * Forget memories semantically
    *
    * @remarks
-   * Update a memory by creating a new version. The original memory is preserved with isLatest=false.
-   */
-  async updateMemory(
-    request: operations.PatchV4MemoriesRequest,
-    options?: RequestOptions,
-  ): Promise<operations.PatchV4MemoriesResponse> {
-    return unwrapAsync(memoriesUpdateMemory(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
-   * Forget memories matching a prompt/query
-   *
-   * @remarks
-   * Agentic mass-forget. Given a prompt or query, a tool-calling agent searches the container's memories and soft-deletes everything matching the target. Use dryRun to preview first.
+   * Describe what should be forgotten in natural language, then preview or apply the matching set. Use dry-run results with the exact-ID endpoint when you need a reviewable, drift-free workflow.
    */
   async forgetMatching(
-    request: operations.PostV4MemoriesForgetMatchingRequest,
+    request: operations.DeleteNsByNamespaceMemoriesSemanticRequest,
     options?: RequestOptions,
-  ): Promise<operations.PostV4MemoriesForgetMatchingResponse> {
+  ): Promise<operations.DeleteNsByNamespaceMemoriesSemanticResponse> {
     return unwrapAsync(memoriesForgetMatching(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
-   * List memory entries with history
-   *
-   * @remarks
-   * List all latest memory entries from specified container tags with their update history and source documents
-   */
-  async list(
-    request: operations.PostV4MemoriesListRequest,
-    options?: RequestOptions,
-  ): Promise<operations.PostV4MemoriesListResponse> {
-    return unwrapAsync(memoriesList(
       this,
       request,
       options,

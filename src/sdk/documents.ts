@@ -4,14 +4,10 @@
  */
 
 import { documentsBatchAdd } from "../funcs/documents-batch-add.js";
-import { documentsChunks } from "../funcs/documents-chunks.js";
-import { documentsDeleteBulk } from "../funcs/documents-delete-bulk.js";
 import { documentsDelete } from "../funcs/documents-delete.js";
-import { documentsFileUrl } from "../funcs/documents-file-url.js";
 import { documentsGet } from "../funcs/documents-get.js";
-import { documentsListProcessing } from "../funcs/documents-list-processing.js";
-import { documentsList } from "../funcs/documents-list.js";
-import { documentsSearch } from "../funcs/documents-search.js";
+import { documentsReplaceWithFile } from "../funcs/documents-replace-with-file.js";
+import { documentsUpdateFile } from "../funcs/documents-update-file.js";
 import { documentsUpdate } from "../funcs/documents-update.js";
 import { documentsUploadFile } from "../funcs/documents-upload-file.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
@@ -20,16 +16,16 @@ import { unwrapAsync } from "../types/fp.js";
 
 export class Documents extends ClientSDK {
   /**
-   * Batch add documents
+   * Delete documents
    *
    * @remarks
-   * Add multiple documents in a single request. Each document can have any content type (text, url, file, etc.) and metadata
+   * Permanently remove documents and their derived knowledge by document ID or caller-defined ID. Each requested ID is handled independently so successful deletions are preserved when another ID fails.
    */
-  async batchAdd(
-    request: operations.PostV3DocumentsBatchRequest,
+  async delete(
+    request: operations.DeleteNsByNamespaceDocumentRequest,
     options?: RequestOptions,
-  ): Promise<operations.PostV3DocumentsBatchResponse> {
-    return unwrapAsync(documentsBatchAdd(
+  ): Promise<operations.DeleteNsByNamespaceDocumentResponse> {
+    return unwrapAsync(documentsDelete(
       this,
       request,
       options,
@@ -37,16 +33,16 @@ export class Documents extends ClientSDK {
   }
 
   /**
-   * Update document
+   * Batch add documents
    *
    * @remarks
-   * Update a document with any content type (text, url, file, etc.) and metadata
+   * Build a knowledge base efficiently by ingesting up to 600 text or URL documents at once. Existing caller-defined IDs append new information using the same semantics as single-document ingestion.
    */
-  async update(
-    request: operations.PatchV3DocumentsByIdRequest,
+  async batchAdd(
+    request: operations.PostNsByNamespaceDocumentBatchRequest,
     options?: RequestOptions,
-  ): Promise<operations.PatchV3DocumentsByIdResponse> {
-    return unwrapAsync(documentsUpdate(
+  ): Promise<operations.PostNsByNamespaceDocumentBatchResponse> {
+    return unwrapAsync(documentsBatchAdd(
       this,
       request,
       options,
@@ -57,12 +53,12 @@ export class Documents extends ClientSDK {
    * Get document
    *
    * @remarks
-   * Get a document by ID
+   * Retrieve a document's canonical content, metadata, and processing state by document ID or caller-defined ID. Optionally attach its source chunks, derived memories, or both in the same response.
    */
   async get(
-    request: operations.GetV3DocumentsByIdRequest,
+    request: operations.GetNsByNamespaceDocumentByIdRequest,
     options?: RequestOptions,
-  ): Promise<operations.GetV3DocumentsByIdResponse> {
+  ): Promise<operations.GetNsByNamespaceDocumentByIdResponse> {
     return unwrapAsync(documentsGet(
       this,
       request,
@@ -71,16 +67,16 @@ export class Documents extends ClientSDK {
   }
 
   /**
-   * Delete document by ID or customId
+   * Update document
    *
    * @remarks
-   * Delete a document by ID or customId
+   * Refresh an existing document without changing its stable ID. Supplied content replaces the canonical content and is reprocessed; omitted fields remain unchanged.
    */
-  async delete(
-    request: operations.DeleteV3DocumentsByIdRequest,
+  async update(
+    request: operations.PatchNsByNamespaceDocumentByIdRequest,
     options?: RequestOptions,
-  ): Promise<void> {
-    return unwrapAsync(documentsDelete(
+  ): Promise<operations.PatchNsByNamespaceDocumentByIdResponse> {
+    return unwrapAsync(documentsUpdate(
       this,
       request,
       options,
@@ -88,15 +84,15 @@ export class Documents extends ClientSDK {
   }
 
   /**
-   * Upload a file
+   * Upload file
    *
    * @remarks
-   * Upload a file to be processed
+   * Transform an uploaded file into searchable knowledge and learned memory. The response returns as soon as ingestion is safely queued while extraction and memory formation continue asynchronously.
    */
   async uploadFile(
-    request: operations.PostV3DocumentsFileRequest,
+    request: operations.PostNsByNamespaceDocumentFileRequest,
     options?: RequestOptions,
-  ): Promise<operations.PostV3DocumentsFileResponse> {
+  ): Promise<operations.PostNsByNamespaceDocumentFileResponse> {
     return unwrapAsync(documentsUploadFile(
       this,
       request,
@@ -105,16 +101,16 @@ export class Documents extends ClientSDK {
   }
 
   /**
-   * List documents
+   * Replace document with file
    *
    * @remarks
-   * Retrieves a paginated list of documents with their metadata and workflow status
+   * Replace an existing document with a new file while keeping its stable document ID. Content and caller metadata are overwritten, then the document is reprocessed asynchronously.
    */
-  async list(
-    request: operations.PostV3DocumentsListRequest,
+  async replaceWithFile(
+    request: operations.PostNsByNamespaceDocumentFileByIdRequest,
     options?: RequestOptions,
-  ): Promise<operations.PostV3DocumentsListResponse> {
-    return unwrapAsync(documentsList(
+  ): Promise<operations.PostNsByNamespaceDocumentFileByIdResponse> {
+    return unwrapAsync(documentsReplaceWithFile(
       this,
       request,
       options,
@@ -122,82 +118,16 @@ export class Documents extends ClientSDK {
   }
 
   /**
-   * Get processing documents
+   * Partially update document file
    *
    * @remarks
-   * Get documents that are currently being processed
+   * Refresh only the file-backed fields you provide. Supplying a file replaces the canonical content; omitted metadata and processing context remain unchanged.
    */
-  async listProcessing(
+  async updateFile(
+    request: operations.PatchNsByNamespaceDocumentFileByIdRequest,
     options?: RequestOptions,
-  ): Promise<operations.GetV3DocumentsProcessingResponse> {
-    return unwrapAsync(documentsListProcessing(
-      this,
-      options,
-    ));
-  }
-
-  /**
-   * Get document chunks
-   *
-   * @remarks
-   * Get all chunks for a document, ordered by position
-   */
-  async chunks(
-    request: operations.GetV3DocumentsByIdChunksRequest,
-    options?: RequestOptions,
-  ): Promise<operations.GetV3DocumentsByIdChunksResponse> {
-    return unwrapAsync(documentsChunks(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
-   * Get presigned file URL
-   *
-   * @remarks
-   * Get a fresh presigned URL for a document's file. Returns a time-limited URL (24h) that can be used to download the file.
-   */
-  async fileUrl(
-    request: operations.GetV3DocumentsByIdFileUrlRequest,
-    options?: RequestOptions,
-  ): Promise<operations.GetV3DocumentsByIdFileUrlResponse> {
-    return unwrapAsync(documentsFileUrl(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
-   * Bulk delete documents
-   *
-   * @remarks
-   * Bulk delete documents by IDs or container tags
-   */
-  async deleteBulk(
-    request: operations.DeleteV3DocumentsBulkRequest,
-    options?: RequestOptions,
-  ): Promise<operations.DeleteV3DocumentsBulkResponse> {
-    return unwrapAsync(documentsDeleteBulk(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
-   * Search documents
-   *
-   * @remarks
-   * Search memories with advanced filtering
-   */
-  async search(
-    request: operations.PostV3SearchRequest,
-    options?: RequestOptions,
-  ): Promise<operations.PostV3SearchResponse> {
-    return unwrapAsync(documentsSearch(
+  ): Promise<operations.PatchNsByNamespaceDocumentFileByIdResponse> {
+    return unwrapAsync(documentsUpdateFile(
       this,
       request,
       options,

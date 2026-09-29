@@ -5,7 +5,7 @@
 
 import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
-import { encodeJSON, encodeSimple } from "../lib/encodings.js";
+import { encodeFormQuery, encodeJSON, encodeSimple } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
@@ -32,15 +32,16 @@ import { Result } from "../types/fp.js";
  * Update document
  *
  * @remarks
- * Update a document with any content type (text, url, file, etc.) and metadata
+ * Refresh an existing document without changing its stable ID. Supplied content replaces the canonical content and is reprocessed; omitted fields remain unchanged.
  */
 export function documentsUpdate(
   client: SupermemoryCore,
-  request: operations.PatchV3DocumentsByIdRequest,
+  request: operations.PatchNsByNamespaceDocumentByIdRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.PatchV3DocumentsByIdResponse,
+    operations.PatchNsByNamespaceDocumentByIdResponse,
+    | errors.PatchNsByNamespaceDocumentByIdBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -61,12 +62,13 @@ export function documentsUpdate(
 
 async function $do(
   client: SupermemoryCore,
-  request: operations.PatchV3DocumentsByIdRequest,
+  request: operations.PatchNsByNamespaceDocumentByIdRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.PatchV3DocumentsByIdResponse,
+      operations.PatchNsByNamespaceDocumentByIdResponse,
+      | errors.PatchNsByNamespaceDocumentByIdBadRequest
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -83,7 +85,10 @@ async function $do(
   const parsed = safeParse(
     request,
     (value) =>
-      z.parse(operations.PatchV3DocumentsByIdRequest$outboundSchema, value),
+      z.parse(
+        operations.PatchNsByNamespaceDocumentByIdRequest$outboundSchema,
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -97,8 +102,17 @@ async function $do(
       explode: false,
       charEncoding: "percent",
     }),
+    namespace: encodeSimple("namespace", payload.namespace, {
+      explode: false,
+      charEncoding: "percent",
+    }),
   };
-  const path = pathToFunc("/v3/documents/{id}")(pathParams);
+  const path = pathToFunc("/ns/{namespace}/document/{id}")(pathParams);
+
+  const query = encodeFormQuery({
+    "dreaming": payload.dreaming,
+    "taskType": payload.taskType,
+  });
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
@@ -112,7 +126,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "patchV3DocumentsById",
+    operationID: "patchNsByNamespaceDocumentById",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -130,6 +144,7 @@ async function $do(
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
+    query: query,
     body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
@@ -156,7 +171,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.PatchV3DocumentsByIdResponse,
+    operations.PatchNsByNamespaceDocumentByIdResponse,
+    | errors.PatchNsByNamespaceDocumentByIdBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -167,8 +183,15 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.PatchV3DocumentsByIdResponse$inboundSchema),
-    M.jsonErr([401, 404], errors.ErrorResponse$inboundSchema),
+    M.json(
+      200,
+      operations.PatchNsByNamespaceDocumentByIdResponse$inboundSchema,
+    ),
+    M.jsonErr(
+      400,
+      errors.PatchNsByNamespaceDocumentByIdBadRequest$inboundSchema,
+    ),
+    M.jsonErr([401, 402, 403, 404, 409], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

@@ -3,10 +3,9 @@ speakeasyVersion: latest
 sources:
     supermemory API:
         inputs:
-            - location: https://api.supermemory.ai/v4/openapi
+            - location: https://api.supermemory.ai/v5/openapi
         overlays:
-            - location: .speakeasy/speakeasy-modifications-overlay.yaml
-            - location: .speakeasy/stainless-parity-overlay.yaml
+            - location: .speakeasy/v5-surface-overlay.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/supermemory-hnj/supermemory/supermemory-api

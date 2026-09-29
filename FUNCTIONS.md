@@ -30,7 +30,16 @@ const supermemory = new SupermemoryCore({
 
 async function run() {
   const res = await add(supermemory, {
-    content: "<value>",
+    namespace: "user_alex",
+    body: {
+      content: "Supermemory turns unstructured content into evolving memory.",
+      id: "my-doc-123",
+      supportingContext: "Focus on product decisions, dates, and owners.",
+      metadata: {
+        "source": "api-docs",
+      },
+      date: "2026-01-15",
+    },
   });
   if (res.ok) {
     const { value: result } = res;

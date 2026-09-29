@@ -5,7 +5,7 @@
 
 import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
+import { encodeJSON, encodeSimple } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
@@ -29,18 +29,19 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Get user profile
+ * Get profile
  *
  * @remarks
- * Get user profile with optional search results
+ * Read a continuously maintained understanding of the subject represented by this namespace. Stable facts, evolving context, and selected custom buckets are returned together without requiring a search query.
  */
 export function profile(
   client: SupermemoryCore,
-  request: operations.PostV4ProfileRequest,
+  request: operations.PostNsByNamespaceProfileRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.PostV4ProfileResponse,
+    operations.PostNsByNamespaceProfileResponse,
+    | errors.PostNsByNamespaceProfileBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -61,12 +62,13 @@ export function profile(
 
 async function $do(
   client: SupermemoryCore,
-  request: operations.PostV4ProfileRequest,
+  request: operations.PostNsByNamespaceProfileRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.PostV4ProfileResponse,
+      operations.PostNsByNamespaceProfileResponse,
+      | errors.PostNsByNamespaceProfileBadRequest
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -82,20 +84,27 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => z.parse(operations.PostV4ProfileRequest$outboundSchema, value),
+    (value) =>
+      z.parse(operations.PostNsByNamespaceProfileRequest$outboundSchema, value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
+  const body = encodeJSON("body", payload.body, { explode: true });
 
-  const path = pathToFunc("/v4/profile")();
+  const pathParams = {
+    namespace: encodeSimple("namespace", payload.namespace, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+  const path = pathToFunc("/ns/{namespace}/profile")(pathParams);
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
-    Accept: "application/json",
+    Accept: "application/json;q=1, text/markdown;q=0",
   }));
 
   const secConfig = await extractSecurity(client._options.apiKey);
@@ -105,7 +114,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "postV4Profile",
+    operationID: "postNsByNamespaceProfile",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -149,7 +158,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.PostV4ProfileResponse,
+    operations.PostNsByNamespaceProfileResponse,
+    | errors.PostNsByNamespaceProfileBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -160,8 +170,12 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.PostV4ProfileResponse$inboundSchema),
-    M.jsonErr([400, 401, 402], errors.ErrorResponse$inboundSchema),
+    M.json(200, operations.PostNsByNamespaceProfileResponse$inboundSchema),
+    M.text(200, operations.PostNsByNamespaceProfileResponse$inboundSchema, {
+      ctype: "text/markdown",
+    }),
+    M.jsonErr(400, errors.PostNsByNamespaceProfileBadRequest$inboundSchema),
+    M.jsonErr([401, 403], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),
