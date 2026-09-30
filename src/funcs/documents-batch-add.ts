@@ -5,7 +5,7 @@
 
 import * as z from "zod/v4-mini";
 import { SupermemoryCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
+import { encodeFormQuery, encodeJSON, encodeSimple } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
@@ -32,15 +32,16 @@ import { Result } from "../types/fp.js";
  * Batch add documents
  *
  * @remarks
- * Add multiple documents in a single request. Each document can have any content type (text, url, file, etc.) and metadata
+ * Build a knowledge base efficiently by ingesting up to 600 text or URL documents at once. Existing caller-defined IDs append new information using the same semantics as single-document ingestion.
  */
 export function documentsBatchAdd(
   client: SupermemoryCore,
-  request: operations.PostV3DocumentsBatchRequest,
+  request: operations.PostNsByNamespaceDocumentBatchRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.PostV3DocumentsBatchResponse,
+    operations.PostNsByNamespaceDocumentBatchResponse,
+    | errors.PostNsByNamespaceDocumentBatchBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -61,12 +62,13 @@ export function documentsBatchAdd(
 
 async function $do(
   client: SupermemoryCore,
-  request: operations.PostV3DocumentsBatchRequest,
+  request: operations.PostNsByNamespaceDocumentBatchRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.PostV3DocumentsBatchResponse,
+      operations.PostNsByNamespaceDocumentBatchResponse,
+      | errors.PostNsByNamespaceDocumentBatchBadRequest
       | errors.ErrorResponse
       | SupermemoryError
       | ResponseValidationError
@@ -83,16 +85,30 @@ async function $do(
   const parsed = safeParse(
     request,
     (value) =>
-      z.parse(operations.PostV3DocumentsBatchRequest$outboundSchema, value),
+      z.parse(
+        operations.PostNsByNamespaceDocumentBatchRequest$outboundSchema,
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
+  const body = encodeJSON("body", payload.body, { explode: true });
 
-  const path = pathToFunc("/v3/documents/batch")();
+  const pathParams = {
+    namespace: encodeSimple("namespace", payload.namespace, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+  const path = pathToFunc("/ns/{namespace}/document/batch")(pathParams);
+
+  const query = encodeFormQuery({
+    "dreaming": payload.dreaming,
+    "taskType": payload.taskType,
+  });
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
@@ -106,7 +122,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "postV3DocumentsBatch",
+    operationID: "postNsByNamespaceDocumentBatch",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -124,6 +140,7 @@ async function $do(
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
+    query: query,
     body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
@@ -150,7 +167,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.PostV3DocumentsBatchResponse,
+    operations.PostNsByNamespaceDocumentBatchResponse,
+    | errors.PostNsByNamespaceDocumentBatchBadRequest
     | errors.ErrorResponse
     | SupermemoryError
     | ResponseValidationError
@@ -161,8 +179,15 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.PostV3DocumentsBatchResponse$inboundSchema),
-    M.jsonErr([401, 402], errors.ErrorResponse$inboundSchema),
+    M.json(
+      200,
+      operations.PostNsByNamespaceDocumentBatchResponse$inboundSchema,
+    ),
+    M.jsonErr(
+      400,
+      errors.PostNsByNamespaceDocumentBatchBadRequest$inboundSchema,
+    ),
+    M.jsonErr([401, 402, 403], errors.ErrorResponse$inboundSchema),
     M.jsonErr(500, errors.ErrorResponse$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

@@ -4,19 +4,17 @@
  */
 
 import { add } from "../funcs/add.js";
-import { patchV3SettingsSecurity } from "../funcs/patch-v3-settings-security.js";
+import { list } from "../funcs/list.js";
 import { profile } from "../funcs/profile.js";
 import { search } from "../funcs/search.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
-import { Connections } from "./connections.js";
-import { ContainerTags } from "./container-tags.js";
-import { Conversations } from "./conversations.js";
 import { Documents } from "./documents.js";
 import { Memories } from "./memories.js";
+import { Namespaces } from "./namespaces.js";
+import { Organization } from "./organization.js";
 import { Profiles } from "./profiles.js";
-import { Settings } from "./settings.js";
 
 export class Supermemory extends ClientSDK {
   private _documents?: Documents;
@@ -24,14 +22,9 @@ export class Supermemory extends ClientSDK {
     return (this._documents ??= new Documents(this._options));
   }
 
-  private _settings?: Settings;
-  get settings(): Settings {
-    return (this._settings ??= new Settings(this._options));
-  }
-
-  private _containerTags?: ContainerTags;
-  get containerTags(): ContainerTags {
-    return (this._containerTags ??= new ContainerTags(this._options));
+  private _profiles?: Profiles;
+  get profiles(): Profiles {
+    return (this._profiles ??= new Profiles(this._options));
   }
 
   private _memories?: Memories;
@@ -39,31 +32,26 @@ export class Supermemory extends ClientSDK {
     return (this._memories ??= new Memories(this._options));
   }
 
-  private _profiles?: Profiles;
-  get profiles(): Profiles {
-    return (this._profiles ??= new Profiles(this._options));
+  private _namespaces?: Namespaces;
+  get namespaces(): Namespaces {
+    return (this._namespaces ??= new Namespaces(this._options));
   }
 
-  private _connections?: Connections;
-  get connections(): Connections {
-    return (this._connections ??= new Connections(this._options));
-  }
-
-  private _conversations?: Conversations;
-  get conversations(): Conversations {
-    return (this._conversations ??= new Conversations(this._options));
+  private _organization?: Organization;
+  get organization(): Organization {
+    return (this._organization ??= new Organization(this._options));
   }
 
   /**
    * Add document
    *
    * @remarks
-   * Add a document with any content type (text, url, file, etc.) and metadata
+   * Turn text or a supported URL into searchable, evolving memory. Supply a new ID to create a document, or reuse an existing ID to append new information while preserving its history.
    */
   async add(
-    request: operations.PostV3DocumentsRequest,
+    request: operations.PostNsByNamespaceDocumentRequest,
     options?: RequestOptions,
-  ): Promise<operations.PostV3DocumentsResponse> {
+  ): Promise<operations.PostNsByNamespaceDocumentResponse> {
     return unwrapAsync(add(
       this,
       request,
@@ -71,11 +59,17 @@ export class Supermemory extends ClientSDK {
     ));
   }
 
-  async patchV3SettingsSecurity(
-    request: operations.PatchV3SettingsSecurityRequest,
+  /**
+   * Search memories
+   *
+   * @remarks
+   * Recall the most relevant learned context and source passages from a namespace. Hybrid search combines memories with document chunks by default, with optional query rewriting, reranking, and supporting context attachments.
+   */
+  async search(
+    request: operations.PostNsByNamespaceSearchRequest,
     options?: RequestOptions,
-  ): Promise<void> {
-    return unwrapAsync(patchV3SettingsSecurity(
+  ): Promise<operations.PostNsByNamespaceSearchResponse> {
+    return unwrapAsync(search(
       this,
       request,
       options,
@@ -83,15 +77,15 @@ export class Supermemory extends ClientSDK {
   }
 
   /**
-   * Get user profile
+   * Get profile
    *
    * @remarks
-   * Get user profile with optional search results
+   * Read a continuously maintained understanding of the subject represented by this namespace. Stable facts, evolving context, and selected custom buckets are returned together without requiring a search query.
    */
   async profile(
-    request: operations.PostV4ProfileRequest,
+    request: operations.PostNsByNamespaceProfileRequest,
     options?: RequestOptions,
-  ): Promise<operations.PostV4ProfileResponse> {
+  ): Promise<operations.PostNsByNamespaceProfileResponse> {
     return unwrapAsync(profile(
       this,
       request,
@@ -100,16 +94,16 @@ export class Supermemory extends ClientSDK {
   }
 
   /**
-   * Search memory entries
+   * List resources
    *
    * @remarks
-   * Search memory entries - Low latency for conversational
+   * Browse documents, source chunks, or learned memories through one predictable paginated contract. Choose the collection in the path; the other collection arrays remain empty for a stable response shape.
    */
-  async search(
-    request: operations.PostV4SearchRequest,
+  async list(
+    request: operations.PostNsByNamespaceListByTypeRequest,
     options?: RequestOptions,
-  ): Promise<operations.PostV4SearchResponse> {
-    return unwrapAsync(search(
+  ): Promise<operations.PostNsByNamespaceListByTypeResponse> {
+    return unwrapAsync(list(
       this,
       request,
       options,

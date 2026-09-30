@@ -7,17 +7,17 @@ supermemory API: The Memory API for the AI era. OpenAPI operations include x-cod
 ### Available Operations
 
 * [add](#add) - Add document
-* [patchV3SettingsSecurity](#patchv3settingssecurity)
-* [profile](#profile) - Get user profile
-* [search](#search) - Search memory entries
+* [search](#search) - Search memories
+* [profile](#profile) - Get profile
+* [list](#list) - List resources
 
 ## add
 
-Add a document with any content type (text, url, file, etc.) and metadata
+Turn text or a supported URL into searchable, evolving memory. Supply a new ID to create a document, or reuse an existing ID to append new information while preserving its history.
 
 ### Example Usage
 
-<!-- UsageSnippet language="typescript" operationID="postV3Documents" method="post" path="/v3/documents" -->
+<!-- UsageSnippet language="typescript" operationID="postNsByNamespaceDocument" method="post" path="/ns/{namespace}/document" -->
 ```typescript
 import { Supermemory } from "supermemory";
 
@@ -27,7 +27,16 @@ const supermemory = new Supermemory({
 
 async function run() {
   const result = await supermemory.add({
-    content: "<value>",
+    namespace: "user_alex",
+    body: {
+      content: "Supermemory turns unstructured content into evolving memory.",
+      id: "my-doc-123",
+      supportingContext: "Focus on product decisions, dates, and owners.",
+      metadata: {
+        "source": "api-docs",
+      },
+      date: "2026-01-15",
+    },
   });
 
   console.log(result);
@@ -52,7 +61,16 @@ const supermemory = new SupermemoryCore({
 
 async function run() {
   const res = await add(supermemory, {
-    content: "<value>",
+    namespace: "user_alex",
+    body: {
+      content: "Supermemory turns unstructured content into evolving memory.",
+      id: "my-doc-123",
+      supportingContext: "Focus on product decisions, dates, and owners.",
+      metadata: {
+        "source": "api-docs",
+      },
+      date: "2026-01-15",
+    },
   });
   if (res.ok) {
     const { value: result } = res;
@@ -69,176 +87,32 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.PostV3DocumentsRequest](../../models/operations/post-v3-documents-request.md)                                                                                      | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `request`                                                                                                                                                                      | [operations.PostNsByNamespaceDocumentRequest](../../models/operations/post-ns-by-namespace-document-request.md)                                                                | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 | `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
 
 ### Response
 
-**Promise\<[operations.PostV3DocumentsResponse](../../models/operations/post-v3-documents-response.md)\>**
+**Promise\<[operations.PostNsByNamespaceDocumentResponse](../../models/operations/post-ns-by-namespace-document-response.md)\>**
 
 ### Errors
 
 | Error Type                     | Status Code                    | Content Type                   |
 | ------------------------------ | ------------------------------ | ------------------------------ |
-| errors.ErrorResponse           | 401                            | application/json               |
-| errors.ErrorResponse           | 500                            | application/json               |
-| errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
-
-## patchV3SettingsSecurity
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="patchV3SettingsSecurity" method="patch" path="/v3/settings/security" -->
-```typescript
-import { Supermemory } from "supermemory";
-
-const supermemory = new Supermemory({
-  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
-});
-
-async function run() {
-  await supermemory.patchV3SettingsSecurity({
-    requireTwoFactor: true,
-  });
-
-
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { SupermemoryCore } from "supermemory/core.js";
-import { patchV3SettingsSecurity } from "supermemory/funcs/patch-v3-settings-security.js";
-
-// Use `SupermemoryCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const supermemory = new SupermemoryCore({
-  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
-});
-
-async function run() {
-  const res = await patchV3SettingsSecurity(supermemory, {
-    requireTwoFactor: true,
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    
-  } else {
-    console.log("patchV3SettingsSecurity failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.PatchV3SettingsSecurityRequest](../../models/operations/patch-v3-settings-security-request.md)                                                                     | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-
-### Response
-
-**Promise\<void\>**
-
-### Errors
-
-| Error Type                     | Status Code                    | Content Type                   |
-| ------------------------------ | ------------------------------ | ------------------------------ |
-| errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
-
-## profile
-
-Get user profile with optional search results
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="postV4Profile" method="post" path="/v4/profile" -->
-```typescript
-import { Supermemory } from "supermemory";
-
-const supermemory = new Supermemory({
-  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
-});
-
-async function run() {
-  const result = await supermemory.profile({
-    containerTag: "<value>",
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { SupermemoryCore } from "supermemory/core.js";
-import { profile } from "supermemory/funcs/profile.js";
-
-// Use `SupermemoryCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const supermemory = new SupermemoryCore({
-  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
-});
-
-async function run() {
-  const res = await profile(supermemory, {
-    containerTag: "<value>",
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("profile failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.PostV4ProfileRequest](../../models/operations/post-v4-profile-request.md)                                                                                          | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-
-### Response
-
-**Promise\<[operations.PostV4ProfileResponse](../../models/operations/post-v4-profile-response.md)\>**
-
-### Errors
-
-| Error Type                     | Status Code                    | Content Type                   |
-| ------------------------------ | ------------------------------ | ------------------------------ |
-| errors.ErrorResponse           | 400, 401, 402                  | application/json               |
+| errors.ErrorResponse           | 400                            | application/json               |
+| errors.ValidationErrorResponse | 400                            | application/json               |
+| errors.ErrorResponse           | 401, 402, 403, 409             | application/json               |
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
 
 ## search
 
-Search memory entries - Low latency for conversational
+Recall the most relevant learned context and source passages from a namespace. Hybrid search combines memories with document chunks by default, with optional query rewriting, reranking, and supporting context attachments.
 
 ### Example Usage
 
-<!-- UsageSnippet language="typescript" operationID="postV4Search" method="post" path="/v4/search" -->
+<!-- UsageSnippet language="typescript" operationID="postNsByNamespaceSearch" method="post" path="/ns/{namespace}/search" -->
 ```typescript
 import { Supermemory } from "supermemory";
 
@@ -248,13 +122,12 @@ const supermemory = new Supermemory({
 
 async function run() {
   const result = await supermemory.search({
-    containerTag: "user_alex",
-    containerTags: [
-      "user_alex",
-    ],
-    threshold: 0.5,
-    include: {},
-    q: "what are the API rate limits",
+    namespace: "user_alex",
+    body: {
+      query: "what are the API rate limits",
+      threshold: 0.5,
+      rerank: "order",
+    },
   });
 
   console.log(result);
@@ -279,13 +152,12 @@ const supermemory = new SupermemoryCore({
 
 async function run() {
   const res = await search(supermemory, {
-    containerTag: "user_alex",
-    containerTags: [
-      "user_alex",
-    ],
-    threshold: 0.5,
-    include: {},
-    q: "what are the API rate limits",
+    namespace: "user_alex",
+    body: {
+      query: "what are the API rate limits",
+      threshold: 0.5,
+      rerank: "order",
+    },
   });
   if (res.ok) {
     const { value: result } = res;
@@ -302,19 +174,195 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.PostV4SearchRequest](../../models/operations/post-v4-search-request.md)                                                                                            | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `request`                                                                                                                                                                      | [operations.PostNsByNamespaceSearchRequest](../../models/operations/post-ns-by-namespace-search-request.md)                                                                    | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 | `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
 
 ### Response
 
-**Promise\<[operations.PostV4SearchResponse](../../models/operations/post-v4-search-response.md)\>**
+**Promise\<[operations.PostNsByNamespaceSearchResponse](../../models/operations/post-ns-by-namespace-search-response.md)\>**
 
 ### Errors
 
 | Error Type                     | Status Code                    | Content Type                   |
 | ------------------------------ | ------------------------------ | ------------------------------ |
-| errors.ErrorResponse           | 400, 401, 402                  | application/json               |
+| errors.ErrorResponse           | 400                            | application/json               |
+| errors.ValidationErrorResponse | 400                            | application/json               |
+| errors.ErrorResponse           | 401, 402, 403                  | application/json               |
+| errors.ErrorResponse           | 500                            | application/json               |
+| errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
+
+## profile
+
+Read a continuously maintained understanding of the subject represented by this namespace. Stable facts, evolving context, and selected custom buckets are returned together without requiring a search query.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="postNsByNamespaceProfile" method="post" path="/ns/{namespace}/profile" -->
+```typescript
+import { Supermemory } from "supermemory";
+
+const supermemory = new Supermemory({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const result = await supermemory.profile({
+    namespace: "user_alex",
+    body: {
+      buckets: [
+        "interests",
+        "goals",
+      ],
+    },
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { SupermemoryCore } from "supermemory/core.js";
+import { profile } from "supermemory/funcs/profile.js";
+
+// Use `SupermemoryCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const supermemory = new SupermemoryCore({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const res = await profile(supermemory, {
+    namespace: "user_alex",
+    body: {
+      buckets: [
+        "interests",
+        "goals",
+      ],
+    },
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("profile failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.PostNsByNamespaceProfileRequest](../../models/operations/post-ns-by-namespace-profile-request.md)                                                                  | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[operations.PostNsByNamespaceProfileResponse](../../models/operations/post-ns-by-namespace-profile-response.md)\>**
+
+### Errors
+
+| Error Type                     | Status Code                    | Content Type                   |
+| ------------------------------ | ------------------------------ | ------------------------------ |
+| errors.ErrorResponse           | 400                            | application/json               |
+| errors.ValidationErrorResponse | 400                            | application/json               |
+| errors.ErrorResponse           | 401, 403                       | application/json               |
+| errors.ErrorResponse           | 500                            | application/json               |
+| errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
+
+## list
+
+Browse documents, source chunks, or learned memories through one predictable paginated contract. Choose the collection in the path; the other collection arrays remain empty for a stable response shape.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="postNsByNamespaceListByType" method="post" path="/ns/{namespace}/list/{type}" -->
+```typescript
+import { Supermemory } from "supermemory";
+
+const supermemory = new Supermemory({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const result = await supermemory.list({
+    namespace: "user_alex",
+    type: "memories",
+    page: 1,
+    limit: 10,
+    sort: "createdAt",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { SupermemoryCore } from "supermemory/core.js";
+import { list } from "supermemory/funcs/list.js";
+
+// Use `SupermemoryCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const supermemory = new SupermemoryCore({
+  apiKey: process.env["SUPERMEMORY_API_KEY"] ?? "",
+});
+
+async function run() {
+  const res = await list(supermemory, {
+    namespace: "user_alex",
+    type: "memories",
+    page: 1,
+    limit: 10,
+    sort: "createdAt",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("list failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.PostNsByNamespaceListByTypeRequest](../../models/operations/post-ns-by-namespace-list-by-type-request.md)                                                          | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[operations.PostNsByNamespaceListByTypeResponse](../../models/operations/post-ns-by-namespace-list-by-type-response.md)\>**
+
+### Errors
+
+| Error Type                     | Status Code                    | Content Type                   |
+| ------------------------------ | ------------------------------ | ------------------------------ |
+| errors.ErrorResponse           | 400                            | application/json               |
+| errors.ValidationErrorResponse | 400                            | application/json               |
+| errors.ErrorResponse           | 401, 403                       | application/json               |
 | errors.ErrorResponse           | 500                            | application/json               |
 | errors.SupermemoryDefaultError | 4XX, 5XX                       | \*/\*                          |
