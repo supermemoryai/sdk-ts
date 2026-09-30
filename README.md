@@ -148,7 +148,6 @@ run();
 ### [Supermemory SDK](docs/sdks/supermemory/README.md)
 
 * [add](docs/sdks/supermemory/README.md#add) - Add document
-* [patchV3SettingsSecurity](docs/sdks/supermemory/README.md#patchv3settingssecurity)
 * [profile](docs/sdks/supermemory/README.md#profile) - Get user profile
 * [search](docs/sdks/supermemory/README.md#search) - Search memory entries
 
@@ -263,7 +262,6 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`memoriesForgetMatching`](docs/sdks/memories/README.md#forgetmatching) - Forget memories matching a prompt/query
 - [`memoriesList`](docs/sdks/memories/README.md#list) - List memory entries with history
 - [`memoriesUpdateMemory`](docs/sdks/memories/README.md#updatememory) - Update a memory (creates new version)
-- [`patchV3SettingsSecurity`](docs/sdks/supermemory/README.md#patchv3settingssecurity)
 - [`profile`](docs/sdks/supermemory/README.md#profile) - Get user profile
 - [`profilesBuckets`](docs/sdks/profiles/README.md#buckets) - Get profile buckets
 - [`search`](docs/sdks/supermemory/README.md#search) - Search memory entries
@@ -432,7 +430,7 @@ run();
 ### Error Classes
 **Primary errors:**
 * [`SupermemoryError`](./src/models/errors/supermemory-error.ts): The base class for HTTP error responses.
-  * [`ErrorResponse`](./src/models/errors/error-response.ts): *
+  * [`ErrorResponse`](./src/models/errors/error-response.ts): Generic error.
 
 <details><summary>Less common errors (6)</summary>
 
@@ -450,8 +448,6 @@ run();
 * [`ResponseValidationError`](./src/models/errors/response-validation-error.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>
-
-\* Check [the method documentation](#available-resources-and-operations) to see if the error is applicable.
 <!-- End Error Handling [errors] -->
 
 <!-- Start Server Selection [server] -->

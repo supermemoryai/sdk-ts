@@ -1,18 +1,18 @@
 lockVersion: 2.0.0
 id: 3f23d198-f06e-4822-83be-88cf668214c6
 management:
-  docChecksum: 1c4eb726ce6871ca56deecdbbb68e167
+  docChecksum: d2ac895af5446cbfffcc77e4d2d3dd73
   docVersion: 3.0.0
-  speakeasyVersion: 1.798.0
-  generationVersion: 2.938.0
-  releaseVersion: 5.0.0-rc.4
-  configChecksum: 6df8050c59c73f2de7c3e2c161204a8d
+  speakeasyVersion: 1.799.0
+  generationVersion: 2.941.0
+  releaseVersion: 5.0.0-rc.5
+  configChecksum: 67868ef355f7b0d916cfad155149ef9e
   repoURL: https://github.com/supermemoryai/sdk-ts.git
   installationURL: https://github.com/supermemoryai/sdk-ts
 persistentEdits:
-  generation_id: 4630cbf5-f970-4b23-a91f-2fc25e2d307e
-  pristine_commit_hash: 18e113f34f515c9966125575545dedce07ee10a7
-  pristine_tree_hash: f65964ad484e429363e133b491404d37ff1827c7
+  generation_id: 76529e50-5807-4d25-aed3-9a6bd5a3852d
+  pristine_commit_hash: 239904b41c8157dcd8cabd13d0cf5ec5fdf7eb84
+  pristine_tree_hash: d33b24090b83316758f45b4a9ea7322df0203965
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -509,10 +509,6 @@ trackedFiles:
     id: b10d76ce037b
     last_write_checksum: sha1:eb671a64348d1af875bc10a96823893c8578aad6
     pristine_git_object: 0db5fdf116854ad960b918e87fd09dd812a4f0bc
-  docs/models/operations/patch-v3-settings-security-request.md:
-    id: 77e2248b11d7
-    last_write_checksum: sha1:16858bcd48faa87c0d653bc39cc903c5083603c8
-    pristine_git_object: d03e727734ba452bb3e1c6b4c5b645f478acc74f
   docs/models/operations/patch-v4-memories-metadata.md:
     id: 522e1fc6482c
     last_write_checksum: sha1:59022530b69d24c2db4312cd8fcdc6f7e36273e6
@@ -1083,8 +1079,8 @@ trackedFiles:
     pristine_git_object: 94b4f1dd568dd358b15c16d4950561d0fb4990d4
   docs/sdks/supermemory/README.md:
     id: e975e5f6aecd
-    last_write_checksum: sha1:0e514ee514ba820614129d1370d1a9d2b8519216
-    pristine_git_object: d5a92b20f1c483cefc0dfb4d22ab524571c4eba3
+    last_write_checksum: sha1:d9d9757d6eefa9139af1c341e2821663181c36bc
+    pristine_git_object: a08fdd0f4cd69b6ba35ee82e56405eb75a5f359d
   examples/.env.template:
     id: 52cbe5afed92
     last_write_checksum: sha1:f2a7127c36e7239553dd29d272ed3f5bd440e793
@@ -1103,12 +1099,12 @@ trackedFiles:
     pristine_git_object: d674a4dc4b7785eeff4fadb2f8f3312e8b1c9768
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:f41629e3592e23971c55e395d5de6e6817048ec6
-    pristine_git_object: 5e43b23c6cfd2908c9aae2e620ba06d0a984c8d0
+    last_write_checksum: sha1:865c5dbe9865908e121300214cc5d7c847edc160
+    pristine_git_object: 829589af65507a5706b92c4e33b5eca8fbc6bc3e
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:c45cef10af69875f7d8c315118461c9ea033c65c
-    pristine_git_object: 5e77e58d96a51397d8a35707dfc51e58c7cc4cd1
+    last_write_checksum: sha1:700efeb7dad8f80ce43f7296c455274c37951f39
+    pristine_git_object: 24911152584519a8b6088d3328e36c96250261b7
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:e904bd3c7f54bc5d6a77f09563781eab7e7454a1
@@ -1249,10 +1245,6 @@ trackedFiles:
     id: 004b435efee3
     last_write_checksum: sha1:874d16e1aac10e6a6f2acd5f6b1b086939b4a41e
     pristine_git_object: 175755836389329c94a91a0b468f5b8d4e35e854
-  src/funcs/patch-v3-settings-security.ts:
-    id: f411a33f8408
-    last_write_checksum: sha1:a9479fdb08f7013c3a99a7f4ab32b2a2b9962838
-    pristine_git_object: b1c10b2203f6c908dac8d29b8eb6b537a9c70f7e
   src/funcs/profile.ts:
     id: 1b23ee909fbd
     last_write_checksum: sha1:5c5a19404e3dc46f4b6110c902c33c560a58981f
@@ -1303,8 +1295,8 @@ trackedFiles:
     pristine_git_object: d99272cb1977945363c9c0349420b6e4962453a1
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:38c5ba41ef89a3cd75cd6fe6bd2c89579d9cb536
-    pristine_git_object: 4144ab213e29c540b00cecfc4bcb552a0671273f
+    last_write_checksum: sha1:76954adda9dd3fb3ee1167aa28a6d7b582281789
+    pristine_git_object: 00d26f34667410a421516127fc8f001caf86e3b6
   src/lib/encodings.ts:
     id: 3bd8ead98afd
     last_write_checksum: sha1:af7147b2e016c87a58bd21d1f3f45944060cc74c
@@ -1459,8 +1451,8 @@ trackedFiles:
     pristine_git_object: 66c385d3018ca68f6f625808c45e1985a90b5b38
   src/models/operations/index.ts:
     id: 0d9ffaf774d2
-    last_write_checksum: sha1:8aabc10a71bf31d8926381799151c68c3ada4c50
-    pristine_git_object: 6c2fee208cb71a2cee1bcab840f2dabce2375747
+    last_write_checksum: sha1:7c40720b632a79580f11daedff1fb9f4d8bc57d6
+    pristine_git_object: 8f475a4a9efb2c19873022b33b0c2b8bfd4199d5
   src/models/operations/patch-v3-container-tags-by-container-tag.ts:
     id: 1bf09187e475
     last_write_checksum: sha1:395746929f13e61159c6056e88578bda7f3d3163
@@ -1469,10 +1461,6 @@ trackedFiles:
     id: 0fac273a03f9
     last_write_checksum: sha1:ae5e428dc54e8a437c87886d31db76fea487695f
     pristine_git_object: f6533558e96f551f79fd9faf284c7a0d1bd4526e
-  src/models/operations/patch-v3-settings-security.ts:
-    id: 0d50fd020a50
-    last_write_checksum: sha1:ec5d8ba6d0a7e8a060005a2a0b48de7f47acda99
-    pristine_git_object: eb1c98943609724907a852721954eae06c94428f
   src/models/operations/patch-v3-settings.ts:
     id: a7bc21aec455
     last_write_checksum: sha1:8360210a5e7e84ebfe9a2cdd575afafa42a2f0a6
@@ -1603,8 +1591,8 @@ trackedFiles:
     pristine_git_object: 2665be1ac26fde34c3d44eda16ec4b2cd453e2c8
   src/sdk/sdk.ts:
     id: 784571af2f69
-    last_write_checksum: sha1:40eb5286fa686732cbf70320154da0e1dac0b074
-    pristine_git_object: bfabf84b355d8e0e32190e44d07d17cebb32c84c
+    last_write_checksum: sha1:3592b319b850d8d6dbcbb54f53a10ca5f28ccfa3
+    pristine_git_object: fdec8d535eb007e93e961fddfed14316c5068b64
   src/sdk/settings.ts:
     id: b7e993b8acd3
     last_write_checksum: sha1:2937aff5bbe448d98a2a3fef01793f973939d736
@@ -2147,4 +2135,6 @@ examples:
       requestBody:
         application/json: {"requireTwoFactor": true}
 examplesVersion: 1.0.2
-releaseNotes: "## Typescript SDK Changes:\n* `supermemory.settings.get()`:  `response.workspacePrompt` **Removed** (Breaking ⚠️)\n* `supermemory.connections.listDocuments()`:  `response.[].id` **Changed** (Breaking ⚠️)\n* `supermemory.profile()`:  `response.searchResults.results[]` **Changed** (Breaking ⚠️)\n* `supermemory.search()`:  `response.results[]` **Changed** (Breaking ⚠️)\n* `supermemory.connections.deleteById()`:  `response` **Changed** (Breaking ⚠️)\n* `supermemory.connections.deleteByProvider()`:  `response` **Changed** (Breaking ⚠️)\n* `supermemory.settings.reset()`:  `response.clearedBrainMemoryRegistry` **Removed** (Breaking ⚠️)\n* `supermemory.settings.update()`: \n  *  `request` **Changed** (Breaking ⚠️)\n  *  `response.updated.workspacePrompt` **Removed** (Breaking ⚠️)\n* `supermemory.documents.search()`:  `response.results[].chunks[].position` **Added**\n* `supermemory.patchV3SettingsSecurity()`: **Added**\n* `supermemory.documents.listProcessing()`: \n  *  `request` **Added**\n  *  `response` **Changed**\n  *  `error.status[400]` **Added**\n* `supermemory.documents.get()`:  `response` **Changed**\n* `supermemory.containerTags.mergeStatus()`:  `response` **Changed**\n* `supermemory.conversations.add()`: \n  *  `response.status[200]` **Added**\n  *  `error` **Changed**\n* `supermemory.connections.create()`:  `response` **Changed**\n* `supermemory.documents.update()`: \n  *  `request.body.documentDate` **Added**\n* `supermemory.documents.batchAdd()`: \n  *  `request` **Changed**\n  *  `response.results[].url` **Added**\n* `supermemory.add()`: \n  *  `request.documentDate` **Added**\n"
+releaseNotes: |
+  ## Typescript SDK Changes:
+  * `supermemory.patchV3SettingsSecurity()`: **Removed** (Breaking ⚠️)

@@ -2214,22 +2214,6 @@ paths:
           source: "curl -X POST \"https://api.supermemory.ai/v3/search\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"q\": \"gift policy for VP promotions\",\n    \"containerTags\": [\"user_123\"],\n    \"limit\": 5\n  }'"
       x-speakeasy-name-override: search
       x-speakeasy-group: documents
-  /v3/settings/security:
-    patch:
-      operationId: "patchV3SettingsSecurity"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: "object"
-              properties:
-                requireTwoFactor:
-                  type: "boolean"
-              required:
-                - "requireTwoFactor"
-      responses:
-        "200": {}
   /v3/settings:
     get:
       operationId: "getV3Settings"
