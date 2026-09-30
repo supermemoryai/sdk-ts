@@ -4,7 +4,6 @@
  */
 
 import { add } from "../funcs/add.js";
-import { patchV3SettingsSecurity } from "../funcs/patch-v3-settings-security.js";
 import { profile } from "../funcs/profile.js";
 import { search } from "../funcs/search.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
@@ -65,17 +64,6 @@ export class Supermemory extends ClientSDK {
     options?: RequestOptions,
   ): Promise<operations.PostV3DocumentsResponse> {
     return unwrapAsync(add(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  async patchV3SettingsSecurity(
-    request: operations.PatchV3SettingsSecurityRequest,
-    options?: RequestOptions,
-  ): Promise<void> {
-    return unwrapAsync(patchV3SettingsSecurity(
       this,
       request,
       options,
