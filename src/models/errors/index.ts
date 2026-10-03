@@ -3,20 +3,27 @@
  * @generated-id: 6c192521844d
  */
 
+export * from "./delete-ns-by-namespace-connectors-by-id.js";
 export * from "./delete-ns-by-namespace-document.js";
 export * from "./delete-ns-by-namespace-memories-semantic.js";
 export * from "./delete-ns-by-namespace-memories.js";
 export * from "./delete-ns-by-namespace-profile-buckets.js";
 export * from "./delete-ns-by-namespace.js";
 export * from "./error-response.js";
+export * from "./get-connectors.js";
+export * from "./get-ns-by-namespace-connectors-by-id.js";
+export * from "./get-ns-by-namespace-connectors.js";
 export * from "./get-ns-by-namespace-document-by-id.js";
 export * from "./get-ns-by-namespace-profile-buckets.js";
 export * from "./get-ns-by-namespace.js";
 export * from "./http-client-errors.js";
+export * from "./patch-ns-by-namespace-connectors-by-id.js";
 export * from "./patch-ns-by-namespace-document-by-id.js";
 export * from "./patch-ns-by-namespace-document-file-by-id.js";
 export * from "./patch-ns-by-namespace.js";
 export * from "./patch-organization.js";
+export * from "./post-ns-by-namespace-connectors-by-id-sync.js";
+export * from "./post-ns-by-namespace-connectors.js";
 export * from "./post-ns-by-namespace-document-batch.js";
 export * from "./post-ns-by-namespace-document-file-by-id.js";
 export * from "./post-ns-by-namespace-document-file.js";

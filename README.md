@@ -166,6 +166,16 @@ run();
 * [profile](docs/sdks/supermemory/README.md#profile) - Get profile
 * [list](docs/sdks/supermemory/README.md#list) - List resources
 
+### [Connectors](docs/sdks/connectors/README.md)
+
+* [getConnectors](docs/sdks/connectors/README.md#getconnectors) - List all connectors
+* [postNsByNamespaceConnectors](docs/sdks/connectors/README.md#postnsbynamespaceconnectors) - Create connector
+* [getNsByNamespaceConnectors](docs/sdks/connectors/README.md#getnsbynamespaceconnectors) - List connectors
+* [getNsByNamespaceConnectorsById](docs/sdks/connectors/README.md#getnsbynamespaceconnectorsbyid) - Get connector
+* [patchNsByNamespaceConnectorsById](docs/sdks/connectors/README.md#patchnsbynamespaceconnectorsbyid) - Update connector
+* [deleteNsByNamespaceConnectorsById](docs/sdks/connectors/README.md#deletensbynamespaceconnectorsbyid) - Delete connector
+* [postNsByNamespaceConnectorsByIdSync](docs/sdks/connectors/README.md#postnsbynamespaceconnectorsbyidsync) - Sync connector
+
 ### [Documents](docs/sdks/documents/README.md)
 
 * [delete](docs/sdks/documents/README.md#delete) - Delete documents
@@ -218,6 +228,13 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 <summary>Available standalone functions</summary>
 
 - [`add`](docs/sdks/supermemory/README.md#add) - Add document
+- [`connectorsDeleteNsByNamespaceConnectorsById`](docs/sdks/connectors/README.md#deletensbynamespaceconnectorsbyid) - Delete connector
+- [`connectorsGetConnectors`](docs/sdks/connectors/README.md#getconnectors) - List all connectors
+- [`connectorsGetNsByNamespaceConnectors`](docs/sdks/connectors/README.md#getnsbynamespaceconnectors) - List connectors
+- [`connectorsGetNsByNamespaceConnectorsById`](docs/sdks/connectors/README.md#getnsbynamespaceconnectorsbyid) - Get connector
+- [`connectorsPatchNsByNamespaceConnectorsById`](docs/sdks/connectors/README.md#patchnsbynamespaceconnectorsbyid) - Update connector
+- [`connectorsPostNsByNamespaceConnectors`](docs/sdks/connectors/README.md#postnsbynamespaceconnectors) - Create connector
+- [`connectorsPostNsByNamespaceConnectorsByIdSync`](docs/sdks/connectors/README.md#postnsbynamespaceconnectorsbyidsync) - Sync connector
 - [`documentsBatchAdd`](docs/sdks/documents/README.md#batchadd) - Batch add documents
 - [`documentsDelete`](docs/sdks/documents/README.md#delete) - Delete documents
 - [`documentsGet`](docs/sdks/documents/README.md#get) - Get document
