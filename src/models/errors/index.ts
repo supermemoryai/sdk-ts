@@ -25,7 +25,6 @@ export * from "./patch-organization.js";
 export * from "./post-ns-by-namespace-connectors-by-id-sync.js";
 export * from "./post-ns-by-namespace-connectors.js";
 export * from "./post-ns-by-namespace-document-batch.js";
-export * from "./post-ns-by-namespace-document-file-by-id.js";
 export * from "./post-ns-by-namespace-document-file.js";
 export * from "./post-ns-by-namespace-document.js";
 export * from "./post-ns-by-namespace-list-by-type.js";

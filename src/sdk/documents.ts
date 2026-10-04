@@ -6,7 +6,6 @@
 import { documentsBatchAdd } from "../funcs/documents-batch-add.js";
 import { documentsDelete } from "../funcs/documents-delete.js";
 import { documentsGet } from "../funcs/documents-get.js";
-import { documentsReplaceWithFile } from "../funcs/documents-replace-with-file.js";
 import { documentsUpdateFile } from "../funcs/documents-update-file.js";
 import { documentsUpdate } from "../funcs/documents-update.js";
 import { documentsUploadFile } from "../funcs/documents-upload-file.js";
@@ -94,23 +93,6 @@ export class Documents extends ClientSDK {
     options?: RequestOptions,
   ): Promise<operations.PostNsByNamespaceDocumentFileResponse> {
     return unwrapAsync(documentsUploadFile(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
-   * Replace document with file
-   *
-   * @remarks
-   * Replace an existing document with a new file while keeping its stable document ID. Content and caller metadata are overwritten, then the document is reprocessed asynchronously.
-   */
-  async replaceWithFile(
-    request: operations.PostNsByNamespaceDocumentFileByIdRequest,
-    options?: RequestOptions,
-  ): Promise<operations.PostNsByNamespaceDocumentFileByIdResponse> {
-    return unwrapAsync(documentsReplaceWithFile(
       this,
       request,
       options,
