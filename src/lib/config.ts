@@ -15,7 +15,7 @@ export const ServerList = [
   /**
    * Production Server
    */
-  "https://api.supermemory.ai",
+  "http://localhost:8787",
 ] as const;
 
 export type SDKOptions = {
@@ -63,6 +63,6 @@ export const SDK_METADATA = {
   language: "typescript",
   openapiDocVersion: "5.0.0",
   sdkVersion: "5.0.0-rc.5",
-  genVersion: "2.941.0",
-  userAgent: "speakeasy-sdk/typescript 5.0.0-rc.5 2.941.0 5.0.0 supermemory",
+  genVersion: "2.943.0",
+  userAgent: "speakeasy-sdk/typescript 5.0.0-rc.5 2.943.0 5.0.0 supermemory",
 } as const;

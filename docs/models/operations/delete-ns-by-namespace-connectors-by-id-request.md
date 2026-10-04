@@ -1,0 +1,20 @@
+# DeleteNsByNamespaceConnectorsByIdRequest
+
+## Example Usage
+
+```typescript
+import { DeleteNsByNamespaceConnectorsByIdRequest } from "supermemory/models/operations";
+
+let value: DeleteNsByNamespaceConnectorsByIdRequest = {
+  namespace: "user_alex",
+  id: "PTzGiUYei7pgzg5buzZHgA",
+};
+```
+
+## Fields
+
+| Field                                                                                                                                         | Type                                                                                                                                          | Required                                                                                                                                      | Description                                                                                                                                   | Example                                                                                                                                       |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `namespace`                                                                                                                                   | *string*                                                                                                                                      | :heavy_check_mark:                                                                                                                            | Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories. | user_alex                                                                                                                                     |
+| `id`                                                                                                                                          | *string*                                                                                                                                      | :heavy_check_mark:                                                                                                                            | Connector identifier returned when the connector was created                                                                                  | PTzGiUYei7pgzg5buzZHgA                                                                                                                        |
+| `deleteDocuments`                                                                                                                             | [operations.DeleteDocuments](../../models/operations/delete-documents.md)                                                                     | :heavy_minus_sign:                                                                                                                            | Also delete documents this connector imported. Defaults to true.                                                                              |                                                                                                                                               |
