@@ -21,14 +21,9 @@ jobs:
       - run: bun run build
       # Includes ESM + CJS import checks against dist/ via Node
       - run: bun test
-
-  # src/generated must be exactly what scripts/generate.ts produces from the
-  # committed spec + fern/ config — no hand edits.
-  generated:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      # src/generated must be exactly what scripts/generate.ts produces from the
+      # committed spec + fern/ config — no hand edits. Runs in this job: a second
+      # job often waits 15 minutes for a runner and gets cancelled.
       - run: SKIP_FETCH=1 bun scripts/generate.ts
       - name: Check for drift
         run: |
