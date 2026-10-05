@@ -166,6 +166,16 @@ run();
 * [profile](docs/sdks/supermemory/README.md#profile) - Get profile
 * [list](docs/sdks/supermemory/README.md#list) - List resources
 
+### [Connectors](docs/sdks/connectors/README.md)
+
+* [listAll](docs/sdks/connectors/README.md#listall) - List all connectors
+* [create](docs/sdks/connectors/README.md#create) - Create connector
+* [list](docs/sdks/connectors/README.md#list) - List connectors
+* [get](docs/sdks/connectors/README.md#get) - Get connector
+* [update](docs/sdks/connectors/README.md#update) - Update connector
+* [delete](docs/sdks/connectors/README.md#delete) - Delete connector
+* [sync](docs/sdks/connectors/README.md#sync) - Sync connector
+
 ### [Documents](docs/sdks/documents/README.md)
 
 * [delete](docs/sdks/documents/README.md#delete) - Delete documents
@@ -218,6 +228,13 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 <summary>Available standalone functions</summary>
 
 - [`add`](docs/sdks/supermemory/README.md#add) - Add document
+- [`connectorsCreate`](docs/sdks/connectors/README.md#create) - Create connector
+- [`connectorsDelete`](docs/sdks/connectors/README.md#delete) - Delete connector
+- [`connectorsGet`](docs/sdks/connectors/README.md#get) - Get connector
+- [`connectorsList`](docs/sdks/connectors/README.md#list) - List connectors
+- [`connectorsListAll`](docs/sdks/connectors/README.md#listall) - List all connectors
+- [`connectorsSync`](docs/sdks/connectors/README.md#sync) - Sync connector
+- [`connectorsUpdate`](docs/sdks/connectors/README.md#update) - Update connector
 - [`documentsBatchAdd`](docs/sdks/documents/README.md#batchadd) - Batch add documents
 - [`documentsDelete`](docs/sdks/documents/README.md#delete) - Delete documents
 - [`documentsGet`](docs/sdks/documents/README.md#get) - Get document
