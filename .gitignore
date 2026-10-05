@@ -6,3 +6,4 @@ bin/
 .env.local
 .env.*.local
 .DS_Store
+tests/.docs-snippets/

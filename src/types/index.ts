@@ -1,0 +1,14 @@
+/*
+ * Runtime helper carried over unchanged from the 5.0.0-rc.5 SDK so behaviour is
+ * identical. Hand-maintained and independent of the API spec.
+ */
+
+export { blobLikeSchema, isBlobLike } from "./blobs.js";
+export * from "./default-to-zero-value.js";
+export type { ClosedEnum, OpenEnum } from "./enums.js";
+export type { Result } from "./fp.js";
+export type { PageIterator, Paginator } from "./operations.js";
+export { createPageIterator } from "./operations.js";
+export * from "./primitives.js";
+export { RFCDate } from "./rfcdate.js";
+export * from "./unrecognized.js";

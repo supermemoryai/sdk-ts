@@ -15,7 +15,7 @@
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
+  "types": "./dist/cjs/index.d.ts",
   "exports": {
     ".": {
       "import": {
@@ -27,7 +27,67 @@
         "default": "./dist/cjs/index.js"
       }
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./types": {
+      "import": {
+        "types": "./dist/esm/types/index.d.ts",
+        "default": "./dist/esm/types/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/types/index.d.ts",
+        "default": "./dist/cjs/types/index.js"
+      }
+    },
+    "./models/errors": {
+      "import": {
+        "types": "./dist/esm/models/errors/index.d.ts",
+        "default": "./dist/esm/models/errors/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/models/errors/index.d.ts",
+        "default": "./dist/cjs/models/errors/index.js"
+      }
+    },
+    "./models": {
+      "import": {
+        "types": "./dist/esm/models/index.d.ts",
+        "default": "./dist/esm/models/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/models/index.d.ts",
+        "default": "./dist/cjs/models/index.js"
+      }
+    },
+    "./models/operations": {
+      "import": {
+        "types": "./dist/esm/models/operations/index.d.ts",
+        "default": "./dist/esm/models/operations/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/models/operations/index.d.ts",
+        "default": "./dist/cjs/models/operations/index.js"
+      }
+    },
+    "./*.js": {
+      "import": {
+        "types": "./dist/esm/*.d.ts",
+        "default": "./dist/esm/*.js"
+      },
+      "require": {
+        "types": "./dist/cjs/*.d.ts",
+        "default": "./dist/cjs/*.js"
+      }
+    },
+    "./*": {
+      "import": {
+        "types": "./dist/esm/*.d.ts",
+        "default": "./dist/esm/*.js"
+      },
+      "require": {
+        "types": "./dist/cjs/*.d.ts",
+        "default": "./dist/cjs/*.js"
+      }
+    }
   },
   "files": [
     "dist",
@@ -41,13 +101,43 @@
   "scripts": {
     "generate": "bun scripts/generate.ts",
     "build": "rm -rf dist && tsc -p tsconfig.json && tsc -p tsconfig.cjs.json && bun scripts/cjs-package.ts",
-    "check-types": "tsc --noEmit -p tsconfig.json",
+    "check-types": "tsc --noEmit -p tsconfig.json && tsc -p tests/rc5-compat/tsconfig.types.json && bun tests/rc5-compat/check-snippets.ts && bun tests/check-docs.ts",
     "test": "bun test",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "bun run build",
+    "generate:surface": "SURFACE_ONLY=1 bun scripts/generate.ts"
   },
   "devDependencies": {
     "@types/bun": "^1.2.0",
     "@types/node": "22",
-    "typescript": "~5.9.3"
+    "dotenv": "^18.0.5",
+    "supermemory-rc5": "npm:supermemory@5.0.0-rc.5",
+    "typescript": "~5.9.3",
+    "undici": "^8.11.2"
+  },
+  "dependencies": {
+    "zod": "^3.25.65 || ^4.0.0"
+  },
+  "typesVersions": {
+    "*": {
+      "dist/*": [
+        "./dist/*"
+      ],
+      "models": [
+        "./dist/cjs/models/index.d.ts"
+      ],
+      "models/errors": [
+        "./dist/cjs/models/errors/index.d.ts"
+      ],
+      "models/operations": [
+        "./dist/cjs/models/operations/index.d.ts"
+      ],
+      "types": [
+        "./dist/cjs/types/index.d.ts"
+      ],
+      "*": [
+        "./dist/cjs/*",
+        "./dist/cjs/*/index.d.ts"
+      ]
+    }
   }
 }

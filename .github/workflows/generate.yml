@@ -38,11 +38,12 @@ jobs:
         env:
           VERSION: ${{ inputs.version }}
         run: |
-          if [ -z "$VERSION" ] && [ -n "$(git status --porcelain -- src/generated)" ]; then
+          if [ -z "$VERSION" ] && [ -n "$(git status --porcelain -- src)" ]; then
             VERSION=$(node -p "const v=require('./package.json').version; const m=v.match(/^(.*-[a-z]+\.)(\d+)$/); m ? m[1]+(+m[2]+1) : v.replace(/(\d+)$/, n => +n+1)")
           fi
           if [ -n "$VERSION" ]; then
             npm version "$VERSION" --no-git-tag-version --allow-same-version
+            SURFACE_ONLY=1 bun scripts/generate.ts   # re-stamp the version into src/lib/surface.ts
           fi
           echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
           {
@@ -64,7 +65,7 @@ jobs:
           commit-message: "chore: regenerate SDK from v5 OpenAPI spec (${{ steps.meta.outputs.version }})"
           title: "chore: regenerate SDK (${{ steps.meta.outputs.version }})"
           body: |
-            Regenerated `src/generated` from `https://api.supermemory.ai/v5/openapi` with Fern (`bun scripts/generate.ts`).
+            Regenerated `src/generated` (Fern) and the public surface (`src/models`, `src/funcs`, `src/sdk`) from `https://api.supermemory.ai/v5/openapi` with Fern (`bun scripts/generate.ts`).
 
             Merging publishes **${{ steps.meta.outputs.version }}** to npm (`rc` tag for prereleases, `latest` otherwise) if that version isn't published yet.
 

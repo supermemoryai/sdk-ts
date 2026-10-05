@@ -1,14 +1,19 @@
-// Public entry point (hand-written). Everything under ./generated is produced
-// by scripts/generate.ts from fern/ — edit fern/overlay.yaml, not generated code.
-import { SupermemoryClient } from "./generated/Client.js";
+/*
+ * Public entry point. Same exports as 5.0.0-rc.5:
+ *
+ *   import Supermemory from "supermemory";
+ *   import { Supermemory, HTTPClient, SDKOptions } from "supermemory";
+ *
+ * Models and errors live at "supermemory/models", "supermemory/models/operations"
+ * and "supermemory/models/errors"; standalone functions at "supermemory/funcs/*".
+ */
 
-// Request/response types and per-status error classes (NotFoundError, …).
-export * from "./generated/api/index.js";
-export type { BaseClientOptions, BaseRequestOptions } from "./generated/BaseClient.js";
-export { SupermemoryEnvironment } from "./generated/environments.js";
-export { SupermemoryError, SupermemoryTimeoutError } from "./generated/errors/index.js";
-export * from "./generated/core/exports.js";
+export * from "./lib/config.js";
+export * as files from "./lib/files.js";
+export { HTTPClient } from "./lib/http.js";
+export type { Fetcher, HTTPClientOptions } from "./lib/http.js";
+export * from "./sdk/sdk.js";
 
-// `new Supermemory({ apiKey })`, plus `import Supermemory from "supermemory"`.
-export { SupermemoryClient as Supermemory, SupermemoryClient };
-export default SupermemoryClient;
+// Default export, as in the v4 (Stainless) SDK: `import Supermemory from "supermemory"`.
+import { Supermemory } from "./sdk/sdk.js";
+export default Supermemory;

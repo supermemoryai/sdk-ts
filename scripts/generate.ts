@@ -19,6 +19,12 @@ if ((await $`docker info`.quiet().nothrow()).exitCode !== 0) {
   process.exit(1);
 }
 
+if (process.env.SURFACE_ONLY) {
+  const { generateSurface } = await import("./surface/generate.ts");
+  await generateSurface(root);
+  process.exit(0);
+}
+
 if (!process.env.SKIP_FETCH) {
   console.log(`==> Fetching ${specUrl}`);
   const res = await fetch(specUrl);
@@ -41,5 +47,10 @@ if (!(await Bun.file("src/generated/Client.ts").exists())) {
 
 // Run metadata embeds the git commit, so it would never diff clean.
 await $`rm -rf src/generated/.fern`;
+
+// The public SDK surface (models, funcs, sdk classes) on top of src/generated.
+const { generateSurface } = await import("./surface/generate.ts");
+const { ops, types } = await generateSurface(root);
+console.log(`==> Surface: ${ops} operations, ${types} named types`);
 
 console.log("==> Done. Review with: git diff --stat");

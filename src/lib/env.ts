@@ -1,0 +1,62 @@
+/*
+ * Runtime helper carried over unchanged from the 5.0.0-rc.5 SDK so behaviour is
+ * identical. Hand-maintained and independent of the API spec.
+ */
+
+import * as z from "zod/v4-mini";
+
+export interface Env {
+  SUPERMEMORY_API_KEY?: string | undefined;
+
+  SUPERMEMORY_DEBUG?: boolean | undefined;
+}
+
+export const envSchema: z.ZodMiniType<Env, unknown> = z.object({
+  SUPERMEMORY_API_KEY: z.optional(z.string()),
+
+  SUPERMEMORY_DEBUG: z.optional(z.coerce.boolean()),
+});
+
+/**
+ * Checks for the existence of the Deno global object to determine the environment.
+ * @returns {boolean} True if the runtime is Deno, false otherwise.
+ */
+function isDeno() {
+  if ("Deno" in globalThis) {
+    return true;
+  }
+
+  return false;
+}
+
+let envMemo: Env | undefined = undefined;
+/**
+ * Reads and validates environment variables.
+ */
+export function env(): Env {
+  if (envMemo) {
+    return envMemo;
+  }
+
+  const globals = globalThis as {
+    Deno?: { env?: { toObject?: () => Record<string, string | undefined> } };
+    process?: { env?: Record<string, string | undefined> };
+  };
+
+  let envObject: Record<string, unknown> = {};
+  if (isDeno()) {
+    envObject = globals.Deno?.env?.toObject?.() ?? {};
+  } else {
+    envObject = globals.process?.env ?? {};
+  }
+
+  envMemo = envSchema.parse(envObject);
+  return envMemo;
+}
+
+/**
+ * Clears the cached env object. Useful for testing with a fresh environment.
+ */
+export function resetEnv() {
+  envMemo = undefined;
+}
