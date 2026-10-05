@@ -1,0 +1,73 @@
+name: Generate SDK
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  # Fired by the API deploy when /v5/openapi changes:
+  #   gh api repos/supermemoryai/sdk-ts/dispatches -f event_type=openapi-updated
+  repository_dispatch:
+    types: [openapi-updated]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Set the SDK version (e.g. 5.0.0-rc.7 or 5.0.0). Leave empty to auto-bump when the generated code changes.
+        type: string
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+
+      - name: Generate from https://api.supermemory.ai/v5/openapi
+        run: bun scripts/generate.ts
+
+      # Explicit version wins; otherwise bump only when the SDK itself changed
+      # (5.0.0-rc.6 -> 5.0.0-rc.7, 5.0.0 -> 5.0.1).
+      - name: Version
+        id: meta
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [ -z "$VERSION" ] && [ -n "$(git status --porcelain -- src/generated)" ]; then
+            VERSION=$(node -p "const v=require('./package.json').version; const m=v.match(/^(.*-[a-z]+\.)(\d+)$/); m ? m[1]+(+m[2]+1) : v.replace(/(\d+)$/, n => +n+1)")
+          fi
+          if [ -n "$VERSION" ]; then
+            npm version "$VERSION" --no-git-tag-version --allow-same-version
+          fi
+          echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+          {
+            echo 'stat<<EOF'
+            git diff --stat -- fern/openapi.json src | tail -n 25
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - run: bun run check-types && bun run build && bun test
+
+      # Opens (or updates) a single PR; does nothing if nothing changed.
+      # PRs opened with the default GITHUB_TOKEN don't trigger CI — set
+      # CODEGEN_PR_TOKEN (fine-grained PAT or app token) so checks run on them.
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.CODEGEN_PR_TOKEN || github.token }}
+          branch: codegen/regenerate
+          delete-branch: true
+          commit-message: "chore: regenerate SDK from v5 OpenAPI spec (${{ steps.meta.outputs.version }})"
+          title: "chore: regenerate SDK (${{ steps.meta.outputs.version }})"
+          body: |
+            Regenerated `src/generated` from `https://api.supermemory.ai/v5/openapi` with Fern (`bun scripts/generate.ts`).
+
+            Merging publishes **${{ steps.meta.outputs.version }}** to npm (`rc` tag for prereleases, `latest` otherwise) if that version isn't published yet.
+
+            ```
+            ${{ steps.meta.outputs.stat }}
+            ```

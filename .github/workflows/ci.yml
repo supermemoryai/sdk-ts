@@ -1,0 +1,39 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+      - run: bun run check-types
+      - run: bun run build
+      # Includes ESM + CJS import checks against dist/ via Node
+      - run: bun test
+
+  # src/generated must be exactly what scripts/generate.ts produces from the
+  # committed spec + fern/ config — no hand edits.
+  generated:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: SKIP_FETCH=1 bun scripts/generate.ts
+      - name: Check for drift
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --short
+            echo "::error::Generated code is out of date or was edited by hand. Run SKIP_FETCH=1 bun run generate and commit."
+            exit 1
+          fi

@@ -1,0 +1,7 @@
+export * from "./DeleteNamespacesResponse.js";
+export * from "./GetNamespacesResponse.js";
+export * from "./GetNamespacesResponseSystem.js";
+export * from "./ListNamespacesResponseItem.js";
+export * from "./ListNamespacesResponseItemSystem.js";
+export * from "./UpdateNamespacesResponse.js";
+export * from "./UpdateNamespacesResponseSystem.js";
