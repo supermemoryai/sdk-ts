@@ -98,6 +98,36 @@ test("a thrown fetch is retried, an abort is not", async () => {
   expect(calls).toBe(1);
 });
 
+test("profileMarkdown returns text that happens to be valid JSON, or empty, unchanged", async () => {
+  for (const body of ["123", '"hello"', "", "{}"]) {
+    const client = new Supermemory({ apiKey: "sm_test", fetch: (async () => new Response(body, { status: 200, headers: { "content-type": "text/markdown" } })) as typeof globalThis.fetch });
+    expect(await client.profileMarkdown("user_alex")).toBe(body);
+  }
+});
+
+test("profileMarkdown maps a 404 to NotFoundError-compatible SupermemoryError", async () => {
+  const client = new Supermemory({ apiKey: "sm_test", fetch: (async () => new Response('{"error":"nope"}', { status: 404, headers: { "content-type": "application/json" } })) as typeof globalThis.fetch, maxRetries: 0 });
+  const err = await client.profileMarkdown("user_alex").catch((e: unknown) => e);
+  expect(err).toBeInstanceOf(SupermemoryError);
+  expect((err as SupermemoryError).statusCode).toBe(404);
+});
+
+test("an abort with a custom reason is not retried", async () => {
+  let calls = 0;
+  const ac = new AbortController();
+  const aborting = (_input: RequestInfo | URL, init?: RequestInit) => {
+    calls++;
+    ac.abort(new Error("user cancelled"));
+    return Promise.reject(init?.signal?.reason ?? new Error("user cancelled"));
+  };
+  const client = new Supermemory({ apiKey: "sm_test", fetch: aborting as typeof globalThis.fetch, maxRetries: 2 });
+  const t0 = Date.now();
+  const err = await client.namespaces.list({ abortSignal: ac.signal }).catch((e: unknown) => e);
+  expect(err).toBeInstanceOf(SupermemoryError);
+  expect(calls).toBe(1);
+  expect(Date.now() - t0).toBeLessThan(500);
+});
+
 test("profileMarkdown sends Accept: text/markdown and returns the text", async () => {
   const sent: Request[] = [];
   const md = async (input: RequestInfo | URL, init?: RequestInit) => {

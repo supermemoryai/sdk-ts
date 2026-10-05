@@ -1,6 +1,10 @@
 import type * as Api from "./generated/api/index.js";
 import { ConnectorsClient } from "./generated/api/resources/connectors/client/Client.js";
 import { SupermemoryClient } from "./generated/Client.js";
+import * as core from "./generated/core/index.js";
+import { mergeHeaders } from "./generated/core/headers.js";
+import { SupermemoryEnvironment } from "./generated/environments.js";
+import { handleNonStatusCodeError } from "./generated/errors/handleNonStatusCodeError.js";
 import { SupermemoryError } from "./generated/errors/index.js";
 
 // Fern cannot inline the per-provider union body of connectors.create, so it alone would take `{ body }`. Accept the body directly like every other method.
@@ -21,19 +25,37 @@ export class Supermemory extends SupermemoryClient {
 
   /** The profile as a markdown document (`Accept: text/markdown`). `profile()` always returns JSON. */
   async profileMarkdown(namespace: string, request: Api.ProfileRequest = {}, requestOptions?: SupermemoryClient.RequestOptions): Promise<string> {
-    const headers = { ...requestOptions?.headers, Accept: "text/markdown" };
-    const body: unknown = await this.profile(namespace, request, { ...requestOptions, headers });
-    // Fern parses every 2xx as JSON; a text body comes back as its non-json marker with the raw text attached.
-    const raw = (body as { ok?: boolean; error?: { reason?: string; rawBody?: string } } | undefined)?.error;
-    if (raw?.reason === "non-json" && typeof raw.rawBody === "string") return raw.rawBody;
-    throw new SupermemoryError({ message: "Expected a markdown profile but the server returned JSON", body });
+    const auth = await this._options.authProvider.getAuthRequest();
+    const response = await core.fetcher<string>({
+      url: core.url.join(
+        (await core.Supplier.get(this._options.baseUrl)) ?? (await core.Supplier.get(this._options.environment)) ?? SupermemoryEnvironment.Default,
+        `ns/${core.url.encodePathParam(namespace)}/profile`,
+      ),
+      method: "POST",
+      headers: mergeHeaders(auth.headers, this._options.headers, requestOptions?.headers, { Accept: "text/markdown" }),
+      contentType: "application/json",
+      queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+      requestType: "json",
+      body: request,
+      responseType: "text",
+      timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options.timeoutInSeconds ?? 60) * 1000,
+      maxRetries: requestOptions?.maxRetries ?? this._options.maxRetries,
+      abortSignal: requestOptions?.abortSignal,
+      fetchFn: this._options.fetch,
+      logging: this._options.logging,
+    });
+    if (response.ok) return response.body;
+    if (response.error.reason === "status-code") {
+      throw new SupermemoryError({ statusCode: response.error.statusCode, body: response.error.body, rawResponse: response.rawResponse });
+    }
+    return handleNonStatusCodeError(response.error, response.rawResponse, "POST", `/ns/${namespace}/profile`);
   }
 }
 export { SupermemoryClient };
 export type { BaseClientOptions as SupermemoryOptions, BaseRequestOptions as RequestOptions } from "./generated/BaseClient.js";
 export * from "./generated/api/index.js";
 export { SupermemoryError, SupermemoryTimeoutError } from "./generated/errors/index.js";
-export { SupermemoryEnvironment } from "./generated/environments.js";
+export { SupermemoryEnvironment };
 export * from "./generated/exports.js";
 
 export default Supermemory;

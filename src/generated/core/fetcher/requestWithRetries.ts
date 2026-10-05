@@ -51,13 +51,14 @@ function getRetryDelayFromHeaders(response: Response, retryAttempt: number): num
 export async function requestWithRetries(
     requestFn: () => Promise<Response>,
     maxRetries: number = DEFAULT_MAX_RETRIES,
+    abortSignal?: AbortSignal,
 ): Promise<Response> {
     for (let i = 0; ; ++i) {
         let response: Response;
         try {
             response = await requestFn();
         } catch (error) {
-            const aborted = error instanceof Error && error.name === "AbortError";
+            const aborted = abortSignal?.aborted === true || (error instanceof Error && error.name === "AbortError");
             if (aborted || i >= maxRetries) throw error;
             await new Promise((resolve) => setTimeout(resolve, addSymmetricJitter(Math.min(INITIAL_RETRY_DELAY * 2 ** i, MAX_RETRY_DELAY))));
             continue;

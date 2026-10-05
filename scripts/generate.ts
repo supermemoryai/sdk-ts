@@ -67,13 +67,14 @@ await Bun.write(
     `export async function requestWithRetries(
     requestFn: () => Promise<Response>,
     maxRetries: number = DEFAULT_MAX_RETRIES,
+    abortSignal?: AbortSignal,
 ): Promise<Response> {
     for (let i = 0; ; ++i) {
         let response: Response;
         try {
             response = await requestFn();
         } catch (error) {
-            const aborted = error instanceof Error && error.name === "AbortError";
+            const aborted = abortSignal?.aborted === true || (error instanceof Error && error.name === "AbortError");
             if (aborted || i >= maxRetries) throw error;
             await new Promise((resolve) => setTimeout(resolve, addSymmetricJitter(Math.min(INITIAL_RETRY_DELAY * 2 ** i, MAX_RETRY_DELAY))));
             continue;
@@ -84,5 +85,11 @@ await Bun.write(
 }
 `,
 );
+
+const fetcherFile = "src/generated/core/fetcher/Fetcher.ts";
+const fetcherSrc = await Bun.file(fetcherFile).text();
+const callSite = "            args.maxRetries,\n        );";
+if (fetcherSrc.split(callSite).length !== 2) throw new Error(`${fetcherFile}: requestWithRetries call site not found once; review the Fern upgrade`);
+await Bun.write(fetcherFile, fetcherSrc.replace(callSite, "            args.maxRetries,\n            args.abortSignal,\n        );"));
 
 console.log("==> Done. Review with: git diff --stat");
