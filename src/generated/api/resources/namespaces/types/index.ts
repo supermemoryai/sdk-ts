@@ -1,4 +1,6 @@
 export * from "./DeleteNamespacesResponse.js";
+export * from "./DeleteNamespacesResponseDeleted.js";
+export * from "./DeleteNamespacesResponseQueued.js";
 export * from "./GetNamespacesResponse.js";
 export * from "./GetNamespacesResponseSystem.js";
 export * from "./ListNamespacesResponseItem.js";

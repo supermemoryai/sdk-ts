@@ -7812,40 +7812,84 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "const": true,
-                      "description": "Confirms the namespace was deleted"
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean",
+                          "const": true,
+                          "description": "Confirms the namespace was deleted"
+                        },
+                        "status": {
+                          "type": "string",
+                          "const": "deleted",
+                          "description": "The namespace and its content are gone"
+                        },
+                        "namespace": {
+                          "type": "string",
+                          "description": "Deleted namespace identifier"
+                        },
+                        "deletedDocumentsCount": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991,
+                          "description": "Number of documents permanently removed"
+                        },
+                        "deletedMemoriesCount": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991,
+                          "description": "Number of memories permanently removed"
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "status",
+                        "namespace",
+                        "deletedDocumentsCount",
+                        "deletedMemoriesCount"
+                      ]
                     },
-                    "namespace": {
-                      "type": "string",
-                      "description": "Deleted namespace identifier"
-                    },
-                    "deletedDocumentsCount": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991,
-                      "description": "Number of documents permanently removed"
-                    },
-                    "deletedMemoriesCount": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991,
-                      "description": "Number of memories permanently removed"
+                    {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean",
+                          "const": true,
+                          "description": "Confirms the namespace move was accepted"
+                        },
+                        "status": {
+                          "type": "string",
+                          "const": "queued",
+                          "description": "The move continues asynchronously after this response"
+                        },
+                        "operationId": {
+                          "type": "string",
+                          "description": "Identifier used to trace the asynchronous move operation"
+                        },
+                        "namespace": {
+                          "type": "string",
+                          "description": "Source namespace being removed"
+                        },
+                        "moveTo": {
+                          "type": "string",
+                          "description": "Destination namespace receiving the content"
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "status",
+                        "operationId",
+                        "namespace",
+                        "moveTo"
+                      ]
                     }
-                  },
-                  "required": [
-                    "success",
-                    "namespace",
-                    "deletedDocumentsCount",
-                    "deletedMemoriesCount"
                   ]
                 }
               }
             },
-            "description": "Namespace permanently deleted"
+            "description": "Namespace permanently deleted (status \"deleted\"). A move answers 202 with status \"queued\"."
           },
           "202": {
             "content": {
