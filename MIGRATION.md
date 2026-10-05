@@ -13,7 +13,7 @@ URL values first as positional arguments, then one object with everything else. 
 ```ts
 await client.add("user_alex", { content: "...", dreaming: "instant" });
 await client.documents.get("user_alex", "doc-1", { attach: ["chunks"] });
-await client.connectors.delete("user_alex", "conn_1", { deleteDocuments: "false" });
+await client.connectors.delete("user_alex", "conn_1", { deleteDocuments: false });
 await client.organization.update({ organizationalContext: "..." }); // no URL values, so just the object
 ```
 

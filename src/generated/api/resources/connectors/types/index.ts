@@ -13,7 +13,6 @@ export * from "./CreateConnectorsRequestBodyS3Config.js";
 export * from "./CreateConnectorsRequestBodyWebCrawler.js";
 export * from "./CreateConnectorsRequestBodyWebCrawlerConfig.js";
 export * from "./CreateConnectorsResponse.js";
-export * from "./DeleteConnectorsRequestDeleteDocuments.js";
 export * from "./DeleteConnectorsResponse.js";
 export * from "./GetConnectorsResponse.js";
 export * from "./GetConnectorsResponseCapabilities.js";

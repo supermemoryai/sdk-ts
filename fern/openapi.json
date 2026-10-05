@@ -7033,12 +7033,7 @@
             "in": "query",
             "name": "deleteDocuments",
             "schema": {
-              "default": "true",
-              "type": "string",
-              "enum": [
-                "true",
-                "false"
-              ]
+              "type": "boolean"
             },
             "description": "Also delete documents this connector imported. Defaults to true."
           }

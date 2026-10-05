@@ -485,7 +485,7 @@ export class ConnectorsClient {
     ): Promise<core.WithRawResponse<Supermemory.DeleteConnectorsResponse>> {
         const { deleteDocuments } = request;
         const _queryParams: Record<string, unknown> = {
-            deleteDocuments: deleteDocuments != null ? deleteDocuments : undefined,
+            deleteDocuments,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(

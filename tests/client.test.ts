@@ -30,7 +30,7 @@ const routes: Array<[string, (c: Supermemory) => Promise<unknown>, string, strin
   ["connectors.listAll", (c) => c.connectors.listAll({ provider: "notion", page: 2 }), "GET", "/connectors?provider=notion&page=2"],
   ["connectors.listAll (no options)", (c) => c.connectors.listAll(), "GET", "/connectors"],
   ["connectors.create", (c) => c.connectors.create("user_alex", { provider: "web-crawler", config: { startUrl: "https://example.com", crawlDepth: 2 } }), "POST", "/ns/user_alex/connectors", { provider: "web-crawler", config: { startUrl: "https://example.com", crawlDepth: 2 } }],
-  ["connectors.delete", (c) => c.connectors.delete("user_alex", "c1", { deleteDocuments: "false" }), "DELETE", "/ns/user_alex/connectors/c1?deleteDocuments=false"],
+  ["connectors.delete", (c) => c.connectors.delete("user_alex", "c1", { deleteDocuments: false }), "DELETE", "/ns/user_alex/connectors/c1?deleteDocuments=false"],
   ["connectors.sync", (c) => c.connectors.sync("user_alex", "c1"), "POST", "/ns/user_alex/connectors/c1/sync"],
 ];
 
