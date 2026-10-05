@@ -23,7 +23,7 @@ const spec: OperationSpec = {
   path: "/connectors",
   fern: [
     "connectors",
-    "listProviders"
+    "listAll"
   ],
   params: [
     {
@@ -46,9 +46,9 @@ const spec: OperationSpec = {
 /**
  * List connectors across every namespace this key can read. Use it for admin views that span users or projects.
  */
-export function connectorsListProviders(
+export function connectorsListAll(
   client: SupermemoryCore,
-  request: GetConnectorsRequest,
+  request?: GetConnectorsRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
@@ -65,7 +65,7 @@ export function connectorsListProviders(
     | SDKValidationError
   >
 > {
-  return invoke(client, spec, request, GetConnectorsRequest$outboundSchema, options, [
+  return invoke(client, spec, request ?? {}, GetConnectorsRequest$outboundSchema, options, [
     M.json(200, z.lazy(() => GetConnectorsResponse$inboundSchema)),
     M.jsonErr(400, GetConnectorsBadRequest$inboundSchema),
     M.jsonErr([401, 403], ErrorResponse$inboundSchema),

@@ -54,7 +54,7 @@ Every content operation is scoped to a **namespace** (a user ID, project ID, or 
 | `client.documents.{get, update, delete, batchAdd, uploadFile, replaceWithFile, updateFile}` | `/ns/{namespace}/document…` |
 | `client.memories.{forget, forgetMatching}` | `/ns/{namespace}/memories…` |
 | `client.profiles.{getBuckets, setBuckets, deleteBuckets}` | `/ns/{namespace}/profile/buckets` |
-| `client.connectors.{listProviders, list, create, get, update, delete, sync}` | `/connectors`, `/ns/{namespace}/connectors…` |
+| `client.connectors.{listAll, list, create, get, update, delete, sync}` | `/connectors`, `/ns/{namespace}/connectors…` |
 | `client.namespaces.{list, get, update, delete}` | `/ns`, `/ns/{namespace}` |
 | `client.organization.{get, update}` | `/organization` |
 

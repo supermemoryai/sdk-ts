@@ -29,7 +29,7 @@ export class ConnectorsClient {
     /**
      * List connectors across every namespace this key can read. Use it for admin views that span users or projects.
      *
-     * @param {Supermemory.ListProvidersConnectorsRequest} request
+     * @param {Supermemory.ListAllConnectorsRequest} request
      * @param {ConnectorsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Supermemory.BadRequestError}
@@ -40,19 +40,19 @@ export class ConnectorsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.connectors.listProviders()
+     *     await client.connectors.listAll()
      */
-    public listProviders(
-        request: Supermemory.ListProvidersConnectorsRequest = {},
+    public listAll(
+        request: Supermemory.ListAllConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
-    ): core.HttpResponsePromise<Supermemory.ListProvidersConnectorsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listProviders(request, requestOptions));
+    ): core.HttpResponsePromise<Supermemory.ListAllConnectorsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listAll(request, requestOptions));
     }
 
-    private async __listProviders(
-        request: Supermemory.ListProvidersConnectorsRequest = {},
+    private async __listAll(
+        request: Supermemory.ListAllConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Supermemory.ListProvidersConnectorsResponse>> {
+    ): Promise<core.WithRawResponse<Supermemory.ListAllConnectorsResponse>> {
         const { provider, page, limit } = request;
         const _queryParams: Record<string, unknown> = {
             provider: provider != null ? provider : undefined,
@@ -87,7 +87,7 @@ export class ConnectorsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Supermemory.ListProvidersConnectorsResponse,
+                data: _response.body as Supermemory.ListAllConnectorsResponse,
                 rawResponse: _response.rawResponse,
             };
         }

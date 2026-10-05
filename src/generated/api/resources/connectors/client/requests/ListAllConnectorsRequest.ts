@@ -6,9 +6,9 @@ import type * as Supermemory from "../../../../index.js";
  * @example
  *     {}
  */
-export interface ListProvidersConnectorsRequest {
+export interface ListAllConnectorsRequest {
     /** Only return connectors for this provider */
-    provider?: Supermemory.ListProvidersConnectorsRequestProvider;
+    provider?: Supermemory.ListAllConnectorsRequestProvider;
     /** One-based page number */
     page?: number;
     /** Maximum connectors to return per page */

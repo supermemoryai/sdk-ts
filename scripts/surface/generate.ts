@@ -552,6 +552,7 @@ export async function generateSurface(root: string) {
     })();
 
     const req = plan.request;
+    const reqOpt = !!req && !(R(nonNull(req.schema).schema).required ?? []).length;
     let reqSchema = "undefined";
     let reqType = "";
     if (req) {
@@ -591,7 +592,7 @@ export async function generateSurface(root: string) {
     out.push(`const spec: OperationSpec = ${JSON.stringify(specObj, null, 2).replace(/"([A-Za-z]+)":/g, "$1:")};\n`);
     const desc = [op.description].filter(Boolean).join("\n");
     out.push(
-      `${doc(desc)}export function ${plan.funcName}(\n  client: SupermemoryCore,\n${req ? `  request: ${reqType},\n` : ""}  options?: RequestOptions,\n): APIPromise<\n  ${resultType}\n> {\n  return invoke(client, spec, ${req ? "request" : "undefined"}, ${reqSchema}, options, [\n${[...successMatchers, ...errMatchers].map((x) => `    ${x},\n`).join("")}  ]);\n}\n`,
+      `${doc(desc)}export function ${plan.funcName}(\n  client: SupermemoryCore,\n${req ? `  request${reqOpt ? "?" : ""}: ${reqType},\n` : ""}  options?: RequestOptions,\n): APIPromise<\n  ${resultType}\n> {\n  return invoke(client, spec, ${req ? (reqOpt ? "request ?? {}" : "request") : "undefined"}, ${reqSchema}, options, [\n${[...successMatchers, ...errMatchers].map((x) => `    ${x},\n`).join("")}  ]);\n}\n`,
     );
     funcs.push(plan.funcFile);
   }
@@ -604,6 +605,7 @@ export async function generateSurface(root: string) {
   }
   const method = (plan: OpPlan, m: string) => {
     const req = plan.request;
+    const reqOpt = !!req && !(R(nonNull(req.schema).schema).required ?? []).length;
     use(m, `funcs/${plan.funcFile}`, plan.funcName);
     use(m, "types/fp", "unwrapAsync");
     use(m, "lib/sdks", "RequestOptions");
@@ -613,7 +615,7 @@ export async function generateSurface(root: string) {
       const d = decls.get(P(R(nonNull(req.schema).schema)))!;
       reqType = use(m, d.module, d.name);
     }
-    return `${doc(plan.op.description, "  ")}  async ${plan.op.name}(\n${req ? `    request: ${reqType},\n` : ""}    options?: RequestOptions,\n  ): Promise<${respType}> {\n    return unwrapAsync(${plan.funcName}(\n      this,\n${req ? "      request,\n" : ""}      options,\n    ));\n  }\n`;
+    return `${doc(plan.op.description, "  ")}  async ${plan.op.name}(\n${req ? `    request${reqOpt ? "?" : ""}: ${reqType},\n` : ""}    options?: RequestOptions,\n  ): Promise<${respType}> {\n    return unwrapAsync(${plan.funcName}(\n      this,\n${req ? "      request,\n" : ""}      options,\n    ));\n  }\n`;
   };
   const subgroups = [...groups.keys()].filter((g): g is string => g !== null);
   for (const g of subgroups) {

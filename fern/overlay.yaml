@@ -28,7 +28,7 @@ actions:
   - { target: '$.paths["/ns/{namespace}/profile/buckets"].put', update: { x-fern-sdk-group-name: profiles, x-fern-sdk-method-name: setBuckets } }
   - { target: '$.paths["/ns/{namespace}/profile/buckets"].delete', update: { x-fern-sdk-group-name: profiles, x-fern-sdk-method-name: deleteBuckets } }
   # connectors
-  - { target: '$.paths["/connectors"].get', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: listProviders } }
+  - { target: '$.paths["/connectors"].get', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: listAll } }
   - { target: '$.paths["/ns/{namespace}/connectors"].post', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: create } }
   - { target: '$.paths["/ns/{namespace}/connectors"].get', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: list } }
   - { target: '$.paths["/ns/{namespace}/connectors/{id}"].get', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: get } }

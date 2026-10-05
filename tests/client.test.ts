@@ -20,7 +20,7 @@ function stub(status = 200, body: unknown = {}, opts: Record<string, unknown> = 
 }
 
 const connectorCases: Array<[string, (c: Supermemory) => Promise<unknown>, string, string]> = [
-  ["listProviders", (c) => c.connectors.listProviders({ provider: "notion", page: 2 }), "GET", "/connectors"],
+  ["listAll", (c) => c.connectors.listAll({ provider: "notion", page: 2 }), "GET", "/connectors"],
   ["list", (c) => c.connectors.list({ namespace: "user_alex" }), "GET", "/ns/user_alex/connectors"],
   ["get", (c) => c.connectors.get({ namespace: "user_alex", id: "c1" }), "GET", "/ns/user_alex/connectors/c1"],
   ["delete", (c) => c.connectors.delete({ namespace: "user_alex", id: "c1" }), "DELETE", "/ns/user_alex/connectors/c1"],

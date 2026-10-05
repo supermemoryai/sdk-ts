@@ -2,12 +2,12 @@
 
 import type * as Supermemory from "../../../index.js";
 
-export interface ListProvidersConnectorsResponseConnectorsItem {
+export interface ListAllConnectorsResponseConnectorsItem {
     id: string;
     /** External source */
-    provider: Supermemory.ListProvidersConnectorsResponseConnectorsItemProvider;
+    provider: Supermemory.ListAllConnectorsResponseConnectorsItemProvider;
     /** pending_authorization until the user finishes the provider login at authUrl; DELETE cancels it. Pending connectors are not listed. */
-    status: Supermemory.ListProvidersConnectorsResponseConnectorsItemStatus;
+    status: Supermemory.ListAllConnectorsResponseConnectorsItemStatus;
     /** Present while pending, when the caller can create connectors in this namespace: where to send the user to authorize */
     authUrl?: string | undefined;
     /** Present while pending: when authUrl stops working */
@@ -16,23 +16,20 @@ export interface ListProvidersConnectorsResponseConnectorsItem {
     namespace: string | null;
     /** Account on the provider side, usually an email */
     account: string | null;
-    capabilities: Supermemory.ListProvidersConnectorsResponseConnectorsItemCapabilities;
+    capabilities: Supermemory.ListAllConnectorsResponseConnectorsItemCapabilities;
     /** Non-secret setup, such as the S3 bucket, crawler start URL or Notion workspace. Credentials are never returned. */
-    config: Record<string, Supermemory.ListProvidersConnectorsResponseConnectorsItemConfigValue | null> | null;
+    config: Record<string, Supermemory.ListAllConnectorsResponseConnectorsItemConfigValue | null> | null;
     /** What syncs, grouped by kind, in the same shape PATCH takes. Null for connectors that sync everything. */
-    selection: Record<
-        string,
-        Supermemory.ListProvidersConnectorsResponseConnectorsItemSelectionValueItem[] | null
-    > | null;
+    selection: Record<string, Supermemory.ListAllConnectorsResponseConnectorsItemSelectionValueItem[] | null> | null;
     documentLimit: number;
     documentCount: number;
     /** Most recent sync run */
-    lastSync: Supermemory.ListProvidersConnectorsResponseConnectorsItemLastSync | null;
+    lastSync: Supermemory.ListAllConnectorsResponseConnectorsItemLastSync | null;
     /** When content last finished syncing */
     lastSyncedAt: string | null;
     createdAt: string;
     /** Present when attach=syncs */
-    syncs?: Supermemory.ListProvidersConnectorsResponseConnectorsItemSyncsItem[] | undefined;
+    syncs?: Supermemory.ListAllConnectorsResponseConnectorsItemSyncsItem[] | undefined;
     /** Present when attach=picker. Null for connectors that sync everything. */
-    picker?: (Supermemory.ListProvidersConnectorsResponseConnectorsItemPicker | null) | undefined;
+    picker?: (Supermemory.ListAllConnectorsResponseConnectorsItemPicker | null) | undefined;
 }

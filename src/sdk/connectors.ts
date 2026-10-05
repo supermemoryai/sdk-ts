@@ -5,7 +5,7 @@
 import { connectorsCreate } from "../funcs/connectors-create.js";
 import { connectorsDelete } from "../funcs/connectors-delete.js";
 import { connectorsGet } from "../funcs/connectors-get.js";
-import { connectorsListProviders } from "../funcs/connectors-list-providers.js";
+import { connectorsListAll } from "../funcs/connectors-list-all.js";
 import { connectorsList } from "../funcs/connectors-list.js";
 import { connectorsSync } from "../funcs/connectors-sync.js";
 import { connectorsUpdate } from "../funcs/connectors-update.js";
@@ -23,11 +23,11 @@ export class Connectors extends ClientSDK {
   /**
    * List connectors across every namespace this key can read. Use it for admin views that span users or projects.
    */
-  async listProviders(
-    request: GetConnectorsRequest,
+  async listAll(
+    request?: GetConnectorsRequest,
     options?: RequestOptions,
   ): Promise<GetConnectorsResponse> {
-    return unwrapAsync(connectorsListProviders(
+    return unwrapAsync(connectorsListAll(
       this,
       request,
       options,

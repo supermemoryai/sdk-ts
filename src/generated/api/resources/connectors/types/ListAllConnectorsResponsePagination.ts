@@ -3,7 +3,7 @@
 /**
  * Pagination metadata
  */
-export interface ListProvidersConnectorsResponsePagination {
+export interface ListAllConnectorsResponsePagination {
     currentPage: number;
     limit?: number | undefined;
     totalItems: number;
