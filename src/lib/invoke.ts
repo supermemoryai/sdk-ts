@@ -129,7 +129,8 @@ async function $do(
       return res.clone();
     } catch (err) {
       call.error = err;
-      throw err;
+      // Resolve instead of throwing so Fern's makeRequest reaches its clearTimeout; the stub is never read.
+      return new Response(null, { status: 599 });
     }
   };
 

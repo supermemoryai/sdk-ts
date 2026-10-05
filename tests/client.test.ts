@@ -75,6 +75,22 @@ test("404 throws ErrorResponse, a SupermemoryError", async () => {
   expect((err as SupermemoryError).body).toBe('{"error":"not found"}');
 });
 
+test("Node exits after a failed request (no timer left behind)", () => {
+  const root = new URL("..", import.meta.url).pathname;
+  const out = execFileSync(
+    "node",
+    [
+      "--input-type=module",
+      "-e",
+      `import { Supermemory, HTTPClient } from "supermemory";
+       const client = new Supermemory({ apiKey: "x", httpClient: new HTTPClient({ fetcher: () => { throw new TypeError("fetch failed"); } }) });
+       try { await client.namespaces.list(); } catch (e) { console.log(e.constructor.name); }`,
+    ],
+    { cwd: root, encoding: "utf8", timeout: 5000 },
+  );
+  expect(out.trim()).toBe("ConnectionError");
+});
+
 test("built package imports from Node ESM and CJS, including subpaths", () => {
   const root = new URL("..", import.meta.url).pathname;
   const esm = execFileSync(
