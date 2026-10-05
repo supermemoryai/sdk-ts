@@ -6,13 +6,10 @@ import type * as Supermemory from "../../../../index.js";
 /**
  * @example
  *     {
- *         file: fs.createReadStream("/path/to/your/file"),
- *         namespace: "user_alex"
+ *         file: fs.createReadStream("/path/to/your/file")
  *     }
  */
 export interface UploadFileDocumentsRequest {
-    /** The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents. */
-    namespace: string;
     /** Processing pipeline. "memory" builds durable learned context; "superrag" optimizes the document for retrieval without generating memories. */
     taskType?: Supermemory.UploadFileDocumentsRequestTaskType;
     /** Processing mode. "dynamic" (default) groups related documents so memories form from coherent context. "instant" processes each document independently right away and bills one extra operation per document. */

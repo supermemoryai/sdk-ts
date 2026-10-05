@@ -3,13 +3,10 @@
 /**
  * @example
  *     {
- *         namespace: "user_alex",
  *         ids: ["my-doc-123"]
  *     }
  */
 export interface DeleteDocumentsRequest {
-    /** The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents. */
-    namespace: string;
     /** Document identifiers to permanently delete from this namespace */
     ids: string[];
 }

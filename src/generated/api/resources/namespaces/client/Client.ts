@@ -110,6 +110,7 @@ export class NamespacesClient {
     /**
      * Read the supporting context that helps Supermemory understand content and form better memories inside this namespace.
      *
+     * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
      * @param {Supermemory.GetNamespacesRequest} request
      * @param {NamespacesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -122,22 +123,21 @@ export class NamespacesClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.namespaces.get({
-     *         namespace: "user_alex"
-     *     })
+     *     await client.namespaces.get("user_alex")
      */
     public get(
-        request: Supermemory.GetNamespacesRequest,
+        namespace: string,
+        request: Supermemory.GetNamespacesRequest = {},
         requestOptions?: NamespacesClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.GetNamespacesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(namespace, request, requestOptions));
     }
 
     private async __get(
-        request: Supermemory.GetNamespacesRequest,
+        namespace: string,
+        _request: Supermemory.GetNamespacesRequest = {},
         requestOptions?: NamespacesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.GetNamespacesResponse>> {
-        const { namespace } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -206,6 +206,7 @@ export class NamespacesClient {
     /**
      * Retire a namespace by permanently deleting its content, or preserve that knowledge by moving everything into another namespace first. Moves are queued and complete asynchronously.
      *
+     * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
      * @param {Supermemory.DeleteNamespacesRequest} request
      * @param {NamespacesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -219,22 +220,21 @@ export class NamespacesClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.namespaces.delete({
-     *         namespace: "user_alex"
-     *     })
+     *     await client.namespaces.delete("user_alex")
      */
     public delete(
-        request: Supermemory.DeleteNamespacesRequest,
+        namespace: string,
+        request: Supermemory.DeleteNamespacesRequest = {},
         requestOptions?: NamespacesClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.DeleteNamespacesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__delete(namespace, request, requestOptions));
     }
 
     private async __delete(
-        request: Supermemory.DeleteNamespacesRequest,
+        namespace: string,
+        request: Supermemory.DeleteNamespacesRequest = {},
         requestOptions?: NamespacesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.DeleteNamespacesResponse>> {
-        const { namespace, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -253,7 +253,7 @@ export class NamespacesClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -311,6 +311,7 @@ export class NamespacesClient {
     /**
      * Shape how Supermemory understands an existing namespace by updating the background context used during ingestion and memory formation.
      *
+     * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
      * @param {Supermemory.UpdateNamespacesRequest} request
      * @param {NamespacesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -323,22 +324,21 @@ export class NamespacesClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.namespaces.update({
-     *         namespace: "user_alex"
-     *     })
+     *     await client.namespaces.update("user_alex")
      */
     public update(
-        request: Supermemory.UpdateNamespacesRequest,
+        namespace: string,
+        request: Supermemory.UpdateNamespacesRequest = {},
         requestOptions?: NamespacesClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.UpdateNamespacesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__update(namespace, request, requestOptions));
     }
 
     private async __update(
-        request: Supermemory.UpdateNamespacesRequest,
+        namespace: string,
+        request: Supermemory.UpdateNamespacesRequest = {},
         requestOptions?: NamespacesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.UpdateNamespacesResponse>> {
-        const { namespace, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -357,7 +357,7 @@ export class NamespacesClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

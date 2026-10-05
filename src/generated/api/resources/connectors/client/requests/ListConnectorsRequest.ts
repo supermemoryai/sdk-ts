@@ -4,13 +4,9 @@ import type * as Supermemory from "../../../../index.js";
 
 /**
  * @example
- *     {
- *         namespace: "user_alex"
- *     }
+ *     {}
  */
 export interface ListConnectorsRequest {
-    /** Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories. */
-    namespace: string;
     /** Only return connectors for this provider */
     provider?: Supermemory.ListConnectorsRequestProvider;
     /** One-based page number */

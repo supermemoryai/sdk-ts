@@ -3,13 +3,10 @@
 /**
  * @example
  *     {
- *         namespace: "user_alex",
  *         ids: ["mem_abc123"]
  *     }
  */
 export interface ForgetMemoriesRequest {
-    /** Namespace containing the memories to forget. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories. */
-    namespace: string;
     /** Memory identifiers to remove from normal recall */
     ids: string[];
 }

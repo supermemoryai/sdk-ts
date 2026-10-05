@@ -2,13 +2,9 @@
 
 /**
  * @example
- *     {
- *         namespace: "user_alex"
- *     }
+ *     {}
  */
 export interface DeleteNamespacesRequest {
-    /** Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories. */
-    namespace: string;
     /** Destination namespace that should receive this namespace's content before deletion. Omit to permanently delete the content. */
     moveTo?: string;
 }

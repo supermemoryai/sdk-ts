@@ -29,6 +29,7 @@ export class ProfilesClient {
     /**
      * Inspect the profile taxonomy active in this namespace. The response combines organization-wide buckets with namespace-owned additions as a concise name-to-description map.
      *
+     * @param {string} namespace - The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories.
      * @param {Supermemory.GetBucketsProfilesRequest} request
      * @param {ProfilesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -39,22 +40,21 @@ export class ProfilesClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.profiles.getBuckets({
-     *         namespace: "user_alex"
-     *     })
+     *     await client.profiles.getBuckets("user_alex")
      */
     public getBuckets(
-        request: Supermemory.GetBucketsProfilesRequest,
+        namespace: string,
+        request: Supermemory.GetBucketsProfilesRequest = {},
         requestOptions?: ProfilesClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.GetBucketsProfilesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getBuckets(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__getBuckets(namespace, request, requestOptions));
     }
 
     private async __getBuckets(
-        request: Supermemory.GetBucketsProfilesRequest,
+        namespace: string,
+        _request: Supermemory.GetBucketsProfilesRequest = {},
         requestOptions?: ProfilesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.GetBucketsProfilesResponse>> {
-        const { namespace } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -121,6 +121,7 @@ export class ProfilesClient {
     /**
      * Teach Supermemory new ways to organize this namespace's profile, or refine how existing namespace-owned buckets are classified. Omitted buckets remain unchanged and organization-wide buckets stay protected.
      *
+     * @param {string} namespace - The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories.
      * @param {Supermemory.SetBucketsProfilesRequest} request
      * @param {ProfilesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -134,25 +135,25 @@ export class ProfilesClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.profiles.setBuckets({
-     *         namespace: "user_alex",
+     *     await client.profiles.setBuckets("user_alex", {
      *         buckets: {
      *             "interests": "Topics the subject actively follows"
      *         }
      *     })
      */
     public setBuckets(
+        namespace: string,
         request: Supermemory.SetBucketsProfilesRequest,
         requestOptions?: ProfilesClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.SetBucketsProfilesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__setBuckets(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__setBuckets(namespace, request, requestOptions));
     }
 
     private async __setBuckets(
+        namespace: string,
         request: Supermemory.SetBucketsProfilesRequest,
         requestOptions?: ProfilesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.SetBucketsProfilesResponse>> {
-        const { namespace, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -171,7 +172,7 @@ export class ProfilesClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -237,6 +238,7 @@ export class ProfilesClient {
     /**
      * Remove profile categories created specifically for this namespace. Unknown names are safely ignored, while organization-wide buckets remain protected.
      *
+     * @param {string} namespace - The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories.
      * @param {Supermemory.DeleteBucketsProfilesRequest} request
      * @param {ProfilesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -250,23 +252,23 @@ export class ProfilesClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.profiles.deleteBuckets({
-     *         namespace: "user_alex",
+     *     await client.profiles.deleteBuckets("user_alex", {
      *         buckets: ["interests"]
      *     })
      */
     public deleteBuckets(
+        namespace: string,
         request: Supermemory.DeleteBucketsProfilesRequest,
         requestOptions?: ProfilesClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.DeleteBucketsProfilesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteBuckets(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__deleteBuckets(namespace, request, requestOptions));
     }
 
     private async __deleteBuckets(
+        namespace: string,
         request: Supermemory.DeleteBucketsProfilesRequest,
         requestOptions?: ProfilesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.DeleteBucketsProfilesResponse>> {
-        const { namespace, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -285,7 +287,7 @@ export class ProfilesClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

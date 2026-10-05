@@ -5,14 +5,11 @@ import type * as Supermemory from "../../index.js";
 /**
  * @example
  *     {
- *         namespace: "user_alex",
  *         limit: 10,
  *         query: "what are the API rate limits"
  *     }
  */
 export interface SearchRequest {
-    /** The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories. */
-    namespace: string;
     /** Maximum number of results to return */
     limit?: number;
     /** Search surface. "hybrid" combines learned memories with source chunks, "memories" returns learned context, and "chunks" returns source passages. */

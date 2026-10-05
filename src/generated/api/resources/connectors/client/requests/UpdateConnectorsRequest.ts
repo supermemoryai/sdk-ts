@@ -4,16 +4,9 @@ import type * as Supermemory from "../../../../index.js";
 
 /**
  * @example
- *     {
- *         namespace: "user_alex",
- *         id: "PTzGiUYei7pgzg5buzZHgA"
- *     }
+ *     {}
  */
 export interface UpdateConnectorsRequest {
-    /** Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories. */
-    namespace: string;
-    /** Connector identifier returned when the connector was created */
-    id: string;
     /** What to sync, as ids grouped by kind. GitHub takes repos, Gmail takes labels, Google Drive takes files and folders. Replaces the current selection. */
     selection?: Supermemory.UpdateConnectorsRequestSelection;
     /** Maximum documents this connector imports */

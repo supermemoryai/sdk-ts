@@ -5,14 +5,11 @@ import type * as Supermemory from "../../../../index.js";
 /**
  * @example
  *     {
- *         namespace: "user_alex",
  *         body: {
  *             provider: "notion"
  *         }
  *     }
  */
 export interface CreateConnectorsRequest {
-    /** Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories. */
-    namespace: string;
     body: Supermemory.CreateConnectorsRequestBody;
 }

@@ -129,6 +129,7 @@ export class ConnectorsClient {
     /**
      * List the connectors that sync into this namespace.
      *
+     * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
      * @param {Supermemory.ListConnectorsRequest} request
      * @param {ConnectorsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -140,22 +141,22 @@ export class ConnectorsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.connectors.list({
-     *         namespace: "user_alex"
-     *     })
+     *     await client.connectors.list("user_alex")
      */
     public list(
-        request: Supermemory.ListConnectorsRequest,
+        namespace: string,
+        request: Supermemory.ListConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.ListConnectorsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(namespace, request, requestOptions));
     }
 
     private async __list(
-        request: Supermemory.ListConnectorsRequest,
+        namespace: string,
+        request: Supermemory.ListConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.ListConnectorsResponse>> {
-        const { namespace, provider, page, limit } = request;
+        const { provider, page, limit } = request;
         const _queryParams: Record<string, unknown> = {
             provider: provider != null ? provider : undefined,
             page,
@@ -228,6 +229,7 @@ export class ConnectorsClient {
     /**
      * Connect an external source to this namespace. OAuth providers return an authUrl to send the user to; providers that authenticate with config start syncing right away.
      *
+     * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
      * @param {Supermemory.CreateConnectorsRequest} request
      * @param {ConnectorsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -241,25 +243,26 @@ export class ConnectorsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.connectors.create({
-     *         namespace: "user_alex",
+     *     await client.connectors.create("user_alex", {
      *         body: {
      *             provider: "notion"
      *         }
      *     })
      */
     public create(
+        namespace: string,
         request: Supermemory.CreateConnectorsRequest,
         requestOptions?: ConnectorsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.CreateConnectorsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__create(namespace, request, requestOptions));
     }
 
     private async __create(
+        namespace: string,
         request: Supermemory.CreateConnectorsRequest,
         requestOptions?: ConnectorsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.CreateConnectorsResponse>> {
-        const { namespace, body: _body } = request;
+        const { body: _body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -336,6 +339,8 @@ export class ConnectorsClient {
     /**
      * Read one connector. Add attach=syncs to include its recent sync runs and the items that failed. attach=picker needs an admin with write access, since the link changes what syncs.
      *
+     * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
+     * @param {string} id - Connector identifier returned when the connector was created
      * @param {Supermemory.GetConnectorsRequest} request
      * @param {ConnectorsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -348,23 +353,24 @@ export class ConnectorsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.connectors.get({
-     *         namespace: "user_alex",
-     *         id: "PTzGiUYei7pgzg5buzZHgA"
-     *     })
+     *     await client.connectors.get("user_alex", "PTzGiUYei7pgzg5buzZHgA")
      */
     public get(
-        request: Supermemory.GetConnectorsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.GetConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.GetConnectorsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(namespace, id, request, requestOptions));
     }
 
     private async __get(
-        request: Supermemory.GetConnectorsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.GetConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.GetConnectorsResponse>> {
-        const { namespace, id, attach, returnUrl } = request;
+        const { attach, returnUrl } = request;
         const _queryParams: Record<string, unknown> = {
             attach,
             returnUrl,
@@ -446,6 +452,8 @@ export class ConnectorsClient {
     /**
      * Disconnect a connector and stop its webhooks. Its imported documents are deleted too unless deleteDocuments is false.
      *
+     * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
+     * @param {string} id - Connector identifier returned when the connector was created
      * @param {Supermemory.DeleteConnectorsRequest} request
      * @param {ConnectorsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -458,23 +466,24 @@ export class ConnectorsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.connectors.delete({
-     *         namespace: "user_alex",
-     *         id: "PTzGiUYei7pgzg5buzZHgA"
-     *     })
+     *     await client.connectors.delete("user_alex", "PTzGiUYei7pgzg5buzZHgA")
      */
     public delete(
-        request: Supermemory.DeleteConnectorsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.DeleteConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.DeleteConnectorsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__delete(namespace, id, request, requestOptions));
     }
 
     private async __delete(
-        request: Supermemory.DeleteConnectorsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.DeleteConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.DeleteConnectorsResponse>> {
-        const { namespace, id, deleteDocuments } = request;
+        const { deleteDocuments } = request;
         const _queryParams: Record<string, unknown> = {
             deleteDocuments: deleteDocuments != null ? deleteDocuments : undefined,
         };
@@ -555,6 +564,8 @@ export class ConnectorsClient {
     /**
      * Change what a connector syncs. A new selection replaces the old one and starts a sync.
      *
+     * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
+     * @param {string} id - Connector identifier returned when the connector was created
      * @param {Supermemory.UpdateConnectorsRequest} request
      * @param {ConnectorsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -567,23 +578,23 @@ export class ConnectorsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.connectors.update({
-     *         namespace: "user_alex",
-     *         id: "PTzGiUYei7pgzg5buzZHgA"
-     *     })
+     *     await client.connectors.update("user_alex", "PTzGiUYei7pgzg5buzZHgA")
      */
     public update(
-        request: Supermemory.UpdateConnectorsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.UpdateConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.UpdateConnectorsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__update(namespace, id, request, requestOptions));
     }
 
     private async __update(
-        request: Supermemory.UpdateConnectorsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.UpdateConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.UpdateConnectorsResponse>> {
-        const { namespace, id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -602,7 +613,7 @@ export class ConnectorsClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -660,6 +671,8 @@ export class ConnectorsClient {
     /**
      * Start a sync now. Returns 409 while a sync for this connector is already running.
      *
+     * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
+     * @param {string} id - Connector identifier returned when the connector was created
      * @param {Supermemory.SyncConnectorsRequest} request
      * @param {ConnectorsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -675,23 +688,23 @@ export class ConnectorsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.connectors.sync({
-     *         namespace: "user_alex",
-     *         id: "PTzGiUYei7pgzg5buzZHgA"
-     *     })
+     *     await client.connectors.sync("user_alex", "PTzGiUYei7pgzg5buzZHgA")
      */
     public sync(
-        request: Supermemory.SyncConnectorsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.SyncConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.SyncConnectorsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__sync(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__sync(namespace, id, request, requestOptions));
     }
 
     private async __sync(
-        request: Supermemory.SyncConnectorsRequest,
+        namespace: string,
+        id: string,
+        _request: Supermemory.SyncConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.SyncConnectorsResponse>> {
-        const { namespace, id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

@@ -63,6 +63,7 @@ export class SupermemoryClient {
     /**
      * Turn text or a supported URL into searchable, evolving memory. Supply a new ID to create a document, or reuse an existing ID to append new information while preserving its history.
      *
+     * @param {string} namespace - The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents.
      * @param {Supermemory.AddRequest} request
      * @param {SupermemoryClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -76,23 +77,24 @@ export class SupermemoryClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.add({
-     *         namespace: "user_alex",
+     *     await client.add("user_alex", {
      *         content: "Supermemory turns unstructured content into evolving memory."
      *     })
      */
     public add(
+        namespace: string,
         request: Supermemory.AddRequest,
         requestOptions?: SupermemoryClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.AddResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__add(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__add(namespace, request, requestOptions));
     }
 
     private async __add(
+        namespace: string,
         request: Supermemory.AddRequest,
         requestOptions?: SupermemoryClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.AddResponse>> {
-        const { namespace, taskType, dreaming, ..._body } = request;
+        const { taskType, dreaming, ..._body } = request;
         const _queryParams: Record<string, unknown> = {
             taskType: taskType != null ? taskType : undefined,
             dreaming: dreaming != null ? dreaming : undefined,
@@ -177,6 +179,7 @@ export class SupermemoryClient {
     /**
      * Recall the most relevant learned context and source passages from a namespace. Hybrid search combines memories with document chunks by default, with optional query rewriting, reranking, and supporting context attachments.
      *
+     * @param {string} namespace - The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories.
      * @param {Supermemory.SearchRequest} request
      * @param {SupermemoryClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -189,24 +192,25 @@ export class SupermemoryClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.search({
-     *         namespace: "user_alex",
+     *     await client.search("user_alex", {
      *         limit: 10,
      *         query: "what are the API rate limits"
      *     })
      */
     public search(
+        namespace: string,
         request: Supermemory.SearchRequest,
         requestOptions?: SupermemoryClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.SearchResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__search(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__search(namespace, request, requestOptions));
     }
 
     private async __search(
+        namespace: string,
         request: Supermemory.SearchRequest,
         requestOptions?: SupermemoryClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.SearchResponse>> {
-        const { namespace, limit, searchMode, ..._body } = request;
+        const { limit, searchMode, ..._body } = request;
         const _queryParams: Record<string, unknown> = {
             limit,
             searchMode: searchMode != null ? searchMode : undefined,
@@ -286,6 +290,7 @@ export class SupermemoryClient {
     /**
      * Read a continuously maintained understanding of the subject represented by this namespace. Stable facts, evolving context, and selected custom buckets are returned together without requiring a search query.
      *
+     * @param {string} namespace - The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories.
      * @param {Supermemory.ProfileRequest} request
      * @param {SupermemoryClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -297,22 +302,21 @@ export class SupermemoryClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.profile({
-     *         namespace: "user_alex"
-     *     })
+     *     await client.profile("user_alex")
      */
     public profile(
-        request: Supermemory.ProfileRequest,
+        namespace: string,
+        request: Supermemory.ProfileRequest = {},
         requestOptions?: SupermemoryClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.ProfileResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__profile(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__profile(namespace, request, requestOptions));
     }
 
     private async __profile(
-        request: Supermemory.ProfileRequest,
+        namespace: string,
+        request: Supermemory.ProfileRequest = {},
         requestOptions?: SupermemoryClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.ProfileResponse>> {
-        const { namespace, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -331,7 +335,7 @@ export class SupermemoryClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -379,6 +383,8 @@ export class SupermemoryClient {
     /**
      * Browse documents, source chunks, or learned memories through one predictable paginated contract. Choose the collection in the path; the other collection arrays remain empty for a stable response shape.
      *
+     * @param {string} namespace - Namespace containing the resources to list. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope resources.
+     * @param {Supermemory.ListRequestType} type - Resource collection to list: source documents, extracted chunks, or learned memories
      * @param {Supermemory.ListRequest} request
      * @param {SupermemoryClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -390,23 +396,24 @@ export class SupermemoryClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.list({
-     *         namespace: "user_alex",
-     *         type: "documents"
-     *     })
+     *     await client.list("user_alex", "documents")
      */
     public list(
-        request: Supermemory.ListRequest,
+        namespace: string,
+        type: Supermemory.ListRequestType,
+        request: Supermemory.ListRequest = {},
         requestOptions?: SupermemoryClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.ListResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(namespace, type, request, requestOptions));
     }
 
     private async __list(
-        request: Supermemory.ListRequest,
+        namespace: string,
+        type: Supermemory.ListRequestType,
+        request: Supermemory.ListRequest = {},
         requestOptions?: SupermemoryClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.ListResponse>> {
-        const { namespace, type: type_, page, limit, sort, order, ..._body } = request;
+        const { page, limit, sort, order, ..._body } = request;
         const _queryParams: Record<string, unknown> = {
             page: Array.isArray(page)
                 ? page.map((item) => (typeof item === "string" ? item : toJson(item)))
@@ -436,7 +443,7 @@ export class SupermemoryClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.SupermemoryEnvironment.Default,
-                `ns/${core.url.encodePathParam(namespace)}/list/${core.url.encodePathParam(type_)}`,
+                `ns/${core.url.encodePathParam(namespace)}/list/${core.url.encodePathParam(type)}`,
             ),
             method: "POST",
             headers: _headers,

@@ -19,12 +19,6 @@ if ((await $`docker info`.quiet().nothrow()).exitCode !== 0) {
   process.exit(1);
 }
 
-if (process.env.SURFACE_ONLY) {
-  const { generateSurface } = await import("./surface/generate.ts");
-  await generateSurface(root);
-  process.exit(0);
-}
-
 if (!process.env.SKIP_FETCH) {
   console.log(`==> Fetching ${specUrl}`);
   const res = await fetch(specUrl);
@@ -48,9 +42,18 @@ if (!(await Bun.file("src/generated/Client.ts").exists())) {
 // Run metadata embeds the git commit, so it would never diff clean.
 await $`rm -rf src/generated/.fern`;
 
-// The public SDK surface (models, funcs, sdk classes) on top of src/generated.
-const { generateSurface } = await import("./surface/generate.ts");
-const { ops, types } = await generateSurface(root);
-console.log(`==> Surface: ${ops} operations, ${types} named types`);
+// Fern clears its per-request timer only after fetch resolves; a thrown fetch left a referenced timer that kept Node alive.
+const makeRequest = "src/generated/core/fetcher/makeRequest.ts";
+const src = await Bun.file(makeRequest).text();
+const before = /    const response = await fetchFn\(url, \{\n([\s\S]*?)\n    \}\);\n\n    if \(timeoutAbortId != null\) \{\n        clearTimeout\(timeoutAbortId\);\n    \}\n\n    return response;\n/;
+if (!before.test(src)) throw new Error(`${makeRequest}: timer cleanup pattern not found; review the Fern upgrade`);
+await Bun.write(makeRequest, src.replace(before, (_, init) => `    try {\n        return await fetchFn(url, {\n${init.replace(/^/gm, "    ")}\n        });\n    } finally {\n        if (timeoutAbortId != null) {\n            clearTimeout(timeoutAbortId);\n        }\n    }\n`));
+
+// Fern aborts its timeout with the string "timeout"; Node's fetch rethrows that string, which is not an Error, so the SDK reported a generic error instead of SupermemoryTimeoutError.
+const signals = "src/generated/core/fetcher/signals.ts";
+const sig = await Bun.file(signals).text();
+const abortLine = "const abortId = setTimeout(() => controller.abort(TIMEOUT), timeoutMs);";
+if (!sig.includes(abortLine)) throw new Error(`${signals}: timeout abort pattern not found; review the Fern upgrade`);
+await Bun.write(signals, sig.replace(abortLine, 'const abortId = setTimeout(() => controller.abort(new DOMException(TIMEOUT, "AbortError")), timeoutMs);'));
 
 console.log("==> Done. Review with: git diff --stat");

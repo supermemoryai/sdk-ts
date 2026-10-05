@@ -2,13 +2,9 @@
 
 /**
  * @example
- *     {
- *         namespace: "user_alex"
- *     }
+ *     {}
  */
 export interface UpdateNamespacesRequest {
-    /** Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories. */
-    namespace: string;
     /** Background that guides how Supermemory interprets documents and forms memories. Max 1500 characters. Set null to clear it. */
     supportingContext?: string | null;
 }

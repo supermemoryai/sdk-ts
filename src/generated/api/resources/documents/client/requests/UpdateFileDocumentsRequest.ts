@@ -5,16 +5,9 @@ import type * as Supermemory from "../../../../index.js";
 
 /**
  * @example
- *     {
- *         namespace: "user_alex",
- *         id: "my-doc-123"
- *     }
+ *     {}
  */
 export interface UpdateFileDocumentsRequest {
-    /** The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents. */
-    namespace: string;
-    /** The public document ID */
-    id: string;
     /** Processing pipeline. "memory" builds durable learned context; "superrag" optimizes the document for retrieval without generating memories. */
     taskType?: Supermemory.UpdateFileDocumentsRequestTaskType;
     /** Processing mode. "dynamic" (default) groups related documents so memories form from coherent context. "instant" processes each document independently right away and bills one extra operation per document. */

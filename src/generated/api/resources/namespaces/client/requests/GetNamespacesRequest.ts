@@ -2,11 +2,6 @@
 
 /**
  * @example
- *     {
- *         namespace: "user_alex"
- *     }
+ *     {}
  */
-export interface GetNamespacesRequest {
-    /** Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories. */
-    namespace: string;
-}
+export type GetNamespacesRequest = {};

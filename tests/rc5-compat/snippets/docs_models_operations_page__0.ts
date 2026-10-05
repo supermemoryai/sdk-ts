@@ -1,4 +1,0 @@
-// Source: docs/models/operations/page.md @ 4d5333e (block 0)
-const value: string = "<value>";
-
-export {};

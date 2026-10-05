@@ -3,13 +3,10 @@
 /**
  * @example
  *     {
- *         namespace: "user_alex",
  *         buckets: ["interests"]
  *     }
  */
 export interface DeleteBucketsProfilesRequest {
-    /** The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories. */
-    namespace: string;
     /** Namespace-owned bucket names to delete. Organization-level buckets are protected and cannot be removed here. */
     buckets: string[];
 }

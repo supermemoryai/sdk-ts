@@ -2,14 +2,6 @@
 
 /**
  * @example
- *     {
- *         namespace: "user_alex",
- *         id: "PTzGiUYei7pgzg5buzZHgA"
- *     }
+ *     {}
  */
-export interface SyncConnectorsRequest {
-    /** Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories. */
-    namespace: string;
-    /** Connector identifier returned when the connector was created */
-    id: string;
-}
+export type SyncConnectorsRequest = {};

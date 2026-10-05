@@ -26,6 +26,7 @@ export class DocumentsClient {
     /**
      * Permanently remove documents and their derived knowledge by document ID or caller-defined ID. Each requested ID is handled independently so successful deletions are preserved when another ID fails.
      *
+     * @param {string} namespace - The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents.
      * @param {Supermemory.DeleteDocumentsRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -37,23 +38,23 @@ export class DocumentsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.documents.delete({
-     *         namespace: "user_alex",
+     *     await client.documents.delete("user_alex", {
      *         ids: ["my-doc-123"]
      *     })
      */
     public delete(
+        namespace: string,
         request: Supermemory.DeleteDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.DeleteDocumentsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__delete(namespace, request, requestOptions));
     }
 
     private async __delete(
+        namespace: string,
         request: Supermemory.DeleteDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.DeleteDocumentsResponse>> {
-        const { namespace, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -72,7 +73,7 @@ export class DocumentsClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -120,6 +121,7 @@ export class DocumentsClient {
     /**
      * Build a knowledge base efficiently by ingesting up to 600 text or URL documents at once. Existing caller-defined IDs append new information using the same semantics as single-document ingestion.
      *
+     * @param {string} namespace - The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents.
      * @param {Supermemory.BatchAddDocumentsRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -132,25 +134,26 @@ export class DocumentsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.documents.batchAdd({
-     *         namespace: "user_alex",
+     *     await client.documents.batchAdd("user_alex", {
      *         documents: [{
      *                 content: "Supermemory turns unstructured content into evolving memory."
      *             }]
      *     })
      */
     public batchAdd(
+        namespace: string,
         request: Supermemory.BatchAddDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.BatchAddDocumentsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__batchAdd(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__batchAdd(namespace, request, requestOptions));
     }
 
     private async __batchAdd(
+        namespace: string,
         request: Supermemory.BatchAddDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.BatchAddDocumentsResponse>> {
-        const { namespace, taskType, dreaming, ..._body } = request;
+        const { taskType, dreaming, ..._body } = request;
         const _queryParams: Record<string, unknown> = {
             taskType: taskType != null ? taskType : undefined,
             dreaming: dreaming != null ? dreaming : undefined,
@@ -238,6 +241,8 @@ export class DocumentsClient {
     /**
      * Retrieve a document's canonical content, metadata, and processing state by document ID or caller-defined ID. Optionally attach its source chunks, derived memories, or both in the same response.
      *
+     * @param {string} namespace - The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents.
+     * @param {string} id - The public document ID
      * @param {Supermemory.GetDocumentsRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -250,23 +255,24 @@ export class DocumentsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.documents.get({
-     *         namespace: "user_alex",
-     *         id: "my-doc-123"
-     *     })
+     *     await client.documents.get("user_alex", "my-doc-123")
      */
     public get(
-        request: Supermemory.GetDocumentsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.GetDocumentsRequest = {},
         requestOptions?: DocumentsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.GetDocumentsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(namespace, id, request, requestOptions));
     }
 
     private async __get(
-        request: Supermemory.GetDocumentsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.GetDocumentsRequest = {},
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.GetDocumentsResponse>> {
-        const { namespace, id, attach } = request;
+        const { attach } = request;
         const _queryParams: Record<string, unknown> = {
             attach: Array.isArray(attach) ? attach.map((item) => item) : attach != null ? attach : undefined,
         };
@@ -342,6 +348,8 @@ export class DocumentsClient {
     /**
      * Refresh an existing document without changing its stable ID. Supplied content replaces the canonical content and is reprocessed; omitted fields remain unchanged.
      *
+     * @param {string} namespace - The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents.
+     * @param {string} id - The public document ID
      * @param {Supermemory.UpdateDocumentsRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -356,23 +364,24 @@ export class DocumentsClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.documents.update({
-     *         namespace: "user_alex",
-     *         id: "my-doc-123"
-     *     })
+     *     await client.documents.update("user_alex", "my-doc-123")
      */
     public update(
-        request: Supermemory.UpdateDocumentsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.UpdateDocumentsRequest = {},
         requestOptions?: DocumentsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.UpdateDocumentsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__update(namespace, id, request, requestOptions));
     }
 
     private async __update(
-        request: Supermemory.UpdateDocumentsRequest,
+        namespace: string,
+        id: string,
+        request: Supermemory.UpdateDocumentsRequest = {},
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.UpdateDocumentsResponse>> {
-        const { namespace, id, taskType, dreaming, ..._body } = request;
+        const { taskType, dreaming, ..._body } = request;
         const _queryParams: Record<string, unknown> = {
             taskType: taskType != null ? taskType : undefined,
             dreaming: dreaming != null ? dreaming : undefined,
@@ -467,6 +476,7 @@ export class DocumentsClient {
     /**
      * Transform an uploaded file into searchable knowledge and learned memory. The response returns as soon as ingestion is safely queued while extraction and memory formation continue asynchronously.
      *
+     * @param {string} namespace
      * @param {Supermemory.UploadFileDocumentsRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -481,19 +491,20 @@ export class DocumentsClient {
      *
      * @example
      *     import { createReadStream } from "fs";
-     *     await client.documents.uploadFile({
-     *         file: fs.createReadStream("/path/to/your/file"),
-     *         namespace: "user_alex"
+     *     await client.documents.uploadFile("user_alex", {
+     *         file: fs.createReadStream("/path/to/your/file")
      *     })
      */
     public uploadFile(
+        namespace: string,
         request: Supermemory.UploadFileDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.UploadFileDocumentsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__uploadFile(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__uploadFile(namespace, request, requestOptions));
     }
 
     private async __uploadFile(
+        namespace: string,
         request: Supermemory.UploadFileDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.UploadFileDocumentsResponse>> {
@@ -534,7 +545,7 @@ export class DocumentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.SupermemoryEnvironment.Default,
-                `ns/${core.url.encodePathParam(request.namespace)}/document/file`,
+                `ns/${core.url.encodePathParam(namespace)}/document/file`,
             ),
             method: "POST",
             headers: _headers,
@@ -611,6 +622,8 @@ export class DocumentsClient {
     /**
      * Replace an existing document with a new file while keeping its stable document ID. Content and caller metadata are overwritten, then the document is reprocessed asynchronously.
      *
+     * @param {string} namespace
+     * @param {string} id
      * @param {Supermemory.ReplaceWithFileDocumentsRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -626,20 +639,22 @@ export class DocumentsClient {
      *
      * @example
      *     import { createReadStream } from "fs";
-     *     await client.documents.replaceWithFile({
-     *         file: fs.createReadStream("/path/to/your/file"),
-     *         namespace: "user_alex",
-     *         id: "my-doc-123"
+     *     await client.documents.replaceWithFile("user_alex", "my-doc-123", {
+     *         file: fs.createReadStream("/path/to/your/file")
      *     })
      */
     public replaceWithFile(
+        namespace: string,
+        id: string,
         request: Supermemory.ReplaceWithFileDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.ReplaceWithFileDocumentsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__replaceWithFile(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__replaceWithFile(namespace, id, request, requestOptions));
     }
 
     private async __replaceWithFile(
+        namespace: string,
+        id: string,
         request: Supermemory.ReplaceWithFileDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.ReplaceWithFileDocumentsResponse>> {
@@ -680,7 +695,7 @@ export class DocumentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.SupermemoryEnvironment.Default,
-                `ns/${core.url.encodePathParam(request.namespace)}/document/file/${core.url.encodePathParam(request.id)}`,
+                `ns/${core.url.encodePathParam(namespace)}/document/file/${core.url.encodePathParam(id)}`,
             ),
             method: "POST",
             headers: _headers,
@@ -762,6 +777,8 @@ export class DocumentsClient {
     /**
      * Refresh only the file-backed fields you provide. Supplying a file replaces the canonical content; omitted metadata and processing context remain unchanged.
      *
+     * @param {string} namespace
+     * @param {string} id
      * @param {Supermemory.UpdateFileDocumentsRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -777,19 +794,20 @@ export class DocumentsClient {
      *
      * @example
      *     import { createReadStream } from "fs";
-     *     await client.documents.updateFile({
-     *         namespace: "user_alex",
-     *         id: "my-doc-123"
-     *     })
+     *     await client.documents.updateFile("user_alex", "my-doc-123", {})
      */
     public updateFile(
+        namespace: string,
+        id: string,
         request: Supermemory.UpdateFileDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.UpdateFileDocumentsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__updateFile(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__updateFile(namespace, id, request, requestOptions));
     }
 
     private async __updateFile(
+        namespace: string,
+        id: string,
         request: Supermemory.UpdateFileDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.UpdateFileDocumentsResponse>> {
@@ -833,7 +851,7 @@ export class DocumentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.SupermemoryEnvironment.Default,
-                `ns/${core.url.encodePathParam(request.namespace)}/document/file/${core.url.encodePathParam(request.id)}`,
+                `ns/${core.url.encodePathParam(namespace)}/document/file/${core.url.encodePathParam(id)}`,
             ),
             method: "PATCH",
             headers: _headers,

@@ -2,16 +2,9 @@
 
 /**
  * @example
- *     {
- *         namespace: "user_alex",
- *         id: "PTzGiUYei7pgzg5buzZHgA"
- *     }
+ *     {}
  */
 export interface GetConnectorsRequest {
-    /** Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories. */
-    namespace: string;
-    /** Connector identifier returned when the connector was created */
-    id: string;
     /** Comma-separated extras. syncs: the 10 most recent sync runs with their failed items. picker: a one-time hosted picker URL. */
     attach?: string;
     /** Where the hosted picker sends the user when they finish */

@@ -26,6 +26,7 @@ export class MemoriesClient {
     /**
      * Remove exact memories from normal recall while preserving their audit history. Each ID is handled independently and any missing or ineligible memory is reported without rolling back successful changes.
      *
+     * @param {string} namespace - Namespace containing the memories to forget. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories.
      * @param {Supermemory.ForgetMemoriesRequest} request
      * @param {MemoriesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -37,23 +38,23 @@ export class MemoriesClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.memories.forget({
-     *         namespace: "user_alex",
+     *     await client.memories.forget("user_alex", {
      *         ids: ["mem_abc123"]
      *     })
      */
     public forget(
+        namespace: string,
         request: Supermemory.ForgetMemoriesRequest,
         requestOptions?: MemoriesClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.ForgetMemoriesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__forget(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__forget(namespace, request, requestOptions));
     }
 
     private async __forget(
+        namespace: string,
         request: Supermemory.ForgetMemoriesRequest,
         requestOptions?: MemoriesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.ForgetMemoriesResponse>> {
-        const { namespace, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -72,7 +73,7 @@ export class MemoriesClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -120,6 +121,7 @@ export class MemoriesClient {
     /**
      * Describe what should be forgotten in natural language, then preview or apply the matching set. Use dry-run results with the exact-ID endpoint when you need a reviewable, drift-free workflow.
      *
+     * @param {string} namespace - Namespace containing the memories to forget. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories.
      * @param {Supermemory.ForgetMatchingMemoriesRequest} request
      * @param {MemoriesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -131,24 +133,24 @@ export class MemoriesClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.memories.forgetMatching({
-     *         namespace: "user_alex",
+     *     await client.memories.forgetMatching("user_alex", {
      *         query: "everything about the old pricing plans",
      *         dryRun: true
      *     })
      */
     public forgetMatching(
+        namespace: string,
         request: Supermemory.ForgetMatchingMemoriesRequest,
         requestOptions?: MemoriesClient.RequestOptions,
     ): core.HttpResponsePromise<Supermemory.ForgetMatchingMemoriesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__forgetMatching(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__forgetMatching(namespace, request, requestOptions));
     }
 
     private async __forgetMatching(
+        namespace: string,
         request: Supermemory.ForgetMatchingMemoriesRequest,
         requestOptions?: MemoriesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.ForgetMatchingMemoriesResponse>> {
-        const { namespace, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -167,7 +169,7 @@ export class MemoriesClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

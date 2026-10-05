@@ -4,13 +4,9 @@ import type * as Supermemory from "../../index.js";
 
 /**
  * @example
- *     {
- *         namespace: "user_alex"
- *     }
+ *     {}
  */
 export interface ProfileRequest {
-    /** The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories. */
-    namespace: string;
     /** Type-safe metadata conditions that limit which memories contribute to the profile */
     filter?: Supermemory.FilterExpression;
     /** Custom buckets to return. Omit to return every effective bucket. */
