@@ -80,6 +80,36 @@ test("a timed-out request throws SupermemoryTimeoutError", async () => {
   expect(err).toBeInstanceOf(SupermemoryTimeoutError);
 });
 
+test("a thrown fetch is retried, an abort is not", async () => {
+  let calls = 0;
+  const flaky = async (input: RequestInfo | URL, init?: RequestInit) => {
+    calls++;
+    if (calls === 1) throw new TypeError("fetch failed");
+    return new Response("[]", { status: 200, headers: { "content-type": "application/json" } });
+  };
+  const client = new Supermemory({ apiKey: "sm_test", fetch: flaky as typeof globalThis.fetch, maxRetries: 2 });
+  expect(await client.namespaces.list()).toEqual([]);
+  expect(calls).toBe(2);
+
+  calls = 0;
+  const once = new Supermemory({ apiKey: "sm_test", fetch: flaky as typeof globalThis.fetch, maxRetries: 0 });
+  const err = await once.namespaces.list().catch((e: unknown) => e);
+  expect(err).toBeInstanceOf(SupermemoryError);
+  expect(calls).toBe(1);
+});
+
+test("profileMarkdown sends Accept: text/markdown and returns the text", async () => {
+  const sent: Request[] = [];
+  const md = async (input: RequestInfo | URL, init?: RequestInit) => {
+    sent.push(new Request(input, init));
+    return new Response("# Alex\n\n- prefers mornings", { status: 200, headers: { "content-type": "text/markdown" } });
+  };
+  const client = new Supermemory({ apiKey: "sm_test", fetch: md as typeof globalThis.fetch });
+  expect(await client.profileMarkdown("user_alex")).toBe("# Alex\n\n- prefers mornings");
+  expect(sent[0]!.headers.get("accept")).toBe("text/markdown");
+  expect(sent[0]!.url.endsWith("/ns/user_alex/profile")).toBe(true);
+});
+
 test("Node exits after a failed request (no timer left behind)", () => {
   const root = new URL("..", import.meta.url).pathname;
   const out = execFileSync(

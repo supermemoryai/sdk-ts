@@ -56,4 +56,33 @@ const abortLine = "const abortId = setTimeout(() => controller.abort(TIMEOUT), t
 if (!sig.includes(abortLine)) throw new Error(`${signals}: timeout abort pattern not found; review the Fern upgrade`);
 await Bun.write(signals, sig.replace(abortLine, 'const abortId = setTimeout(() => controller.abort(new DOMException(TIMEOUT, "AbortError")), timeoutMs);'));
 
+// Fern retries only on status codes; a thrown fetch (connection reset, DNS) was never retried. Aborts and timeouts still are not.
+const retries = "src/generated/core/fetcher/requestWithRetries.ts";
+const rt = await Bun.file(retries).text();
+const loopStart = rt.indexOf("export async function requestWithRetries(");
+if (loopStart === -1 || !rt.includes("let response: Response = await requestFn();")) throw new Error(`${retries}: retry loop pattern not found; review the Fern upgrade`);
+await Bun.write(
+  retries,
+  rt.slice(0, loopStart) +
+    `export async function requestWithRetries(
+    requestFn: () => Promise<Response>,
+    maxRetries: number = DEFAULT_MAX_RETRIES,
+): Promise<Response> {
+    for (let i = 0; ; ++i) {
+        let response: Response;
+        try {
+            response = await requestFn();
+        } catch (error) {
+            const aborted = error instanceof Error && error.name === "AbortError";
+            if (aborted || i >= maxRetries) throw error;
+            await new Promise((resolve) => setTimeout(resolve, addSymmetricJitter(Math.min(INITIAL_RETRY_DELAY * 2 ** i, MAX_RETRY_DELAY))));
+            continue;
+        }
+        if (!isRetryableStatusCode(response.status) || i >= maxRetries) return response;
+        await new Promise((resolve) => setTimeout(resolve, getRetryDelayFromHeaders(response, i)));
+    }
+}
+`,
+);
+
 console.log("==> Done. Review with: git diff --stat");

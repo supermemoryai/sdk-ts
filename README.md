@@ -43,6 +43,7 @@ Every content operation is scoped to a **namespace** (a user ID, project ID, or 
 | `client.add(namespace, { content, ... })` | `POST /ns/{namespace}/document` |
 | `client.search(namespace, { query, ... })` | `POST /ns/{namespace}/search` |
 | `client.profile(namespace, { filter?, buckets? })` | `POST /ns/{namespace}/profile` |
+| `client.profileMarkdown(namespace, { filter?, buckets? })` | same, as a markdown string (`Accept: text/markdown`) |
 | `client.list(namespace, type, { page?, limit?, filter?, ... })` | `POST /ns/{namespace}/list/{type}` |
 | `client.documents.{get, update, delete, batchAdd, uploadFile, replaceWithFile, updateFile}` | `/ns/{namespace}/document…` |
 | `client.memories.{forget, forgetMatching}` | `/ns/{namespace}/memories…` |
@@ -100,7 +101,7 @@ try {
 
 ## Retries and timeouts
 
-Requests that fail with 408, 429 or 5xx, or with a connection error, are retried twice with exponential backoff (honoring `Retry-After`). The default timeout is 60 seconds. Both can be set on the client or per call:
+Requests that fail with 408, 429 or 5xx, or whose connection fails, are retried twice with exponential backoff (honoring `Retry-After`). The default timeout is 60 seconds. Both can be set on the client or per call:
 
 ```ts
 import { Supermemory } from "supermemory";

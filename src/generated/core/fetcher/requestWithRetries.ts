@@ -52,17 +52,17 @@ export async function requestWithRetries(
     requestFn: () => Promise<Response>,
     maxRetries: number = DEFAULT_MAX_RETRIES,
 ): Promise<Response> {
-    let response: Response = await requestFn();
-
-    for (let i = 0; i < maxRetries; ++i) {
-        if (isRetryableStatusCode(response.status)) {
-            const delay = getRetryDelayFromHeaders(response, i);
-
-            await new Promise((resolve) => setTimeout(resolve, delay));
+    for (let i = 0; ; ++i) {
+        let response: Response;
+        try {
             response = await requestFn();
-        } else {
-            break;
+        } catch (error) {
+            const aborted = error instanceof Error && error.name === "AbortError";
+            if (aborted || i >= maxRetries) throw error;
+            await new Promise((resolve) => setTimeout(resolve, addSymmetricJitter(Math.min(INITIAL_RETRY_DELAY * 2 ** i, MAX_RETRY_DELAY))));
+            continue;
         }
+        if (!isRetryableStatusCode(response.status) || i >= maxRetries) return response;
+        await new Promise((resolve) => setTimeout(resolve, getRetryDelayFromHeaders(response, i)));
     }
-    return response!;
 }
