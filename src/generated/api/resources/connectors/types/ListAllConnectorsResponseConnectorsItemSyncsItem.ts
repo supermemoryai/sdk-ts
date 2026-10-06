@@ -3,12 +3,11 @@
 import type * as Supermemory from "../../../index.js";
 
 export interface ListAllConnectorsResponseConnectorsItemSyncsItem {
-    status: Supermemory.ListAllConnectorsResponseConnectorsItemSyncsItemStatus;
     errorCode: Supermemory.ListAllConnectorsResponseConnectorsItemSyncsItemErrorCode | null;
     /** Customer-safe error message */
     error: string | null;
-    startedAt: string;
-    completedAt: string | null;
+    /** Run status and timestamps maintained by Supermemory */
+    system: Supermemory.ListAllConnectorsResponseConnectorsItemSyncsItemSystem;
     id: string;
     trigger: Supermemory.ListAllConnectorsResponseConnectorsItemSyncsItemTrigger;
     itemsProcessed: number;

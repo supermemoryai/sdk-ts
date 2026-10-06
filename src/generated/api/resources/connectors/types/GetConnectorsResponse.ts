@@ -6,12 +6,8 @@ export interface GetConnectorsResponse {
     id: string;
     /** External source */
     provider: Supermemory.GetConnectorsResponseProvider;
-    /** pending_authorization until the user finishes the provider login at authUrl; DELETE cancels it. Pending connectors are not listed. */
-    status: Supermemory.GetConnectorsResponseStatus;
-    /** Present while pending, when the caller can create connectors in this namespace: where to send the user to authorize */
-    authUrl?: string | undefined;
-    /** Present while pending: when authUrl stops working */
-    authUrlExpiresAt?: string | undefined;
+    /** Present while pending, when the caller can create connectors in this namespace */
+    authorization?: Supermemory.GetConnectorsResponseAuthorization | undefined;
     /** Namespace the connector syncs into. Null only for connectors created before namespaces were required. */
     namespace: string | null;
     /** Account on the provider side, usually an email */
@@ -23,11 +19,10 @@ export interface GetConnectorsResponse {
     selection: Record<string, Supermemory.GetConnectorsResponseSelectionValueItem[] | null> | null;
     documentLimit: number;
     documentCount: number;
-    /** Most recent sync run */
-    lastSync: Supermemory.GetConnectorsResponseLastSync | null;
-    /** When content last finished syncing */
-    lastSyncedAt: string | null;
-    createdAt: string;
+    /** The most recent sync run, which may still be running or may have failed */
+    latestRun: Supermemory.GetConnectorsResponseLatestRun | null;
+    /** Lifecycle status and timestamps maintained by Supermemory */
+    system: Supermemory.GetConnectorsResponseSystem;
     /** Present when include=syncs */
     syncs?: Supermemory.GetConnectorsResponseSyncsItem[] | undefined;
     /** Present when include=picker. Null for connectors that sync everything. */

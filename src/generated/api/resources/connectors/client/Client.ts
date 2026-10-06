@@ -227,7 +227,7 @@ export class ConnectorsClient {
     }
 
     /**
-     * Connect an external source to this namespace. OAuth providers return an authUrl to send the user to; providers that authenticate with config start syncing right away.
+     * Connect an external source to this namespace. OAuth providers return an authorization url to send the user to; providers that authenticate with config start syncing right away.
      *
      * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
      * @param {Supermemory.CreateConnectorsRequest} request

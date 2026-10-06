@@ -6,12 +6,8 @@ export interface ListAllConnectorsResponseConnectorsItem {
     id: string;
     /** External source */
     provider: Supermemory.ListAllConnectorsResponseConnectorsItemProvider;
-    /** pending_authorization until the user finishes the provider login at authUrl; DELETE cancels it. Pending connectors are not listed. */
-    status: Supermemory.ListAllConnectorsResponseConnectorsItemStatus;
-    /** Present while pending, when the caller can create connectors in this namespace: where to send the user to authorize */
-    authUrl?: string | undefined;
-    /** Present while pending: when authUrl stops working */
-    authUrlExpiresAt?: string | undefined;
+    /** Present while pending, when the caller can create connectors in this namespace */
+    authorization?: Supermemory.ListAllConnectorsResponseConnectorsItemAuthorization | undefined;
     /** Namespace the connector syncs into. Null only for connectors created before namespaces were required. */
     namespace: string | null;
     /** Account on the provider side, usually an email */
@@ -23,11 +19,10 @@ export interface ListAllConnectorsResponseConnectorsItem {
     selection: Record<string, Supermemory.ListAllConnectorsResponseConnectorsItemSelectionValueItem[] | null> | null;
     documentLimit: number;
     documentCount: number;
-    /** Most recent sync run */
-    lastSync: Supermemory.ListAllConnectorsResponseConnectorsItemLastSync | null;
-    /** When content last finished syncing */
-    lastSyncedAt: string | null;
-    createdAt: string;
+    /** The most recent sync run, which may still be running or may have failed */
+    latestRun: Supermemory.ListAllConnectorsResponseConnectorsItemLatestRun | null;
+    /** Lifecycle status and timestamps maintained by Supermemory */
+    system: Supermemory.ListAllConnectorsResponseConnectorsItemSystem;
     /** Present when include=syncs */
     syncs?: Supermemory.ListAllConnectorsResponseConnectorsItemSyncsItem[] | undefined;
     /** Present when include=picker. Null for connectors that sync everything. */
