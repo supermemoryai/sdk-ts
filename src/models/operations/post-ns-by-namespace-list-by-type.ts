@@ -247,7 +247,7 @@ export type PostNsByNamespaceListByTypeMemory = {
 /**
  * Page metadata for the selected resource collection
  */
-export type Pagination = {
+export type PostNsByNamespaceListByTypePagination = {
   /**
    * Current one-based page number
    */
@@ -285,7 +285,7 @@ export type PostNsByNamespaceListByTypeResponse = {
   /**
    * Page metadata for the selected resource collection
    */
-  pagination: Pagination;
+  pagination: PostNsByNamespaceListByTypePagination;
 };
 
 /** @internal */
@@ -517,21 +517,24 @@ export function postNsByNamespaceListByTypeMemoryFromJSON(
 }
 
 /** @internal */
-export const Pagination$inboundSchema: z.ZodMiniType<Pagination, unknown> = z
-  .object({
-    currentPage: types.number(),
-    limit: z._default(types.number(), 10),
-    totalItems: types.number(),
-    totalPages: types.number(),
-  });
+export const PostNsByNamespaceListByTypePagination$inboundSchema: z.ZodMiniType<
+  PostNsByNamespaceListByTypePagination,
+  unknown
+> = z.object({
+  currentPage: types.number(),
+  limit: z._default(types.number(), 10),
+  totalItems: types.number(),
+  totalPages: types.number(),
+});
 
-export function paginationFromJSON(
+export function postNsByNamespaceListByTypePaginationFromJSON(
   jsonString: string,
-): SafeParseResult<Pagination, SDKValidationError> {
+): SafeParseResult<PostNsByNamespaceListByTypePagination, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Pagination$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Pagination' from JSON`,
+    (x) =>
+      PostNsByNamespaceListByTypePagination$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostNsByNamespaceListByTypePagination' from JSON`,
   );
 }
 
@@ -547,7 +550,7 @@ export const PostNsByNamespaceListByTypeResponse$inboundSchema: z.ZodMiniType<
   memories: z.array(
     z.lazy(() => PostNsByNamespaceListByTypeMemory$inboundSchema),
   ),
-  pagination: z.lazy(() => Pagination$inboundSchema),
+  pagination: z.lazy(() => PostNsByNamespaceListByTypePagination$inboundSchema),
 });
 
 export function postNsByNamespaceListByTypeResponseFromJSON(

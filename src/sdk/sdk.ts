@@ -10,6 +10,7 @@ import { search } from "../funcs/search.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
+import { Connectors } from "./connectors.js";
 import { Documents } from "./documents.js";
 import { Memories } from "./memories.js";
 import { Namespaces } from "./namespaces.js";
@@ -30,6 +31,11 @@ export class Supermemory extends ClientSDK {
   private _memories?: Memories;
   get memories(): Memories {
     return (this._memories ??= new Memories(this._options));
+  }
+
+  private _connectors?: Connectors;
+  get connectors(): Connectors {
+    return (this._connectors ??= new Connectors(this._options));
   }
 
   private _namespaces?: Namespaces;
