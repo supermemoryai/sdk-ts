@@ -1,25 +1,31 @@
 # DeleteNsByNamespaceResponseBody
 
-Namespace permanently deleted
+Namespace permanently deleted (status "deleted"). A move answers 202 with status "queued".
 
-## Example Usage
+
+## Supported Types
+
+### `operations.Deleted`
 
 ```typescript
-import { DeleteNsByNamespaceResponseBody } from "supermemory/models/operations";
-
-let value: DeleteNsByNamespaceResponseBody = {
+const value: operations.Deleted = {
   success: true,
+  status: "deleted",
   namespace: "<value>",
-  deletedDocumentsCount: 822702,
-  deletedMemoriesCount: 815582,
+  deletedDocumentsCount: 399741,
+  deletedMemoriesCount: 142389,
 };
 ```
 
-## Fields
+### `operations.Queued`
 
-| Field                                   | Type                                    | Required                                | Description                             |
-| --------------------------------------- | --------------------------------------- | --------------------------------------- | --------------------------------------- |
-| `success`                               | *true*                                  | :heavy_check_mark:                      | Confirms the namespace was deleted      |
-| `namespace`                             | *string*                                | :heavy_check_mark:                      | Deleted namespace identifier            |
-| `deletedDocumentsCount`                 | *number*                                | :heavy_check_mark:                      | Number of documents permanently removed |
-| `deletedMemoriesCount`                  | *number*                                | :heavy_check_mark:                      | Number of memories permanently removed  |
+```typescript
+const value: operations.Queued = {
+  success: true,
+  status: "queued",
+  operationId: "<id>",
+  namespace: "<value>",
+  moveTo: "<value>",
+};
+```
+
