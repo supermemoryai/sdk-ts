@@ -1,6 +1,6 @@
 {
   "name": "supermemory",
-  "version": "5.0.0-rc.6",
+  "version": "5.0.0",
   "description": "The official TypeScript library for the Supermemory API",
   "license": "Apache-2.0",
   "author": "Supermemory <dhravya@supermemory.com>",

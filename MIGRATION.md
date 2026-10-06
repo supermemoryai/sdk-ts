@@ -3,7 +3,7 @@
 v5 of the TypeScript SDK is generated from the Supermemory **v5 API** (`/v5/openapi`). v5 is namespace-first: every content operation is scoped to a namespace, the replacement for container tags.
 
 ```sh
-npm i supermemory@rc   # same package as before
+npm i supermemory@5   # same package as before
 ```
 
 ## The one rule

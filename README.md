@@ -9,7 +9,7 @@ The official TypeScript library for the [Supermemory](https://supermemory.ai) v5
 ## Install
 
 ```sh
-npm i supermemory@rc   # or: bun add / pnpm add / yarn add supermemory@rc
+npm i supermemory   # or: bun add / pnpm add / yarn add supermemory
 ```
 
 The package also ships the `supermemory` CLI (`npx supermemory`, `bunx supermemory`).
