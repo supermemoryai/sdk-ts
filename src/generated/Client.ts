@@ -11,7 +11,6 @@ import type { BaseClientOptions, BaseRequestOptions } from "./BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "./BaseClient.js";
 import { mergeHeaders } from "./core/headers.js";
 import * as core from "./core/index.js";
-import { toJson } from "./core/json.js";
 import { mergeAdditionalBodyParameters } from "./core/requestBody.js";
 import * as environments from "./environments.js";
 import { handleNonStatusCodeError } from "./errors/handleNonStatusCodeError.js";
@@ -94,11 +93,6 @@ export class SupermemoryClient {
         request: Supermemory.AddRequest,
         requestOptions?: SupermemoryClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.AddResponse>> {
-        const { taskType, dreaming, ..._body } = request;
-        const _queryParams: Record<string, unknown> = {
-            taskType: taskType != null ? taskType : undefined,
-            dreaming: dreaming != null ? dreaming : undefined,
-        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -115,13 +109,9 @@ export class SupermemoryClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -193,7 +183,6 @@ export class SupermemoryClient {
      *
      * @example
      *     await client.search("user_alex", {
-     *         limit: 10,
      *         query: "what are the API rate limits"
      *     })
      */
@@ -210,11 +199,6 @@ export class SupermemoryClient {
         request: Supermemory.SearchRequest,
         requestOptions?: SupermemoryClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.SearchResponse>> {
-        const { limit, searchMode, ..._body } = request;
-        const _queryParams: Record<string, unknown> = {
-            limit,
-            searchMode: searchMode != null ? searchMode : undefined,
-        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -231,13 +215,9 @@ export class SupermemoryClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -396,7 +376,10 @@ export class SupermemoryClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.list("user_alex", "documents")
+     *     await client.list("user_alex", "documents", {
+     *         page: 1,
+     *         limit: 10
+     *     })
      */
     public list(
         namespace: string,
@@ -415,20 +398,8 @@ export class SupermemoryClient {
     ): Promise<core.WithRawResponse<Supermemory.ListResponse>> {
         const { page, limit, sort, order, ..._body } = request;
         const _queryParams: Record<string, unknown> = {
-            page: Array.isArray(page)
-                ? page.map((item) => (typeof item === "string" ? item : toJson(item)))
-                : page != null
-                  ? typeof page === "string"
-                      ? page
-                      : toJson(page)
-                  : undefined,
-            limit: Array.isArray(limit)
-                ? limit.map((item) => (typeof item === "string" ? item : toJson(item)))
-                : limit != null
-                  ? typeof limit === "string"
-                      ? limit
-                      : toJson(limit)
-                  : undefined,
+            page,
+            limit,
             sort: sort != null ? sort : undefined,
             order: order != null ? order : undefined,
         };

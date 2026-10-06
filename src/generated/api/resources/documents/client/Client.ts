@@ -153,11 +153,6 @@ export class DocumentsClient {
         request: Supermemory.BatchAddDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.BatchAddDocumentsResponse>> {
-        const { taskType, dreaming, ..._body } = request;
-        const _queryParams: Record<string, unknown> = {
-            taskType: taskType != null ? taskType : undefined,
-            dreaming: dreaming != null ? dreaming : undefined,
-        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -174,13 +169,9 @@ export class DocumentsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -239,7 +230,7 @@ export class DocumentsClient {
     }
 
     /**
-     * Retrieve a document's canonical content, metadata, and processing state by document ID or caller-defined ID. Optionally attach its source chunks, derived memories, or both in the same response.
+     * Retrieve a document's canonical content, metadata, and processing state by document ID or caller-defined ID. Optionally include its source chunks, derived memories, or both in the same response.
      *
      * @param {string} namespace - The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents.
      * @param {string} id - The public document ID
@@ -272,9 +263,9 @@ export class DocumentsClient {
         request: Supermemory.GetDocumentsRequest = {},
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.GetDocumentsResponse>> {
-        const { attach } = request;
+        const { include } = request;
         const _queryParams: Record<string, unknown> = {
-            attach: Array.isArray(attach) ? attach.map((item) => item) : attach != null ? attach : undefined,
+            include: Array.isArray(include) ? include.map((item) => item) : include != null ? include : undefined,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -381,11 +372,6 @@ export class DocumentsClient {
         request: Supermemory.UpdateDocumentsRequest = {},
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.UpdateDocumentsResponse>> {
-        const { taskType, dreaming, ..._body } = request;
-        const _queryParams: Record<string, unknown> = {
-            taskType: taskType != null ? taskType : undefined,
-            dreaming: dreaming != null ? dreaming : undefined,
-        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -402,13 +388,9 @@ export class DocumentsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -508,12 +490,6 @@ export class DocumentsClient {
         request: Supermemory.UploadFileDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.UploadFileDocumentsResponse>> {
-        const _queryParams: Record<string, unknown> = {
-            taskType: request.taskType != null ? request.taskType : undefined,
-            dreaming: request.dreaming != null ? request.dreaming : undefined,
-            fileType: request.fileType != null ? request.fileType : undefined,
-            mimeType: request.mimeType,
-        };
         const _body = await core.newFormData();
         await _body.appendFile("file", request.file);
         if (request.supportingContext != null) {
@@ -530,6 +506,22 @@ export class DocumentsClient {
 
         if (request.date != null) {
             _body.append("date", request.date);
+        }
+
+        if (request.taskType != null) {
+            _body.append("taskType", request.taskType);
+        }
+
+        if (request.dreaming != null) {
+            _body.append("dreaming", request.dreaming);
+        }
+
+        if (request.fileType != null) {
+            _body.append("fileType", request.fileType);
+        }
+
+        if (request.mimeType != null) {
+            _body.append("mimeType", request.mimeType);
         }
 
         const _maybeEncodedRequest = await _body.getRequest();
@@ -549,11 +541,7 @@ export class DocumentsClient {
             ),
             method: "POST",
             headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "file",
             duplex: _maybeEncodedRequest.duplex,
             body: _maybeEncodedRequest.body,
@@ -658,12 +646,6 @@ export class DocumentsClient {
         request: Supermemory.ReplaceWithFileDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.ReplaceWithFileDocumentsResponse>> {
-        const _queryParams: Record<string, unknown> = {
-            taskType: request.taskType != null ? request.taskType : undefined,
-            dreaming: request.dreaming != null ? request.dreaming : undefined,
-            fileType: request.fileType != null ? request.fileType : undefined,
-            mimeType: request.mimeType,
-        };
         const _body = await core.newFormData();
         await _body.appendFile("file", request.file);
         if (request.supportingContext != null) {
@@ -680,6 +662,22 @@ export class DocumentsClient {
 
         if (request.date != null) {
             _body.append("date", request.date);
+        }
+
+        if (request.taskType != null) {
+            _body.append("taskType", request.taskType);
+        }
+
+        if (request.dreaming != null) {
+            _body.append("dreaming", request.dreaming);
+        }
+
+        if (request.fileType != null) {
+            _body.append("fileType", request.fileType);
+        }
+
+        if (request.mimeType != null) {
+            _body.append("mimeType", request.mimeType);
         }
 
         const _maybeEncodedRequest = await _body.getRequest();
@@ -699,11 +697,7 @@ export class DocumentsClient {
             ),
             method: "POST",
             headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "file",
             duplex: _maybeEncodedRequest.duplex,
             body: _maybeEncodedRequest.body,
@@ -811,12 +805,6 @@ export class DocumentsClient {
         request: Supermemory.UpdateFileDocumentsRequest,
         requestOptions?: DocumentsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.UpdateFileDocumentsResponse>> {
-        const _queryParams: Record<string, unknown> = {
-            taskType: request.taskType != null ? request.taskType : undefined,
-            dreaming: request.dreaming != null ? request.dreaming : undefined,
-            fileType: request.fileType != null ? request.fileType : undefined,
-            mimeType: request.mimeType,
-        };
         const _body = await core.newFormData();
         if (request.file != null) {
             await _body.appendFile("file", request.file);
@@ -838,6 +826,22 @@ export class DocumentsClient {
             _body.append("date", request.date);
         }
 
+        if (request.taskType != null) {
+            _body.append("taskType", request.taskType);
+        }
+
+        if (request.dreaming != null) {
+            _body.append("dreaming", request.dreaming);
+        }
+
+        if (request.fileType != null) {
+            _body.append("fileType", request.fileType);
+        }
+
+        if (request.mimeType != null) {
+            _body.append("mimeType", request.mimeType);
+        }
+
         const _maybeEncodedRequest = await _body.getRequest();
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -855,11 +859,7 @@ export class DocumentsClient {
             ),
             method: "PATCH",
             headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "file",
             duplex: _maybeEncodedRequest.duplex,
             body: _maybeEncodedRequest.body,

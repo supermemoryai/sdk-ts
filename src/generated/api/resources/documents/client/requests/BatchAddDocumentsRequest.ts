@@ -11,10 +11,10 @@ import type * as Supermemory from "../../../../index.js";
  *     }
  */
 export interface BatchAddDocumentsRequest {
+    /** Documents to ingest or append in one request */
+    documents: Supermemory.BatchAddDocumentsRequestDocumentsItem[];
     /** Processing pipeline. "memory" builds durable learned context; "superrag" optimizes the document for retrieval without generating memories. */
     taskType?: Supermemory.BatchAddDocumentsRequestTaskType;
     /** Processing mode. "dynamic" (default) groups related documents so memories form from coherent context. "instant" processes each document independently right away and bills one extra operation per document. */
     dreaming?: Supermemory.BatchAddDocumentsRequestDreaming;
-    /** Documents to ingest or append in one request */
-    documents: Supermemory.BatchAddDocumentsRequestDocumentsItem[];
 }

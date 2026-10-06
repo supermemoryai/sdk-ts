@@ -337,7 +337,7 @@ export class ConnectorsClient {
     }
 
     /**
-     * Read one connector. Add attach=syncs to include its recent sync runs and the items that failed. attach=picker needs an admin with write access, since the link changes what syncs.
+     * Read one connector. Add include=syncs to include its recent sync runs and the items that failed. include=picker needs an admin with write access, since the link changes what syncs.
      *
      * @param {string} namespace - Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories.
      * @param {string} id - Connector identifier returned when the connector was created
@@ -370,9 +370,9 @@ export class ConnectorsClient {
         request: Supermemory.GetConnectorsRequest = {},
         requestOptions?: ConnectorsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.GetConnectorsResponse>> {
-        const { attach, returnUrl } = request;
+        const { include, returnUrl } = request;
         const _queryParams: Record<string, unknown> = {
-            attach,
+            include: Array.isArray(include) ? include.map((item) => item) : include != null ? include : undefined,
             returnUrl,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();

@@ -16,11 +16,14 @@ function stub(status = 200, body: unknown = {}, opts: Record<string, unknown> = 
 }
 
 const routes: Array<[string, (c: Supermemory) => Promise<unknown>, string, string, unknown?]> = [
-  ["add", (c) => c.add("user_alex", { content: "hi", id: "d1", dreaming: "instant" }), "POST", "/ns/user_alex/document?dreaming=instant", { content: "hi", id: "d1" }],
-  ["search", (c) => c.search("user_alex", { query: "q", searchMode: "chunks", limit: 3 }), "POST", "/ns/user_alex/search?limit=3&searchMode=chunks", { query: "q" }],
+  ["add", (c) => c.add("user_alex", { content: "hi", id: "d1", dreaming: "instant" }), "POST", "/ns/user_alex/document", { content: "hi", id: "d1", dreaming: "instant" }],
+  ["search", (c) => c.search("user_alex", { query: "q", searchMode: "chunks", limit: 3, include: { related: true } }), "POST", "/ns/user_alex/search", { query: "q", searchMode: "chunks", limit: 3, include: { related: true } }],
   ["profile", (c) => c.profile("user_alex"), "POST", "/ns/user_alex/profile"],
   ["list", (c) => c.list("user_alex", "documents", { limit: 5, filter: { field: "a", operator: "eq", value: "b" } }), "POST", "/ns/user_alex/list/documents?limit=5", { filter: { field: "a", operator: "eq", value: "b" } }],
-  ["documents.get", (c) => c.documents.get("user_alex", "d1", { attach: ["chunks"] }), "GET", "/ns/user_alex/document/d1?attach=chunks"],
+  ["documents.get", (c) => c.documents.get("user_alex", "d1", { include: ["chunks", "memories"] }), "GET", "/ns/user_alex/document/d1?include=chunks,memories"],
+  ["memories.get", (c) => c.memories.get("user_alex", "m1", { include: ["related"], relatedLimit: 5 }), "GET", "/ns/user_alex/memories/m1?include=related&relatedLimit=5"],
+  ["namespaces.list (paged)", (c) => c.namespaces.list({ page: 2, limit: 50 }), "GET", "/ns?page=2&limit=50"],
+  ["namespaces.delete (move)", (c) => c.namespaces.delete("user_alex", { moveTo: "archive" }), "DELETE", "/ns/user_alex?moveTo=archive"],
   ["documents.get (no options)", (c) => c.documents.get("user_alex", "d1"), "GET", "/ns/user_alex/document/d1"],
   ["documents.delete", (c) => c.documents.delete("user_alex", { ids: ["d1"] }), "DELETE", "/ns/user_alex/document", { ids: ["d1"] }],
   ["memories.forgetMatching", (c) => c.memories.forgetMatching("user_alex", { query: "x", dryRun: true }), "DELETE", "/ns/user_alex/memories/semantic", { query: "x", dryRun: true }],
@@ -31,6 +34,7 @@ const routes: Array<[string, (c: Supermemory) => Promise<unknown>, string, strin
   ["connectors.listAll (no options)", (c) => c.connectors.listAll(), "GET", "/connectors"],
   ["connectors.create", (c) => c.connectors.create("user_alex", { provider: "web-crawler", config: { startUrl: "https://example.com", crawlDepth: 2 } }), "POST", "/ns/user_alex/connectors", { provider: "web-crawler", config: { startUrl: "https://example.com", crawlDepth: 2 } }],
   ["connectors.delete", (c) => c.connectors.delete("user_alex", "c1", { deleteDocuments: false }), "DELETE", "/ns/user_alex/connectors/c1?deleteDocuments=false"],
+  ["connectors.get (include)", (c) => c.connectors.get("user_alex", "c1", { include: ["syncs", "picker"], returnUrl: "https://x" }), "GET", "/ns/user_alex/connectors/c1?include=syncs,picker&returnUrl=https%3A%2F%2Fx"],
   ["connectors.sync", (c) => c.connectors.sync("user_alex", "c1"), "POST", "/ns/user_alex/connectors/c1/sync"],
 ];
 
@@ -40,7 +44,9 @@ for (const [name, call, method, pathAndQuery, body] of routes) {
     await call(client).catch(() => undefined); // stub bodies are not real responses; the request is what is checked
     expect(sent).toHaveLength(1);
     expect(sent[0]!.method).toBe(method);
-    expect(sent[0]!.url.pathname + sent[0]!.url.search).toBe(pathAndQuery);
+    // Comma lists and repeated keys are both accepted by the API; compare the parsed set, not the raw string.
+    const norm = (u: URL) => `${u.pathname}?${[...u.searchParams].flatMap(([k, v]) => v.split(",").map((x) => `${k}=${x}`)).sort().join("&")}`;
+    expect(norm(sent[0]!.url)).toBe(norm(new URL(pathAndQuery, "http://x")));
     expect(sent[0]!.headers.get("authorization")).toBe("Bearer sm_test");
     if (body !== undefined) expect(JSON.parse(sent[0]!.body)).toEqual(body);
   });
@@ -76,7 +82,7 @@ test("a timed-out request throws SupermemoryTimeoutError", async () => {
   const never = (_input: RequestInfo | URL, init?: RequestInit) =>
     new Promise<Response>((_, reject) => init?.signal?.addEventListener("abort", () => reject(init.signal!.reason)));
   const client = new Supermemory({ apiKey: "sm_test", fetch: never as typeof globalThis.fetch, maxRetries: 0 });
-  const err = await client.namespaces.list({ timeoutInSeconds: 0.01 }).catch((e: unknown) => e);
+  const err = await client.organization.get({ timeoutInSeconds: 0.01 }).catch((e: unknown) => e);
   expect(err).toBeInstanceOf(SupermemoryTimeoutError);
 });
 
@@ -85,10 +91,10 @@ test("a thrown fetch is retried, an abort is not", async () => {
   const flaky = async (input: RequestInfo | URL, init?: RequestInit) => {
     calls++;
     if (calls === 1) throw new TypeError("fetch failed");
-    return new Response("[]", { status: 200, headers: { "content-type": "application/json" } });
+    return new Response("{}", { status: 200, headers: { "content-type": "application/json" } });
   };
   const client = new Supermemory({ apiKey: "sm_test", fetch: flaky as typeof globalThis.fetch, maxRetries: 2 });
-  expect(await client.namespaces.list()).toEqual([]);
+  expect(await client.organization.get()).toEqual({});
   expect(calls).toBe(2);
 
   calls = 0;
@@ -122,7 +128,7 @@ test("an abort with a custom reason is not retried", async () => {
   };
   const client = new Supermemory({ apiKey: "sm_test", fetch: aborting as typeof globalThis.fetch, maxRetries: 2 });
   const t0 = Date.now();
-  const err = await client.namespaces.list({ abortSignal: ac.signal }).catch((e: unknown) => e);
+  const err = await client.organization.get({ abortSignal: ac.signal }).catch((e: unknown) => e);
   expect(err).toBeInstanceOf(SupermemoryError);
   expect(calls).toBe(1);
   expect(Date.now() - t0).toBeLessThan(500);

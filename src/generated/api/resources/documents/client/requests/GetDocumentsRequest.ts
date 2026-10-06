@@ -7,6 +7,6 @@ import type * as Supermemory from "../../../../index.js";
  *     {}
  */
 export interface GetDocumentsRequest {
-    /** Child resources to include. Repeat the parameter to attach chunks, memories, or both. */
-    attach?: Supermemory.GetDocumentsRequestAttachItem | Supermemory.GetDocumentsRequestAttachItem[];
+    /** Comma-separated child resources to include: chunks, memories, or both. */
+    include?: Supermemory.GetDocumentsRequestIncludeItem | Supermemory.GetDocumentsRequestIncludeItem[];
 }

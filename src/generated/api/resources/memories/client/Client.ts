@@ -221,4 +221,112 @@ export class MemoriesClient {
             "/ns/{namespace}/memories/semantic",
         );
     }
+
+    /**
+     * Retrieve one memory by ID. Optionally include its version history and connected memories (each list walks outward up to relatedLimit, nearest first) and its source document.
+     *
+     * @param {string} namespace - Namespace containing the memories to forget. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories.
+     * @param {string} id - Memory identifier
+     * @param {Supermemory.GetMemoriesRequest} request
+     * @param {MemoriesClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Supermemory.BadRequestError}
+     * @throws {@link Supermemory.UnauthorizedError}
+     * @throws {@link Supermemory.ForbiddenError}
+     * @throws {@link Supermemory.NotFoundError}
+     * @throws {@link Supermemory.InternalServerError}
+     * @throws {@link errors.SupermemoryError}
+     * @throws {@link errors.SupermemoryTimeoutError}
+     *
+     * @example
+     *     await client.memories.get("user_alex", "mem_abc123")
+     */
+    public get(
+        namespace: string,
+        id: string,
+        request: Supermemory.GetMemoriesRequest = {},
+        requestOptions?: MemoriesClient.RequestOptions,
+    ): core.HttpResponsePromise<Supermemory.GetMemoriesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(namespace, id, request, requestOptions));
+    }
+
+    private async __get(
+        namespace: string,
+        id: string,
+        request: Supermemory.GetMemoriesRequest = {},
+        requestOptions?: MemoriesClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Supermemory.GetMemoriesResponse>> {
+        const { include, relatedLimit } = request;
+        const _queryParams: Record<string, unknown> = {
+            include: Array.isArray(include) ? include.map((item) => item) : include != null ? include : undefined,
+            relatedLimit,
+        };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SupermemoryEnvironment.Default,
+                `ns/${core.url.encodePathParam(namespace)}/memories/${core.url.encodePathParam(id)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Supermemory.GetMemoriesResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Supermemory.BadRequestError(
+                        _response.error.body as Supermemory.BadRequestErrorBody,
+                        _response.rawResponse,
+                    );
+                case 401:
+                    throw new Supermemory.UnauthorizedError(
+                        _response.error.body as Supermemory.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Supermemory.ForbiddenError(
+                        _response.error.body as Supermemory.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Supermemory.NotFoundError(
+                        _response.error.body as Supermemory.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Supermemory.InternalServerError(
+                        _response.error.body as Supermemory.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SupermemoryError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/ns/{namespace}/memories/{id}");
+    }
 }

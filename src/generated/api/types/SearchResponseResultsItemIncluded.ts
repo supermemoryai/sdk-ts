@@ -6,8 +6,8 @@ import type * as Supermemory from "../index.js";
  * Requested supporting context for the result
  */
 export interface SearchResponseResultsItemIncluded {
-    /** Memory relationships attached when requested */
+    /** Memory relationships included when requested */
     related?: Supermemory.SearchResponseResultsItemIncludedRelated | undefined;
-    /** Source document attached when requested and available */
+    /** Source document included when requested and available */
     document?: Supermemory.SearchResponseResultsItemIncludedDocument | undefined;
 }

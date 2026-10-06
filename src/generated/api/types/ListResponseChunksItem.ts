@@ -11,8 +11,8 @@ export interface ListResponseChunksItem {
     content: string;
     /** Chunk content type */
     type: string;
-    /** Chunk metadata, when available */
-    metadata: Record<string, unknown> | null;
+    /** Chunk metadata; empty object when none */
+    metadata: Record<string, unknown>;
     /** Lifecycle timestamps maintained by Supermemory */
     system: Supermemory.ListResponseChunksItemSystem;
     /** ID of the chunk's parent document */

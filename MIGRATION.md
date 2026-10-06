@@ -12,7 +12,7 @@ URL values first as positional arguments, then one object with everything else. 
 
 ```ts
 await client.add("user_alex", { content: "...", dreaming: "instant" });
-await client.documents.get("user_alex", "doc-1", { attach: ["chunks"] });
+await client.documents.get("user_alex", "doc-1", { include: ["chunks"] });
 await client.connectors.delete("user_alex", "conn_1", { deleteDocuments: false });
 await client.organization.update({ organizationalContext: "..." }); // no URL values, so just the object
 ```
@@ -26,13 +26,13 @@ Those release candidates took a single object with `namespace` inside it and the
 ```ts
 // rc.5 (does not compile against this version)
 await client.add({ namespace: "user_alex", dreaming: "instant", body: { content: "..." } });
-await client.documents.get({ namespace: "user_alex", id: "doc-1", attach: ["chunks"] });
+await client.documents.get({ namespace: "user_alex", id: "doc-1", attach: ["chunks"] }); // rc.5 also called it attach
 await client.search({ namespace: "user_alex", searchMode: "chunks", body: { query: "..." } });
 ```
 
 ```ts
 await client.add("user_alex", { content: "...", dreaming: "instant" });
-await client.documents.get("user_alex", "doc-1", { attach: ["chunks"] });
+await client.documents.get("user_alex", "doc-1", { include: ["chunks"] });
 await client.search("user_alex", { query: "...", searchMode: "chunks" });
 ```
 
@@ -47,7 +47,7 @@ Client options and errors also changed, see below. `supermemory/models`, `superm
 | `client.add({ content, containerTag, customId, metadata })` | `client.add(namespace, { content, id, metadata })` |
 | `client.documents.batchAdd({ documents, containerTag })` | `client.documents.batchAdd(namespace, { documents })` |
 | `client.documents.uploadFile({ file, containerTag })` | `client.documents.uploadFile(namespace, { file })` |
-| `client.documents.get(id)` | `client.documents.get(namespace, id, { attach? })` |
+| `client.documents.get(id)` | `client.documents.get(namespace, id, { include? })` |
 | `client.documents.update(id, {...})` | `client.documents.update(namespace, id, {...})` |
 | `client.documents.delete(id)` / `deleteBulk({ ids })` | `client.documents.delete(namespace, { ids })` |
 | `client.documents.list({ containerTags })` | `client.list(namespace, "documents", { filter? })` |
@@ -74,7 +74,7 @@ Client options and errors also changed, see below. `supermemory/models`, `superm
 | `documentDate` | `date` |
 | `q` | `query` |
 | `filters` (JSON string) | `filter` (typed expression: `{ field, operator, value }` or `{ operator: "and" \| "or", operands }`) |
-| `include` | `attach` |
+| `include` | `include` (now a typed list on GETs, an object on search) |
 | `rerank: true` + `aggregate` | `rerank: "none" \| "order" \| "aggregate"` |
 | search mode `documents` | `searchMode: "chunks"` |
 

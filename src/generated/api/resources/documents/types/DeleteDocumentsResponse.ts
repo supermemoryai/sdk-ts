@@ -4,7 +4,7 @@ import type * as Supermemory from "../../../index.js";
 
 export interface DeleteDocumentsResponse {
     /** Number of documents successfully deleted */
-    deletedCount: number;
+    count: number;
     /** Per-document failures; successful deletions are not rolled back */
     errors: Supermemory.DeleteDocumentsResponseErrorsItem[];
 }

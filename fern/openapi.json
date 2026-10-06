@@ -359,11 +359,22 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "Unique identifier of the document"
+                      "minLength": 1,
+                      "description": "Document identifier to poll or retrieve"
                     },
                     "status": {
                       "type": "string",
-                      "description": "Status of the document"
+                      "enum": [
+                        "unknown",
+                        "queued",
+                        "extracting",
+                        "chunking",
+                        "embedding",
+                        "indexing",
+                        "done",
+                        "failed"
+                      ],
+                      "description": "The document's processing state after this request. queued when new work was queued; otherwise its current state, e.g. done for an unchanged duplicate or failed for a metadata-only update to a failed document."
                     }
                   },
                   "required": [
@@ -460,30 +471,6 @@
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
-          },
-          {
-            "in": "query",
-            "name": "taskType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "memory",
-                "superrag"
-              ]
-            },
-            "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories."
-          },
-          {
-            "in": "query",
-            "name": "dreaming",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "dynamic",
-                "instant"
-              ]
-            },
-            "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document."
           }
         ],
         "requestBody": {
@@ -570,6 +557,22 @@
                     "description": "When the source content is from, in ISO 8601 format",
                     "example": "2026-01-15",
                     "type": "string"
+                  },
+                  "taskType": {
+                    "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories.",
+                    "type": "string",
+                    "enum": [
+                      "memory",
+                      "superrag"
+                    ]
+                  },
+                  "dreaming": {
+                    "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document.",
+                    "type": "string",
+                    "enum": [
+                      "dynamic",
+                      "instant"
+                    ]
                   }
                 },
                 "required": [
@@ -584,7 +587,7 @@
           {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/document?dreaming=instant\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"content\": \"Sarah is being promoted to VP of Product.\",\n    \"id\": \"chat_session_1\",\n    \"metadata\": { \"type\": \"conversation\" }\n  }'"
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/document\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"content\": \"Sarah is being promoted to VP of Product.\",\n    \"dreaming\": \"instant\",\n    \"id\": \"chat_session_1\",\n    \"metadata\": { \"type\": \"conversation\" }\n  }'"
           }
         ]
       },
@@ -598,7 +601,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "deletedCount": {
+                    "count": {
                       "type": "integer",
                       "minimum": 0,
                       "maximum": 9007199254740991,
@@ -632,7 +635,7 @@
                     }
                   },
                   "required": [
-                    "deletedCount",
+                    "count",
                     "errors"
                   ],
                   "additionalProperties": false
@@ -759,22 +762,33 @@
                         "properties": {
                           "id": {
                             "type": "string",
-                            "description": "Unique identifier of the document (empty string for failed items)"
+                            "description": "Document identifier"
                           },
                           "status": {
                             "type": "string",
-                            "description": "Status of the document (e.g. 'done', 'queued', 'error')"
+                            "enum": [
+                              "unknown",
+                              "queued",
+                              "extracting",
+                              "chunking",
+                              "embedding",
+                              "indexing",
+                              "done",
+                              "failed",
+                              "error"
+                            ],
+                            "description": "The document's processing state, as for a single add; error when this item failed"
                           },
                           "error": {
-                            "description": "Error message when status is 'error'",
+                            "description": "Failure reason",
                             "type": "string"
                           },
                           "details": {
-                            "description": "Additional error details when status is 'error'",
+                            "description": "Human-readable explanation of the failure",
                             "type": "string"
                           },
                           "url": {
-                            "description": "URL of the failed item, when it had one. Only present on failed items, where it may be the only way to tell which input the error belongs to (the id falls back to 'unknown' when the input had neither an id nor a customId).",
+                            "description": "URL of the failed item, when it had one",
                             "type": "string"
                           }
                         },
@@ -784,21 +798,25 @@
                         ],
                         "additionalProperties": false
                       },
-                      "description": "Array of results for each document in the batch"
+                      "description": "One result per submitted document: accepted documents first, in request order, then failed ones. Match results by id, or by url for a failed item with no id."
+                    },
+                    "count": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Number of documents accepted"
                     },
                     "failed": {
-                      "type": "number",
-                      "description": "Count of documents that failed to add"
-                    },
-                    "success": {
-                      "type": "number",
-                      "description": "Count of documents successfully added"
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Number of documents that failed"
                     }
                   },
                   "required": [
                     "results",
-                    "failed",
-                    "success"
+                    "count",
+                    "failed"
                   ],
                   "additionalProperties": false
                 }
@@ -880,30 +898,6 @@
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
-          },
-          {
-            "in": "query",
-            "name": "taskType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "memory",
-                "superrag"
-              ]
-            },
-            "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories."
-          },
-          {
-            "in": "query",
-            "name": "dreaming",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "dynamic",
-                "instant"
-              ]
-            },
-            "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document."
           }
         ],
         "requestBody": {
@@ -1005,6 +999,22 @@
                       "additionalProperties": false
                     },
                     "description": "Documents to ingest or append in one request"
+                  },
+                  "taskType": {
+                    "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories.",
+                    "type": "string",
+                    "enum": [
+                      "memory",
+                      "superrag"
+                    ]
+                  },
+                  "dreaming": {
+                    "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document.",
+                    "type": "string",
+                    "enum": [
+                      "dynamic",
+                      "instant"
+                    ]
                   }
                 },
                 "required": [
@@ -1019,7 +1029,7 @@
           {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/document/batch?dreaming=instant\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"documents\": [\n      { \"content\": \"Q3 roadmap notes\", \"id\": \"doc_roadmap\" },\n      { \"content\": \"Gift policy for VP promotions\", \"id\": \"doc_gifts\" }\n    ]\n  }'"
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/document/batch\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"documents\": [\n      { \"content\": \"Q3 roadmap notes\", \"id\": \"doc_roadmap\" },\n      { \"content\": \"Gift policy for VP promotions\", \"id\": \"doc_gifts\" }\n    ],\n    \"dreaming\": \"instant\"\n  }'"
           }
         ]
       }
@@ -1027,7 +1037,7 @@
     "/ns/{namespace}/document/{id}": {
       "get": {
         "operationId": "getNsByNamespaceDocumentById",
-        "description": "Retrieve a document's canonical content, metadata, and processing state by document ID or caller-defined ID. Optionally attach its source chunks, derived memories, or both in the same response.",
+        "description": "Retrieve a document's canonical content, metadata, and processing state by document ID or caller-defined ID. Optionally include its source chunks, derived memories, or both in the same response.",
         "responses": {
           "200": {
             "content": {
@@ -1096,6 +1106,16 @@
                       "properties": {
                         "status": {
                           "type": "string",
+                          "enum": [
+                            "unknown",
+                            "queued",
+                            "extracting",
+                            "chunking",
+                            "embedding",
+                            "indexing",
+                            "done",
+                            "failed"
+                          ],
                           "description": "Current extraction and memory-processing status"
                         },
                         "createdAt": {
@@ -1143,19 +1163,12 @@
                             "description": "Chunk content type"
                           },
                           "metadata": {
-                            "anyOf": [
-                              {
-                                "type": "object",
-                                "propertyNames": {
-                                  "type": "string"
-                                },
-                                "additionalProperties": {}
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Chunk metadata, when available"
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {},
+                            "description": "Chunk metadata; empty object when none"
                           },
                           "system": {
                             "type": "object",
@@ -1199,19 +1212,12 @@
                             "description": "Learned fact or context extracted from the document"
                           },
                           "metadata": {
-                            "anyOf": [
-                              {
-                                "type": "object",
-                                "propertyNames": {
-                                  "type": "string"
-                                },
-                                "additionalProperties": {}
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Memory metadata, including temporal context when available"
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {},
+                            "description": "Memory metadata, including temporal context; empty object when none"
                           },
                           "isStatic": {
                             "type": "boolean",
@@ -1282,7 +1288,7 @@
                     "metadata",
                     "system"
                   ],
-                  "description": "Namespace-scoped document. Attachment keys are omitted unless requested and are empty arrays when requested without results."
+                  "description": "Namespace-scoped document. Included keys are omitted unless requested and are empty arrays when requested without results."
                 }
               }
             },
@@ -1377,7 +1383,7 @@
           },
           {
             "in": "query",
-            "name": "attach",
+            "name": "include",
             "schema": {
               "type": "array",
               "items": {
@@ -1386,16 +1392,18 @@
                   "chunks",
                   "memories"
                 ]
-              }
+              },
+              "style": "form",
+              "explode": false
             },
-            "description": "Child resources to include. Repeat the parameter to attach chunks, memories, or both."
+            "description": "Comma-separated child resources to include: chunks, memories, or both."
           }
         ],
         "x-codeSamples": [
           {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl \"https://api.supermemory.ai/ns/project_123/document/doc_abc123?attach=chunks&attach=memories\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
+            "source": "curl \"https://api.supermemory.ai/ns/project_123/document/doc_abc123?include=chunks,memories\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
           }
         ]
       },
@@ -1411,11 +1419,22 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "description": "Unique identifier of the document"
+                      "minLength": 1,
+                      "description": "Document identifier to poll or retrieve"
                     },
                     "status": {
                       "type": "string",
-                      "description": "Status of the document"
+                      "enum": [
+                        "unknown",
+                        "queued",
+                        "extracting",
+                        "chunking",
+                        "embedding",
+                        "indexing",
+                        "done",
+                        "failed"
+                      ],
+                      "description": "The document's processing state after this request. queued when new work was queued; otherwise its current state, e.g. done for an unchanged duplicate or failed for a metadata-only update to a failed document."
                     }
                   },
                   "required": [
@@ -1534,30 +1553,6 @@
             },
             "required": true,
             "description": "The public document ID"
-          },
-          {
-            "in": "query",
-            "name": "taskType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "memory",
-                "superrag"
-              ]
-            },
-            "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories."
-          },
-          {
-            "in": "query",
-            "name": "dreaming",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "dynamic",
-                "instant"
-              ]
-            },
-            "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document."
           }
         ],
         "requestBody": {
@@ -1637,6 +1632,22 @@
                     "description": "When the source content is from, in ISO 8601 format",
                     "example": "2026-01-15",
                     "type": "string"
+                  },
+                  "taskType": {
+                    "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories.",
+                    "type": "string",
+                    "enum": [
+                      "memory",
+                      "superrag"
+                    ]
+                  },
+                  "dreaming": {
+                    "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document.",
+                    "type": "string",
+                    "enum": [
+                      "dynamic",
+                      "instant"
+                    ]
                   }
                 },
                 "additionalProperties": false
@@ -1671,8 +1682,17 @@
                     },
                     "status": {
                       "type": "string",
-                      "const": "processing",
-                      "description": "Confirms the file was accepted for asynchronous processing"
+                      "enum": [
+                        "unknown",
+                        "queued",
+                        "extracting",
+                        "chunking",
+                        "embedding",
+                        "indexing",
+                        "done",
+                        "failed"
+                      ],
+                      "description": "The document's processing state after this request. queued when new work was queued; otherwise its current state, e.g. done for an unchanged duplicate or failed for a metadata-only update to a failed document."
                     }
                   },
                   "required": [
@@ -1769,54 +1789,6 @@
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
-          },
-          {
-            "in": "query",
-            "name": "taskType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "memory",
-                "superrag"
-              ]
-            },
-            "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories."
-          },
-          {
-            "in": "query",
-            "name": "dreaming",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "dynamic",
-                "instant"
-              ]
-            },
-            "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document."
-          },
-          {
-            "in": "query",
-            "name": "fileType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "text",
-                "pdf",
-                "image",
-                "video",
-                "audio"
-              ]
-            },
-            "description": "Explicit source type used when automatic inference is insufficient"
-          },
-          {
-            "in": "query",
-            "name": "mimeType",
-            "schema": {
-              "type": "string",
-              "pattern": "^[^\\s/]+\\/[^\\s/]+$"
-            },
-            "description": "Explicit MIME type used when upload metadata is insufficient"
           }
         ],
         "requestBody": {
@@ -1849,6 +1821,38 @@
                     "description": "When the source content is from, in ISO 8601 format",
                     "example": "2026-01-15",
                     "type": "string"
+                  },
+                  "taskType": {
+                    "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories.",
+                    "type": "string",
+                    "enum": [
+                      "memory",
+                      "superrag"
+                    ]
+                  },
+                  "dreaming": {
+                    "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document.",
+                    "type": "string",
+                    "enum": [
+                      "dynamic",
+                      "instant"
+                    ]
+                  },
+                  "fileType": {
+                    "description": "Explicit source type used when automatic inference is insufficient",
+                    "type": "string",
+                    "enum": [
+                      "text",
+                      "pdf",
+                      "image",
+                      "video",
+                      "audio"
+                    ]
+                  },
+                  "mimeType": {
+                    "description": "Explicit MIME type used when upload metadata is insufficient",
+                    "type": "string",
+                    "pattern": "^[^\\s/]+\\/[^\\s/]+$"
                   }
                 },
                 "required": [
@@ -1879,8 +1883,17 @@
                     },
                     "status": {
                       "type": "string",
-                      "const": "processing",
-                      "description": "Confirms the file was accepted for asynchronous processing"
+                      "enum": [
+                        "unknown",
+                        "queued",
+                        "extracting",
+                        "chunking",
+                        "embedding",
+                        "indexing",
+                        "done",
+                        "failed"
+                      ],
+                      "description": "The document's processing state after this request. queued when new work was queued; otherwise its current state, e.g. done for an unchanged duplicate or failed for a metadata-only update to a failed document."
                     }
                   },
                   "required": [
@@ -1999,54 +2012,6 @@
             },
             "required": true,
             "description": "The public document ID"
-          },
-          {
-            "in": "query",
-            "name": "taskType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "memory",
-                "superrag"
-              ]
-            },
-            "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories."
-          },
-          {
-            "in": "query",
-            "name": "dreaming",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "dynamic",
-                "instant"
-              ]
-            },
-            "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document."
-          },
-          {
-            "in": "query",
-            "name": "fileType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "text",
-                "pdf",
-                "image",
-                "video",
-                "audio"
-              ]
-            },
-            "description": "Explicit source type used when automatic inference is insufficient"
-          },
-          {
-            "in": "query",
-            "name": "mimeType",
-            "schema": {
-              "type": "string",
-              "pattern": "^[^\\s/]+\\/[^\\s/]+$"
-            },
-            "description": "Explicit MIME type used when upload metadata is insufficient"
           }
         ],
         "requestBody": {
@@ -2079,6 +2044,38 @@
                     "description": "When the source content is from, in ISO 8601 format",
                     "example": "2026-01-15",
                     "type": "string"
+                  },
+                  "taskType": {
+                    "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories.",
+                    "type": "string",
+                    "enum": [
+                      "memory",
+                      "superrag"
+                    ]
+                  },
+                  "dreaming": {
+                    "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document.",
+                    "type": "string",
+                    "enum": [
+                      "dynamic",
+                      "instant"
+                    ]
+                  },
+                  "fileType": {
+                    "description": "Explicit source type used when automatic inference is insufficient",
+                    "type": "string",
+                    "enum": [
+                      "text",
+                      "pdf",
+                      "image",
+                      "video",
+                      "audio"
+                    ]
+                  },
+                  "mimeType": {
+                    "description": "Explicit MIME type used when upload metadata is insufficient",
+                    "type": "string",
+                    "pattern": "^[^\\s/]+\\/[^\\s/]+$"
                   }
                 },
                 "required": [
@@ -2107,8 +2104,17 @@
                     },
                     "status": {
                       "type": "string",
-                      "const": "processing",
-                      "description": "Confirms the file was accepted for asynchronous processing"
+                      "enum": [
+                        "unknown",
+                        "queued",
+                        "extracting",
+                        "chunking",
+                        "embedding",
+                        "indexing",
+                        "done",
+                        "failed"
+                      ],
+                      "description": "The document's processing state after this request. queued when new work was queued; otherwise its current state, e.g. done for an unchanged duplicate or failed for a metadata-only update to a failed document."
                     }
                   },
                   "required": [
@@ -2227,54 +2233,6 @@
             },
             "required": true,
             "description": "The public document ID"
-          },
-          {
-            "in": "query",
-            "name": "taskType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "memory",
-                "superrag"
-              ]
-            },
-            "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories."
-          },
-          {
-            "in": "query",
-            "name": "dreaming",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "dynamic",
-                "instant"
-              ]
-            },
-            "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document."
-          },
-          {
-            "in": "query",
-            "name": "fileType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "text",
-                "pdf",
-                "image",
-                "video",
-                "audio"
-              ]
-            },
-            "description": "Explicit source type used when automatic inference is insufficient"
-          },
-          {
-            "in": "query",
-            "name": "mimeType",
-            "schema": {
-              "type": "string",
-              "pattern": "^[^\\s/]+\\/[^\\s/]+$"
-            },
-            "description": "Explicit MIME type used when upload metadata is insufficient"
           }
         ],
         "requestBody": {
@@ -2307,6 +2265,38 @@
                     "description": "When the source content is from, in ISO 8601 format",
                     "example": "2026-01-15",
                     "type": "string"
+                  },
+                  "taskType": {
+                    "description": "Processing pipeline. \"memory\" builds durable learned context; \"superrag\" optimizes the document for retrieval without generating memories.",
+                    "type": "string",
+                    "enum": [
+                      "memory",
+                      "superrag"
+                    ]
+                  },
+                  "dreaming": {
+                    "description": "Processing mode. \"dynamic\" (default) groups related documents so memories form from coherent context. \"instant\" processes each document independently right away and bills one extra operation per document.",
+                    "type": "string",
+                    "enum": [
+                      "dynamic",
+                      "instant"
+                    ]
+                  },
+                  "fileType": {
+                    "description": "Explicit source type used when automatic inference is insufficient",
+                    "type": "string",
+                    "enum": [
+                      "text",
+                      "pdf",
+                      "image",
+                      "video",
+                      "audio"
+                    ]
+                  },
+                  "mimeType": {
+                    "description": "Explicit MIME type used when upload metadata is insufficient",
+                    "type": "string",
+                    "pattern": "^[^\\s/]+\\/[^\\s/]+$"
                   }
                 },
                 "additionalProperties": false
@@ -2348,18 +2338,11 @@
                             "type": "string"
                           },
                           "metadata": {
-                            "anyOf": [
-                              {
-                                "type": "object",
-                                "propertyNames": {
-                                  "type": "string"
-                                },
-                                "additionalProperties": {}
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {},
                             "description": "Public metadata attached to the result",
                             "example": {
                               "source": "conversation",
@@ -2374,6 +2357,10 @@
                           "isLatest": {
                             "type": "boolean",
                             "description": "Whether the memory is its latest version; false for recalled forgotten memories"
+                          },
+                          "isInference": {
+                            "type": "boolean",
+                            "description": "Whether the memory was inferred rather than stated directly; false for chunks"
                           },
                           "system": {
                             "type": "object",
@@ -2397,7 +2384,7 @@
                             "type": "object",
                             "properties": {
                               "related": {
-                                "description": "Memory relationships attached when requested",
+                                "description": "Memory relationships included when requested",
                                 "type": "object",
                                 "properties": {
                                   "parents": {
@@ -2405,6 +2392,10 @@
                                     "items": {
                                       "type": "object",
                                       "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "Related memory ID"
+                                        },
                                         "relation": {
                                           "type": "string",
                                           "enum": [
@@ -2430,19 +2421,12 @@
                                           "description": "Related learned fact or context"
                                         },
                                         "metadata": {
-                                          "description": "Public metadata associated with the related memory",
-                                          "anyOf": [
-                                            {
-                                              "type": "object",
-                                              "propertyNames": {
-                                                "type": "string"
-                                              },
-                                              "additionalProperties": {}
-                                            },
-                                            {
-                                              "type": "null"
-                                            }
-                                          ]
+                                          "type": "object",
+                                          "propertyNames": {
+                                            "type": "string"
+                                          },
+                                          "additionalProperties": {},
+                                          "description": "Public metadata associated with the related memory"
                                         },
                                         "system": {
                                           "type": "object",
@@ -2459,8 +2443,10 @@
                                         }
                                       },
                                       "required": [
+                                        "id",
                                         "relation",
                                         "memory",
+                                        "metadata",
                                         "system"
                                       ]
                                     },
@@ -2471,6 +2457,10 @@
                                     "items": {
                                       "type": "object",
                                       "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "Related memory ID"
+                                        },
                                         "relation": {
                                           "type": "string",
                                           "enum": [
@@ -2496,19 +2486,12 @@
                                           "description": "Related learned fact or context"
                                         },
                                         "metadata": {
-                                          "description": "Public metadata associated with the related memory",
-                                          "anyOf": [
-                                            {
-                                              "type": "object",
-                                              "propertyNames": {
-                                                "type": "string"
-                                              },
-                                              "additionalProperties": {}
-                                            },
-                                            {
-                                              "type": "null"
-                                            }
-                                          ]
+                                          "type": "object",
+                                          "propertyNames": {
+                                            "type": "string"
+                                          },
+                                          "additionalProperties": {},
+                                          "description": "Public metadata associated with the related memory"
                                         },
                                         "system": {
                                           "type": "object",
@@ -2525,8 +2508,10 @@
                                         }
                                       },
                                       "required": [
+                                        "id",
                                         "relation",
                                         "memory",
+                                        "metadata",
                                         "system"
                                       ]
                                     },
@@ -2537,6 +2522,10 @@
                                     "items": {
                                       "type": "object",
                                       "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "Related memory ID"
+                                        },
                                         "relation": {
                                           "type": "string",
                                           "enum": [
@@ -2562,19 +2551,12 @@
                                           "description": "Related learned fact or context"
                                         },
                                         "metadata": {
-                                          "description": "Public metadata associated with the related memory",
-                                          "anyOf": [
-                                            {
-                                              "type": "object",
-                                              "propertyNames": {
-                                                "type": "string"
-                                              },
-                                              "additionalProperties": {}
-                                            },
-                                            {
-                                              "type": "null"
-                                            }
-                                          ]
+                                          "type": "object",
+                                          "propertyNames": {
+                                            "type": "string"
+                                          },
+                                          "additionalProperties": {},
+                                          "description": "Public metadata associated with the related memory"
                                         },
                                         "system": {
                                           "type": "object",
@@ -2591,8 +2573,10 @@
                                         }
                                       },
                                       "required": [
+                                        "id",
                                         "relation",
                                         "memory",
+                                        "metadata",
                                         "system"
                                       ]
                                     },
@@ -2606,7 +2590,7 @@
                                 ]
                               },
                               "document": {
-                                "description": "Source document attached when requested and available",
+                                "description": "Source document included when requested and available",
                                 "type": "object",
                                 "properties": {
                                   "id": {
@@ -2614,7 +2598,6 @@
                                     "description": "Source document identifier"
                                   },
                                   "title": {
-                                    "description": "Source document title",
                                     "anyOf": [
                                       {
                                         "type": "string"
@@ -2622,10 +2605,10 @@
                                       {
                                         "type": "null"
                                       }
-                                    ]
+                                    ],
+                                    "description": "Source document title"
                                   },
                                   "type": {
-                                    "description": "Detected source or content type",
                                     "anyOf": [
                                       {
                                         "type": "string"
@@ -2633,25 +2616,18 @@
                                       {
                                         "type": "null"
                                       }
-                                    ]
+                                    ],
+                                    "description": "Detected source or content type"
                                   },
                                   "metadata": {
-                                    "description": "Public metadata attached to the source document",
-                                    "anyOf": [
-                                      {
-                                        "type": "object",
-                                        "propertyNames": {
-                                          "type": "string"
-                                        },
-                                        "additionalProperties": {}
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
-                                    ]
+                                    "type": "object",
+                                    "propertyNames": {
+                                      "type": "string"
+                                    },
+                                    "additionalProperties": {},
+                                    "description": "Public metadata attached to the source document"
                                   },
                                   "summary": {
-                                    "description": "Generated summary of the source document",
                                     "anyOf": [
                                       {
                                         "type": "string"
@@ -2659,21 +2635,35 @@
                                       {
                                         "type": "null"
                                       }
-                                    ]
+                                    ],
+                                    "description": "Generated summary of the source document"
                                   },
-                                  "createdAt": {
-                                    "type": "string",
-                                    "description": "ISO 8601 timestamp when the source document was created"
-                                  },
-                                  "updatedAt": {
-                                    "type": "string",
-                                    "description": "ISO 8601 timestamp of the source document's latest update"
+                                  "system": {
+                                    "type": "object",
+                                    "properties": {
+                                      "createdAt": {
+                                        "type": "string",
+                                        "description": "ISO 8601 timestamp when the source document was created"
+                                      },
+                                      "updatedAt": {
+                                        "type": "string",
+                                        "description": "ISO 8601 timestamp of the source document's latest update"
+                                      }
+                                    },
+                                    "required": [
+                                      "createdAt",
+                                      "updatedAt"
+                                    ],
+                                    "description": "Lifecycle timestamps maintained by Supermemory"
                                   }
                                 },
                                 "required": [
                                   "id",
-                                  "createdAt",
-                                  "updatedAt"
+                                  "title",
+                                  "type",
+                                  "metadata",
+                                  "summary",
+                                  "system"
                                 ]
                               }
                             }
@@ -2684,6 +2674,7 @@
                           "metadata",
                           "similarity",
                           "isLatest",
+                          "isInference",
                           "system"
                         ]
                       },
@@ -2777,33 +2768,6 @@
             },
             "required": true,
             "description": "The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories."
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "schema": {
-              "default": 10,
-              "example": 10,
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100
-            },
-            "description": "Maximum number of results to return"
-          },
-          {
-            "in": "query",
-            "name": "searchMode",
-            "schema": {
-              "default": "hybrid",
-              "example": "hybrid",
-              "type": "string",
-              "enum": [
-                "hybrid",
-                "memories",
-                "chunks"
-              ]
-            },
-            "description": "Search surface. \"hybrid\" combines learned memories with source chunks, \"memories\" returns learned context, and \"chunks\" returns source passages."
           }
         ],
         "requestBody": {
@@ -2828,28 +2792,50 @@
                     },
                     "$ref": "#/components/schemas/FilterExpression"
                   },
-                  "attach": {
+                  "searchMode": {
+                    "default": "hybrid",
+                    "description": "Search surface. \"hybrid\" combines learned memories with source chunks, \"memories\" returns learned context, and \"chunks\" returns source passages.",
+                    "example": "hybrid",
+                    "type": "string",
+                    "enum": [
+                      "hybrid",
+                      "memories",
+                      "chunks"
+                    ]
+                  },
+                  "limit": {
+                    "default": 10,
+                    "description": "Maximum number of results to return",
+                    "example": 10,
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                  },
+                  "include": {
                     "default": {
                       "documents": false,
                       "related": false,
                       "forgotten": false
                     },
                     "description": "Optional context to include alongside each matching result",
+                    "example": {
+                      "related": true
+                    },
                     "type": "object",
                     "properties": {
                       "documents": {
                         "default": false,
-                        "description": "Attach the source document for each result when one is available",
+                        "description": "Include the source document for each result when one is available",
                         "type": "boolean"
                       },
                       "related": {
                         "default": false,
-                        "description": "Attach parent, child, and sibling memories that explain how each memory evolved",
+                        "description": "Include parent, child, and sibling memories that explain how each memory evolved",
                         "type": "boolean"
                       },
                       "forgotten": {
                         "default": false,
-                        "description": "Allow forgotten memories to participate in recall",
+                        "description": "Let forgotten and expired memories appear in results",
                         "type": "boolean"
                       }
                     },
@@ -2893,7 +2879,7 @@
           {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/search?searchMode=hybrid&limit=5\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"query\": \"gift ideas for a VP promotion after a Tokyo offsite\",\n    \"filter\": {\n      \"operator\": \"and\",\n      \"operands\": [\n        { \"field\": \"category\", \"operator\": \"eq\", \"value\": \"work\" },\n        { \"field\": \"importance\", \"operator\": \"gte\", \"value\": 0.8 }\n      ]\n    },\n    \"attach\": { \"related\": true }\n  }'"
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/search\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"query\": \"gift ideas for a VP promotion after a Tokyo offsite\",\n    \"searchMode\": \"hybrid\",\n    \"limit\": 5,\n    \"include\": { \"related\": true },\n    \"filter\": {\n      \"operator\": \"and\",\n      \"operands\": [\n        { \"field\": \"category\", \"operator\": \"eq\", \"value\": \"work\" },\n        { \"field\": \"importance\", \"operator\": \"gte\", \"value\": 0.8 }\n      ]\n    }\n  }'"
           }
         ]
       }
@@ -3900,15 +3886,10 @@
             "name": "page",
             "schema": {
               "example": 1,
-              "anyOf": [
-                {
-                  "type": "string",
-                  "pattern": "^\\d+$"
-                },
-                {
-                  "type": "number"
-                }
-              ]
+              "default": 1,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
             },
             "description": "One-based page number"
           },
@@ -3917,15 +3898,10 @@
             "name": "limit",
             "schema": {
               "example": 10,
-              "anyOf": [
-                {
-                  "type": "string",
-                  "pattern": "^\\d+$"
-                },
-                {
-                  "type": "number"
-                }
-              ]
+              "default": 10,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
             },
             "description": "Maximum resources to return per page"
           },
@@ -3933,6 +3909,7 @@
             "in": "query",
             "name": "sort",
             "schema": {
+              "default": "createdAt",
               "example": "createdAt",
               "type": "string",
               "enum": [
@@ -3968,6 +3945,24 @@
                   "filter": {
                     "description": "Type-safe metadata conditions applied before pagination",
                     "$ref": "#/components/schemas/FilterExpression"
+                  },
+                  "include": {
+                    "default": {
+                      "forgotten": false
+                    },
+                    "description": "Optional extras, matching search's include",
+                    "example": {
+                      "forgotten": true
+                    },
+                    "type": "object",
+                    "properties": {
+                      "forgotten": {
+                        "default": false,
+                        "description": "List forgotten and expired memories too, with isForgotten: true. Applies to type memories only.",
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "additionalProperties": false
@@ -4102,19 +4097,12 @@
                             "description": "Chunk content type"
                           },
                           "metadata": {
-                            "anyOf": [
-                              {
-                                "type": "object",
-                                "propertyNames": {
-                                  "type": "string"
-                                },
-                                "additionalProperties": {}
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Chunk metadata, when available"
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {},
+                            "description": "Chunk metadata; empty object when none"
                           },
                           "system": {
                             "type": "object",
@@ -4162,19 +4150,12 @@
                             "description": "Learned fact or context extracted from the document"
                           },
                           "metadata": {
-                            "anyOf": [
-                              {
-                                "type": "object",
-                                "propertyNames": {
-                                  "type": "string"
-                                },
-                                "additionalProperties": {}
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Memory metadata, including temporal context when available"
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {},
+                            "description": "Memory metadata, including temporal context; empty object when none"
                           },
                           "isStatic": {
                             "type": "boolean",
@@ -4629,7 +4610,7 @@
                             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
                           },
                           "syncs": {
-                            "description": "Present when attach=syncs",
+                            "description": "Present when include=syncs",
                             "type": "array",
                             "items": {
                               "type": "object",
@@ -4758,7 +4739,7 @@
                             }
                           },
                           "picker": {
-                            "description": "Present when attach=picker. Null for connectors that sync everything.",
+                            "description": "Present when include=picker. Null for connectors that sync everything.",
                             "anyOf": [
                               {
                                 "type": "object",
@@ -5625,7 +5606,7 @@
                             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
                           },
                           "syncs": {
-                            "description": "Present when attach=syncs",
+                            "description": "Present when include=syncs",
                             "type": "array",
                             "items": {
                               "type": "object",
@@ -5754,7 +5735,7 @@
                             }
                           },
                           "picker": {
-                            "description": "Present when attach=picker. Null for connectors that sync everything.",
+                            "description": "Present when include=picker. Null for connectors that sync everything.",
                             "anyOf": [
                               {
                                 "type": "object",
@@ -5923,10 +5904,18 @@
           },
           {
             "in": "query",
-            "name": "attach",
+            "name": "include",
             "schema": {
-              "type": "string",
-              "pattern": "^(syncs|picker)(,(syncs|picker))*$"
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "syncs",
+                  "picker"
+                ]
+              },
+              "style": "form",
+              "explode": false
             },
             "description": "Comma-separated extras. syncs: the 10 most recent sync runs with their failed items. picker: a one-time hosted picker URL."
           },
@@ -5940,7 +5929,7 @@
             "description": "Where the hosted picker sends the user when they finish"
           }
         ],
-        "description": "Read one connector. Add attach=syncs to include its recent sync runs and the items that failed. attach=picker needs an admin with write access, since the link changes what syncs.",
+        "description": "Read one connector. Add include=syncs to include its recent sync runs and the items that failed. include=picker needs an admin with write access, since the link changes what syncs.",
         "responses": {
           "200": {
             "content": {
@@ -6187,7 +6176,7 @@
                       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
                     },
                     "syncs": {
-                      "description": "Present when attach=syncs",
+                      "description": "Present when include=syncs",
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -6316,7 +6305,7 @@
                       }
                     },
                     "picker": {
-                      "description": "Present when attach=picker. Null for connectors that sync everything.",
+                      "description": "Present when include=picker. Null for connectors that sync everything.",
                       "anyOf": [
                         {
                           "type": "object",
@@ -6763,7 +6752,7 @@
                       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
                     },
                     "syncs": {
-                      "description": "Present when attach=syncs",
+                      "description": "Present when include=syncs",
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -6892,7 +6881,7 @@
                       }
                     },
                     "picker": {
-                      "description": "Present when attach=picker. Null for connectors that sync everything.",
+                      "description": "Present when include=picker. Null for connectors that sync everything.",
                       "anyOf": [
                         {
                           "type": "object",
@@ -7288,75 +7277,133 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "Internal identifier for the namespace"
-                      },
-                      "namespace": {
-                        "type": "string",
-                        "description": "Namespace identifier used in API paths"
-                      },
-                      "documentCount": {
-                        "type": "integer",
-                        "minimum": 0,
-                        "maximum": 9007199254740991,
-                        "description": "Number of active source documents in the namespace"
-                      },
-                      "memoryCount": {
-                        "type": "integer",
-                        "minimum": 0,
-                        "maximum": 9007199254740991,
-                        "description": "Number of current, recallable memories in the namespace"
-                      },
-                      "description": {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ],
-                        "description": "Human-readable purpose or scope of the namespace"
-                      },
-                      "system": {
+                  "type": "object",
+                  "properties": {
+                    "namespaces": {
+                      "type": "array",
+                      "items": {
                         "type": "object",
                         "properties": {
-                          "createdAt": {
+                          "id": {
                             "type": "string",
-                            "format": "date-time",
-                            "description": "ISO 8601 timestamp when the namespace was created"
+                            "description": "Internal identifier for the namespace"
                           },
-                          "updatedAt": {
+                          "namespace": {
                             "type": "string",
-                            "format": "date-time",
-                            "description": "ISO 8601 timestamp of the latest namespace update"
+                            "description": "Namespace identifier used in API paths"
+                          },
+                          "documentCount": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991,
+                            "description": "Number of active source documents in the namespace"
+                          },
+                          "memoryCount": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991,
+                            "description": "Number of current, recallable memories in the namespace"
+                          },
+                          "description": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "description": "Human-readable purpose or scope of the namespace"
+                          },
+                          "system": {
+                            "type": "object",
+                            "properties": {
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "ISO 8601 timestamp when the namespace was created"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "ISO 8601 timestamp of the latest namespace update"
+                              }
+                            },
+                            "required": [
+                              "createdAt",
+                              "updatedAt"
+                            ],
+                            "description": "Namespace lifecycle timestamps"
                           }
                         },
                         "required": [
-                          "createdAt",
-                          "updatedAt"
-                        ],
-                        "description": "Namespace lifecycle timestamps"
-                      }
+                          "id",
+                          "namespace",
+                          "documentCount",
+                          "memoryCount",
+                          "description",
+                          "system"
+                        ]
+                      },
+                      "description": "Namespaces on this page, newest first"
                     },
-                    "required": [
-                      "id",
-                      "namespace",
-                      "documentCount",
-                      "memoryCount",
-                      "description",
-                      "system"
-                    ]
-                  }
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "currentPage": {
+                          "type": "number"
+                        },
+                        "limit": {
+                          "default": 10,
+                          "type": "number",
+                          "maximum": 1100
+                        },
+                        "totalItems": {
+                          "type": "number"
+                        },
+                        "totalPages": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "currentPage",
+                        "totalItems",
+                        "totalPages"
+                      ],
+                      "description": "Pagination metadata",
+                      "example": {
+                        "currentPage": 1,
+                        "limit": 10,
+                        "totalItems": 100,
+                        "totalPages": 10
+                      }
+                    }
+                  },
+                  "required": [
+                    "namespaces",
+                    "pagination"
+                  ]
                 }
               }
             },
             "description": "Namespaces available to the caller"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ValidationErrorResponse"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "401": {
             "content": {
@@ -7392,6 +7439,30 @@
         "summary": "List namespaces",
         "tags": [
           "Namespaces"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "default": 1,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "description": "One-based page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Maximum namespaces to return per page"
+          }
         ]
       }
     },
@@ -7404,75 +7475,133 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "Internal identifier for the namespace"
-                      },
-                      "namespace": {
-                        "type": "string",
-                        "description": "Namespace identifier used in API paths"
-                      },
-                      "documentCount": {
-                        "type": "integer",
-                        "minimum": 0,
-                        "maximum": 9007199254740991,
-                        "description": "Number of active source documents in the namespace"
-                      },
-                      "memoryCount": {
-                        "type": "integer",
-                        "minimum": 0,
-                        "maximum": 9007199254740991,
-                        "description": "Number of current, recallable memories in the namespace"
-                      },
-                      "description": {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ],
-                        "description": "Human-readable purpose or scope of the namespace"
-                      },
-                      "system": {
+                  "type": "object",
+                  "properties": {
+                    "namespaces": {
+                      "type": "array",
+                      "items": {
                         "type": "object",
                         "properties": {
-                          "createdAt": {
+                          "id": {
                             "type": "string",
-                            "format": "date-time",
-                            "description": "ISO 8601 timestamp when the namespace was created"
+                            "description": "Internal identifier for the namespace"
                           },
-                          "updatedAt": {
+                          "namespace": {
                             "type": "string",
-                            "format": "date-time",
-                            "description": "ISO 8601 timestamp of the latest namespace update"
+                            "description": "Namespace identifier used in API paths"
+                          },
+                          "documentCount": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991,
+                            "description": "Number of active source documents in the namespace"
+                          },
+                          "memoryCount": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991,
+                            "description": "Number of current, recallable memories in the namespace"
+                          },
+                          "description": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "description": "Human-readable purpose or scope of the namespace"
+                          },
+                          "system": {
+                            "type": "object",
+                            "properties": {
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "ISO 8601 timestamp when the namespace was created"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "ISO 8601 timestamp of the latest namespace update"
+                              }
+                            },
+                            "required": [
+                              "createdAt",
+                              "updatedAt"
+                            ],
+                            "description": "Namespace lifecycle timestamps"
                           }
                         },
                         "required": [
-                          "createdAt",
-                          "updatedAt"
-                        ],
-                        "description": "Namespace lifecycle timestamps"
-                      }
+                          "id",
+                          "namespace",
+                          "documentCount",
+                          "memoryCount",
+                          "description",
+                          "system"
+                        ]
+                      },
+                      "description": "Namespaces on this page, newest first"
                     },
-                    "required": [
-                      "id",
-                      "namespace",
-                      "documentCount",
-                      "memoryCount",
-                      "description",
-                      "system"
-                    ]
-                  }
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "currentPage": {
+                          "type": "number"
+                        },
+                        "limit": {
+                          "default": 10,
+                          "type": "number",
+                          "maximum": 1100
+                        },
+                        "totalItems": {
+                          "type": "number"
+                        },
+                        "totalPages": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "currentPage",
+                        "totalItems",
+                        "totalPages"
+                      ],
+                      "description": "Pagination metadata",
+                      "example": {
+                        "currentPage": 1,
+                        "limit": 10,
+                        "totalItems": 100,
+                        "totalPages": 10
+                      }
+                    }
+                  },
+                  "required": [
+                    "namespaces",
+                    "pagination"
+                  ]
                 }
               }
             },
             "description": "Namespaces available to the caller"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ValidationErrorResponse"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "401": {
             "content": {
@@ -7508,6 +7637,30 @@
         "summary": "List namespaces",
         "tags": [
           "Namespaces"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "default": 1,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "description": "One-based page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Maximum namespaces to return per page"
+          }
         ]
       }
     },
@@ -7816,11 +7969,6 @@
                     {
                       "type": "object",
                       "properties": {
-                        "success": {
-                          "type": "boolean",
-                          "const": true,
-                          "description": "Confirms the namespace was deleted"
-                        },
                         "status": {
                           "type": "string",
                           "const": "deleted",
@@ -7844,7 +7992,6 @@
                         }
                       },
                       "required": [
-                        "success",
                         "status",
                         "namespace",
                         "deletedDocumentsCount",
@@ -7854,11 +8001,6 @@
                     {
                       "type": "object",
                       "properties": {
-                        "success": {
-                          "type": "boolean",
-                          "const": true,
-                          "description": "Confirms the namespace move was accepted"
-                        },
                         "status": {
                           "type": "string",
                           "const": "queued",
@@ -7878,7 +8020,6 @@
                         }
                       },
                       "required": [
-                        "success",
                         "status",
                         "operationId",
                         "namespace",
@@ -7897,11 +8038,6 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "const": true,
-                      "description": "Confirms the namespace move was accepted"
-                    },
                     "status": {
                       "type": "string",
                       "const": "queued",
@@ -7921,7 +8057,6 @@
                     }
                   },
                   "required": [
-                    "success",
                     "status",
                     "operationId",
                     "namespace",
@@ -8016,29 +8151,19 @@
             },
             "required": true,
             "description": "Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories."
+          },
+          {
+            "in": "query",
+            "name": "moveTo",
+            "schema": {
+              "example": "project_archive",
+              "type": "string",
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z0-9_:-]+$"
+            },
+            "description": "Destination namespace that should receive this namespace's content before deletion. Omit to permanently delete the content."
           }
-        ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "default": {},
-                "type": "object",
-                "properties": {
-                  "moveTo": {
-                    "description": "Destination namespace that should receive this namespace's content before deletion. Omit to permanently delete the content.",
-                    "example": "project_archive",
-                    "type": "string",
-                    "maxLength": 100,
-                    "pattern": "^[a-zA-Z0-9_:-]+$"
-                  }
-                },
-                "additionalProperties": false
-              }
-            }
-          }
-        }
+        ]
       }
     },
     "/organization": {
@@ -8232,6 +8357,731 @@
         "summary": "Update organization settings",
         "tags": [
           "Organization"
+        ]
+      }
+    },
+    "/ns/{namespace}/memories/{id}": {
+      "get": {
+        "operationId": "getNsByNamespaceMemoriesById",
+        "description": "Retrieve one memory by ID. Optionally include its version history and connected memories (each list walks outward up to relatedLimit, nearest first) and its source document.",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Stable memory identifier"
+                    },
+                    "memory": {
+                      "type": "string",
+                      "description": "Learned fact or context extracted from the document"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {},
+                      "description": "Memory metadata, including temporal context; empty object when none"
+                    },
+                    "isStatic": {
+                      "type": "boolean",
+                      "description": "Whether the memory belongs to the stable profile section"
+                    },
+                    "isInference": {
+                      "type": "boolean",
+                      "description": "Whether the memory was inferred rather than explicitly stated"
+                    },
+                    "isLatest": {
+                      "type": "boolean",
+                      "description": "Whether this is the newest version in its memory chain"
+                    },
+                    "isForgotten": {
+                      "type": "boolean",
+                      "description": "Whether this memory has been excluded from normal recall"
+                    },
+                    "version": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991,
+                      "description": "Version number within the memory chain"
+                    },
+                    "system": {
+                      "type": "object",
+                      "properties": {
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                          "description": "ISO 8601 timestamp when this memory version was created"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                          "description": "ISO 8601 timestamp of the latest update to this version"
+                        }
+                      },
+                      "required": [
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "description": "Lifecycle timestamps maintained by Supermemory"
+                    },
+                    "included": {
+                      "description": "Requested extras",
+                      "type": "object",
+                      "properties": {
+                        "related": {
+                          "description": "Present when include has related",
+                          "type": "object",
+                          "properties": {
+                            "parents": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "Related memory ID"
+                                  },
+                                  "relation": {
+                                    "type": "string",
+                                    "enum": [
+                                      "updates",
+                                      "extends",
+                                      "derives"
+                                    ],
+                                    "description": "How this memory is connected to the matched memory"
+                                  },
+                                  "version": {
+                                    "description": "Version number within the related memory's history",
+                                    "anyOf": [
+                                      {
+                                        "type": "number"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "description": "Related learned fact or context"
+                                  },
+                                  "metadata": {
+                                    "type": "object",
+                                    "propertyNames": {
+                                      "type": "string"
+                                    },
+                                    "additionalProperties": {},
+                                    "description": "Public metadata associated with the related memory"
+                                  },
+                                  "system": {
+                                    "type": "object",
+                                    "properties": {
+                                      "updatedAt": {
+                                        "type": "string",
+                                        "description": "ISO 8601 timestamp of the related memory's latest update"
+                                      }
+                                    },
+                                    "required": [
+                                      "updatedAt"
+                                    ],
+                                    "description": "Lifecycle details for the related memory"
+                                  },
+                                  "document": {
+                                    "description": "Source document; present when include has both related and documents",
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string",
+                                        "description": "Source document identifier"
+                                      },
+                                      "title": {
+                                        "anyOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ],
+                                        "description": "Source document title"
+                                      },
+                                      "type": {
+                                        "anyOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ],
+                                        "description": "Detected source or content type"
+                                      },
+                                      "metadata": {
+                                        "type": "object",
+                                        "propertyNames": {
+                                          "type": "string"
+                                        },
+                                        "additionalProperties": {},
+                                        "description": "Public metadata attached to the source document"
+                                      },
+                                      "summary": {
+                                        "anyOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ],
+                                        "description": "Generated summary of the source document"
+                                      },
+                                      "system": {
+                                        "type": "object",
+                                        "properties": {
+                                          "createdAt": {
+                                            "type": "string",
+                                            "description": "ISO 8601 timestamp when the source document was created"
+                                          },
+                                          "updatedAt": {
+                                            "type": "string",
+                                            "description": "ISO 8601 timestamp of the source document's latest update"
+                                          }
+                                        },
+                                        "required": [
+                                          "createdAt",
+                                          "updatedAt"
+                                        ],
+                                        "description": "Lifecycle timestamps maintained by Supermemory"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "type",
+                                      "metadata",
+                                      "summary",
+                                      "system"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "relation",
+                                  "memory",
+                                  "metadata",
+                                  "system"
+                                ]
+                              },
+                              "description": "Earlier versions this memory updates, nearest first"
+                            },
+                            "children": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "Related memory ID"
+                                  },
+                                  "relation": {
+                                    "type": "string",
+                                    "enum": [
+                                      "updates",
+                                      "extends",
+                                      "derives"
+                                    ],
+                                    "description": "How this memory is connected to the matched memory"
+                                  },
+                                  "version": {
+                                    "description": "Version number within the related memory's history",
+                                    "anyOf": [
+                                      {
+                                        "type": "number"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "description": "Related learned fact or context"
+                                  },
+                                  "metadata": {
+                                    "type": "object",
+                                    "propertyNames": {
+                                      "type": "string"
+                                    },
+                                    "additionalProperties": {},
+                                    "description": "Public metadata associated with the related memory"
+                                  },
+                                  "system": {
+                                    "type": "object",
+                                    "properties": {
+                                      "updatedAt": {
+                                        "type": "string",
+                                        "description": "ISO 8601 timestamp of the related memory's latest update"
+                                      }
+                                    },
+                                    "required": [
+                                      "updatedAt"
+                                    ],
+                                    "description": "Lifecycle details for the related memory"
+                                  },
+                                  "document": {
+                                    "description": "Source document; present when include has both related and documents",
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string",
+                                        "description": "Source document identifier"
+                                      },
+                                      "title": {
+                                        "anyOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ],
+                                        "description": "Source document title"
+                                      },
+                                      "type": {
+                                        "anyOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ],
+                                        "description": "Detected source or content type"
+                                      },
+                                      "metadata": {
+                                        "type": "object",
+                                        "propertyNames": {
+                                          "type": "string"
+                                        },
+                                        "additionalProperties": {},
+                                        "description": "Public metadata attached to the source document"
+                                      },
+                                      "summary": {
+                                        "anyOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ],
+                                        "description": "Generated summary of the source document"
+                                      },
+                                      "system": {
+                                        "type": "object",
+                                        "properties": {
+                                          "createdAt": {
+                                            "type": "string",
+                                            "description": "ISO 8601 timestamp when the source document was created"
+                                          },
+                                          "updatedAt": {
+                                            "type": "string",
+                                            "description": "ISO 8601 timestamp of the source document's latest update"
+                                          }
+                                        },
+                                        "required": [
+                                          "createdAt",
+                                          "updatedAt"
+                                        ],
+                                        "description": "Lifecycle timestamps maintained by Supermemory"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "type",
+                                      "metadata",
+                                      "summary",
+                                      "system"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "relation",
+                                  "memory",
+                                  "metadata",
+                                  "system"
+                                ]
+                              },
+                              "description": "Newer versions that update this memory, nearest first"
+                            },
+                            "siblings": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "Related memory ID"
+                                  },
+                                  "relation": {
+                                    "type": "string",
+                                    "enum": [
+                                      "updates",
+                                      "extends",
+                                      "derives"
+                                    ],
+                                    "description": "How this memory is connected to the matched memory"
+                                  },
+                                  "version": {
+                                    "description": "Version number within the related memory's history",
+                                    "anyOf": [
+                                      {
+                                        "type": "number"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "description": "Related learned fact or context"
+                                  },
+                                  "metadata": {
+                                    "type": "object",
+                                    "propertyNames": {
+                                      "type": "string"
+                                    },
+                                    "additionalProperties": {},
+                                    "description": "Public metadata associated with the related memory"
+                                  },
+                                  "system": {
+                                    "type": "object",
+                                    "properties": {
+                                      "updatedAt": {
+                                        "type": "string",
+                                        "description": "ISO 8601 timestamp of the related memory's latest update"
+                                      }
+                                    },
+                                    "required": [
+                                      "updatedAt"
+                                    ],
+                                    "description": "Lifecycle details for the related memory"
+                                  },
+                                  "document": {
+                                    "description": "Source document; present when include has both related and documents",
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string",
+                                        "description": "Source document identifier"
+                                      },
+                                      "title": {
+                                        "anyOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ],
+                                        "description": "Source document title"
+                                      },
+                                      "type": {
+                                        "anyOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ],
+                                        "description": "Detected source or content type"
+                                      },
+                                      "metadata": {
+                                        "type": "object",
+                                        "propertyNames": {
+                                          "type": "string"
+                                        },
+                                        "additionalProperties": {},
+                                        "description": "Public metadata attached to the source document"
+                                      },
+                                      "summary": {
+                                        "anyOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ],
+                                        "description": "Generated summary of the source document"
+                                      },
+                                      "system": {
+                                        "type": "object",
+                                        "properties": {
+                                          "createdAt": {
+                                            "type": "string",
+                                            "description": "ISO 8601 timestamp when the source document was created"
+                                          },
+                                          "updatedAt": {
+                                            "type": "string",
+                                            "description": "ISO 8601 timestamp of the source document's latest update"
+                                          }
+                                        },
+                                        "required": [
+                                          "createdAt",
+                                          "updatedAt"
+                                        ],
+                                        "description": "Lifecycle timestamps maintained by Supermemory"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "type",
+                                      "metadata",
+                                      "summary",
+                                      "system"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "relation",
+                                  "memory",
+                                  "metadata",
+                                  "system"
+                                ]
+                              },
+                              "description": "Memories connected by extends or derives, nearest first"
+                            }
+                          },
+                          "required": [
+                            "parents",
+                            "children",
+                            "siblings"
+                          ]
+                        },
+                        "document": {
+                          "description": "Source document; present when include has documents and one exists",
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Source document identifier"
+                            },
+                            "title": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "description": "Source document title"
+                            },
+                            "type": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "description": "Detected source or content type"
+                            },
+                            "metadata": {
+                              "type": "object",
+                              "propertyNames": {
+                                "type": "string"
+                              },
+                              "additionalProperties": {},
+                              "description": "Public metadata attached to the source document"
+                            },
+                            "summary": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "description": "Generated summary of the source document"
+                            },
+                            "system": {
+                              "type": "object",
+                              "properties": {
+                                "createdAt": {
+                                  "type": "string",
+                                  "description": "ISO 8601 timestamp when the source document was created"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "description": "ISO 8601 timestamp of the source document's latest update"
+                                }
+                              },
+                              "required": [
+                                "createdAt",
+                                "updatedAt"
+                              ],
+                              "description": "Lifecycle timestamps maintained by Supermemory"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "title",
+                            "type",
+                            "metadata",
+                            "summary",
+                            "system"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "memory",
+                    "metadata",
+                    "isStatic",
+                    "isInference",
+                    "isLatest",
+                    "isForgotten",
+                    "version",
+                    "system"
+                  ]
+                }
+              }
+            },
+            "description": "Memory retrieved"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ValidationErrorResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Namespace access denied"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Memory not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Server error"
+          }
+        },
+        "summary": "Get memory",
+        "tags": [
+          "Content Management"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z0-9_:-]+$",
+              "example": "user_alex"
+            },
+            "required": true,
+            "description": "Namespace containing the memories to forget. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories."
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "example": "mem_abc123"
+            },
+            "required": true,
+            "description": "Memory identifier"
+          },
+          {
+            "in": "query",
+            "name": "include",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "related",
+                  "documents"
+                ]
+              },
+              "style": "form",
+              "explode": false
+            },
+            "description": "Comma-separated extras. related: the memory's version history and connected memories. documents: the source document, also attached to each related memory when both are requested."
+          },
+          {
+            "in": "query",
+            "name": "relatedLimit",
+            "schema": {
+              "default": 10,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Maximum parents, children and siblings to return, applied to each list separately. Each list walks outward from the memory, nearest first, until it reaches this many."
+          }
         ]
       }
     }

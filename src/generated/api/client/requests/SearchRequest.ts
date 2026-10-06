@@ -5,21 +5,20 @@ import type * as Supermemory from "../../index.js";
 /**
  * @example
  *     {
- *         limit: 10,
  *         query: "what are the API rate limits"
  *     }
  */
 export interface SearchRequest {
-    /** Maximum number of results to return */
-    limit?: number;
-    /** Search surface. "hybrid" combines learned memories with source chunks, "memories" returns learned context, and "chunks" returns source passages. */
-    searchMode?: Supermemory.SearchRequestSearchMode;
     /** Natural-language question, topic, or phrase to retrieve relevant context for. Replaces the v4 `q` field. */
     query: string;
     /** Type-safe metadata conditions applied before ranking results. Replaces the v4 `filters` field and unifies both legacy filter formats into one expression type. */
     filter?: Supermemory.FilterExpression;
+    /** Search surface. "hybrid" combines learned memories with source chunks, "memories" returns learned context, and "chunks" returns source passages. */
+    searchMode?: Supermemory.SearchRequestSearchMode;
+    /** Maximum number of results to return */
+    limit?: number;
     /** Optional context to include alongside each matching result */
-    attach?: Supermemory.SearchRequestAttach;
+    include?: Supermemory.SearchRequestInclude;
     /** Minimum relevance score from 0 to 1. Raise it for precision (fewer, accurate results) or lower it for broader recall (more results). */
     threshold?: number;
     /** Post-retrieval ranking. "order" improves result ordering; "aggregate" also combines overlapping context into cleaner answers. This is helpful if you want to ensure the most relevant results are returned. */

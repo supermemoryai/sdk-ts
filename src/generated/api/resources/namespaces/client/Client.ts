@@ -29,8 +29,10 @@ export class NamespacesClient {
     /**
      * Discover every namespace available to the caller, including its purpose, document volume, memory count, and lifecycle timestamps.
      *
+     * @param {Supermemory.ListNamespacesRequest} request
      * @param {NamespacesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Supermemory.BadRequestError}
      * @throws {@link Supermemory.UnauthorizedError}
      * @throws {@link Supermemory.ForbiddenError}
      * @throws {@link Supermemory.InternalServerError}
@@ -41,14 +43,21 @@ export class NamespacesClient {
      *     await client.namespaces.list()
      */
     public list(
+        request: Supermemory.ListNamespacesRequest = {},
         requestOptions?: NamespacesClient.RequestOptions,
-    ): core.HttpResponsePromise<Supermemory.ListNamespacesResponseItem[]> {
-        return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
+    ): core.HttpResponsePromise<Supermemory.ListNamespacesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
     private async __list(
+        request: Supermemory.ListNamespacesRequest = {},
         requestOptions?: NamespacesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Supermemory.ListNamespacesResponseItem[]>> {
+    ): Promise<core.WithRawResponse<Supermemory.ListNamespacesResponse>> {
+        const { page, limit } = request;
+        const _queryParams: Record<string, unknown> = {
+            page,
+            limit,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -64,7 +73,11 @@ export class NamespacesClient {
             ),
             method: "GET",
             headers: _headers,
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -72,14 +85,16 @@ export class NamespacesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return {
-                data: _response.body as Supermemory.ListNamespacesResponseItem[],
-                rawResponse: _response.rawResponse,
-            };
+            return { data: _response.body as Supermemory.ListNamespacesResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Supermemory.BadRequestError(
+                        _response.error.body as Supermemory.BadRequestErrorBody,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Supermemory.UnauthorizedError(
                         _response.error.body as Supermemory.ErrorResponse,
@@ -220,7 +235,9 @@ export class NamespacesClient {
      * @throws {@link errors.SupermemoryTimeoutError}
      *
      * @example
-     *     await client.namespaces.delete("user_alex")
+     *     await client.namespaces.delete("user_alex", {
+     *         moveTo: "project_archive"
+     *     })
      */
     public delete(
         namespace: string,
@@ -235,6 +252,10 @@ export class NamespacesClient {
         request: Supermemory.DeleteNamespacesRequest = {},
         requestOptions?: NamespacesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.DeleteNamespacesResponse>> {
+        const { moveTo } = request;
+        const _queryParams: Record<string, unknown> = {
+            moveTo,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -250,10 +271,11 @@ export class NamespacesClient {
             ),
             method: "DELETE",
             headers: _headers,
-            contentType: "application/json",
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

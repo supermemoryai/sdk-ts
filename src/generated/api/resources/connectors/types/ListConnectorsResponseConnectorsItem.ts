@@ -28,8 +28,8 @@ export interface ListConnectorsResponseConnectorsItem {
     /** When content last finished syncing */
     lastSyncedAt: string | null;
     createdAt: string;
-    /** Present when attach=syncs */
+    /** Present when include=syncs */
     syncs?: Supermemory.ListConnectorsResponseConnectorsItemSyncsItem[] | undefined;
-    /** Present when attach=picker. Null for connectors that sync everything. */
+    /** Present when include=picker. Null for connectors that sync everything. */
     picker?: (Supermemory.ListConnectorsResponseConnectorsItemPicker | null) | undefined;
 }

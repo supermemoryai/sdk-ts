@@ -3,10 +3,10 @@
 import type * as Supermemory from "../../../index.js";
 
 export interface BatchAddDocumentsResponse {
-    /** Array of results for each document in the batch */
+    /** One result per submitted document: accepted documents first, in request order, then failed ones. Match results by id, or by url for a failed item with no id. */
     results: Supermemory.BatchAddDocumentsResponseResultsItem[];
-    /** Count of documents that failed to add */
+    /** Number of documents accepted */
+    count: number;
+    /** Number of documents that failed */
     failed: number;
-    /** Count of documents successfully added */
-    success: number;
 }

@@ -10,8 +10,8 @@ export interface GetDocumentsResponseMemoriesItem {
     id: string;
     /** Learned fact or context extracted from the document */
     memory: string;
-    /** Memory metadata, including temporal context when available */
-    metadata: Record<string, unknown> | null;
+    /** Memory metadata, including temporal context; empty object when none */
+    metadata: Record<string, unknown>;
     /** Whether the memory belongs to the stable profile section */
     isStatic: boolean;
     /** Whether the memory was inferred rather than explicitly stated */

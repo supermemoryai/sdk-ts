@@ -57,7 +57,7 @@ import { Supermemory } from "supermemory";
 
 const client = new Supermemory();
 
-const doc = await client.documents.get("user_alex", "pref-1", { attach: ["chunks", "memories"] });
+const doc = await client.documents.get("user_alex", "pref-1", { include: ["chunks", "memories"] });
 const page = await client.list("user_alex", "documents", { limit: 20, filter: { field: "source", operator: "eq", value: "chat" } });
 const setup = await client.connectors.create("user_alex", { provider: "notion", redirectUrl: "https://app.example.com/back" });
 await client.connectors.delete("user_alex", setup.id, { deleteDocuments: false });

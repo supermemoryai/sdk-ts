@@ -3,7 +3,7 @@
 import type * as Supermemory from "../index.js";
 
 /**
- * Memory relationships attached when requested
+ * Memory relationships included when requested
  */
 export interface SearchResponseResultsItemIncludedRelated {
     /** Earlier memories this result updates or derives from */

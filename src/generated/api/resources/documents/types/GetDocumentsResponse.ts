@@ -3,7 +3,7 @@
 import type * as Supermemory from "../../../index.js";
 
 /**
- * Namespace-scoped document. Attachment keys are omitted unless requested and are empty arrays when requested without results.
+ * Namespace-scoped document. Included keys are omitted unless requested and are empty arrays when requested without results.
  */
 export interface GetDocumentsResponse {
     /** Stable document identifier */

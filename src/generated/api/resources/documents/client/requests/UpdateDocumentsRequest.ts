@@ -7,10 +7,6 @@ import type * as Supermemory from "../../../../index.js";
  *     {}
  */
 export interface UpdateDocumentsRequest {
-    /** Processing pipeline. "memory" builds durable learned context; "superrag" optimizes the document for retrieval without generating memories. */
-    taskType?: Supermemory.UpdateDocumentsRequestTaskType;
-    /** Processing mode. "dynamic" (default) groups related documents so memories form from coherent context. "instant" processes each document independently right away and bills one extra operation per document. */
-    dreaming?: Supermemory.UpdateDocumentsRequestDreaming;
     /** The content to process. This may be plaintext or a URL to supported rich content. */
     content?: string;
     /** Context used to guide memory extraction within this namespace. Max 1500 characters. */
@@ -21,4 +17,8 @@ export interface UpdateDocumentsRequest {
     group?: Record<string, Supermemory.UpdateDocumentsRequestGroupValue>;
     /** When the source content is from, in ISO 8601 format */
     date?: string;
+    /** Processing pipeline. "memory" builds durable learned context; "superrag" optimizes the document for retrieval without generating memories. */
+    taskType?: Supermemory.UpdateDocumentsRequestTaskType;
+    /** Processing mode. "dynamic" (default) groups related documents so memories form from coherent context. "instant" processes each document independently right away and bills one extra operation per document. */
+    dreaming?: Supermemory.UpdateDocumentsRequestDreaming;
 }

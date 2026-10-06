@@ -10,11 +10,13 @@ export interface SearchResponseResultsItem {
     /** Source passage returned by chunk search (only present for chunk results from hybrid search) */
     chunk?: string | undefined;
     /** Public metadata attached to the result */
-    metadata: Record<string, unknown> | null;
+    metadata: Record<string, unknown>;
     /** Normalized relevance score used to rank the result, from 0 to 1 */
     similarity: number;
     /** Whether the memory is its latest version; false for recalled forgotten memories */
     isLatest: boolean;
+    /** Whether the memory was inferred rather than stated directly; false for chunks */
+    isInference: boolean;
     /** Lifecycle and filesystem details for the result */
     system: Supermemory.SearchResponseResultsItemSystem;
     /** Requested supporting context for the result */

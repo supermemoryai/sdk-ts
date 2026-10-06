@@ -23,6 +23,7 @@ actions:
   # memories
   - { target: '$.paths["/ns/{namespace}/memories"].delete', update: { x-fern-sdk-group-name: memories, x-fern-sdk-method-name: forget } }
   - { target: '$.paths["/ns/{namespace}/memories/semantic"].delete', update: { x-fern-sdk-group-name: memories, x-fern-sdk-method-name: forgetMatching } }
+  - { target: '$.paths["/ns/{namespace}/memories/{id}"].get', update: { x-fern-sdk-group-name: memories, x-fern-sdk-method-name: get } }
   # profiles
   - { target: '$.paths["/ns/{namespace}/profile/buckets"].get', update: { x-fern-sdk-group-name: profiles, x-fern-sdk-method-name: getBuckets } }
   - { target: '$.paths["/ns/{namespace}/profile/buckets"].put', update: { x-fern-sdk-group-name: profiles, x-fern-sdk-method-name: setBuckets } }

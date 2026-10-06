@@ -14,6 +14,7 @@ export * from "./CreateConnectorsRequestBodyWebCrawler.js";
 export * from "./CreateConnectorsRequestBodyWebCrawlerConfig.js";
 export * from "./CreateConnectorsResponse.js";
 export * from "./DeleteConnectorsResponse.js";
+export * from "./GetConnectorsRequestIncludeItem.js";
 export * from "./GetConnectorsResponse.js";
 export * from "./GetConnectorsResponseCapabilities.js";
 export * from "./GetConnectorsResponseConfigValue.js";

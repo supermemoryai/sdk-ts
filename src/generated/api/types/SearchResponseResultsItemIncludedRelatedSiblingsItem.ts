@@ -3,6 +3,8 @@
 import type * as Supermemory from "../index.js";
 
 export interface SearchResponseResultsItemIncludedRelatedSiblingsItem {
+    /** Related memory ID */
+    id: string;
     /** How this memory is connected to the matched memory */
     relation: Supermemory.SearchResponseResultsItemIncludedRelatedSiblingsItemRelation;
     /** Version number within the related memory's history */
@@ -10,7 +12,7 @@ export interface SearchResponseResultsItemIncludedRelatedSiblingsItem {
     /** Related learned fact or context */
     memory: string;
     /** Public metadata associated with the related memory */
-    metadata?: (Record<string, unknown> | null) | undefined;
+    metadata: Record<string, unknown>;
     /** Lifecycle details for the related memory */
     system: Supermemory.SearchResponseResultsItemIncludedRelatedSiblingsItemSystem;
 }

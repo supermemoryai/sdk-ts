@@ -9,10 +9,6 @@ import type * as Supermemory from "../../index.js";
  *     }
  */
 export interface AddRequest {
-    /** Processing pipeline. "memory" builds durable learned context; "superrag" optimizes the document for retrieval without generating memories. */
-    taskType?: Supermemory.AddRequestTaskType;
-    /** Processing mode. "dynamic" (default) groups related documents so memories form from coherent context. "instant" processes each document independently right away and bills one extra operation per document. */
-    dreaming?: Supermemory.AddRequestDreaming;
     /** The content to process. This may be plaintext or a URL to supported rich content. */
     content: string;
     /** An optional caller-defined document ID */
@@ -25,4 +21,8 @@ export interface AddRequest {
     group?: Record<string, Supermemory.AddRequestGroupValue>;
     /** When the source content is from, in ISO 8601 format */
     date?: string;
+    /** Processing pipeline. "memory" builds durable learned context; "superrag" optimizes the document for retrieval without generating memories. */
+    taskType?: Supermemory.AddRequestTaskType;
+    /** Processing mode. "dynamic" (default) groups related documents so memories form from coherent context. "instant" processes each document independently right away and bills one extra operation per document. */
+    dreaming?: Supermemory.AddRequestDreaming;
 }

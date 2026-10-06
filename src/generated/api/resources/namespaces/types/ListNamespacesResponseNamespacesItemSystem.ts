@@ -3,7 +3,7 @@
 /**
  * Namespace lifecycle timestamps
  */
-export interface ListNamespacesResponseItemSystem {
+export interface ListNamespacesResponseNamespacesItemSystem {
     /** ISO 8601 timestamp when the namespace was created */
     createdAt: string;
     /** ISO 8601 timestamp of the latest namespace update */

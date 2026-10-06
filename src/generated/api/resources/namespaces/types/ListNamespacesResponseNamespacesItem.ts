@@ -2,7 +2,7 @@
 
 import type * as Supermemory from "../../../index.js";
 
-export interface ListNamespacesResponseItem {
+export interface ListNamespacesResponseNamespacesItem {
     /** Internal identifier for the namespace */
     id: string;
     /** Namespace identifier used in API paths */
@@ -14,5 +14,5 @@ export interface ListNamespacesResponseItem {
     /** Human-readable purpose or scope of the namespace */
     description: string | null;
     /** Namespace lifecycle timestamps */
-    system: Supermemory.ListNamespacesResponseItemSystem;
+    system: Supermemory.ListNamespacesResponseNamespacesItemSystem;
 }

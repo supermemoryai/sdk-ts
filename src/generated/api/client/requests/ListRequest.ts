@@ -4,17 +4,22 @@ import type * as Supermemory from "../../index.js";
 
 /**
  * @example
- *     {}
+ *     {
+ *         page: 1,
+ *         limit: 10
+ *     }
  */
 export interface ListRequest {
     /** One-based page number */
-    page?: Supermemory.ListRequestPage;
+    page?: number;
     /** Maximum resources to return per page */
-    limit?: Supermemory.ListRequestLimit;
+    limit?: number;
     /** Field used to order results. Position is available only when listing chunks. */
     sort?: Supermemory.ListRequestSort;
     /** Ascending or descending sort direction */
     order?: Supermemory.ListRequestOrder;
     /** Type-safe metadata conditions applied before pagination */
     filter?: Supermemory.FilterExpression;
+    /** Optional extras, matching search's include */
+    include?: Supermemory.ListRequestInclude;
 }

@@ -2,7 +2,9 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         moveTo: "project_archive"
+ *     }
  */
 export interface DeleteNamespacesRequest {
     /** Destination namespace that should receive this namespace's content before deletion. Omit to permanently delete the content. */

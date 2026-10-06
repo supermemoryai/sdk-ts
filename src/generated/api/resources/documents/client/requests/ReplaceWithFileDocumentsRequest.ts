@@ -10,14 +10,6 @@ import type * as Supermemory from "../../../../index.js";
  *     }
  */
 export interface ReplaceWithFileDocumentsRequest {
-    /** Processing pipeline. "memory" builds durable learned context; "superrag" optimizes the document for retrieval without generating memories. */
-    taskType?: Supermemory.ReplaceWithFileDocumentsRequestTaskType;
-    /** Processing mode. "dynamic" (default) groups related documents so memories form from coherent context. "instant" processes each document independently right away and bills one extra operation per document. */
-    dreaming?: Supermemory.ReplaceWithFileDocumentsRequestDreaming;
-    /** Explicit source type used when automatic inference is insufficient */
-    fileType?: Supermemory.ReplaceWithFileDocumentsRequestFileType;
-    /** Explicit MIME type used when upload metadata is insufficient */
-    mimeType?: string;
     /** File contents to upload */
     file: core.file.Uploadable;
     /** Context used to guide memory extraction within this namespace. Max 1500 characters. */
@@ -28,4 +20,12 @@ export interface ReplaceWithFileDocumentsRequest {
     group?: string;
     /** When the source content is from, in ISO 8601 format */
     date?: string;
+    /** Processing pipeline. "memory" builds durable learned context; "superrag" optimizes the document for retrieval without generating memories. */
+    taskType?: Supermemory.ReplaceWithFileDocumentsRequestTaskType;
+    /** Processing mode. "dynamic" (default) groups related documents so memories form from coherent context. "instant" processes each document independently right away and bills one extra operation per document. */
+    dreaming?: Supermemory.ReplaceWithFileDocumentsRequestDreaming;
+    /** Explicit source type used when automatic inference is insufficient */
+    fileType?: Supermemory.ReplaceWithFileDocumentsRequestFileType;
+    /** Explicit MIME type used when upload metadata is insufficient */
+    mimeType?: string;
 }
