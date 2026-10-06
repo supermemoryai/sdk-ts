@@ -1,0 +1,46 @@
+# Maps the v5 OpenAPI document (/v5/openapi) onto the SDK surface. Method names
+# match the Python SDK (supermemoryai/python-sdk) in camelCase.
+overlay: 1.0.0
+info: { title: Supermemory v5 TypeScript SDK surface, version: 1.0.0 }
+actions:
+  - target: $.components.securitySchemes.bearerAuth
+    update: { x-fern-bearer: { name: apiKey, env: SUPERMEMORY_API_KEY } }
+  - target: $.paths["/namespaces"]
+    remove: true
+  # root-level
+  - { target: '$.paths["/ns/{namespace}/document"].post', update: { x-fern-sdk-group-name: [], x-fern-sdk-method-name: add } }
+  - { target: '$.paths["/ns/{namespace}/search"].post', update: { x-fern-sdk-group-name: [], x-fern-sdk-method-name: search } }
+  - { target: '$.paths["/ns/{namespace}/profile"].post', update: { x-fern-sdk-group-name: [], x-fern-sdk-method-name: profile } }
+  - { target: '$.paths["/ns/{namespace}/list/{type}"].post', update: { x-fern-sdk-group-name: [], x-fern-sdk-method-name: list } }
+  # documents
+  - { target: '$.paths["/ns/{namespace}/document/batch"].post', update: { x-fern-sdk-group-name: documents, x-fern-sdk-method-name: batchAdd } }
+  - { target: '$.paths["/ns/{namespace}/document/{id}"].get', update: { x-fern-sdk-group-name: documents, x-fern-sdk-method-name: get } }
+  - { target: '$.paths["/ns/{namespace}/document/{id}"].patch', update: { x-fern-sdk-group-name: documents, x-fern-sdk-method-name: update } }
+  - { target: '$.paths["/ns/{namespace}/document"].delete', update: { x-fern-sdk-group-name: documents, x-fern-sdk-method-name: delete } }
+  - { target: '$.paths["/ns/{namespace}/document/file"].post', update: { x-fern-sdk-group-name: documents, x-fern-sdk-method-name: uploadFile } }
+  - { target: '$.paths["/ns/{namespace}/document/file/{id}"].post', update: { x-fern-sdk-group-name: documents, x-fern-sdk-method-name: replaceWithFile } }
+  - { target: '$.paths["/ns/{namespace}/document/file/{id}"].patch', update: { x-fern-sdk-group-name: documents, x-fern-sdk-method-name: updateFile } }
+  # memories
+  - { target: '$.paths["/ns/{namespace}/memories"].delete', update: { x-fern-sdk-group-name: memories, x-fern-sdk-method-name: forget } }
+  - { target: '$.paths["/ns/{namespace}/memories/semantic"].delete', update: { x-fern-sdk-group-name: memories, x-fern-sdk-method-name: forgetMatching } }
+  - { target: '$.paths["/ns/{namespace}/memories/{id}"].get', update: { x-fern-sdk-group-name: memories, x-fern-sdk-method-name: get } }
+  # profiles
+  - { target: '$.paths["/ns/{namespace}/profile/buckets"].get', update: { x-fern-sdk-group-name: profiles, x-fern-sdk-method-name: getBuckets } }
+  - { target: '$.paths["/ns/{namespace}/profile/buckets"].put', update: { x-fern-sdk-group-name: profiles, x-fern-sdk-method-name: setBuckets } }
+  - { target: '$.paths["/ns/{namespace}/profile/buckets"].delete', update: { x-fern-sdk-group-name: profiles, x-fern-sdk-method-name: deleteBuckets } }
+  # connectors
+  - { target: '$.paths["/connectors"].get', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: listAll } }
+  - { target: '$.paths["/ns/{namespace}/connectors"].post', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: create } }
+  - { target: '$.paths["/ns/{namespace}/connectors"].get', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: list } }
+  - { target: '$.paths["/ns/{namespace}/connectors/{id}"].get', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: get } }
+  - { target: '$.paths["/ns/{namespace}/connectors/{id}"].patch', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: update } }
+  - { target: '$.paths["/ns/{namespace}/connectors/{id}"].delete', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: delete } }
+  - { target: '$.paths["/ns/{namespace}/connectors/{id}/sync"].post', update: { x-fern-sdk-group-name: connectors, x-fern-sdk-method-name: sync } }
+  # namespaces
+  - { target: '$.paths["/ns"].get', update: { x-fern-sdk-group-name: namespaces, x-fern-sdk-method-name: list } }
+  - { target: '$.paths["/ns/{namespace}"].get', update: { x-fern-sdk-group-name: namespaces, x-fern-sdk-method-name: get } }
+  - { target: '$.paths["/ns/{namespace}"].patch', update: { x-fern-sdk-group-name: namespaces, x-fern-sdk-method-name: update } }
+  - { target: '$.paths["/ns/{namespace}"].delete', update: { x-fern-sdk-group-name: namespaces, x-fern-sdk-method-name: delete } }
+  # organization
+  - { target: '$.paths["/organization"].get', update: { x-fern-sdk-group-name: organization, x-fern-sdk-method-name: get } }
+  - { target: '$.paths["/organization"].patch', update: { x-fern-sdk-group-name: organization, x-fern-sdk-method-name: update } }

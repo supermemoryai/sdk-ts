@@ -71,7 +71,7 @@ jobs:
 
       - name: Build SDK
         if: steps.meta.outputs.publish == 'true'
-        run: npm install --ignore-scripts && npm run build
+        run: bun install --frozen-lockfile --ignore-scripts && bun run build
 
       - name: Bundle CLI from monorepo
         if: steps.meta.outputs.publish == 'true'

@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://schema.buildwithfern.dev/generators-yml.json
+#
+# Generates src/generated from the Supermemory v5 API (openapi.json, refreshed
+# from https://api.supermemory.ai/v5/openapi by scripts/generate.ts). Fern runs
+# the open-source generator image locally in Docker — no hosted account needed.
+#
+# overlay.yaml controls the SDK surface (method names and groups). src/index.ts
+# is hand-written and re-exports the generated client as `Supermemory`.
+api:
+  specs:
+    - openapi: ./openapi.json
+      overlays: ./overlay.yaml
+      settings:
+        respect-nullable-schemas: true
+        coerce-enums-to-literals: true
+        path-parameter-order: url-order
+default-group: typescript-sdk
+groups:
+  typescript-sdk:
+    generators:
+      - name: fernapi/fern-typescript-sdk
+        version: 3.98.4
+        output:
+          location: local-file-system
+          path: ../src/generated
+        config:
+          namespaceExport: Supermemory
+          # Path params live in the request object: client.add({ namespace, content })
+          inlinePathParameters: false
+          inlineFileProperties: true
+          noSerdeLayer: true
+          skipResponseValidation: true
+          fetchSupport: native
+          streamType: web
+          omitUndefined: true
+          # Hoist inline schemas to named types; the nested-namespace mode emits
+          # broken references for Record<string, Array<object>> (profile buckets).
+          enableInlineTypes: false
