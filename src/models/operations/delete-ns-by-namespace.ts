@@ -5,6 +5,8 @@
 
 import * as z from "zod/v4-mini";
 import { safeParse } from "../../lib/schemas.js";
+import * as discriminatedUnionTypes from "../../types/discriminated-union.js";
+import { discriminatedUnion } from "../../types/discriminated-union.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
 import { smartUnion } from "../../types/smart-union.js";
@@ -51,14 +53,38 @@ export type DeleteNsByNamespaceResponseBodyQueued = {
   moveTo: string;
 };
 
-/**
- * Namespace permanently deleted
- */
-export type DeleteNsByNamespaceResponseBody = {
+export type Queued = {
+  /**
+   * Confirms the namespace move was accepted
+   */
+  success: true;
+  /**
+   * The move continues asynchronously after this response
+   */
+  status: "queued";
+  /**
+   * Identifier used to trace the asynchronous move operation
+   */
+  operationId: string;
+  /**
+   * Source namespace being removed
+   */
+  namespace: string;
+  /**
+   * Destination namespace receiving the content
+   */
+  moveTo: string;
+};
+
+export type Deleted = {
   /**
    * Confirms the namespace was deleted
    */
   success: true;
+  /**
+   * The namespace and its content are gone
+   */
+  status: "deleted";
   /**
    * Deleted namespace identifier
    */
@@ -73,9 +99,19 @@ export type DeleteNsByNamespaceResponseBody = {
   deletedMemoriesCount: number;
 };
 
+/**
+ * Namespace permanently deleted (status "deleted"). A move answers 202 with status "queued".
+ */
+export type DeleteNsByNamespaceResponseBody =
+  | Deleted
+  | Queued
+  | discriminatedUnionTypes.Unknown<"status">;
+
 export type DeleteNsByNamespaceResponse =
   | DeleteNsByNamespaceResponseBodyQueued
-  | DeleteNsByNamespaceResponseBody;
+  | Deleted
+  | Queued
+  | discriminatedUnionTypes.Unknown<"status">;
 
 /** @internal */
 export type DeleteNsByNamespaceRequestBody$Outbound = {
@@ -147,14 +183,50 @@ export function deleteNsByNamespaceResponseBodyQueuedFromJSON(
 }
 
 /** @internal */
-export const DeleteNsByNamespaceResponseBody$inboundSchema: z.ZodMiniType<
-  DeleteNsByNamespaceResponseBody,
-  unknown
-> = z.object({
+export const Queued$inboundSchema: z.ZodMiniType<Queued, unknown> = z.object({
   success: types.literal(true),
+  status: types.literal("queued"),
+  operationId: types.string(),
+  namespace: types.string(),
+  moveTo: types.string(),
+});
+
+export function queuedFromJSON(
+  jsonString: string,
+): SafeParseResult<Queued, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Queued$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Queued' from JSON`,
+  );
+}
+
+/** @internal */
+export const Deleted$inboundSchema: z.ZodMiniType<Deleted, unknown> = z.object({
+  success: types.literal(true),
+  status: types.literal("deleted"),
   namespace: types.string(),
   deletedDocumentsCount: types.number(),
   deletedMemoriesCount: types.number(),
+});
+
+export function deletedFromJSON(
+  jsonString: string,
+): SafeParseResult<Deleted, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Deleted$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Deleted' from JSON`,
+  );
+}
+
+/** @internal */
+export const DeleteNsByNamespaceResponseBody$inboundSchema: z.ZodMiniType<
+  DeleteNsByNamespaceResponseBody,
+  unknown
+> = discriminatedUnion("status", {
+  deleted: z.lazy(() => Deleted$inboundSchema),
+  queued: z.lazy(() => Queued$inboundSchema),
 });
 
 export function deleteNsByNamespaceResponseBodyFromJSON(
@@ -173,7 +245,10 @@ export const DeleteNsByNamespaceResponse$inboundSchema: z.ZodMiniType<
   unknown
 > = smartUnion([
   z.lazy(() => DeleteNsByNamespaceResponseBodyQueued$inboundSchema),
-  z.lazy(() => DeleteNsByNamespaceResponseBody$inboundSchema),
+  discriminatedUnion("status", {
+    deleted: z.lazy(() => Deleted$inboundSchema),
+    queued: z.lazy(() => Queued$inboundSchema),
+  }),
 ]);
 
 export function deleteNsByNamespaceResponseFromJSON(
