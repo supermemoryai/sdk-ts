@@ -92,4 +92,11 @@ const callSite = "            args.maxRetries,\n        );";
 if (fetcherSrc.split(callSite).length !== 2) throw new Error(`${fetcherFile}: requestWithRetries call site not found once; review the Fern upgrade`);
 await Bun.write(fetcherFile, fetcherSrc.replace(callSite, "            args.maxRetries,\n            args.abortSignal,\n        );"));
 
+// The passthrough fetch() resolved its base URL without the default environment the typed methods fall back to, so a default client could not use relative paths and sent absolute URLs without auth.
+const clientFile = "src/generated/Client.ts";
+const clientSrc = await Bun.file(clientFile).text();
+const baseLine = "                baseUrl: this._options.baseUrl ?? this._options.environment,\n";
+if (clientSrc.split(baseLine).length !== 2) throw new Error(`${clientFile}: passthrough baseUrl line not found once; review the Fern upgrade`);
+await Bun.write(clientFile, clientSrc.replace(baseLine, "                baseUrl: this._options.baseUrl ?? this._options.environment ?? environments.SupermemoryEnvironment.Default,\n"));
+
 console.log("==> Done. Review with: git diff --stat");

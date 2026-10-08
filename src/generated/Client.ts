@@ -489,7 +489,7 @@ export class SupermemoryClient {
             input,
             init,
             {
-                baseUrl: this._options.baseUrl ?? this._options.environment,
+                baseUrl: this._options.baseUrl ?? this._options.environment ?? environments.SupermemoryEnvironment.Default,
                 headers: this._options.headers,
                 timeoutInSeconds: this._options.timeoutInSeconds,
                 maxRetries: this._options.maxRetries,
