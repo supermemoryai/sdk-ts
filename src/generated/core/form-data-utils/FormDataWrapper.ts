@@ -70,7 +70,7 @@ function isArrayBufferView(value: unknown): value is ArrayBufferView {
 
 async function streamToBuffer(stream: unknown): Promise<Buffer> {
     if (RUNTIME.type === "node") {
-        const { Readable } = await import("stream");
+        const { Readable } = (await import(/* webpackIgnore: true */ /* @vite-ignore */ ["s", "t", "r", "e", "a", "m"].join(""))) as typeof import("stream");
 
         if (stream instanceof Readable) {
             const chunks: Buffer[] = [];

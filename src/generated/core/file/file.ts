@@ -52,7 +52,7 @@ async function getFileWithMetadata(
     }
 
     if ("path" in file) {
-        const fs = await import("fs");
+        const fs = (await import(/* webpackIgnore: true */ /* @vite-ignore */ ["f", "s"].join(""))) as typeof import("fs");
         if (!fs?.createReadStream) {
             throw new Error("File path uploads are not supported in this environment.");
         }
@@ -101,7 +101,7 @@ function isFileLike(value: unknown): value is Uploadable.FileLike {
 
 async function tryGetFileSizeFromPath(path: string): Promise<number | undefined> {
     try {
-        const fs = await import("fs");
+        const fs = (await import(/* webpackIgnore: true */ /* @vite-ignore */ ["f", "s"].join(""))) as typeof import("fs");
         if (!fs?.promises?.stat) {
             return undefined;
         }
