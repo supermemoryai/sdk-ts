@@ -118,6 +118,23 @@ test("profileMarkdown maps a 404 to NotFoundError-compatible SupermemoryError", 
   expect((err as SupermemoryError).statusCode).toBe(404);
 });
 
+test("fetch passthrough on a default client resolves relative paths and sends auth to the default host", async () => {
+  const { sent, client } = stub();
+  await client.fetch("/v3/settings");
+  await client.fetch("https://api.supermemory.ai/v3/settings");
+  expect(sent.map((s) => s.url.href)).toEqual(["https://api.supermemory.ai/v3/settings", "https://api.supermemory.ai/v3/settings"]);
+  expect(sent.map((s) => s.headers.get("authorization"))).toEqual(["Bearer sm_test", "Bearer sm_test"]);
+});
+
+
+test("fetch passthrough does not send auth to another host", async () => {
+  const { sent, client } = stub();
+  await client.fetch("https://example.com/x");
+  expect(sent[0].url.href).toBe("https://example.com/x");
+  expect(sent[0].headers.get("authorization")).toBeNull();
+});
+
+
 test("an abort with a custom reason is not retried", async () => {
   let calls = 0;
   const ac = new AbortController();
