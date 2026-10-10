@@ -3,6 +3,7 @@
 import * as Supermemory from "./api/index.js";
 import { ConnectorsClient } from "./api/resources/connectors/client/Client.js";
 import { DocumentsClient } from "./api/resources/documents/client/Client.js";
+import { FeedbackClient } from "./api/resources/feedback/client/Client.js";
 import { MemoriesClient } from "./api/resources/memories/client/Client.js";
 import { NamespacesClient } from "./api/resources/namespaces/client/Client.js";
 import { OrganizationClient } from "./api/resources/organization/client/Client.js";
@@ -30,6 +31,7 @@ export class SupermemoryClient {
     protected _connectors: ConnectorsClient | undefined;
     protected _namespaces: NamespacesClient | undefined;
     protected _organization: OrganizationClient | undefined;
+    protected _feedback: FeedbackClient | undefined;
 
     constructor(options: SupermemoryClient.Options = {}) {
         this._options = normalizeClientOptionsWithAuth(options);
@@ -57,6 +59,10 @@ export class SupermemoryClient {
 
     public get organization(): OrganizationClient {
         return (this._organization ??= new OrganizationClient(this._options));
+    }
+
+    public get feedback(): FeedbackClient {
+        return (this._feedback ??= new FeedbackClient(this._options));
     }
 
     /**

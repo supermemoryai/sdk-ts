@@ -223,7 +223,7 @@ export class MemoriesClient {
     }
 
     /**
-     * Retrieve one memory by ID. Optionally include its version history and connected memories (each list walks outward up to relatedLimit, nearest first) and its source document.
+     * Retrieve one memory by ID. Optionally include its version history and connected memories (each list walks outward up to relatedLimit) and its source document.
      *
      * @param {string} namespace - Namespace containing the memories to forget. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories.
      * @param {string} id - Memory identifier
