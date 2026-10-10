@@ -80,15 +80,11 @@
                 "description": "Compare the field for equality or inequality"
               },
               "value": {
-                "anyOf": [
-                  {
-                    "type": "number"
-                  },
-                  {
-                    "type": "boolean"
-                  }
-                ],
-                "description": "Numeric or boolean value to compare against"
+                "description": "Numeric or boolean value to compare against",
+                "type": [
+                  "number",
+                  "boolean"
+                ]
               }
             },
             "required": [
@@ -343,6 +339,10 @@
     {
       "name": "Organization",
       "description": "Read and update organization-wide settings"
+    },
+    {
+      "name": "Feedback",
+      "description": "Report bugs, request features, and flag documentation issues"
     }
   ],
   "paths": {
@@ -464,10 +464,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
@@ -585,9 +585,19 @@
         },
         "x-codeSamples": [
           {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst doc = await client.add(\"user_123\", {\n  content: \"Sarah is being promoted to VP of Product.\",\n  id: \"chat_session_1\",\n  metadata: { type: \"conversation\" },\n  dreaming: \"instant\",\n});\nconsole.log(doc.id, doc.status);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\ndoc = client.add(\n    \"user_123\",\n    content=\"Sarah is being promoted to VP of Product.\",\n    id=\"chat_session_1\",\n    metadata={\"type\": \"conversation\"},\n    dreaming=\"instant\",\n)\nprint(doc.id, doc.status)"
+          },
+          {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/document\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"content\": \"Sarah is being promoted to VP of Product.\",\n    \"dreaming\": \"instant\",\n    \"id\": \"chat_session_1\",\n    \"metadata\": { \"type\": \"conversation\" }\n  }'"
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/document\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"content\": \"Sarah is being promoted to VP of Product.\",\n    \"id\": \"chat_session_1\",\n    \"metadata\": { \"type\": \"conversation\" },\n    \"dreaming\": \"instant\"\n  }'"
           }
         ]
       },
@@ -701,10 +711,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
@@ -741,7 +751,24 @@
               }
             }
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst res = await client.documents.delete(\"user_123\", {\n  ids: [\"chat_session_1\", \"doc_roadmap\"],\n});\nconsole.log(res.count, res.errors);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nres = client.documents.delete(\"user_123\", ids=[\"chat_session_1\", \"doc_roadmap\"])\nprint(res.count, res.errors)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X DELETE \"https://api.supermemory.ai/ns/user_123/document\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"ids\": [\"chat_session_1\", \"doc_roadmap\"] }'"
+          }
+        ]
       }
     },
     "/ns/{namespace}/document/batch": {
@@ -777,7 +804,7 @@
                               "failed",
                               "error"
                             ],
-                            "description": "The document's processing state, as for a single add; error when this item failed"
+                            "description": "The document's processing state after this request, or error when this item failed"
                           },
                           "error": {
                             "description": "Failure reason",
@@ -891,10 +918,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
@@ -1027,6 +1054,16 @@
         },
         "x-codeSamples": [
           {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst res = await client.documents.batchAdd(\"user_123\", {\n  documents: [\n    { content: \"Q3 roadmap notes\", id: \"doc_roadmap\" },\n    { content: \"Gift policy for VP promotions\", id: \"doc_gifts\" },\n  ],\n  dreaming: \"instant\",\n});\nconsole.log(res.count, res.failed);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nres = client.documents.batch_add(\n    \"user_123\",\n    documents=[\n        {\"content\": \"Q3 roadmap notes\", \"id\": \"doc_roadmap\"},\n        {\"content\": \"Gift policy for VP promotions\", \"id\": \"doc_gifts\"},\n    ],\n    dreaming=\"instant\",\n)\nprint(res.count, res.failed)"
+          },
+          {
             "lang": "bash",
             "label": "cURL",
             "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/document/batch\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"documents\": [\n      { \"content\": \"Q3 roadmap notes\", \"id\": \"doc_roadmap\" },\n      { \"content\": \"Gift policy for VP promotions\", \"id\": \"doc_gifts\" }\n    ],\n    \"dreaming\": \"instant\"\n  }'"
@@ -1051,16 +1088,12 @@
                       "example": "doc_xyz789"
                     },
                     "title": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
                       "description": "Extracted or caller-provided document title",
-                      "example": "API Rate Limiting Policy"
+                      "example": "API Rate Limiting Policy",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "type": {
                       "type": "string",
@@ -1068,27 +1101,19 @@
                       "example": "text"
                     },
                     "summary": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
-                      "description": "Generated summary of the document, when available"
+                      "description": "Generated summary of the document, when available",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "content": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
                       "description": "Canonical extracted text used for processing and recall",
-                      "example": "Our API rate limits are 100 req/min on free and 1000 on pro."
+                      "example": "Our API rate limits are 100 req/min on free and 1000 on pro.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "metadata": {
                       "type": "object",
@@ -1121,13 +1146,13 @@
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
-                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                           "description": "ISO 8601 timestamp when the document was created"
                         },
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time",
-                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                           "description": "ISO 8601 timestamp of the latest document update"
                         }
                       },
@@ -1176,7 +1201,7 @@
                               "createdAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp when the chunk was created"
                               }
                             },
@@ -1247,13 +1272,13 @@
                               "createdAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp when this memory version was created"
                               },
                               "updatedAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp of the latest update to this version"
                               }
                             },
@@ -1361,10 +1386,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
@@ -1401,9 +1426,19 @@
         ],
         "x-codeSamples": [
           {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst doc = await client.documents.get(\"user_123\", \"doc_abc123\", {\n  include: [\"chunks\", \"memories\"],\n});\nconsole.log(doc.system.status, doc.chunks?.length, doc.memories?.length);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\ndoc = client.documents.get(\"user_123\", \"doc_abc123\", include=[\"chunks\", \"memories\"])\nprint(doc.system.status, len(doc.chunks or []), len(doc.memories or []))"
+          },
+          {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl \"https://api.supermemory.ai/ns/project_123/document/doc_abc123?include=chunks,memories\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
+            "source": "curl \"https://api.supermemory.ai/ns/user_123/document/doc_abc123?include=chunks,memories\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
           }
         ]
       },
@@ -1534,10 +1569,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
@@ -1657,9 +1692,19 @@
         },
         "x-codeSamples": [
           {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst updated = await client.documents.update(\"user_123\", \"chat_session_1\", {\n  content: \"Updated notes: Sarah is now VP of Product.\",\n  metadata: { type: \"conversation\" },\n});\nconsole.log(updated.status);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nupdated = client.documents.update(\n    \"user_123\",\n    \"chat_session_1\",\n    content=\"Updated notes: Sarah is now VP of Product.\",\n    metadata={\"type\": \"conversation\"},\n)\nprint(updated.status)"
+          },
+          {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X PATCH \"https://api.supermemory.ai/ns/user_123/document/chat_session_1\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"content\": \"Updated notes — Sarah is now VP of Product.\",\n    \"metadata\": { \"type\": \"conversation\" }\n  }'"
+            "source": "curl -X PATCH \"https://api.supermemory.ai/ns/user_123/document/chat_session_1\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"content\": \"Updated notes: Sarah is now VP of Product.\",\n    \"metadata\": { \"type\": \"conversation\" }\n  }'"
           }
         ]
       }
@@ -1782,10 +1827,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
@@ -1862,7 +1907,24 @@
               }
             }
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\nimport { openAsBlob } from \"node:fs\";\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst doc = await client.documents.uploadFile(\"user_123\", {\n  file: await openAsBlob(\"notes.pdf\"),\n  metadata: JSON.stringify({ source: \"upload\" }), // multipart: metadata is a JSON string\n});\nconsole.log(doc.id, doc.status);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\nimport json\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nwith open(\"notes.pdf\", \"rb\") as f:\n    doc = client.documents.upload_file(\n        \"user_123\",\n        file=f,\n        metadata=json.dumps({\"source\": \"upload\"}),  # multipart: metadata is a JSON string\n    )\nprint(doc.id, doc.status)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/document/file\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -F \"file=@notes.pdf\" \\\n  -F 'metadata={\"source\":\"upload\"}'"
+          }
+        ]
       }
     },
     "/ns/{namespace}/document/file/{id}": {
@@ -1993,10 +2055,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
@@ -2085,7 +2147,24 @@
               }
             }
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\nimport { openAsBlob } from \"node:fs\";\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst doc = await client.documents.replaceWithFile(\"user_123\", \"doc_abc123\", {\n  file: await openAsBlob(\"notes-v2.pdf\"),\n  metadata: JSON.stringify({ revision: 2 }),\n});\nconsole.log(doc.status);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\nimport json\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nwith open(\"notes-v2.pdf\", \"rb\") as f:\n    doc = client.documents.replace_with_file(\n        \"user_123\",\n        \"doc_abc123\",\n        file=f,\n        metadata=json.dumps({\"revision\": 2}),\n    )\nprint(doc.status)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/document/file/doc_abc123\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -F \"file=@notes-v2.pdf\" \\\n  -F 'metadata={\"revision\":2}'"
+          }
+        ]
       },
       "patch": {
         "operationId": "patchNsByNamespaceDocumentFileById",
@@ -2214,10 +2293,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
@@ -2303,7 +2382,24 @@
               }
             }
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst doc = await client.documents.updateFile(\"user_123\", \"doc_abc123\", {\n  metadata: JSON.stringify({ reviewed: true }), // file is optional here\n});\nconsole.log(doc.status);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\nimport json\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\ndoc = client.documents.update_file(\n    \"user_123\",\n    \"doc_abc123\",\n    metadata=json.dumps({\"reviewed\": True}),  # file is optional here\n)\nprint(doc.status)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X PATCH \"https://api.supermemory.ai/ns/user_123/document/file/doc_abc123\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -F 'metadata={\"reviewed\":true}'"
+          }
+        ]
       }
     },
     "/ns/{namespace}/search": {
@@ -2407,13 +2503,9 @@
                                         },
                                         "version": {
                                           "description": "Version number within the related memory's history",
-                                          "anyOf": [
-                                            {
-                                              "type": "number"
-                                            },
-                                            {
-                                              "type": "null"
-                                            }
+                                          "type": [
+                                            "number",
+                                            "null"
                                           ]
                                         },
                                         "memory": {
@@ -2472,13 +2564,9 @@
                                         },
                                         "version": {
                                           "description": "Version number within the related memory's history",
-                                          "anyOf": [
-                                            {
-                                              "type": "number"
-                                            },
-                                            {
-                                              "type": "null"
-                                            }
+                                          "type": [
+                                            "number",
+                                            "null"
                                           ]
                                         },
                                         "memory": {
@@ -2537,13 +2625,9 @@
                                         },
                                         "version": {
                                           "description": "Version number within the related memory's history",
-                                          "anyOf": [
-                                            {
-                                              "type": "number"
-                                            },
-                                            {
-                                              "type": "null"
-                                            }
+                                          "type": [
+                                            "number",
+                                            "null"
                                           ]
                                         },
                                         "memory": {
@@ -2598,26 +2682,18 @@
                                     "description": "Source document identifier"
                                   },
                                   "title": {
-                                    "anyOf": [
-                                      {
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
-                                    ],
-                                    "description": "Source document title"
+                                    "description": "Source document title",
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
                                   },
                                   "type": {
-                                    "anyOf": [
-                                      {
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
-                                    ],
-                                    "description": "Detected source or content type"
+                                    "description": "Detected source or content type",
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
                                   },
                                   "metadata": {
                                     "type": "object",
@@ -2628,15 +2704,11 @@
                                     "description": "Public metadata attached to the source document"
                                   },
                                   "summary": {
-                                    "anyOf": [
-                                      {
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
-                                    ],
-                                    "description": "Generated summary of the source document"
+                                    "description": "Generated summary of the source document",
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
                                   },
                                   "system": {
                                     "type": "object",
@@ -2761,10 +2833,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories."
@@ -2876,6 +2948,16 @@
           }
         },
         "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst { results, searchTime } = await client.search(\"user_123\", {\n  query: \"gift ideas for a VP promotion after a Tokyo offsite\",\n  searchMode: \"hybrid\",\n  limit: 5,\n  include: { related: true },\n  filter: {\n    operator: \"and\",\n    operands: [\n      { field: \"category\", operator: \"eq\", value: \"work\" },\n      { field: \"importance\", operator: \"gte\", value: 0.8 },\n    ],\n  },\n});\nfor (const r of results) console.log(r.similarity.toFixed(2), r.memory ?? r.chunk);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nresponse = client.search(\n    \"user_123\",\n    query=\"gift ideas for a VP promotion after a Tokyo offsite\",\n    search_mode=\"hybrid\",\n    limit=5,\n    include={\"related\": True},\n    filter={\n        \"operator\": \"and\",\n        \"operands\": [\n            {\"field\": \"category\", \"operator\": \"eq\", \"value\": \"work\"},\n            {\"field\": \"importance\", \"operator\": \"gte\", \"value\": 0.8},\n        ],\n    },\n)\nfor r in response.results:\n    print(round(r.similarity, 2), r.memory or r.chunk)"
+          },
           {
             "lang": "bash",
             "label": "cURL",
@@ -3046,10 +3128,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories."
@@ -3090,9 +3172,19 @@
         },
         "x-codeSamples": [
           {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst { profile } = await client.profile(\"user_123\");\nconsole.log(profile.static.map((m) => m.memory));\nconsole.log(profile.dynamic.map((m) => m.memory));"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nprofile = client.profile(\"user_123\").profile\nprint([m.memory for m in profile.static])\nprint([m.memory for m in profile.dynamic])"
+          },
+          {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/profile\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"filter\": {\n      \"field\": \"region\",\n      \"operator\": \"eq\",\n      \"value\": \"us-west\"\n    }\n  }'"
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/profile\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{}'"
           }
         ]
       }
@@ -3174,10 +3266,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories."
@@ -3185,14 +3277,19 @@
         ],
         "x-codeSamples": [
           {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst buckets = await client.profiles.getBuckets(\"user_123\");\nconsole.log(buckets);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nbuckets = client.profiles.get_buckets(\"user_123\")\nprint(buckets)"
+          },
+          {
             "lang": "bash",
             "label": "cURL",
             "source": "curl \"https://api.supermemory.ai/ns/user_123/profile/buckets\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
-          },
-          {
-            "lang": "typescript",
-            "label": "TypeScript SDK",
-            "source": "import Supermemory from \"supermemory\";\n\nconst client = new Supermemory({\n  apiKey: process.env.SUPERMEMORY_API_KEY,\n});\n\nconst res = await fetch(\"https://api.supermemory.ai/ns/user_123/profile/buckets\", {\n  headers: {\n    Authorization: `Bearer ${process.env.SUPERMEMORY_API_KEY}`,\n  },\n});\nconst data = await res.json();\nconsole.log(data);"
           }
         ]
       },
@@ -3302,10 +3399,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories."
@@ -3344,7 +3441,24 @@
               }
             }
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nawait client.profiles.setBuckets(\"user_123\", {\n  buckets: {\n    work: \"Job, team, and current projects\",\n    preferences: \"Food, travel, and communication preferences\",\n  },\n});"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nclient.profiles.set_buckets(\n    \"user_123\",\n    buckets={\n        \"work\": \"Job, team, and current projects\",\n        \"preferences\": \"Food, travel, and communication preferences\",\n    },\n)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X PUT \"https://api.supermemory.ai/ns/user_123/profile/buckets\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"buckets\": {\n      \"work\": \"Job, team, and current projects\",\n      \"preferences\": \"Food, travel, and communication preferences\"\n    }\n  }'"
+          }
+        ]
       },
       "delete": {
         "operationId": "deleteNsByNamespaceProfileBuckets",
@@ -3452,10 +3566,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "The isolated namespace to search. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories."
@@ -3492,7 +3606,24 @@
               }
             }
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nawait client.profiles.deleteBuckets(\"user_123\", { buckets: [\"work\"] });"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nclient.profiles.delete_buckets(\"user_123\", buckets=[\"work\"])"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X DELETE \"https://api.supermemory.ai/ns/user_123/profile/buckets\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"buckets\": [\"work\"] }'"
+          }
+        ]
       }
     },
     "/ns/{namespace}/memories": {
@@ -3625,10 +3756,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace containing the memories to forget. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories."
@@ -3665,6 +3796,16 @@
           }
         },
         "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst res = await client.memories.forget(\"user_123\", { ids: [\"mem_1\", \"mem_2\"] });\nconsole.log(res.count, res.errors);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nres = client.memories.forget(\"user_123\", ids=[\"mem_1\", \"mem_2\"])\nprint(res.count, res.errors)"
+          },
           {
             "lang": "bash",
             "label": "cURL",
@@ -3803,10 +3944,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace containing the memories to forget. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories."
@@ -3843,6 +3984,16 @@
         },
         "x-codeSamples": [
           {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\n// Preview first, then run again with dryRun: false\nconst preview = await client.memories.forgetMatching(\"user_123\", {\n  query: \"forget everything about the old pricing plan\",\n  dryRun: true,\n});\nconsole.log(preview.matches.map((m) => m.memory));"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\n# Preview first, then run again with dry_run=False\npreview = client.memories.forget_matching(\n    \"user_123\",\n    query=\"forget everything about the old pricing plan\",\n    dry_run=True,\n)\nprint([m.memory for m in preview.matches])"
+          },
+          {
             "lang": "bash",
             "label": "cURL",
             "source": "curl -X DELETE \"https://api.supermemory.ai/ns/user_123/memories/semantic\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"query\": \"forget everything about the old pricing plan\",\n    \"dryRun\": true\n  }'"
@@ -3858,10 +4009,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace containing the resources to list. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope resources."
@@ -3950,7 +4101,7 @@
                     "default": {
                       "forgotten": false
                     },
-                    "description": "Optional extras, matching search's include",
+                    "description": "Optional extras",
                     "example": {
                       "forgotten": true
                     },
@@ -3988,30 +4139,22 @@
                             "description": "Stable document identifier"
                           },
                           "title": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Extracted or caller-provided document title"
+                            "description": "Extracted or caller-provided document title",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "type": {
                             "type": "string",
                             "description": "Detected source or content type"
                           },
                           "summary": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Generated summary of the document, when available"
+                            "description": "Generated summary of the document, when available",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "metadata": {
                             "type": "object",
@@ -4022,15 +4165,11 @@
                             "description": "Public metadata attached to the document"
                           },
                           "url": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Original source URL, when the document was ingested from the web"
+                            "description": "Original source URL, when the document was ingested from the web",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "system": {
                             "type": "object",
@@ -4042,13 +4181,13 @@
                               "createdAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp when the document was created"
                               },
                               "updatedAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp of the latest document update"
                               }
                             },
@@ -4110,7 +4249,7 @@
                               "createdAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp when the chunk was created"
                               }
                             },
@@ -4185,13 +4324,13 @@
                               "createdAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp when this memory version was created"
                               },
                               "updatedAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp of the latest update to this version"
                               }
                             },
@@ -4310,6 +4449,23 @@
         "summary": "List resources",
         "tags": [
           "Content Management"
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst page = await client.list(\"user_123\", \"documents\", {\n  page: 1,\n  limit: 20,\n  sort: \"createdAt\",\n  order: \"desc\",\n  filter: { field: \"type\", operator: \"eq\", value: \"conversation\" },\n});\nconsole.log(page.documents.length, page.pagination.totalPages);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\npage = client.list(\n    \"user_123\",\n    \"documents\",\n    page=1,\n    limit=20,\n    sort=\"createdAt\",\n    order=\"desc\",\n    filter={\"field\": \"type\", \"operator\": \"eq\", \"value\": \"conversation\"},\n)\nprint(len(page.documents), page.pagination.total_pages)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/list/documents?page=1&limit=20&sort=createdAt&order=desc\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"filter\": { \"field\": \"type\", \"operator\": \"eq\", \"value\": \"conversation\" } }'"
+          }
         ]
       }
     },
@@ -4399,7 +4555,7 @@
                               "expiresAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "When url stops working"
                               }
                             },
@@ -4409,26 +4565,18 @@
                             ]
                           },
                           "namespace": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required."
+                            "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required.",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "account": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Account on the provider side, usually an email"
+                            "description": "Account on the provider side, usually an email",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "capabilities": {
                             "type": "object",
@@ -4455,16 +4603,10 @@
                                   "type": "string"
                                 },
                                 "additionalProperties": {
-                                  "anyOf": [
-                                    {
-                                      "type": "string"
-                                    },
-                                    {
-                                      "type": "number"
-                                    },
-                                    {
-                                      "type": "boolean"
-                                    }
+                                  "type": [
+                                    "string",
+                                    "number",
+                                    "boolean"
                                   ]
                                 }
                               },
@@ -4504,7 +4646,7 @@
                                 "type": "null"
                               }
                             ],
-                            "description": "What syncs, grouped by kind, in the same shape PATCH takes. Null for connectors that sync everything.",
+                            "description": "What syncs, grouped by kind (repos, labels, files or folders), each a list of { id, name }. Null for connectors that sync everything.",
                             "example": {
                               "labels": [
                                 {
@@ -4543,15 +4685,11 @@
                                     ]
                                   },
                                   "error": {
-                                    "anyOf": [
-                                      {
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
-                                    ],
-                                    "description": "Customer-safe error message"
+                                    "description": "Customer-safe error message",
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
                                   },
                                   "system": {
                                     "type": "object",
@@ -4567,7 +4705,7 @@
                                       "startedAt": {
                                         "type": "string",
                                         "format": "date-time",
-                                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                         "description": "ISO 8601 timestamp when the run started"
                                       },
                                       "completedAt": {
@@ -4575,7 +4713,7 @@
                                           {
                                             "type": "string",
                                             "format": "date-time",
-                                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                           },
                                           {
                                             "type": "null"
@@ -4618,7 +4756,7 @@
                               "createdAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp when the connector was created"
                               },
                               "lastSuccessfulSyncAt": {
@@ -4626,7 +4764,7 @@
                                   {
                                     "type": "string",
                                     "format": "date-time",
-                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                   },
                                   {
                                     "type": "null"
@@ -4666,15 +4804,11 @@
                                   ]
                                 },
                                 "error": {
-                                  "anyOf": [
-                                    {
-                                      "type": "string"
-                                    },
-                                    {
-                                      "type": "null"
-                                    }
-                                  ],
-                                  "description": "Customer-safe error message"
+                                  "description": "Customer-safe error message",
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
                                 },
                                 "system": {
                                   "type": "object",
@@ -4690,7 +4824,7 @@
                                     "startedAt": {
                                       "type": "string",
                                       "format": "date-time",
-                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                       "description": "ISO 8601 timestamp when the run started"
                                     },
                                     "completedAt": {
@@ -4698,7 +4832,7 @@
                                         {
                                           "type": "string",
                                           "format": "date-time",
-                                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                         },
                                         {
                                           "type": "null"
@@ -4740,13 +4874,9 @@
                                         "type": "string"
                                       },
                                       "title": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
+                                        "type": [
+                                          "string",
+                                          "null"
                                         ]
                                       },
                                       "errorCode": {
@@ -4795,7 +4925,7 @@
                                   "expiresAt": {
                                     "type": "string",
                                     "format": "date-time",
-                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                   }
                                 },
                                 "required": [
@@ -4918,7 +5048,24 @@
           "Connectors"
         ],
         "x-speakeasy-group": "connectors",
-        "x-speakeasy-name-override": "listAll"
+        "x-speakeasy-name-override": "listAll",
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst { connectors } = await client.connectors.listAll({ provider: \"notion\", limit: 50 });\nfor (const c of connectors) console.log(c.namespace, c.provider, c.latestRun?.system.status);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\npage = client.connectors.list_all(provider=\"notion\", limit=50)\nfor c in page.connectors:\n    print(c.namespace, c.provider, c.latest_run.system.status if c.latest_run else None)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl \"https://api.supermemory.ai/connectors?provider=notion&limit=50\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
+          }
+        ]
       }
     },
     "/ns/{namespace}/connectors": {
@@ -4929,10 +5076,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories."
@@ -5242,7 +5389,7 @@
                             "expiresAt": {
                               "type": "string",
                               "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                               "description": "When url stops working"
                             }
                           },
@@ -5340,7 +5487,24 @@
           "Connectors"
         ],
         "x-speakeasy-group": "connectors",
-        "x-speakeasy-name-override": "create"
+        "x-speakeasy-name-override": "create",
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst { id, authorization } = await client.connectors.create(\"user_123\", {\n  provider: \"notion\",\n  redirectUrl: \"https://app.example.com/connected\",\n});\n// OAuth providers return authorization.url to send the user to; config providers return null\nconsole.log(id, authorization?.url, authorization?.expiresAt);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nsetup = client.connectors.create(\n    \"user_123\",\n    request={\"provider\": \"notion\", \"redirectUrl\": \"https://app.example.com/connected\"},\n)\n# OAuth providers return authorization.url to send the user to; config providers return None\nprint(setup.id, setup.authorization.url if setup.authorization else None)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/connectors\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"provider\": \"notion\", \"redirectUrl\": \"https://app.example.com/connected\" }'"
+          }
+        ]
       },
       "get": {
         "operationId": "getNsByNamespaceConnectors",
@@ -5349,10 +5513,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories."
@@ -5439,7 +5603,7 @@
                               "expiresAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "When url stops working"
                               }
                             },
@@ -5449,26 +5613,18 @@
                             ]
                           },
                           "namespace": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required."
+                            "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required.",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "account": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Account on the provider side, usually an email"
+                            "description": "Account on the provider side, usually an email",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "capabilities": {
                             "type": "object",
@@ -5495,16 +5651,10 @@
                                   "type": "string"
                                 },
                                 "additionalProperties": {
-                                  "anyOf": [
-                                    {
-                                      "type": "string"
-                                    },
-                                    {
-                                      "type": "number"
-                                    },
-                                    {
-                                      "type": "boolean"
-                                    }
+                                  "type": [
+                                    "string",
+                                    "number",
+                                    "boolean"
                                   ]
                                 }
                               },
@@ -5544,7 +5694,7 @@
                                 "type": "null"
                               }
                             ],
-                            "description": "What syncs, grouped by kind, in the same shape PATCH takes. Null for connectors that sync everything.",
+                            "description": "What syncs, grouped by kind (repos, labels, files or folders), each a list of { id, name }. Null for connectors that sync everything.",
                             "example": {
                               "labels": [
                                 {
@@ -5583,15 +5733,11 @@
                                     ]
                                   },
                                   "error": {
-                                    "anyOf": [
-                                      {
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
-                                    ],
-                                    "description": "Customer-safe error message"
+                                    "description": "Customer-safe error message",
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
                                   },
                                   "system": {
                                     "type": "object",
@@ -5607,7 +5753,7 @@
                                       "startedAt": {
                                         "type": "string",
                                         "format": "date-time",
-                                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                         "description": "ISO 8601 timestamp when the run started"
                                       },
                                       "completedAt": {
@@ -5615,7 +5761,7 @@
                                           {
                                             "type": "string",
                                             "format": "date-time",
-                                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                           },
                                           {
                                             "type": "null"
@@ -5658,7 +5804,7 @@
                               "createdAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp when the connector was created"
                               },
                               "lastSuccessfulSyncAt": {
@@ -5666,7 +5812,7 @@
                                   {
                                     "type": "string",
                                     "format": "date-time",
-                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                   },
                                   {
                                     "type": "null"
@@ -5706,15 +5852,11 @@
                                   ]
                                 },
                                 "error": {
-                                  "anyOf": [
-                                    {
-                                      "type": "string"
-                                    },
-                                    {
-                                      "type": "null"
-                                    }
-                                  ],
-                                  "description": "Customer-safe error message"
+                                  "description": "Customer-safe error message",
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
                                 },
                                 "system": {
                                   "type": "object",
@@ -5730,7 +5872,7 @@
                                     "startedAt": {
                                       "type": "string",
                                       "format": "date-time",
-                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                       "description": "ISO 8601 timestamp when the run started"
                                     },
                                     "completedAt": {
@@ -5738,7 +5880,7 @@
                                         {
                                           "type": "string",
                                           "format": "date-time",
-                                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                         },
                                         {
                                           "type": "null"
@@ -5780,13 +5922,9 @@
                                         "type": "string"
                                       },
                                       "title": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
+                                        "type": [
+                                          "string",
+                                          "null"
                                         ]
                                       },
                                       "errorCode": {
@@ -5835,7 +5973,7 @@
                                   "expiresAt": {
                                     "type": "string",
                                     "format": "date-time",
-                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                   }
                                 },
                                 "required": [
@@ -5958,7 +6096,24 @@
           "Connectors"
         ],
         "x-speakeasy-group": "connectors",
-        "x-speakeasy-name-override": "list"
+        "x-speakeasy-name-override": "list",
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst { connectors } = await client.connectors.list(\"user_123\");\nfor (const c of connectors) console.log(c.id, c.provider, c.documentCount);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\npage = client.connectors.list(\"user_123\")\nfor c in page.connectors:\n    print(c.id, c.provider, c.document_count)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl \"https://api.supermemory.ai/ns/user_123/connectors\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
+          }
+        ]
       }
     },
     "/ns/{namespace}/connectors/{id}": {
@@ -5969,10 +6124,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories."
@@ -6051,7 +6206,7 @@
                         "expiresAt": {
                           "type": "string",
                           "format": "date-time",
-                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                           "description": "When url stops working"
                         }
                       },
@@ -6061,26 +6216,18 @@
                       ]
                     },
                     "namespace": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
-                      "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required."
+                      "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "account": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
-                      "description": "Account on the provider side, usually an email"
+                      "description": "Account on the provider side, usually an email",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "capabilities": {
                       "type": "object",
@@ -6107,16 +6254,10 @@
                             "type": "string"
                           },
                           "additionalProperties": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "number"
-                              },
-                              {
-                                "type": "boolean"
-                              }
+                            "type": [
+                              "string",
+                              "number",
+                              "boolean"
                             ]
                           }
                         },
@@ -6156,7 +6297,7 @@
                           "type": "null"
                         }
                       ],
-                      "description": "What syncs, grouped by kind, in the same shape PATCH takes. Null for connectors that sync everything.",
+                      "description": "What syncs, grouped by kind (repos, labels, files or folders), each a list of { id, name }. Null for connectors that sync everything.",
                       "example": {
                         "labels": [
                           {
@@ -6195,15 +6336,11 @@
                               ]
                             },
                             "error": {
-                              "anyOf": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "null"
-                                }
-                              ],
-                              "description": "Customer-safe error message"
+                              "description": "Customer-safe error message",
+                              "type": [
+                                "string",
+                                "null"
+                              ]
                             },
                             "system": {
                               "type": "object",
@@ -6219,7 +6356,7 @@
                                 "startedAt": {
                                   "type": "string",
                                   "format": "date-time",
-                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                   "description": "ISO 8601 timestamp when the run started"
                                 },
                                 "completedAt": {
@@ -6227,7 +6364,7 @@
                                     {
                                       "type": "string",
                                       "format": "date-time",
-                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                     },
                                     {
                                       "type": "null"
@@ -6270,7 +6407,7 @@
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
-                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                           "description": "ISO 8601 timestamp when the connector was created"
                         },
                         "lastSuccessfulSyncAt": {
@@ -6278,7 +6415,7 @@
                             {
                               "type": "string",
                               "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                             },
                             {
                               "type": "null"
@@ -6318,15 +6455,11 @@
                             ]
                           },
                           "error": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Customer-safe error message"
+                            "description": "Customer-safe error message",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "system": {
                             "type": "object",
@@ -6342,7 +6475,7 @@
                               "startedAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp when the run started"
                               },
                               "completedAt": {
@@ -6350,7 +6483,7 @@
                                   {
                                     "type": "string",
                                     "format": "date-time",
-                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                   },
                                   {
                                     "type": "null"
@@ -6392,13 +6525,9 @@
                                   "type": "string"
                                 },
                                 "title": {
-                                  "anyOf": [
-                                    {
-                                      "type": "string"
-                                    },
-                                    {
-                                      "type": "null"
-                                    }
+                                  "type": [
+                                    "string",
+                                    "null"
                                   ]
                                 },
                                 "errorCode": {
@@ -6447,7 +6576,7 @@
                             "expiresAt": {
                               "type": "string",
                               "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                             }
                           },
                           "required": [
@@ -6542,7 +6671,24 @@
           "Connectors"
         ],
         "x-speakeasy-group": "connectors",
-        "x-speakeasy-name-override": "get"
+        "x-speakeasy-name-override": "get",
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst connector = await client.connectors.get(\"user_123\", \"conn_abc123\", {\n  include: [\"syncs\", \"picker\"],\n});\nconsole.log(connector.latestRun?.system.status, connector.syncs?.length, connector.picker?.url);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nconnector = client.connectors.get(\"user_123\", \"conn_abc123\", include=[\"syncs\", \"picker\"])\nprint(connector.latest_run, connector.syncs, connector.picker)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl \"https://api.supermemory.ai/ns/user_123/connectors/conn_abc123?include=syncs,picker\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
+          }
+        ]
       },
       "patch": {
         "operationId": "patchNsByNamespaceConnectorsById",
@@ -6551,10 +6697,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories."
@@ -6669,7 +6815,7 @@
                         "expiresAt": {
                           "type": "string",
                           "format": "date-time",
-                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                           "description": "When url stops working"
                         }
                       },
@@ -6679,26 +6825,18 @@
                       ]
                     },
                     "namespace": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
-                      "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required."
+                      "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required.",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "account": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
-                      "description": "Account on the provider side, usually an email"
+                      "description": "Account on the provider side, usually an email",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "capabilities": {
                       "type": "object",
@@ -6725,16 +6863,10 @@
                             "type": "string"
                           },
                           "additionalProperties": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "number"
-                              },
-                              {
-                                "type": "boolean"
-                              }
+                            "type": [
+                              "string",
+                              "number",
+                              "boolean"
                             ]
                           }
                         },
@@ -6774,7 +6906,7 @@
                           "type": "null"
                         }
                       ],
-                      "description": "What syncs, grouped by kind, in the same shape PATCH takes. Null for connectors that sync everything.",
+                      "description": "What syncs, grouped by kind (repos, labels, files or folders), each a list of { id, name }. Null for connectors that sync everything.",
                       "example": {
                         "labels": [
                           {
@@ -6813,15 +6945,11 @@
                               ]
                             },
                             "error": {
-                              "anyOf": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "null"
-                                }
-                              ],
-                              "description": "Customer-safe error message"
+                              "description": "Customer-safe error message",
+                              "type": [
+                                "string",
+                                "null"
+                              ]
                             },
                             "system": {
                               "type": "object",
@@ -6837,7 +6965,7 @@
                                 "startedAt": {
                                   "type": "string",
                                   "format": "date-time",
-                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                   "description": "ISO 8601 timestamp when the run started"
                                 },
                                 "completedAt": {
@@ -6845,7 +6973,7 @@
                                     {
                                       "type": "string",
                                       "format": "date-time",
-                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                     },
                                     {
                                       "type": "null"
@@ -6888,7 +7016,7 @@
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
-                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                           "description": "ISO 8601 timestamp when the connector was created"
                         },
                         "lastSuccessfulSyncAt": {
@@ -6896,7 +7024,7 @@
                             {
                               "type": "string",
                               "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                             },
                             {
                               "type": "null"
@@ -6936,15 +7064,11 @@
                             ]
                           },
                           "error": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Customer-safe error message"
+                            "description": "Customer-safe error message",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "system": {
                             "type": "object",
@@ -6960,7 +7084,7 @@
                               "startedAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                                 "description": "ISO 8601 timestamp when the run started"
                               },
                               "completedAt": {
@@ -6968,7 +7092,7 @@
                                   {
                                     "type": "string",
                                     "format": "date-time",
-                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                                   },
                                   {
                                     "type": "null"
@@ -7010,13 +7134,9 @@
                                   "type": "string"
                                 },
                                 "title": {
-                                  "anyOf": [
-                                    {
-                                      "type": "string"
-                                    },
-                                    {
-                                      "type": "null"
-                                    }
+                                  "type": [
+                                    "string",
+                                    "null"
                                   ]
                                 },
                                 "errorCode": {
@@ -7065,7 +7185,7 @@
                             "expiresAt": {
                               "type": "string",
                               "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                             }
                           },
                           "required": [
@@ -7160,7 +7280,24 @@
           "Connectors"
         ],
         "x-speakeasy-group": "connectors",
-        "x-speakeasy-name-override": "update"
+        "x-speakeasy-name-override": "update",
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nawait client.connectors.update(\"user_123\", \"conn_abc123\", {\n  documentLimit: 500,\n  selection: { repos: [\"123456789\"] }, // provider-specific selection\n});"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nclient.connectors.update(\n    \"user_123\",\n    \"conn_abc123\",\n    document_limit=500,\n    selection={\"repos\": [\"123456789\"]},  # provider-specific selection\n)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X PATCH \"https://api.supermemory.ai/ns/user_123/connectors/conn_abc123\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"documentLimit\": 500, \"selection\": { \"repos\": [\"123456789\"] } }'"
+          }
+        ]
       },
       "delete": {
         "operationId": "deleteNsByNamespaceConnectorsById",
@@ -7169,10 +7306,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories."
@@ -7285,7 +7422,24 @@
           "Connectors"
         ],
         "x-speakeasy-group": "connectors",
-        "x-speakeasy-name-override": "delete"
+        "x-speakeasy-name-override": "delete",
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nawait client.connectors.delete(\"user_123\", \"conn_abc123\", { deleteDocuments: true });"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nclient.connectors.delete(\"user_123\", \"conn_abc123\", delete_documents=True)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X DELETE \"https://api.supermemory.ai/ns/user_123/connectors/conn_abc123?deleteDocuments=true\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
+          }
+        ]
       }
     },
     "/ns/{namespace}/connectors/{id}/sync": {
@@ -7296,10 +7450,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories."
@@ -7435,7 +7589,24 @@
           "Connectors"
         ],
         "x-speakeasy-group": "connectors",
-        "x-speakeasy-name-override": "sync"
+        "x-speakeasy-name-override": "sync",
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst run = await client.connectors.sync(\"user_123\", \"conn_abc123\");\nconsole.log(run.status); // \"queued\"; 409 if a sync is already running"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nrun = client.connectors.sync(\"user_123\", \"conn_abc123\")\nprint(run.status)  # \"queued\"; 409 if a sync is already running"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/connectors/conn_abc123/sync\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
+          }
+        ]
       }
     },
     "/namespaces": {
@@ -7475,15 +7646,11 @@
                             "description": "Number of current, recallable memories in the namespace"
                           },
                           "description": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Human-readable purpose or scope of the namespace"
+                            "description": "Human-readable purpose or scope of the namespace",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "system": {
                             "type": "object",
@@ -7632,6 +7799,23 @@
               "maximum": 100
             },
             "description": "Maximum namespaces to return per page"
+          }
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst { namespaces } = await client.namespaces.list({ page: 1, limit: 50 });\nconsole.log(namespaces.map((ns) => ns.namespace));"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\npage = client.namespaces.list(page=1, limit=50)\nprint([ns.namespace for ns in page.namespaces])"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl \"https://api.supermemory.ai/namespaces?page=1&limit=50\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
           }
         ]
       }
@@ -7673,15 +7857,11 @@
                             "description": "Number of current, recallable memories in the namespace"
                           },
                           "description": {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ],
-                            "description": "Human-readable purpose or scope of the namespace"
+                            "description": "Human-readable purpose or scope of the namespace",
+                            "type": [
+                              "string",
+                              "null"
+                            ]
                           },
                           "system": {
                             "type": "object",
@@ -7831,6 +8011,23 @@
             },
             "description": "Maximum namespaces to return per page"
           }
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst { namespaces, pagination } = await client.namespaces.list({ page: 1, limit: 50 });\nfor (const ns of namespaces) console.log(ns.namespace, ns.documentCount, ns.memoryCount);\nconsole.log(pagination.totalPages);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\npage = client.namespaces.list(page=1, limit=50)\nfor ns in page.namespaces:\n    print(ns.namespace, ns.document_count, ns.memory_count)\nprint(page.pagination.total_pages)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl \"https://api.supermemory.ai/ns?page=1&limit=50\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
+          }
         ]
       }
     },
@@ -7850,15 +8047,11 @@
                       "description": "Namespace identifier used in API paths"
                     },
                     "supportingContext": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
-                      "description": "Background that helps Supermemory interpret documents and form better memories in this namespace"
+                      "description": "Background that helps Supermemory interpret documents and form better memories in this namespace",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "system": {
                       "type": "object",
@@ -7958,13 +8151,30 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories."
+          }
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst ns = await client.namespaces.get(\"user_123\");\nconsole.log(ns.supportingContext, ns.system.createdAt);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nns = client.namespaces.get(\"user_123\")\nprint(ns.supporting_context, ns.system.created_at)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl \"https://api.supermemory.ai/ns/user_123\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
           }
         ]
       },
@@ -7975,10 +8185,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories."
@@ -8023,15 +8233,11 @@
                       "description": "Namespace identifier used in API paths"
                     },
                     "supportingContext": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
-                      "description": "Background that helps Supermemory interpret documents and form better memories in this namespace"
+                      "description": "Background that helps Supermemory interpret documents and form better memories in this namespace",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "system": {
                       "type": "object",
@@ -8125,6 +8331,23 @@
         "summary": "Update namespace settings",
         "tags": [
           "Namespaces"
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nawait client.namespaces.update(\"user_123\", {\n  supportingContext: \"A paying customer on the Pro plan; prefers concise answers.\",\n});"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nclient.namespaces.update(\n    \"user_123\",\n    supporting_context=\"A paying customer on the Pro plan; prefers concise answers.\",\n)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X PATCH \"https://api.supermemory.ai/ns/user_123\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"supportingContext\": \"A paying customer on the Pro plan; prefers concise answers.\" }'"
+          }
         ]
       },
       "delete": {
@@ -8314,10 +8537,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace identifier. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents and memories."
@@ -8332,6 +8555,23 @@
               "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "description": "Destination namespace that should receive this namespace's content before deletion. Omit to permanently delete the content."
+          }
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\n// Move everything into another namespace instead of deleting: add { moveTo: \"project_main\" }\nconst res = await client.namespaces.delete(\"project_old\");\nconsole.log(res.status); // \"deleted\", or \"queued\" when moving"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\n# Move everything into another namespace instead of deleting: add move_to=\"project_main\"\nres = client.namespaces.delete(\"project_old\")\nprint(res.status)  # \"deleted\", or \"queued\" when moving"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X DELETE \"https://api.supermemory.ai/ns/project_old?moveTo=project_main\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
           }
         ]
       }
@@ -8348,15 +8588,11 @@
                   "type": "object",
                   "properties": {
                     "organizationalContext": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
-                      "description": "Shared background that helps Supermemory interpret content consistently across every namespace"
+                      "description": "Shared background that helps Supermemory interpret content consistently across every namespace",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "namespaceCount": {
                       "type": "integer",
@@ -8408,6 +8644,23 @@
         "summary": "Get organization settings",
         "tags": [
           "Organization"
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst org = await client.organization.get();\nconsole.log(org.organizationalContext, org.namespaceCount);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\norg = client.organization.get()\nprint(org.organizational_context, org.namespace_count)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl \"https://api.supermemory.ai/organization\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
+          }
         ]
       },
       "patch": {
@@ -8450,15 +8703,11 @@
                   "type": "object",
                   "properties": {
                     "organizationalContext": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ],
-                      "description": "Shared background that helps Supermemory interpret content consistently across every namespace"
+                      "description": "Shared background that helps Supermemory interpret content consistently across every namespace",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "namespaceCount": {
                       "type": "integer",
@@ -8527,13 +8776,30 @@
         "summary": "Update organization settings",
         "tags": [
           "Organization"
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nawait client.organization.update({\n  organizationalContext: \"Acme sells billing software to dental clinics.\",\n});"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nclient.organization.update(\n    organizational_context=\"Acme sells billing software to dental clinics.\",\n)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X PATCH \"https://api.supermemory.ai/organization\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"organizationalContext\": \"Acme sells billing software to dental clinics.\" }'"
+          }
         ]
       }
     },
     "/ns/{namespace}/memories/{id}": {
       "get": {
         "operationId": "getNsByNamespaceMemoriesById",
-        "description": "Retrieve one memory by ID. Optionally include its version history and connected memories (each list walks outward up to relatedLimit, nearest first) and its source document.",
+        "description": "Retrieve one memory by ID. Optionally include its version history and connected memories (each list walks outward up to relatedLimit) and its source document.",
         "responses": {
           "200": {
             "content": {
@@ -8585,13 +8851,13 @@
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
-                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                           "description": "ISO 8601 timestamp when this memory version was created"
                         },
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time",
-                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                           "description": "ISO 8601 timestamp of the latest update to this version"
                         }
                       },
@@ -8629,13 +8895,9 @@
                                   },
                                   "version": {
                                     "description": "Version number within the related memory's history",
-                                    "anyOf": [
-                                      {
-                                        "type": "number"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
+                                    "type": [
+                                      "number",
+                                      "null"
                                     ]
                                   },
                                   "memory": {
@@ -8672,26 +8934,18 @@
                                         "description": "Source document identifier"
                                       },
                                       "title": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
-                                        ],
-                                        "description": "Source document title"
+                                        "description": "Source document title",
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
                                       },
                                       "type": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
-                                        ],
-                                        "description": "Detected source or content type"
+                                        "description": "Detected source or content type",
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
                                       },
                                       "metadata": {
                                         "type": "object",
@@ -8702,15 +8956,11 @@
                                         "description": "Public metadata attached to the source document"
                                       },
                                       "summary": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
-                                        ],
-                                        "description": "Generated summary of the source document"
+                                        "description": "Generated summary of the source document",
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
                                       },
                                       "system": {
                                         "type": "object",
@@ -8749,7 +8999,7 @@
                                   "system"
                                 ]
                               },
-                              "description": "Earlier versions this memory updates, nearest first"
+                              "description": "Earlier versions this memory updates"
                             },
                             "children": {
                               "type": "array",
@@ -8771,13 +9021,9 @@
                                   },
                                   "version": {
                                     "description": "Version number within the related memory's history",
-                                    "anyOf": [
-                                      {
-                                        "type": "number"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
+                                    "type": [
+                                      "number",
+                                      "null"
                                     ]
                                   },
                                   "memory": {
@@ -8814,26 +9060,18 @@
                                         "description": "Source document identifier"
                                       },
                                       "title": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
-                                        ],
-                                        "description": "Source document title"
+                                        "description": "Source document title",
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
                                       },
                                       "type": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
-                                        ],
-                                        "description": "Detected source or content type"
+                                        "description": "Detected source or content type",
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
                                       },
                                       "metadata": {
                                         "type": "object",
@@ -8844,15 +9082,11 @@
                                         "description": "Public metadata attached to the source document"
                                       },
                                       "summary": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
-                                        ],
-                                        "description": "Generated summary of the source document"
+                                        "description": "Generated summary of the source document",
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
                                       },
                                       "system": {
                                         "type": "object",
@@ -8891,7 +9125,7 @@
                                   "system"
                                 ]
                               },
-                              "description": "Newer versions that update this memory, nearest first"
+                              "description": "Newer versions that update this memory"
                             },
                             "siblings": {
                               "type": "array",
@@ -8913,13 +9147,9 @@
                                   },
                                   "version": {
                                     "description": "Version number within the related memory's history",
-                                    "anyOf": [
-                                      {
-                                        "type": "number"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
+                                    "type": [
+                                      "number",
+                                      "null"
                                     ]
                                   },
                                   "memory": {
@@ -8956,26 +9186,18 @@
                                         "description": "Source document identifier"
                                       },
                                       "title": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
-                                        ],
-                                        "description": "Source document title"
+                                        "description": "Source document title",
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
                                       },
                                       "type": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
-                                        ],
-                                        "description": "Detected source or content type"
+                                        "description": "Detected source or content type",
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
                                       },
                                       "metadata": {
                                         "type": "object",
@@ -8986,15 +9208,11 @@
                                         "description": "Public metadata attached to the source document"
                                       },
                                       "summary": {
-                                        "anyOf": [
-                                          {
-                                            "type": "string"
-                                          },
-                                          {
-                                            "type": "null"
-                                          }
-                                        ],
-                                        "description": "Generated summary of the source document"
+                                        "description": "Generated summary of the source document",
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
                                       },
                                       "system": {
                                         "type": "object",
@@ -9033,7 +9251,7 @@
                                   "system"
                                 ]
                               },
-                              "description": "Memories connected by extends or derives, nearest first"
+                              "description": "Memories connected by extends or derives"
                             }
                           },
                           "required": [
@@ -9051,26 +9269,18 @@
                               "description": "Source document identifier"
                             },
                             "title": {
-                              "anyOf": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "null"
-                                }
-                              ],
-                              "description": "Source document title"
+                              "description": "Source document title",
+                              "type": [
+                                "string",
+                                "null"
+                              ]
                             },
                             "type": {
-                              "anyOf": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "null"
-                                }
-                              ],
-                              "description": "Detected source or content type"
+                              "description": "Detected source or content type",
+                              "type": [
+                                "string",
+                                "null"
+                              ]
                             },
                             "metadata": {
                               "type": "object",
@@ -9081,15 +9291,11 @@
                               "description": "Public metadata attached to the source document"
                             },
                             "summary": {
-                              "anyOf": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "null"
-                                }
-                              ],
-                              "description": "Generated summary of the source document"
+                              "description": "Generated summary of the source document",
+                              "type": [
+                                "string",
+                                "null"
+                              ]
                             },
                             "system": {
                               "type": "object",
@@ -9205,10 +9411,10 @@
             "in": "path",
             "name": "namespace",
             "schema": {
+              "example": "user_alex",
               "type": "string",
               "maxLength": 100,
-              "pattern": "^[a-zA-Z0-9_:-]+$",
-              "example": "user_alex"
+              "pattern": "^[a-zA-Z0-9_:-]+$"
             },
             "required": true,
             "description": "Namespace containing the memories to forget. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope memories."
@@ -9250,9 +9456,220 @@
               "minimum": 1,
               "maximum": 100
             },
-            "description": "Maximum parents, children and siblings to return, applied to each list separately. Each list walks outward from the memory, nearest first, until it reaches this many."
+            "description": "Maximum parents, children and siblings to return, applied to each list separately. Each list walks outward from the memory until it reaches this many."
+          }
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst memory = await client.memories.get(\"user_123\", \"mem_abc123\", {\n  include: [\"related\", \"documents\"],\n});\nconsole.log(memory.memory, memory.isLatest);"
+          },
+          {
+            "lang": "python",
+            "label": "Python SDK",
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\nmemory = client.memories.get(\"user_123\", \"mem_abc123\", include=[\"related\", \"documents\"])\nprint(memory.memory, memory.is_latest)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl \"https://api.supermemory.ai/ns/user_123/memories/mem_abc123?include=related,documents\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\""
           }
         ]
+      }
+    },
+    "/feedback": {
+      "post": {
+        "operationId": "postFeedback",
+        "summary": "Send feedback",
+        "description": "Report a bug, request a feature or flag a docs problem to the Supermemory team. Built for AI agents: send structured JSON and an engineer picks it up.\n\nAuthentication is optional for requests with a usable client IP. Cross-zone Cloudflare Worker requests and requests without a client IP must provide an API key. With an API key the limit is 3 submissions per organization per UTC day; without one it is 3 per IPv4 address or IPv6 /64, shared with everyone behind that address. Authenticated submissions have a separate 200/day pool; anonymous submissions share a 20/day pool. Pass your API key to get your own quota.",
+        "tags": [
+          "Feedback"
+        ],
+        "security": [
+          {},
+          {
+            "bearerAuth": []
+          }
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X POST \"https://api.supermemory.ai/feedback\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"type\": \"bug\",\n    \"title\": \"Search misses documents added in the last minute\",\n    \"description\": \"Documents report status done but do not appear in /v4/search for about a minute.\",\n    \"endpoint\": \"POST /v4/search\",\n    \"client\": \"my-agent/1.0\"\n  }'"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Feedback received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Feedback reference",
+                      "example": "fb_k3m9q2x7wd"
+                    },
+                    "remaining": {
+                      "type": "number",
+                      "description": "Submissions left for this caller until 00:00 UTC",
+                      "example": 2
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "remaining"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ValidationErrorResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "An API key is invalid or required for this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The API key cannot access this endpoint or namespace",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily limit reached. The Retry-After header gives the seconds until it resets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Slack rejected the feedback or delivery could not be confirmed. Only confirmed rejections are refunded; do not automatically retry uncertain deliveries.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Feedback is not available on this deployment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "bug",
+                      "feature_request",
+                      "docs",
+                      "other"
+                    ],
+                    "description": "Kind of feedback",
+                    "example": "bug"
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "description": "One-line summary",
+                    "example": "Search returns no results for documents still in indexing"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000,
+                    "description": "What happened, with enough detail for an engineer to act on it",
+                    "example": "Documents added less than a minute ago are missing from /v4/search results even though GET /v3/documents/{id} reports status done."
+                  },
+                  "endpoint": {
+                    "description": "API operation the feedback is about",
+                    "example": "POST /v4/search",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "requestId": {
+                    "description": "Request ID of a failing call, if there is one",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "expected": {
+                    "description": "What you expected to happen",
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  "actual": {
+                    "description": "What actually happened",
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  "client": {
+                    "description": "Agent, tool or SDK sending the feedback",
+                    "example": "claude-code/2.1, supermemory-sdk-ts/5.0.0",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "contactEmail": {
+                    "description": "Where to reach you about this feedback",
+                    "type": "string",
+                    "maxLength": 320,
+                    "format": "email",
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                  }
+                },
+                "required": [
+                  "type",
+                  "title",
+                  "description"
+                ]
+              }
+            }
+          }
+        }
       }
     }
   }

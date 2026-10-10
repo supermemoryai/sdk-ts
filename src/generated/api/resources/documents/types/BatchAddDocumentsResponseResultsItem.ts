@@ -5,7 +5,7 @@ import type * as Supermemory from "../../../index.js";
 export interface BatchAddDocumentsResponseResultsItem {
     /** Document identifier */
     id: string;
-    /** The document's processing state, as for a single add; error when this item failed */
+    /** The document's processing state after this request, or error when this item failed */
     status: Supermemory.BatchAddDocumentsResponseResultsItemStatus;
     /** Failure reason */
     error?: string | undefined;
