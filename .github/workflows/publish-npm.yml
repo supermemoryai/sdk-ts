@@ -77,10 +77,15 @@ jobs:
         if: steps.meta.outputs.publish == 'true'
         run: |
           (cd ../mono && bun install --ignore-scripts)
-          bun build ../mono/apps/cli/src/index.ts --outfile bin/cli.mjs --target node --format esm
+          bun build ../mono/apps/cli/src/index.ts --outfile bin/cli.mjs --target node --format esm \
+            --define "process.env.SUPERMEMORY_CLI_VERSION=\"$VERSION\""
           grep -q '^#!' bin/cli.mjs || sed -i '1i #!/usr/bin/env node' bin/cli.mjs
           chmod +x bin/cli.mjs
-          node bin/cli.mjs --version
+          # The CLI must report the package version, not its 0.0.0-dev fallback
+          GOT=$(node bin/cli.mjs --version)
+          [ "$GOT" = "$VERSION" ] || { echo "::error::CLI reports $GOT, expected $VERSION"; exit 1; }
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
 
       - name: Verify tarball contents
         if: steps.meta.outputs.publish == 'true'
