@@ -111,6 +111,8 @@ const client = new Supermemory({ maxRetries: 3, timeoutInSeconds: 120 });
 await client.search("user_alex", { query: "meetings" }, { maxRetries: 0, timeoutInSeconds: 5 });
 ```
 
+`client.feedback.postFeedback()` never retries automatically, including when `maxRetries` is set on the client or request. A failed delivery may already have submitted the feedback, so retrying could duplicate it.
+
 Per-call options also take `abortSignal`, extra `headers` and `queryParams`.
 
 ## Custom base URL and fetch
