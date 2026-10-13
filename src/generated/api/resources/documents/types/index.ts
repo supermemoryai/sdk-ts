@@ -15,6 +15,7 @@ export * from "./GetDocumentsResponseChunksItemSystem.js";
 export * from "./GetDocumentsResponseMemoriesItem.js";
 export * from "./GetDocumentsResponseMemoriesItemSystem.js";
 export * from "./GetDocumentsResponseSystem.js";
+export * from "./GetDocumentsResponseSystemDreamingStatus.js";
 export * from "./GetDocumentsResponseSystemStatus.js";
 export * from "./ReplaceWithFileDocumentsRequestDreaming.js";
 export * from "./ReplaceWithFileDocumentsRequestFileType.js";

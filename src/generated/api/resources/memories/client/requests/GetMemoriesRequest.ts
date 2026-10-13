@@ -9,6 +9,6 @@ import type * as Supermemory from "../../../../index.js";
 export interface GetMemoriesRequest {
     /** Comma-separated extras. related: the memory's version history and connected memories. documents: the source document, also attached to each related memory when both are requested. */
     include?: Supermemory.GetMemoriesRequestIncludeItem | Supermemory.GetMemoriesRequestIncludeItem[];
-    /** Maximum parents, children and siblings to return, applied to each list separately. Each list walks outward from the memory, nearest first, until it reaches this many. */
+    /** Maximum parents, children and siblings to return, applied to each list separately. Parents and children are earlier and later versions up to three steps away, nearest first; siblings are direct extends or derives links. */
     relatedLimit?: number;
 }
