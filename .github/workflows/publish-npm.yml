@@ -16,7 +16,7 @@ defaults:
     working-directory: sdk
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: "peak-ubuntu-24.04-4"
     steps:
       # The SDK and the monorepo are checked out as SIBLING directories.
       # The mono clone must never live inside the package root: the generated
