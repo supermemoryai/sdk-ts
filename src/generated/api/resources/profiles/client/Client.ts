@@ -92,15 +92,9 @@ export class ProfilesClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,
@@ -194,15 +188,9 @@ export class ProfilesClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new Supermemory.NotFoundError(
                         _response.error.body as Supermemory.ErrorResponse,
@@ -214,10 +202,7 @@ export class ProfilesClient {
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new Supermemory.InternalServerError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,
@@ -309,15 +294,9 @@ export class ProfilesClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new Supermemory.NotFoundError(
                         _response.error.body as Supermemory.ErrorResponse,
@@ -329,10 +308,7 @@ export class ProfilesClient {
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new Supermemory.InternalServerError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,

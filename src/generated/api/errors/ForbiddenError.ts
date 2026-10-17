@@ -2,12 +2,9 @@
 
 import type * as core from "../../core/index.js";
 import * as errors from "../../errors/index.js";
-import type * as Supermemory from "../index.js";
 
 export class ForbiddenError extends errors.SupermemoryError {
-    public declare readonly body: Supermemory.ErrorResponse;
-
-    constructor(body: Supermemory.ErrorResponse, rawResponse?: core.RawResponse) {
+    constructor(body?: unknown, rawResponse?: core.RawResponse) {
         super({
             message: "ForbiddenError",
             statusCode: 403,

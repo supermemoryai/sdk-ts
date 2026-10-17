@@ -2,6 +2,7 @@
 
 import * as Supermemory from "./api/index.js";
 import { ConnectorsClient } from "./api/resources/connectors/client/Client.js";
+import { ContentManagementClient } from "./api/resources/contentManagement/client/Client.js";
 import { DocumentsClient } from "./api/resources/documents/client/Client.js";
 import { FeedbackClient } from "./api/resources/feedback/client/Client.js";
 import { MemoriesClient } from "./api/resources/memories/client/Client.js";
@@ -31,6 +32,7 @@ export class SupermemoryClient {
     protected _connectors: ConnectorsClient | undefined;
     protected _namespaces: NamespacesClient | undefined;
     protected _organization: OrganizationClient | undefined;
+    protected _contentManagement: ContentManagementClient | undefined;
     protected _feedback: FeedbackClient | undefined;
 
     constructor(options: SupermemoryClient.Options = {}) {
@@ -59,6 +61,10 @@ export class SupermemoryClient {
 
     public get organization(): OrganizationClient {
         return (this._organization ??= new OrganizationClient(this._options));
+    }
+
+    public get contentManagement(): ContentManagementClient {
+        return (this._contentManagement ??= new ContentManagementClient(this._options));
     }
 
     public get feedback(): FeedbackClient {
@@ -136,30 +142,21 @@ export class SupermemoryClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 402:
                     throw new Supermemory.PaymentRequiredError(
                         _response.error.body as Supermemory.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
                     throw new Supermemory.ConflictError(
                         _response.error.body as Supermemory.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new Supermemory.InternalServerError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,
@@ -242,25 +239,16 @@ export class SupermemoryClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 402:
                     throw new Supermemory.PaymentRequiredError(
                         _response.error.body as Supermemory.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 500:
-                    throw new Supermemory.InternalServerError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,
@@ -340,20 +328,11 @@ export class SupermemoryClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 500:
-                    throw new Supermemory.InternalServerError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,
@@ -450,20 +429,11 @@ export class SupermemoryClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 500:
-                    throw new Supermemory.InternalServerError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,
