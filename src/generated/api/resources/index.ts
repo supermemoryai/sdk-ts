@@ -1,6 +1,9 @@
 export * from "./connectors/client/requests/index.js";
 export * as connectors from "./connectors/index.js";
 export * from "./connectors/types/index.js";
+export * from "./contentManagement/client/requests/index.js";
+export * as contentManagement from "./contentManagement/index.js";
+export * from "./contentManagement/types/index.js";
 export * from "./documents/client/requests/index.js";
 export * as documents from "./documents/index.js";
 export * from "./documents/types/index.js";

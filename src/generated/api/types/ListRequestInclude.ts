@@ -4,6 +4,8 @@
  * Optional extras
  */
 export interface ListRequestInclude {
+    /** Include live memory counts when listing documents */
+    memoryCount?: boolean | undefined;
     /** List forgotten and expired memories too, with isForgotten: true. Applies to type memories only. */
     forgotten?: boolean | undefined;
 }
