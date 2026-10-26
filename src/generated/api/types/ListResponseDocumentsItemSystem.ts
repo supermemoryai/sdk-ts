@@ -10,6 +10,8 @@ export interface ListResponseDocumentsItemSystem {
     status: string;
     /** Memory generation state, separate from status. dreaming while memories for the latest content are queued, being generated, or waiting for a retry after a failure; done once they are generated or when none are needed. Under dynamic dreaming, status can reach done minutes before dreamingStatus does. */
     dreamingStatus: Supermemory.ListResponseDocumentsItemSystemDreamingStatus;
+    /** Number of live memories linked to this document in the requested namespace */
+    memoryCount?: number | undefined;
     /** ISO 8601 timestamp when the document was created */
     createdAt: string;
     /** ISO 8601 timestamp of the latest document update */

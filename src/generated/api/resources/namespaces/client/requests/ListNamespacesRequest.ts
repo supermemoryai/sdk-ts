@@ -9,4 +9,6 @@ export interface ListNamespacesRequest {
     page?: number;
     /** Maximum namespaces to return per page */
     limit?: number;
+    /** Case-insensitive substring to match against namespace names */
+    q?: string;
 }

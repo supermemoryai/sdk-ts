@@ -4,6 +4,10 @@
  * Optional extras
  */
 export interface ListRequestInclude {
+    /** Include the last published extracted text when listing documents only. Large documents can make the response significantly larger. */
+    content?: boolean | undefined;
+    /** Include live memory counts when listing documents */
+    memoryCount?: boolean | undefined;
     /** List forgotten and expired memories too, with isForgotten: true. Applies to type memories only. */
     forgotten?: boolean | undefined;
 }
