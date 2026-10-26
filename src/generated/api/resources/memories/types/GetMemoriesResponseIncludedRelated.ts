@@ -6,10 +6,10 @@ import type * as Supermemory from "../../../index.js";
  * Present when include has related
  */
 export interface GetMemoriesResponseIncludedRelated {
-    /** Earlier versions this memory updates, nearest first */
+    /** Earlier versions this memory updates */
     parents: Supermemory.GetMemoriesResponseIncludedRelatedParentsItem[];
-    /** Newer versions that update this memory, nearest first */
+    /** Newer versions that update this memory */
     children: Supermemory.GetMemoriesResponseIncludedRelatedChildrenItem[];
-    /** Memories connected by extends or derives, nearest first */
+    /** Memories connected by extends or derives */
     siblings: Supermemory.GetMemoriesResponseIncludedRelatedSiblingsItem[];
 }

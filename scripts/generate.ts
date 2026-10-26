@@ -6,6 +6,7 @@
 // Requires Docker: Fern runs its TypeScript generator as a container
 // (`fern generate --local`), so no hosted Fern account is needed.
 import { $ } from "bun";
+import { disableFeedbackRetries } from "./disable-feedback-retries.ts";
 
 const root = new URL("..", import.meta.url).pathname;
 process.chdir(root);
@@ -91,6 +92,9 @@ const fetcherSrc = await Bun.file(fetcherFile).text();
 const callSite = "            args.maxRetries,\n        );";
 if (fetcherSrc.split(callSite).length !== 2) throw new Error(`${fetcherFile}: requestWithRetries call site not found once; review the Fern upgrade`);
 await Bun.write(fetcherFile, fetcherSrc.replace(callSite, "            args.maxRetries,\n            args.abortSignal,\n        );"));
+
+const feedbackFile = "src/generated/api/resources/feedback/client/Client.ts";
+await Bun.write(feedbackFile, disableFeedbackRetries(await Bun.file(feedbackFile).text()));
 
 // The passthrough fetch() resolved its base URL without the default environment the typed methods fall back to, so a default client could not use relative paths and sent absolute URLs without auth.
 const clientFile = "src/generated/Client.ts";

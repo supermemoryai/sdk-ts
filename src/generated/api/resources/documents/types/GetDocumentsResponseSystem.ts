@@ -8,6 +8,8 @@ import type * as Supermemory from "../../../index.js";
 export interface GetDocumentsResponseSystem {
     /** Current extraction and memory-processing status */
     status: Supermemory.GetDocumentsResponseSystemStatus;
+    /** Memory generation state, separate from status. dreaming while memories for the latest content are queued, being generated, or waiting for a retry after a failure; done once they are generated or when none are needed. Under dynamic dreaming, status can reach done minutes before dreamingStatus does. */
+    dreamingStatus: Supermemory.GetDocumentsResponseSystemDreamingStatus;
     /** ISO 8601 timestamp when the document was created */
     createdAt: string;
     /** ISO 8601 timestamp of the latest document update */
