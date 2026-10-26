@@ -96,4 +96,23 @@ await Bun.write(fetcherFile, fetcherSrc.replace(callSite, "            args.maxR
 const feedbackFile = "src/generated/api/resources/feedback/client/Client.ts";
 await Bun.write(feedbackFile, disableFeedbackRetries(await Bun.file(feedbackFile).text()));
 
+// The passthrough fetch() resolved its base URL without the default environment the typed methods fall back to, so a default client could not use relative paths and sent absolute URLs without auth.
+const clientFile = "src/generated/Client.ts";
+const clientSrc = await Bun.file(clientFile).text();
+const baseLine = "                baseUrl: this._options.baseUrl ?? this._options.environment,\n";
+if (clientSrc.split(baseLine).length !== 2) throw new Error(`${clientFile}: passthrough baseUrl line not found once; review the Fern upgrade`);
+await Bun.write(clientFile, clientSrc.replace(baseLine, "                baseUrl: this._options.baseUrl ?? this._options.environment ?? environments.SupermemoryEnvironment.Default,\n"));
+
+// Bundlers (esbuild, Convex, Workers, Vite) resolve a dynamic import() with a literal specifier even on a path that never runs, so the Node-only file and stream helpers broke every non-Node bundle. A computed specifier is left as a runtime import; Node still resolves it when an upload actually needs it.
+const nodeImport = (name: string) => `(await import(/* webpackIgnore: true */ /* @vite-ignore */ [${[...name].map((c) => JSON.stringify(c)).join(", ")}].join(""))) as typeof import("${name}")`;
+for (const [file, name, count] of [
+    ["src/generated/core/file/file.ts", "fs", 2],
+    ["src/generated/core/form-data-utils/FormDataWrapper.ts", "stream", 1],
+] as const) {
+    const text = await Bun.file(file).text();
+    const literal = `await import("${name}")`;
+    if (text.split(literal).length !== count + 1) throw new Error(`${file}: expected ${count} ${literal} call(s); review the Fern upgrade`);
+    await Bun.write(file, text.split(literal).join(nodeImport(name)));
+}
+
 console.log("==> Done. Review with: git diff --stat");

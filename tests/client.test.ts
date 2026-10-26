@@ -118,6 +118,42 @@ test("profileMarkdown maps a 404 to NotFoundError-compatible SupermemoryError", 
   expect((err as SupermemoryError).statusCode).toBe(404);
 });
 
+test("fetch passthrough on a default client resolves relative paths and sends auth to the default host", async () => {
+  const { sent, client } = stub();
+  await client.fetch("/v3/settings");
+  await client.fetch("https://api.supermemory.ai/v3/settings");
+  expect(sent.map((s) => s.url.href)).toEqual(["https://api.supermemory.ai/v3/settings", "https://api.supermemory.ai/v3/settings"]);
+  expect(sent.map((s) => s.headers.get("authorization"))).toEqual(["Bearer sm_test", "Bearer sm_test"]);
+});
+
+
+test("fetch passthrough does not send auth to another host", async () => {
+  const { sent, client } = stub();
+  await client.fetch("https://example.com/x");
+  expect(sent[0].url.href).toBe("https://example.com/x");
+  expect(sent[0].headers.get("authorization")).toBeNull();
+});
+
+
+test("generated core has no literal import() of node builtins, which break browser and edge bundles", async () => {
+  const offenders: string[] = [];
+  for await (const file of new Bun.Glob("src/generated/**/*.ts").scan({ cwd: new URL("..", import.meta.url).pathname })) {
+    const text = await Bun.file(new URL(`../${file}`, import.meta.url)).text();
+    if (/\bawait\s+import\(\s*(\/\*[^*]*\*\/\s*)*["'`](fs|stream)["'`]/.test(text)) offenders.push(file);
+  }
+  expect(offenders).toEqual([]);
+});
+
+
+test("file path uploads still read from disk through the computed fs import", async () => {
+  const { toBinaryUploadRequest } = await import("../src/generated/core/file/file.ts");
+  const path = `${process.env.TMPDIR ?? "/tmp"}/sm-upload-${process.pid}.txt`;
+  await Bun.write(path, "hello\n");
+  const req = await toBinaryUploadRequest({ path });
+  expect(req.headers["Content-Length"]).toBe("6");
+});
+
+
 test("an abort with a custom reason is not retried", async () => {
   let calls = 0;
   const ac = new AbortController();
