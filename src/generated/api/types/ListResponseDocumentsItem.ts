@@ -3,7 +3,7 @@
 import type * as Supermemory from "../index.js";
 
 /**
- * A document in this namespace without its content
+ * A document in this namespace, optionally including its content
  */
 export interface ListResponseDocumentsItem {
     /** Stable document identifier */
@@ -12,11 +12,13 @@ export interface ListResponseDocumentsItem {
     title: string | null;
     /** Detected source or content type */
     type: string;
+    /** Last published extracted text when include.content is true; null before the first content publication */
+    content?: (string | null) | undefined;
     /** Generated summary of the document, when available */
     summary: string | null;
     /** Public metadata attached to the document */
     metadata: Record<string, unknown>;
-    /** Original source URL, when the document was ingested from the web */
+    /** Source URL or uploaded file URL when available */
     url: string | null;
     /** Processing status, lifecycle timestamps, and storage path maintained by Supermemory */
     system: Supermemory.ListResponseDocumentsItemSystem;

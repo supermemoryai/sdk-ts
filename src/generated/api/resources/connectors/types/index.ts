@@ -8,6 +8,8 @@ export * from "./CreateConnectorsRequestBodyGranola.js";
 export * from "./CreateConnectorsRequestBodyGranolaConfig.js";
 export * from "./CreateConnectorsRequestBodyNotion.js";
 export * from "./CreateConnectorsRequestBodyOnedrive.js";
+export * from "./CreateConnectorsRequestBodyOnedriveConfig.js";
+export * from "./CreateConnectorsRequestBodyOnedriveConfigSyncScope.js";
 export * from "./CreateConnectorsRequestBodyS3.js";
 export * from "./CreateConnectorsRequestBodyS3Config.js";
 export * from "./CreateConnectorsRequestBodyWebCrawler.js";

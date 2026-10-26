@@ -53,10 +53,11 @@ export class NamespacesClient {
         request: Supermemory.ListNamespacesRequest = {},
         requestOptions?: NamespacesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.ListNamespacesResponse>> {
-        const { page, limit } = request;
+        const { page, limit, q } = request;
         const _queryParams: Record<string, unknown> = {
             page,
             limit,
+            q,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -96,20 +97,11 @@ export class NamespacesClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 500:
-                    throw new Supermemory.InternalServerError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,
@@ -187,25 +179,16 @@ export class NamespacesClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new Supermemory.NotFoundError(
                         _response.error.body as Supermemory.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new Supermemory.InternalServerError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,
@@ -294,15 +277,9 @@ export class NamespacesClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new Supermemory.NotFoundError(
                         _response.error.body as Supermemory.ErrorResponse,
@@ -314,10 +291,7 @@ export class NamespacesClient {
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new Supermemory.InternalServerError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,
@@ -398,25 +372,16 @@ export class NamespacesClient {
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new Supermemory.UnauthorizedError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Supermemory.ForbiddenError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new Supermemory.NotFoundError(
                         _response.error.body as Supermemory.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new Supermemory.InternalServerError(
-                        _response.error.body as Supermemory.ErrorResponse,
-                        _response.rawResponse,
-                    );
+                    throw new Supermemory.InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.SupermemoryError({
                         statusCode: _response.error.statusCode,

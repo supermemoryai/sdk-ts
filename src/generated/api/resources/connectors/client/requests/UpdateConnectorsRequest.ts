@@ -7,7 +7,7 @@ import type * as Supermemory from "../../../../index.js";
  *     {}
  */
 export interface UpdateConnectorsRequest {
-    /** What to sync, as ids grouped by kind. GitHub takes repos, Gmail takes labels, Google Drive takes files and folders. Replaces the current selection. */
+    /** What to sync, as ids grouped by kind. GitHub takes repos, Gmail takes labels, Google Drive takes files and folders, OneDrive takes folders. Replaces the current selection. */
     selection?: Supermemory.UpdateConnectorsRequestSelection;
     /** Maximum documents this connector imports */
     documentLimit?: number;
