@@ -15,7 +15,7 @@ export interface GetConnectorsResponse {
     capabilities: Supermemory.GetConnectorsResponseCapabilities;
     /** Non-secret setup, such as the S3 bucket, crawler start URL or Notion workspace. Credentials are never returned. */
     config: Record<string, Supermemory.GetConnectorsResponseConfigValue | null> | null;
-    /** What syncs, grouped by kind, in the same shape PATCH takes. Null for connectors that sync everything. */
+    /** What syncs, grouped by kind (repos, labels, files or folders), each a list of { id, name }. Null for connectors that sync everything. */
     selection: Record<string, Supermemory.GetConnectorsResponseSelectionValueItem[] | null> | null;
     documentLimit: number;
     documentCount: number;

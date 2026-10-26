@@ -30,6 +30,7 @@ export * from "./ListResponseChunksItem.js";
 export * from "./ListResponseChunksItemSystem.js";
 export * from "./ListResponseDocumentsItem.js";
 export * from "./ListResponseDocumentsItemSystem.js";
+export * from "./ListResponseDocumentsItemSystemDreamingStatus.js";
 export * from "./ListResponseMemoriesItem.js";
 export * from "./ListResponseMemoriesItemSystem.js";
 export * from "./ListResponsePagination.js";

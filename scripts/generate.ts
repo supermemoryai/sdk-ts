@@ -6,6 +6,7 @@
 // Requires Docker: Fern runs its TypeScript generator as a container
 // (`fern generate --local`), so no hosted Fern account is needed.
 import { $ } from "bun";
+import { disableFeedbackRetries } from "./disable-feedback-retries.ts";
 
 const root = new URL("..", import.meta.url).pathname;
 process.chdir(root);
@@ -91,6 +92,9 @@ const fetcherSrc = await Bun.file(fetcherFile).text();
 const callSite = "            args.maxRetries,\n        );";
 if (fetcherSrc.split(callSite).length !== 2) throw new Error(`${fetcherFile}: requestWithRetries call site not found once; review the Fern upgrade`);
 await Bun.write(fetcherFile, fetcherSrc.replace(callSite, "            args.maxRetries,\n            args.abortSignal,\n        );"));
+
+const feedbackFile = "src/generated/api/resources/feedback/client/Client.ts";
+await Bun.write(feedbackFile, disableFeedbackRetries(await Bun.file(feedbackFile).text()));
 
 // Bundlers (esbuild, Convex, Workers, Vite) resolve a dynamic import() with a literal specifier even on a path that never runs, so the Node-only file and stream helpers broke every non-Node bundle. A computed specifier is left as a runtime import; Node still resolves it when an upload actually needs it.
 const nodeImport = (name: string) => `(await import(/* webpackIgnore: true */ /* @vite-ignore */ [${[...name].map((c) => JSON.stringify(c)).join(", ")}].join(""))) as typeof import("${name}")`;

@@ -20,6 +20,6 @@ export interface ListRequest {
     order?: Supermemory.ListRequestOrder;
     /** Type-safe metadata conditions applied before pagination */
     filter?: Supermemory.FilterExpression;
-    /** Optional extras, matching search's include */
+    /** Optional extras */
     include?: Supermemory.ListRequestInclude;
 }
