@@ -4043,6 +4043,16 @@
           },
           {
             "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "description": "Opaque cursor from a previous response's `pagination.nextCursor`. When present, `page` is ignored and results continue after the last item of the previous page. Filters, sort, order and limit must match the request that produced the cursor."
+          },
+          {
+            "in": "query",
             "name": "page",
             "schema": {
               "example": 1,
@@ -4419,12 +4429,25 @@
                         "totalPages": {
                           "type": "number",
                           "description": "Total pages available at the selected limit"
+                        },
+                        "hasMore": {
+                          "type": "boolean",
+                          "description": "Whether more items exist after this page"
+                        },
+                        "nextCursor": {
+                          "description": "Opaque cursor for the next page. Pass it back as `cursor` with the same filters, sort, order and limit. Null when there are no more items. Cursor requests skip the per-page count and avoid deep offsets.",
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
                         "currentPage",
                         "totalItems",
-                        "totalPages"
+                        "totalPages",
+                        "hasMore",
+                        "nextCursor"
                       ],
                       "description": "Page metadata for the selected resource collection"
                     }
@@ -4497,17 +4520,17 @@
           {
             "lang": "typescript",
             "label": "TypeScript SDK",
-            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\nconst page = await client.list(\"user_123\", \"documents\", {\n  page: 1,\n  limit: 20,\n  sort: \"createdAt\",\n  order: \"desc\",\n  filter: { field: \"type\", operator: \"eq\", value: \"conversation\" },\n});\nconsole.log(page.documents.length, page.pagination.totalPages);"
+            "source": "import { Supermemory } from \"supermemory\";\n\nconst client = new Supermemory(); // reads SUPERMEMORY_API_KEY\n\n// Follow pagination.nextCursor instead of page numbers to avoid deep offsets.\nlet cursor: string | undefined;\ndo {\n  const page = await client.list(\"user_123\", \"documents\", {\n    limit: 100,\n    cursor,\n    filter: { field: \"type\", operator: \"eq\", value: \"conversation\" },\n  });\n  console.log(page.documents.length, page.pagination.totalItems);\n  cursor = page.pagination.nextCursor ?? undefined;\n} while (cursor);"
           },
           {
             "lang": "python",
             "label": "Python SDK",
-            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\npage = client.list(\n    \"user_123\",\n    \"documents\",\n    page=1,\n    limit=20,\n    sort=\"createdAt\",\n    order=\"desc\",\n    filter={\"field\": \"type\", \"operator\": \"eq\", \"value\": \"conversation\"},\n)\nprint(len(page.documents), page.pagination.total_pages)"
+            "source": "from supermemory import Supermemory\n\nclient = Supermemory()  # reads SUPERMEMORY_API_KEY\n\ncursor = None\nwhile True:\n    page = client.list(\n        \"user_123\",\n        \"documents\",\n        limit=100,\n        cursor=cursor,\n        filter={\"field\": \"type\", \"operator\": \"eq\", \"value\": \"conversation\"},\n    )\n    print(len(page.documents), page.pagination.total_items)\n    cursor = page.pagination.next_cursor\n    if not cursor:\n        break"
           },
           {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/list/documents?page=1&limit=20&sort=createdAt&order=desc\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"filter\": { \"field\": \"type\", \"operator\": \"eq\", \"value\": \"conversation\" } }'"
+            "source": "curl -X POST \"https://api.supermemory.ai/ns/user_123/list/documents?limit=100\" \\\n  -H \"Authorization: Bearer $SUPERMEMORY_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"filter\": { \"field\": \"type\", \"operator\": \"eq\", \"value\": \"conversation\" } }'\n# then repeat with &cursor=<pagination.nextCursor> until hasMore is false"
           }
         ]
       }
@@ -5013,6 +5036,17 @@
                         },
                         "totalPages": {
                           "type": "number"
+                        },
+                        "hasMore": {
+                          "description": "Whether more items exist after this page",
+                          "type": "boolean"
+                        },
+                        "nextCursor": {
+                          "description": "Opaque cursor for the next page. Pass it back as `cursor`. Null when there are no more items.",
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -5025,7 +5059,9 @@
                         "currentPage": 1,
                         "limit": 10,
                         "totalItems": 100,
-                        "totalPages": 10
+                        "totalPages": 10,
+                        "hasMore": true,
+                        "nextCursor": "<opaque cursor>"
                       }
                     }
                   },
@@ -6075,6 +6111,17 @@
                         },
                         "totalPages": {
                           "type": "number"
+                        },
+                        "hasMore": {
+                          "description": "Whether more items exist after this page",
+                          "type": "boolean"
+                        },
+                        "nextCursor": {
+                          "description": "Opaque cursor for the next page. Pass it back as `cursor`. Null when there are no more items.",
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -6087,7 +6134,9 @@
                         "currentPage": 1,
                         "limit": 10,
                         "totalItems": 100,
-                        "totalPages": 10
+                        "totalPages": 10,
+                        "hasMore": true,
+                        "nextCursor": "<opaque cursor>"
                       }
                     }
                   },
@@ -7757,6 +7806,17 @@
                         },
                         "totalPages": {
                           "type": "number"
+                        },
+                        "hasMore": {
+                          "description": "Whether more items exist after this page",
+                          "type": "boolean"
+                        },
+                        "nextCursor": {
+                          "description": "Opaque cursor for the next page. Pass it back as `cursor`. Null when there are no more items.",
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -7769,7 +7829,9 @@
                         "currentPage": 1,
                         "limit": 10,
                         "totalItems": 100,
-                        "totalPages": 10
+                        "totalPages": 10,
+                        "hasMore": true,
+                        "nextCursor": "<opaque cursor>"
                       }
                     }
                   },
@@ -7977,6 +8039,17 @@
                         },
                         "totalPages": {
                           "type": "number"
+                        },
+                        "hasMore": {
+                          "description": "Whether more items exist after this page",
+                          "type": "boolean"
+                        },
+                        "nextCursor": {
+                          "description": "Opaque cursor for the next page. Pass it back as `cursor`. Null when there are no more items.",
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -7989,7 +8062,9 @@
                         "currentPage": 1,
                         "limit": 10,
                         "totalItems": 100,
-                        "totalPages": 10
+                        "totalPages": 10,
+                        "hasMore": true,
+                        "nextCursor": "<opaque cursor>"
                       }
                     }
                   },

@@ -8,4 +8,8 @@ export interface ListAllConnectorsResponsePagination {
     limit?: number | undefined;
     totalItems: number;
     totalPages: number;
+    /** Whether more items exist after this page */
+    hasMore?: boolean | undefined;
+    /** Opaque cursor for the next page. Pass it back as `cursor`. Null when there are no more items. */
+    nextCursor?: (string | null) | undefined;
 }

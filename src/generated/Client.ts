@@ -381,8 +381,9 @@ export class SupermemoryClient {
         request: Supermemory.ListRequest = {},
         requestOptions?: SupermemoryClient.RequestOptions,
     ): Promise<core.WithRawResponse<Supermemory.ListResponse>> {
-        const { page, limit, sort, order, ..._body } = request;
+        const { cursor, page, limit, sort, order, ..._body } = request;
         const _queryParams: Record<string, unknown> = {
+            cursor,
             page,
             limit,
             sort: sort != null ? sort : undefined,

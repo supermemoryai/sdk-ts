@@ -12,4 +12,8 @@ export interface ListResponsePagination {
     totalItems: number;
     /** Total pages available at the selected limit */
     totalPages: number;
+    /** Whether more items exist after this page */
+    hasMore: boolean;
+    /** Opaque cursor for the next page. Pass it back as `cursor` with the same filters, sort, order and limit. Null when there are no more items. Cursor requests skip the per-page count and avoid deep offsets. */
+    nextCursor: string | null;
 }

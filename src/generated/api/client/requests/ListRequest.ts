@@ -10,6 +10,8 @@ import type * as Supermemory from "../../index.js";
  *     }
  */
 export interface ListRequest {
+    /** Opaque cursor from a previous response's `pagination.nextCursor`. When present, `page` is ignored and results continue after the last item of the previous page. Filters, sort, order and limit must match the request that produced the cursor. */
+    cursor?: string;
     /** One-based page number */
     page?: number;
     /** Maximum resources to return per page */
