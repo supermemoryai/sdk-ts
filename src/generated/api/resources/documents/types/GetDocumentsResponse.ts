@@ -18,7 +18,7 @@ export interface GetDocumentsResponse {
     content: string | null;
     /** Caller metadata with internal fields removed */
     metadata: Record<string, unknown>;
-    /** Processing status, lifecycle timestamps, and storage path maintained by Supermemory */
+    /** Ingestion source, processing status, lifecycle timestamps, and storage path maintained by Supermemory */
     system: Supermemory.GetDocumentsResponseSystem;
     /** Ordered document chunks; included only when requested */
     chunks?: Supermemory.GetDocumentsResponseChunksItem[] | undefined;
