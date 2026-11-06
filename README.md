@@ -80,6 +80,12 @@ await client.documents.uploadFile("user_alex", { file: await openAsBlob("notes.p
 await client.documents.uploadFile("user_alex", { file: new File(["# Notes"], "notes.md"), metadata: JSON.stringify({ source: "upload" }) });
 ```
 
+## For coding agents
+
+- Docs index for agents: https://supermemory.ai/docs/llms.txt. Every docs page also has a Markdown copy at `<url>.md`.
+- Docs search over MCP: `https://supermemory.ai/docs/mcp`.
+- This SDK is for the v5 API (`/ns/{namespace}/…`). `containerTag`, `/v3` and `/v4` belong to older versions that shut down on December 31, 2026; see [MIGRATION.md](MIGRATION.md).
+
 ## Errors
 
 Non-2xx responses throw a typed error for the status (`BadRequestError`, `UnauthorizedError`, `PaymentRequiredError`, `ForbiddenError`, `NotFoundError`, `ConflictError`, `InternalServerError`, `ServiceUnavailableError`). All of them extend `SupermemoryError`, which carries `statusCode`, `body` and `rawResponse`. Timeouts throw `SupermemoryTimeoutError`; a failed connection throws a plain `SupermemoryError` with no status code.
