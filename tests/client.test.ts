@@ -213,3 +213,21 @@ test("built package imports from Node ESM and CJS", () => {
   expect(esm.trim()).toBe("function");
   expect(cjs.trim()).toBe("function");
 });
+
+test("profileMarkdown honors additionalBodyParameters like profile", async () => {
+  const { sent, client } = stub();
+  const request = { buckets: ["original"] };
+  const options = { additionalBodyParameters: { buckets: ["override"], futureOption: true } };
+  await client.profile("user_alex", request, options);
+  await client.profileMarkdown("user_alex", request, options);
+  expect(JSON.parse(sent[1]!.body)).toEqual(JSON.parse(sent[0]!.body));
+  expect(JSON.parse(sent[1]!.body)).toEqual({ buckets: ["override"], futureOption: true });
+  expect(request).toEqual({ buckets: ["original"] });
+  expect(sent[1]!.headers.get("accept")).toBe("text/markdown");
+});
+
+test("profileMarkdown honors additional body parameters with default request", async () => {
+  const { sent, client } = stub();
+  await client.profileMarkdown("user_alex", undefined, { additionalBodyParameters: { futureOption: true } });
+  expect(JSON.parse(sent[0]!.body)).toEqual({ futureOption: true });
+});
