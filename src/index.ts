@@ -3,6 +3,7 @@ import { ConnectorsClient } from "./generated/api/resources/connectors/client/Cl
 import { SupermemoryClient } from "./generated/Client.js";
 import * as core from "./generated/core/index.js";
 import { mergeHeaders } from "./generated/core/headers.js";
+import { mergeAdditionalBodyParameters } from "./generated/core/requestBody.js";
 import { SupermemoryEnvironment } from "./generated/environments.js";
 import { handleNonStatusCodeError } from "./generated/errors/handleNonStatusCodeError.js";
 import { SupermemoryError } from "./generated/errors/index.js";
@@ -36,7 +37,7 @@ export class Supermemory extends SupermemoryClient {
       contentType: "application/json",
       queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
       requestType: "json",
-      body: request,
+      body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
       responseType: "text",
       timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options.timeoutInSeconds ?? 60) * 1000,
       maxRetries: requestOptions?.maxRetries ?? this._options.maxRetries,
