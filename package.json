@@ -1,7 +1,20 @@
 {
   "name": "supermemory",
   "version": "5.1.2",
-  "description": "The official TypeScript library for the Supermemory API",
+  "description": "TypeScript SDK for supermemory, the memory API for AI agents: long-term memory, user profiles and search.",
+  "keywords": [
+    "supermemory",
+    "memory",
+    "ai-memory",
+    "agent-memory",
+    "long-term-memory",
+    "ai-agents",
+    "llm",
+    "rag",
+    "user-profiles",
+    "context",
+    "sdk"
+  ],
   "license": "Apache-2.0",
   "author": "Supermemory <dhravya@supermemory.com>",
   "homepage": "https://supermemory.ai",
