@@ -8,7 +8,7 @@ export interface UpdateConnectorsResponse {
     provider: Supermemory.UpdateConnectorsResponseProvider;
     /** Present while pending, when the caller can create connectors in this namespace */
     authorization?: Supermemory.UpdateConnectorsResponseAuthorization | undefined;
-    /** Namespace the connector syncs into. Null only for connectors created before namespaces were required. */
+    /** Namespace the connector syncs into. Connectors created without one report sm_project_default. */
     namespace: string | null;
     /** Account on the provider side, usually an email */
     account: string | null;

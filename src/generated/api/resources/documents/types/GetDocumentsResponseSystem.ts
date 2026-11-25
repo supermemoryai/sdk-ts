@@ -3,9 +3,11 @@
 import type * as Supermemory from "../../../index.js";
 
 /**
- * Processing status, lifecycle timestamps, and storage path maintained by Supermemory
+ * Ingestion source, processing status, lifecycle timestamps, and storage path maintained by Supermemory
  */
 export interface GetDocumentsResponseSystem {
+    /** Recorded ingestion source; null when unavailable */
+    source: string | null;
     /** Current extraction and memory-processing status */
     status: Supermemory.GetDocumentsResponseSystemStatus;
     /** Memory generation state, separate from status. dreaming while memories for the latest content are queued, being generated, or waiting for a retry after a failure; done once they are generated or when none are needed. Under dynamic dreaming, status can reach done minutes before dreamingStatus does. */

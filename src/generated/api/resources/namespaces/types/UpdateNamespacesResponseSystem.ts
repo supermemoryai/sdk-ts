@@ -6,6 +6,6 @@
 export interface UpdateNamespacesResponseSystem {
     /** ISO 8601 timestamp when the namespace was created */
     createdAt: string;
-    /** ISO 8601 timestamp of the latest settings update */
+    /** ISO 8601 timestamp of the latest change to the namespace's settings, documents, or memories */
     updatedAt: string;
 }
