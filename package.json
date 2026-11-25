@@ -1,6 +1,6 @@
 {
   "name": "supermemory",
-  "version": "5.1.2",
+  "version": "5.1.3",
   "description": "TypeScript SDK for supermemory, the memory API for AI agents: long-term memory, user profiles and search.",
   "keywords": [
     "supermemory",

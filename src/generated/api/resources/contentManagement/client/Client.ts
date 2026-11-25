@@ -121,4 +121,97 @@ export class ContentManagementClient {
             "/ns/{namespace}/list/documents/memory-counts",
         );
     }
+
+    /**
+     * Page through a namespace's documents with their memories as graph nodes and edges, for example to render @supermemory/memory-graph. Pass nextCursor back as cursor until it is null.
+     *
+     * @param {string} namespace - The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents.
+     * @param {Supermemory.PostNsByNamespaceGraphRequest} request
+     * @param {ContentManagementClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Supermemory.BadRequestError}
+     * @throws {@link Supermemory.UnauthorizedError}
+     * @throws {@link Supermemory.ForbiddenError}
+     * @throws {@link errors.SupermemoryError}
+     * @throws {@link errors.SupermemoryTimeoutError}
+     *
+     * @example
+     *     await client.contentManagement.postNsByNamespaceGraph("user_alex")
+     */
+    public postNsByNamespaceGraph(
+        namespace: string,
+        request: Supermemory.PostNsByNamespaceGraphRequest = {},
+        requestOptions?: ContentManagementClient.RequestOptions,
+    ): core.HttpResponsePromise<Supermemory.PostNsByNamespaceGraphResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__postNsByNamespaceGraph(namespace, request, requestOptions));
+    }
+
+    private async __postNsByNamespaceGraph(
+        namespace: string,
+        request: Supermemory.PostNsByNamespaceGraphRequest = {},
+        requestOptions?: ContentManagementClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Supermemory.PostNsByNamespaceGraphResponse>> {
+        const { cursor, limit, ..._body } = request;
+        const _queryParams: Record<string, unknown> = {
+            cursor,
+            limit,
+        };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SupermemoryEnvironment.Default,
+                `ns/${core.url.encodePathParam(namespace)}/graph`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Supermemory.PostNsByNamespaceGraphResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Supermemory.BadRequestError(
+                        _response.error.body as Supermemory.BadRequestErrorBody,
+                        _response.rawResponse,
+                    );
+                case 401:
+                    throw new Supermemory.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Supermemory.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.SupermemoryError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/ns/{namespace}/graph");
+    }
 }

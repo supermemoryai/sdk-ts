@@ -501,7 +501,7 @@
                   "metadata": {
                     "description": "Arbitrary metadata attached to the document and derived data",
                     "example": {
-                      "source": "api-docs"
+                      "team": "platform"
                     },
                     "type": "object",
                     "propertyNames": {
@@ -962,7 +962,7 @@
                         "metadata": {
                           "description": "Arbitrary metadata attached to the document and derived data",
                           "example": {
-                            "source": "api-docs"
+                            "team": "platform"
                           },
                           "type": "object",
                           "propertyNames": {
@@ -1123,12 +1123,20 @@
                       "additionalProperties": {},
                       "description": "Caller metadata with internal fields removed",
                       "example": {
-                        "source": "api-docs"
+                        "team": "platform"
                       }
                     },
                     "system": {
                       "type": "object",
                       "properties": {
+                        "source": {
+                          "description": "Recorded ingestion source; null when unavailable",
+                          "example": "api",
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
                         "status": {
                           "type": "string",
                           "enum": [
@@ -1165,12 +1173,13 @@
                         }
                       },
                       "required": [
+                        "source",
                         "status",
                         "dreamingStatus",
                         "createdAt",
                         "updatedAt"
                       ],
-                      "description": "Processing status, lifecycle timestamps, and storage path maintained by Supermemory"
+                      "description": "Ingestion source, processing status, lifecycle timestamps, and storage path maintained by Supermemory"
                     },
                     "chunks": {
                       "description": "Ordered document chunks; included only when requested",
@@ -1620,7 +1629,7 @@
                   "metadata": {
                     "description": "Arbitrary metadata attached to the document and derived data",
                     "example": {
-                      "source": "api-docs"
+                      "team": "platform"
                     },
                     "type": "object",
                     "propertyNames": {
@@ -4631,7 +4640,7 @@
                             ]
                           },
                           "namespace": {
-                            "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required.",
+                            "description": "Namespace the connector syncs into. Connectors created without one report sm_project_default.",
                             "type": [
                               "string",
                               "null"
@@ -5706,7 +5715,7 @@
                             ]
                           },
                           "namespace": {
-                            "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required.",
+                            "description": "Namespace the connector syncs into. Connectors created without one report sm_project_default.",
                             "type": [
                               "string",
                               "null"
@@ -6322,7 +6331,7 @@
                       ]
                     },
                     "namespace": {
-                      "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required.",
+                      "description": "Namespace the connector syncs into. Connectors created without one report sm_project_default.",
                       "type": [
                         "string",
                         "null"
@@ -6931,7 +6940,7 @@
                       ]
                     },
                     "namespace": {
-                      "description": "Namespace the connector syncs into. Null only for connectors created before namespaces were required.",
+                      "description": "Namespace the connector syncs into. Connectors created without one report sm_project_default.",
                       "type": [
                         "string",
                         "null"
@@ -7769,7 +7778,7 @@
                               "updatedAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "description": "ISO 8601 timestamp of the latest namespace update"
+                                "description": "ISO 8601 timestamp of the latest change to the namespace's settings, documents, or memories"
                               }
                             },
                             "required": [
@@ -8002,7 +8011,7 @@
                               "updatedAt": {
                                 "type": "string",
                                 "format": "date-time",
-                                "description": "ISO 8601 timestamp of the latest namespace update"
+                                "description": "ISO 8601 timestamp of the latest change to the namespace's settings, documents, or memories"
                               }
                             },
                             "required": [
@@ -8214,7 +8223,7 @@
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time",
-                          "description": "ISO 8601 timestamp of the latest settings update"
+                          "description": "ISO 8601 timestamp of the latest change to the namespace's settings, documents, or memories"
                         }
                       },
                       "required": [
@@ -8400,7 +8409,7 @@
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time",
-                          "description": "ISO 8601 timestamp of the latest settings update"
+                          "description": "ISO 8601 timestamp of the latest change to the namespace's settings, documents, or memories"
                         }
                       },
                       "required": [
@@ -9737,6 +9746,377 @@
           },
           "500": {
             "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/ns/{namespace}/graph": {
+      "post": {
+        "operationId": "postNsByNamespaceGraph",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "namespace",
+            "schema": {
+              "example": "user_alex",
+              "type": "string",
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z0-9_:-]+$"
+            },
+            "required": true,
+            "description": "The isolated namespace. This can be an ID for your user, a project ID, or any other identifier you wish to use to scope documents."
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 50,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "filter": {
+                    "description": "A type-safe metadata filter predicate or nested and/or expression with up to 5 levels of nesting",
+                    "$ref": "#/components/schemas/FilterExpression"
+                  },
+                  "sort": {
+                    "default": "createdAt",
+                    "type": "string",
+                    "enum": [
+                      "createdAt",
+                      "updatedAt"
+                    ]
+                  },
+                  "order": {
+                    "default": "desc",
+                    "type": "string",
+                    "enum": [
+                      "asc",
+                      "desc"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "summary": "Get memory graph",
+        "description": "Page through a namespace's documents with their memories as graph nodes and edges, for example to render @supermemory/memory-graph. Pass nextCursor back as cursor until it is null.",
+        "tags": [
+          "Content Management"
+        ],
+        "responses": {
+          "200": {
+            "description": "Graph page retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nodes": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "document"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "customId": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "title": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "summary": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "namespaces": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "id",
+                              "customId",
+                              "title",
+                              "summary",
+                              "type",
+                              "namespaces",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "type": "string",
+                                "const": "memory"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "memory": {
+                                "type": "string"
+                              },
+                              "namespace": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "isStatic": {
+                                "type": "boolean"
+                              },
+                              "isLatest": {
+                                "type": "boolean"
+                              },
+                              "isForgotten": {
+                                "type": "boolean"
+                              },
+                              "isInference": {
+                                "type": "boolean"
+                              },
+                              "forgetAfter": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "forgetReason": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "version": {
+                                "type": "integer",
+                                "minimum": -9007199254740991,
+                                "maximum": 9007199254740991
+                              },
+                              "parentMemoryId": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "rootMemoryId": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "id",
+                              "memory",
+                              "namespace",
+                              "isStatic",
+                              "isLatest",
+                              "isForgotten",
+                              "isInference",
+                              "forgetAfter",
+                              "forgetReason",
+                              "version",
+                              "parentMemoryId",
+                              "rootMemoryId",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "edges": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "source"
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "target": {
+                                "type": "string"
+                              },
+                              "sourceAddedAt": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "sourceRelevanceScore": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "source",
+                              "target",
+                              "sourceAddedAt",
+                              "sourceRelevanceScore"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "updates",
+                                  "extends",
+                                  "derives"
+                                ]
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "target": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "source",
+                              "target"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "nextCursor": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "nodes",
+                    "edges",
+                    "nextCursor"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or cursor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ValidationErrorResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Namespace access denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
