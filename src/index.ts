@@ -1,4 +1,5 @@
 import type * as Api from "./generated/api/index.js";
+import { BadRequestError, ForbiddenError, InternalServerError, UnauthorizedError } from "./generated/api/index.js";
 import { ConnectorsClient } from "./generated/api/resources/connectors/client/Client.js";
 import { SupermemoryClient } from "./generated/Client.js";
 import * as core from "./generated/core/index.js";
@@ -46,7 +47,20 @@ export class Supermemory extends SupermemoryClient {
     });
     if (response.ok) return response.body;
     if (response.error.reason === "status-code") {
-      throw new SupermemoryError({ statusCode: response.error.statusCode, body: response.error.body, rawResponse: response.rawResponse });
+      const { statusCode, body } = response.error;
+      // Same status mapping as the generated profile(), so callers can catch the typed errors for both.
+      switch (statusCode) {
+        case 400:
+          throw new BadRequestError(body as Api.BadRequestErrorBody, response.rawResponse);
+        case 401:
+          throw new UnauthorizedError(body, response.rawResponse);
+        case 403:
+          throw new ForbiddenError(body, response.rawResponse);
+        case 500:
+          throw new InternalServerError(body, response.rawResponse);
+        default:
+          throw new SupermemoryError({ statusCode, body, rawResponse: response.rawResponse });
+      }
     }
     return handleNonStatusCodeError(response.error, response.rawResponse, "POST", `/ns/${namespace}/profile`);
   }

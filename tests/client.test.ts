@@ -118,6 +118,18 @@ test("profileMarkdown maps a 404 to NotFoundError-compatible SupermemoryError", 
   expect((err as SupermemoryError).statusCode).toBe(404);
 });
 
+test("profileMarkdown throws the same typed errors as profile", async () => {
+  for (const status of [400, 401, 403, 500]) {
+    const { client } = stub(status, { error: "nope" }, { apiKey: "sm_test", maxRetries: 0 });
+    const expected = await client.profile("user_alex").catch((e: unknown) => e);
+    const err = await client.profileMarkdown("user_alex").catch((e: unknown) => e);
+    expect((expected as Error).constructor).not.toBe(SupermemoryError);
+    expect((err as Error).constructor).toBe((expected as Error).constructor);
+    expect((err as SupermemoryError).statusCode).toBe(status);
+    expect((err as SupermemoryError).body).toEqual({ error: "nope" });
+  }
+});
+
 test("fetch passthrough on a default client resolves relative paths and sends auth to the default host", async () => {
   const { sent, client } = stub();
   await client.fetch("/v3/settings");
